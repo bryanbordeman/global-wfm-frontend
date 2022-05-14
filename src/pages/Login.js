@@ -9,29 +9,35 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import logo from '../assets/GPS_Logo.png'
+import { useNavigate } from 'react-router-dom';
 
 function Login(props) {
 
     const [username, setUsername ] = useState('');
     const [password, setPassword ] = useState('');
+    let navigate = useNavigate();
 
     const onChangeUsername = e => {
         const username = e.target.value;
+        console.log(username)
         setUsername(username);
     };
 
     const onChangePassword = e => {
         const password = e.target.value;
+        console.log(password)
         setPassword(password);
     };
 
-    const login = () => {
+    const login = (e) => {
+        e.preventDefault()
         // console.log('Login')
         props.login({username: username, password: password});
-        props.history.push('/');
+        navigate('/');
     };
 
     return ( 
+        
         <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

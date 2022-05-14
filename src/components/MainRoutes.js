@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
 
-function MainRoutes() {
+function MainRoutes(props) {
     return (
         <div>
             <Routes>
@@ -14,7 +14,11 @@ function MainRoutes() {
                 <Route 
                     exact 
                     path='/login' 
-                    element={<Login/>} />
+                    element={
+                        <Login login={props.login} />
+                    } />
+
+
                 <Route render={() => <h1>Error 404</h1>}/>
             </Routes>
         </div>

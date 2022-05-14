@@ -10,6 +10,7 @@ function App() {
   const [ error, setError ] = useState('')
 
   async function login(user= null){
+    // console.log('App Login Function')
     UserService.login(user)
       .then(response => {
         setToken(response.data.token);
@@ -46,8 +47,10 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-          <MainRoutes/>
-        </BrowserRouter>
+          <MainRoutes
+            login={login}
+          />
+      </BrowserRouter>
     </div>
   );
 }
