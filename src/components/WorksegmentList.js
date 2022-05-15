@@ -4,24 +4,19 @@ import { Container, Typography, CardActions, Button, Card, CardContent, Chip } f
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CheckIcon from '@mui/icons-material/Check';
 import WeekPicker from '../components/WeekPicker'
-// import { Link } from 'react-router-dom';
-// import Card from 'react-bootstrap/Card';
-// import Container from 'react-bootstrap/Container';
-// import Button from 'react-bootstrap/Button';
-// import Alert from 'react-bootstrap/Alert';
 import moment from 'moment';
 
 
 function WorksegmentList(props) {
     const [ worksegments, setWorksegments ] = useState([]);
-    const [isoWeek, setIsoWeek] = React.useState(moment(new Date()).format('GGGG[W]WW'));
+    const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
 
     useEffect(() => {
         retrieveWorksegments();
-    }, [props.token]);
+    }, [props.token, isoWeek]);
 
     const retrieveWorksegments = () => {
-        WorksegmentDataService.getAll(props.token)
+        WorksegmentDataService.getWeek(props.token, isoWeek)
         .then(response => {
             setWorksegments(response.data);
         })
@@ -55,6 +50,28 @@ function WorksegmentList(props) {
         setIsoWeek(week)
     }
 
+    const getTotalHours = () => {
+        let totalHours = 0
+        let totalTravelHours = 0
+
+        for (let i = 0; i < worksegments.length; i++){
+            totalHours += Number(worksegments[i].duration)
+            totalTravelHours += Number(worksegments[i].travel_duration)
+            }
+        let totalRegularHours = totalHours - totalTravelHours
+        let totalOvertimeHours = 0
+        if(totalRegularHours > 40 ){
+            totalOvertimeHours = totalRegularHours - 40
+        }
+
+        return {totalHours: totalHours, 
+                totalTravelHours: totalTravelHours,
+                totalRegularHours: totalRegularHours,
+                totalOvertimeHours: totalOvertimeHours}
+    }
+
+    const totals = getTotalHours()
+
 
     return ( 
         <Container>
@@ -62,7 +79,26 @@ function WorksegmentList(props) {
             <WeekPicker 
                 getIsoWeek={getIsoWeek}
             />
-            <h1>{isoWeek}</h1>
+            <Card 
+                variant='outlined'
+                sx={{ minWidth: 275, marginBottom: '20px', marginTop: '20px' }}
+            >
+                <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Regular Hours: {totals.totalRegularHours}
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Travel Hours: {totals.totalTravelHours}
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Overtime Hours: {totals.totalOvertimeHours}
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Total Hours: {totals.totalHours}
+                    </Typography>
+                </CardContent>
+                    
+            </Card>
             </div>
             {worksegments.map((segment) => {
                 return (

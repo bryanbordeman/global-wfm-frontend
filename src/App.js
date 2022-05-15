@@ -44,6 +44,7 @@ function App() {
             setError(e.toString());
         });
     };
+
     return (
         <BrowserRouter>
             <Navbar

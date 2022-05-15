@@ -48,7 +48,9 @@ const renderWeekPickerDay = (date, selectedDates, pickersDayProps) => {
     }
 
     const start = startOfWeek(value);
+    start.setDate(startOfWeek(value).getDate() + 1);
     const end = endOfWeek(value);
+    end.setDate(endOfWeek(value).getDate() + 1);
 
     const dayIsBetween = isWithinInterval(date, { start, end });
     const isFirstDay = isSameDay(date, start);
