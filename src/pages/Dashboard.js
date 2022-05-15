@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Alert } from '@mui/material';
+import WorksegmentList from '../components/WorksegmentList';
 
 function Dashboard(props){
+    const { user, token } = props
     return (
         <div>
             {!props.user ? 
@@ -14,7 +16,11 @@ function Dashboard(props){
             </div>
             : 
             <div>
-            <h3>Welcome {props.user}</h3> 
+            <h3>Welcome {user}</h3> 
+                <WorksegmentList
+                    user={user}
+                    token={token}
+                />
             </div>
             }
             

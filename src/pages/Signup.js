@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -11,7 +9,7 @@ import Container from '@mui/material/Container';
 import logo from '../assets/GPS_Logo.png'
 import { useNavigate } from 'react-router-dom';
 
-function Login(props) {
+function Signup(props) {
 
     const [username, setUsername ] = useState('');
     const [password, setPassword ] = useState('');
@@ -27,10 +25,10 @@ function Login(props) {
         setPassword(password);
     };
 
-    const login = (e) => {
+    const signup = (e) => {
         e.preventDefault()
-        props.login({username: username, password: password});
-        navigate('/');
+        props.signup({username: username, password: password});
+        navigate('/login');
     };
 
     return ( 
@@ -46,7 +44,7 @@ function Login(props) {
         }}
         >
         <img style={{width: '20rem'}} src={logo} alt="GPS Logo"/>
-        <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={signup} noValidate sx={{ mt: 1 }}>
             <TextField
                 margin="normal"
                 required
@@ -71,10 +69,6 @@ function Login(props) {
                 value={password}
                 onChange={onChangePassword}
             />
-            <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-            />
             <Button
                 type="submit"
                 size="large"
@@ -82,7 +76,7 @@ function Login(props) {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-            Sign In
+            Signup
             </Button>
             <div style={{display: 'flex', 
                             flexDirection: 'column', 
@@ -90,8 +84,8 @@ function Login(props) {
                             justifyContent: 'center'}}>
                 <Grid item
                     sx={{marginTop: '10px'}}>
-                    <Link href="/signup/" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                    <Link href="/login/" variant="body2">
+                        {"Already have an account? Login"}
                     </Link>
                 </Grid>
             </div>
@@ -101,4 +95,4 @@ function Login(props) {
     );
 }
 
-export default Login;
+export default Signup;
