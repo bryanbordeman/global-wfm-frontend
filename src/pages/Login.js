@@ -19,19 +19,16 @@ function Login(props) {
 
     const onChangeUsername = e => {
         const username = e.target.value;
-        console.log(username)
         setUsername(username);
     };
 
     const onChangePassword = e => {
         const password = e.target.value;
-        console.log(password)
         setPassword(password);
     };
 
     const login = (e) => {
         e.preventDefault()
-        // console.log('Login')
         props.login({username: username, password: password});
         navigate('/');
     };

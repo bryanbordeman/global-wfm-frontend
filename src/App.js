@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import MainRoutes from './components/MainRoutes';
+import Navbar from './components/Navbar'
 import UserService from "./services/User.services";
 
 function App() {
@@ -10,48 +11,50 @@ function App() {
   const [ error, setError ] = useState('')
 
   async function login(user= null){
-    // console.log('App Login Function')
-    UserService.login(user)
+      // console.log('App Login Function')
+      UserService.login(user)
       .then(response => {
-        setToken(response.data.token);
-        setUser(user.username);
-        localStorage.setItem('token', response.data.token)
-        localStorage.setItem('user', user.username);
-        setError('');
+          setToken(response.data.token);
+          setUser(user.username);
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('user', user.username);
+          setError('');
       })
       .catch( e => {
-        console.log('login', e);
-        setError(e.toString());
-    });
+          console.log('login', e);
+          setError(e.toString());
+      });
   };
   async function logout(){
-    setToken('');
-    setUser('');
-    localStorage.setItem('token', '');
-    localStorage.setItem('user', '');
+      setToken('');
+      setUser('');
+      localStorage.setItem('token', '');
+      localStorage.setItem('user', '');
   };
   async function signup(user= null){
-    UserService.signup(user)
+      UserService.signup(user)
       .then(response => {
-        setToken(response.data.token);
-        setUser(user.username);
-        localStorage.setItem('token', response.data.token)
-        localStorage.setItem('user', user.username);
+          setToken(response.data.token);
+          setUser(user.username);
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('user', user.username);
       })
       .catch( e => {
-        console.log('login', e);
-        setError(e.toString());
-    });
+          console.log('login', e);
+          setError(e.toString());
+      });
   };
-
   return (
-    <div className="App">
       <BrowserRouter>
+          <Navbar
+            user={user}
+            logout={logout}/>
           <MainRoutes
+            user={user}
+            token={token}
             login={login}
-          />
+            logout={logout}/>
       </BrowserRouter>
-    </div>
   );
 }
 
