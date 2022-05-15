@@ -3,6 +3,7 @@ import WorksegmentDataService from '../services/Worksegment.services'
 import { Container, Typography, CardActions, Button, Card, CardContent, Chip } from '@mui/material';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CheckIcon from '@mui/icons-material/Check';
+import WeekPicker from '../components/WeekPicker'
 // import { Link } from 'react-router-dom';
 // import Card from 'react-bootstrap/Card';
 // import Container from 'react-bootstrap/Container';
@@ -13,6 +14,7 @@ import moment from 'moment';
 
 function WorksegmentList(props) {
     const [ worksegments, setWorksegments ] = useState([]);
+    const [isoWeek, setIsoWeek] = React.useState(moment(new Date()).format('GGGG[W]WW'));
 
     useEffect(() => {
         retrieveWorksegments();
@@ -49,9 +51,19 @@ function WorksegmentList(props) {
         });
     };
 
+    const getIsoWeek = (week) => {
+        setIsoWeek(week)
+    }
+
 
     return ( 
         <Container>
+            <div  style={{marginBottom: '20px', marginTop: '20px' }}>
+            <WeekPicker 
+                getIsoWeek={getIsoWeek}
+            />
+            <h1>{isoWeek}</h1>
+            </div>
             {worksegments.map((segment) => {
                 return (
                     <Card 

@@ -15,8 +15,7 @@ function Dashboard(props){
             </Alert>
             </div>
             : 
-            <div>
-            <h3>Welcome {user}</h3> 
+            <div> 
                 <WorksegmentList
                     user={user}
                     token={token}
