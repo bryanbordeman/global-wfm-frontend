@@ -10,6 +10,7 @@ import isSameDay from 'date-fns/isSameDay';
 import isWithinInterval from 'date-fns/isWithinInterval';
 import startOfWeek from 'date-fns/startOfWeek';
 import moment from 'moment';
+import locale from 'date-fns/locale/en-GB'
 
 const CustomPickersDay = styled(PickersDay, {
 shouldForwardProp: (prop) =>
@@ -68,8 +69,9 @@ const renderWeekPickerDay = (date, selectedDates, pickersDayProps) => {
 };
 
 return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} locale={locale}>
     <DatePicker
+        
         displayStaticWrapperAs="desktop"
         label={isoWeek}
         value={value}
@@ -77,6 +79,7 @@ return (
         setValue(newValue);
         setIsoWeek(moment(newValue).format('GGGG[W]WW'))
         }}
+
         renderDay={renderWeekPickerDay}
         renderInput={(params) => <TextField {...params} />}
         disableMaskedInput={true}

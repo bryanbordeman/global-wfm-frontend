@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
 
-const pages = ['Timesheets', 'Projects', 'Announcements', 'Expenses'];
+const pages = ['Timesheets', 'Schedule', 'Projects', 'Announcements', 'Expenses'];
 const settings = ['Profile', 'Account', 'Dashboard'];
 
 

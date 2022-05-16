@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import WorksegmentDataService from '../services/Worksegment.services'
 import { Container, Typography, CardActions, Button, Card, CardContent, Chip } from '@mui/material';
+import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider } from '@mui/material';
+
+
+import DeleteIcon from '@mui/icons-material/Delete'
+import Edit from '@mui/icons-material/Edit'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CheckIcon from '@mui/icons-material/Check';
 import WeekPicker from '../components/WeekPicker'
@@ -72,16 +77,112 @@ function WorksegmentList(props) {
 
     const totals = getTotalHours()
 
+    const segmentList = worksegments.map(segment => (
+                <Paper
+                    sx={{
+                    my: 2,
+                    width: '100%',
+                    maxWidth: '500px',
+                    border: 1,
+                    borderColor: 'primary.main',
+                    borderRadius: '16px'
+                    }}
+                    variant="outlined"
+                    key={segment.id}
+                >
+                    <Grid container wrap="nowrap" spacing={2}>
+                    <Grid item xs zeroMinWidth>
+                        <ListItem 
+                            key={segment.id}
+                            secondaryAction={
+                                !segment.is_approved ?
+                                <Stack spacing={2}>
+                                    <IconButton
+                                        color='primary'
+                                        >
+                                        <Edit/>
+                                    </IconButton>
+                                    <Divider />
+                                    <IconButton 
+                                        edge="end" 
+                                        color="error"
+                                        aria-label="delete"
+                                        onClick={ () => deleteWorksegment(segment.id) } >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Stack> : ''
+                            }
+                        >
+                            <ListItemAvatar
+                            sx={{ 
+                                marginRight: '1rem', 
+                                marginBottom: '1rem',
+                            }}
+                            >
+                                <Chip 
+                                    sx={{ 
+                                        marginTop: '1rem',
+                                        marginBottom: '1rem',
+                                    }}
+                                    color={`${segment.is_approved ? 'success' : 'primary'}`}
+                                    icon={segment.is_approved ? <CheckIcon /> : <QueryBuilderIcon/>} 
+                                    label={`${segment.duration} ${segment.duration > 1 ? 'Hrs' : 'Hr'}`} 
+                                    // variant="outlined" 
+                                />
+                                <Divider/>
+                                <ListItemText
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginTop: '1rem',
+                                    }}
+                                    key={segment.id}
+                                    primary={`${segment.is_approved ? 'Approved' : 'Pending'}`}
+                                />
+                            </ListItemAvatar>
+                            <ListItemText
+                                key={segment.id}
+                                primary={<div style={{textDecoration: 'underline'}}>{moment(segment.date).format("ddd, MMMM Do YYYY")}</div>}
+                                secondary={
+                                <>
+                                    {`${moment(new Date(segment.date + ' ' + segment.start_time)).format('LT')} -  
+                                    ${moment(new Date(segment.date + ' ' + segment.end_time)).format('LT')}`}
+                                    <br/>
+                                    Project: {segment.project}
+                                    <br/>
+                                    Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}
+                                </>}
+                            />
+                        </ListItem>
+                    </Grid>
+                    </Grid>
+                </Paper>
+            ))
+
+
 
     return ( 
-        <Container>
+        <Container
+        sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection:'column',
+            marginTop: '1rem',
+        }}>
             <div  style={{marginBottom: '20px', marginTop: '20px' }}>
             <WeekPicker 
                 getIsoWeek={getIsoWeek}
             />
             <Card 
                 variant='outlined'
-                sx={{ minWidth: 275, marginBottom: '20px', marginTop: '20px' }}
+                sx={{
+                    marginTop: '20px',
+                    width: '100%',
+                    maxWidth: '500px',
+                    }}
+                // sx={{ minWidth: 275, marginBottom: '20px', marginTop: '20px' }}
             >
                 <CardContent>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -100,7 +201,7 @@ function WorksegmentList(props) {
                     
             </Card>
             </div>
-            {worksegments.map((segment) => {
+            {/* {worksegments.map((segment) => {
                 return (
                     <Card 
                         key={segment.id}
@@ -145,59 +246,9 @@ function WorksegmentList(props) {
                         : ''}
                     </Card>
                     )
-            })}
+            })} */}
+            {segmentList}
         </Container>
-
-        // <Container>
-        //     {props.token == null || props.token === '' ? (
-        //     <Alert variant='warning'>
-        //         You are not logged in. Please 
-        //         <Link to={'/login'}> Login </Link>
-        //         to see your todos.
-        //     </Alert>
-        //     ) : (
-        //     <div>
-        //         <Link to={"/todos/create"}>
-        //             <Button variant='outline-info' className="mb-3">
-        //                 Add Todo
-        //             </Button>
-
-        //         </Link>
-        //     {todos.map((todo) => {
-        //         return (
-        //             <Card key={todo.id} className="mb-3">
-        //                 <Card.Body>
-        //                     <div className={`${todo.completed ? "text-decoration-line-through" : ''}`}>
-        //                         <Card.Title>{todo.title}</Card.Title>
-        //                         <Card.Text><b>Memo:</b> {todo.memo}</Card.Text>
-        //                         <Card.Text className='mb-4'>Date created: {moment(todo.created).format("Do MMMM YYYY")}</Card.Text>
-        //                     </div>
-        //                     {!todo.commpleted && 
-        //                         <Link to={{
-        //                             pathname: '/todos/' + 'todo.id',
-        //                             state: {
-        //                                 currentTodo: todo
-        //                             }
-        //                         }}>
-        //                             <Button variant='outline-info' className='me-2'>
-        //                                 Edit
-        //                             </Button>
-        //                         </Link>
-        //                     }
-        //                     <Button variant='outline-danger' onClick={() => deleteTodo(todo.id)}
-        //                     className="me-2">
-        //                         Delete
-        //                     </Button>
-        //                     <Button variant="outline-success" onClick={() => completeTodo(todo.id)}>
-        //                         Complete
-        //                     </Button>
-        //                 </Card.Body>
-        //             </Card>
-        //         )
-        //     })}
-        //     </div>
-        //     )}
-        // </Container>
     );
 }
 
