@@ -69,9 +69,11 @@ const renderWeekPickerDay = (date, selectedDates, pickersDayProps) => {
 };
 
 return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} locale={locale}>
+    <LocalizationProvider 
+        dateAdapter={AdapterDateFns} 
+        locale={locale}
+    >
     <DatePicker
-        
         displayStaticWrapperAs="desktop"
         label={isoWeek}
         value={value}
@@ -79,7 +81,6 @@ return (
         setValue(newValue);
         setIsoWeek(moment(newValue).format('GGGG[W]WW'))
         }}
-
         renderDay={renderWeekPickerDay}
         renderInput={(params) => <TextField {...params} />}
         disableMaskedInput={true}

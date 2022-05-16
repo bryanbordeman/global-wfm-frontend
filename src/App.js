@@ -4,6 +4,22 @@ import { BrowserRouter } from 'react-router-dom';
 import MainRoutes from './components/MainRoutes';
 import Navbar from './components/Navbar'
 import UserService from "./services/User.services";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import  BottomNavigation  from './components/BottomNavigation';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#1C88B0',
+        },
+        secondary: {
+            main: '#D1DF45',
+        },
+        darkBlue: {
+            main: '#11495F',
+        },
+        },
+});
 
 function App() {
     const [ user, setUser ] = useState(localStorage.getItem('user') || null)
@@ -46,17 +62,20 @@ function App() {
     };
 
     return (
-        <BrowserRouter>
-            <Navbar
-                user={user}
-                logout={logout}/>
-            <MainRoutes
-                user={user}
-                token={token}
-                login={login}
-                signup={signup}
-                logout={logout}/>
-        </BrowserRouter>
+        <ThemeProvider theme={theme}>
+            <BrowserRouter>
+                <Navbar
+                    user={user}
+                    logout={logout}/>
+                <MainRoutes
+                    user={user}
+                    token={token}
+                    login={login}
+                    signup={signup}
+                    logout={logout}/>
+                {/* <BottomNavigation/> */}
+            </BrowserRouter>
+        </ThemeProvider>
     );
 }
 
