@@ -4,7 +4,6 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-// import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -13,7 +12,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Stack } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import FormGroup from '@mui/material/FormGroup';
+
 
 
 export default function AddWorksegmentForm(props) {
@@ -25,12 +24,35 @@ export default function AddWorksegmentForm(props) {
     const [lunch, setLunch] = React.useState(true);
     const [travel, setTravel] = React.useState(0);
     const [notes, setNotes] = React.useState('');
+
+    
+    const [ submitted, setSubmitted ] = React.useState(false);
     
     const {handleClose, open } = props
+    const { user, token, editing, createWorksegment } = props
+
+    const data = {
+        project: project, 
+        is_approved: false,
+        date: date.toISOString().split('T')[0],
+        start_time: startTime.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"),
+        end_time: endTime.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"),
+        lunch: lunch,
+        travel_duration: travel,
+        notes: notes
+    }
+
+
+    const handleSubmit = () => {
+        createWorksegment(data)
+    };
+
+
+    
     return (
         <div>
         <Dialog fullWidth open={open} onClose={handleClose}>
-            <DialogTitle>Add Worksegment</DialogTitle>
+            <DialogTitle>{`${editing ? 'Edit' : 'Add'} Worksegment`}</DialogTitle>
             <DialogContent>
             <Stack direction="column" spacing={2}>
                 <TextField
@@ -39,7 +61,7 @@ export default function AddWorksegmentForm(props) {
                     id="project"
                     label="Project"
                     onChange={(project) => {
-                        setProject(project)}}
+                        setProject(project.target.value)}}
                     type="text"
                     fullWidth
                     variant="outlined"
@@ -79,18 +101,17 @@ export default function AddWorksegmentForm(props) {
                     />
                 </LocalizationProvider>
                 <FormControlLabel
-                    onChange={(lunch) => {
+                    onChange={() => {
                         setLunch(lunch)}}
                     control={<Switch defaultChecked color="primary" />}
                     label="Lunch"
-                    labelPlacement="lunch"
                 />
                 <TextField
                     autoFocus
                     margin="dense"
                     id="travel"
                     onChange={(travel) => {
-                        setTravel(travel)}}
+                        setTravel(travel.target.value)}}
                     label="Travel Duration"
                     type="number"
                     fullWidth
@@ -100,16 +121,15 @@ export default function AddWorksegmentForm(props) {
                     id="outlined-multiline-static"
                     label="Notes"
                     onChange={(notes) => {
-                        setNotes(notes)}}
+                        setNotes(notes.target.value)}}
                     multiline
                     rows={4}
-                    defaultValue="Notes"
                 />
             </Stack>
             </DialogContent>
             <DialogActions>
             <Button variant='outlined' color='error' onClick={handleClose}>Cancel</Button>
-            <Button variant='outlined' onClick={handleClose}>Add</Button>
+            <Button variant='outlined' onClick={handleSubmit}>Submit</Button>
             </DialogActions>
         </Dialog>
         </div>

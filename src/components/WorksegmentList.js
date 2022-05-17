@@ -17,6 +17,10 @@ function WorksegmentList(props) {
     const [ worksegments, setWorksegments ] = useState([]);
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
     const [ open, setOpen ] = React.useState(false);
+    const { user, token } = props
+
+    const [ editing, setEditing ] = React.useState(false)
+    const [ submitted, setSubmitted ] = React.useState(false)
 
     useEffect(() => {
         retrieveWorksegments();
@@ -24,6 +28,7 @@ function WorksegmentList(props) {
 
     const handleClickOpen = () => {
         setOpen(true);
+        setEditing(false)
     };
 
     const handleClose = () => {
@@ -38,6 +43,18 @@ function WorksegmentList(props) {
         .catch( e => {
             console.log(e)
         })
+    };
+
+    const createWorksegment = (data) => {
+        WorksegmentDataService.createWorksegment(data, token)
+        .then(response => {
+            setSubmitted(true);
+            setOpen(false)
+            retrieveWorksegments()
+        })
+        .catch(e => {
+            console.log(e)
+        });
     };
 
     const deleteWorksegment = (segmentId) => {
@@ -109,6 +126,9 @@ function WorksegmentList(props) {
                                 <Stack spacing={2}>
                                     <IconButton
                                         color='primary'
+                                        onClick={ () => {
+                                            // saveWorksegment(segment)
+                                            setEditing(true)} }
                                         >
                                         <Edit/>
                                     </IconButton>
@@ -169,8 +189,6 @@ function WorksegmentList(props) {
                     </Grid>
                 </Paper>
             ))
-
-
 
     return ( 
         <Container
@@ -239,7 +257,11 @@ function WorksegmentList(props) {
             <AddWorksegmentForm 
                 handleClickOpen={handleClickOpen}
                 handleClose={handleClose}
-                open={open}/>
+                open={open}
+                user={user}
+                token={token}
+                editing={editing}
+                createWorksegment={createWorksegment}/>
             {segmentList}
         </Container>
     );
