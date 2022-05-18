@@ -5,9 +5,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import moment from 'moment';
 
-export default function DeleteWorksegmentModal() {
-    const [openDelete, setOpenDelete] = React.useState(false);
+export default function DeleteWorksegmentModal(props) {
+
+    const { deleteWorksegment, segment , openDelete, setOpenDelete  } = props
 
     const handleClickOpen = () => {
         setOpenDelete(true);
@@ -17,11 +19,13 @@ export default function DeleteWorksegmentModal() {
         setOpenDelete(false);
     };
 
+    const handleDelete = () => {
+        deleteWorksegment(segment.id);
+        setOpenDelete(false);
+    };
+
     return (
         <div>
-        <Button variant="outlined" onClick={handleClickOpen}>
-            Open alert dialog
-        </Button>
         <Dialog
             open={openDelete}
             onClose={handleClose}
@@ -33,14 +37,23 @@ export default function DeleteWorksegmentModal() {
             </DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
-                Let Google help apps determine location. This means sending anonymous
-                location data to Google, even when no apps are running.
+                {moment(segment.date).format("ddd, MMMM Do YYYY")}
+                <br/>
+                {`${moment(new Date(segment.date + ' ' + segment.start_time)).format('LT')} -  
+                ${moment(new Date(segment.date + ' ' + segment.end_time)).format('LT')}`}
+                <br/>
+                Project: {segment.project}
+                <br/>
+                Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}
+                <br/>
+                Total Hours: {`${segment.duration} ${segment.duration > 1 ? 'Hrs' : 'Hr'}`}
+ 
             </DialogContentText>
             </DialogContent>
             <DialogActions>
             <Button variant='outlined' onClick={handleClose}>Close</Button>
-            <Button color='error' variant='outlined' onClick={handleClose} autoFocus>
-                Delte
+            <Button color='error' variant='outlined' onClick={handleDelete} autoFocus>
+                Delete
             </Button>
             </DialogActions>
         </Dialog>

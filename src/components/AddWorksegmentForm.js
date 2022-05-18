@@ -17,7 +17,7 @@ import Switch from '@mui/material/Switch';
 
 export default function AddWorksegmentForm(props) {
     
-    const [project, setProject] = React.useState(null);
+    const [project, setProject] = React.useState('');
     const [date, setDate] = React.useState(new Date());
     const [startTime, setStartTime] = React.useState(new Date());
     const [endTime, setEndTime] = React.useState(new Date());
@@ -28,8 +28,18 @@ export default function AddWorksegmentForm(props) {
     
     const [ submitted, setSubmitted ] = React.useState(false);
     
-    const {handleClose, open } = props
+    const {handleClose, openAdd } = props
     const { user, token, editing, createWorksegment } = props
+
+    React.useEffect(() => {
+        setProject('');
+        setDate(new Date());
+        setStartTime(new Date());
+        setEndTime(new Date());
+        setLunch(true);
+        setTravel(0);
+        setNotes('');
+    },[openAdd])
 
     const data = {
         project: project, 
@@ -44,14 +54,14 @@ export default function AddWorksegmentForm(props) {
 
 
     const handleSubmit = () => {
-        createWorksegment(data)
+        createWorksegment(data);
     };
 
 
     
     return (
         <div>
-        <Dialog fullWidth open={open} onClose={handleClose}>
+        <Dialog fullWidth open={openAdd} onClose={handleClose}>
             <DialogTitle>{`${editing ? 'Edit' : 'Add'} Worksegment`}</DialogTitle>
             <DialogContent>
             <Stack direction="column" spacing={2}>
@@ -62,6 +72,7 @@ export default function AddWorksegmentForm(props) {
                     label="Project"
                     onChange={(project) => {
                         setProject(project.target.value)}}
+                    value={project}
                     type="text"
                     fullWidth
                     variant="outlined"
@@ -102,9 +113,10 @@ export default function AddWorksegmentForm(props) {
                 </LocalizationProvider>
                 <FormControlLabel
                     onChange={() => {
-                        setLunch(lunch)}}
+                        setLunch(!lunch)}}
                     control={<Switch defaultChecked color="primary" />}
                     label="Lunch"
+                    value={lunch}
                 />
                 <TextField
                     autoFocus
@@ -112,6 +124,7 @@ export default function AddWorksegmentForm(props) {
                     id="travel"
                     onChange={(travel) => {
                         setTravel(travel.target.value)}}
+                    value={travel}
                     label="Travel Duration"
                     type="number"
                     fullWidth
@@ -122,6 +135,7 @@ export default function AddWorksegmentForm(props) {
                     label="Notes"
                     onChange={(notes) => {
                         setNotes(notes.target.value)}}
+                    value={notes}
                     multiline
                     rows={4}
                 />

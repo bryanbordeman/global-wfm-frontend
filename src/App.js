@@ -67,7 +67,7 @@ function App() {
     };
 
     return (
-        <div>
+        <div style={{backgroundColor: '#f8f8ff', height: '100vh'}}>
         <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Navbar

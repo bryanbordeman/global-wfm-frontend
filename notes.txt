@@ -1,1 +1,2 @@
-fix background marginTop problem with color on WorksegmentList 
+- fix background at login page. problem with color on top 
+- add validation on AddWorksegment

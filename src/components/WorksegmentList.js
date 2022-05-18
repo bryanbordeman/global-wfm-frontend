@@ -19,23 +19,26 @@ import DeleteWorksegmentModal from './DeleteWorksegmentModal';
 function WorksegmentList(props) {
     const [ worksegments, setWorksegments ] = useState([]);
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
-    const [ open, setOpen ] = React.useState(false);
+    const [ openAdd, setOpenAdd ] = React.useState(false);
+    const [ openDelete, setOpenDelete ] = React.useState(false);
     const { user, token } = props
+    const [ editSegment, setEditSegment ] = React.useState({}) 
 
     const [ editing, setEditing ] = React.useState(false)
     const [ submitted, setSubmitted ] = React.useState(false)
+    const [ deleted, setDeleted ] = React.useState(false)
 
     useEffect(() => {
         retrieveWorksegments();
     }, [props.token, isoWeek]);
 
     const handleClickOpen = () => {
-        setOpen(true);
+        setOpenAdd(true);
         setEditing(false)
     };
 
     const handleClose = () => {
-        setOpen(false);
+        setOpenAdd(false);
     };
 
     const retrieveWorksegments = () => {
@@ -51,12 +54,13 @@ function WorksegmentList(props) {
     const createWorksegment = (data) => {
         WorksegmentDataService.createWorksegment(data, token)
         .then(response => {
-            setSubmitted(true)
+            window.scrollTo(0, 0);
+            setSubmitted(true);
             setTimeout(() => {
                 setSubmitted(false)
-            }, 3000)
-            setOpen(false)
-            retrieveWorksegments()
+            }, 3000);
+            setOpenAdd(false);
+            retrieveWorksegments();
         })
         .catch(e => {
             console.log(e)
@@ -66,7 +70,12 @@ function WorksegmentList(props) {
     const deleteWorksegment = (segmentId) => {
         WorksegmentDataService.deleteWorksegment(segmentId, props.token)
         .then(response => {
+            window.scrollTo(0, 0);
             retrieveWorksegments();
+            setDeleted(true)
+            setTimeout(() => {
+                setDeleted(false)
+            }, 3000)
         })
         .catch( e => {
             console.log(e)
@@ -86,7 +95,12 @@ function WorksegmentList(props) {
 
     const getIsoWeek = (week) => {
         setIsoWeek(week)
-    }
+    };
+
+    const handleClickOpenDelete = (segment) => {
+        setOpenDelete(true)
+        setEditSegment(segment)
+    };
 
     const getTotalHours = () => {
         let totalHours = 0
@@ -144,7 +158,8 @@ function WorksegmentList(props) {
                                         edge="end" 
                                         color="error"
                                         aria-label="delete"
-                                        onClick={ () => deleteWorksegment(segment.id) } >
+                                        onClick={ () => {
+                                            handleClickOpenDelete(segment)}}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </Stack> : ''
@@ -204,15 +219,23 @@ function WorksegmentList(props) {
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection:'column',
-            marginTop: '1rem',
+            height: '100%'
         }}>
             {submitted ? 
             <Alert 
-                sx={{marginBottom: '1rem'}}
+                sx={{marginBottom: '1rem', width: '100%', height: '100%'}}
                 severity="success">
                 <AlertTitle>Submitted</AlertTitle>
                 Your time has been submitted for approval— <strong>Status = Pending</strong>
             </Alert> : ''}
+            {deleted ? 
+            <Alert 
+                sx={{marginBottom: '1rem', width: '100%'}}
+                severity="error">
+                <AlertTitle>Deleted</AlertTitle>
+                Your time has been deleted
+            </Alert> : ''}
+            
             <div  style={{width: '100%', maxWidth: '500px' }}>
             <Stack style={{marginBottom: '0.75rem', marginTop: '1rem',}}direction="row" spacing={2}>
             <WeekPicker 
@@ -271,13 +294,18 @@ function WorksegmentList(props) {
             <AddWorksegmentForm 
                 handleClickOpen={handleClickOpen}
                 handleClose={handleClose}
-                open={open}
+                openAdd={openAdd}
                 user={user}
                 token={token}
                 editing={editing}
                 createWorksegment={createWorksegment}/>
             {segmentList}
-            {/* <DeleteWorksegmentModal/> */}
+            <DeleteWorksegmentModal
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
+                segment={editSegment}
+                deleteWorksegment={deleteWorksegment}
+                retrieveWorksegments={retrieveWorksegments}/>
         </Container>
     );
 }
