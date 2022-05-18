@@ -18,7 +18,12 @@ const theme = createTheme({
         darkBlue: {
             main: '#11495F',
         },
+        
         },
+    // background: {
+    //     paper: 'red',
+    //     default: 'red'
+    // }
 });
 
 function App() {
@@ -62,6 +67,7 @@ function App() {
     };
 
     return (
+        <div>
         <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Navbar
@@ -76,6 +82,7 @@ function App() {
                 {/* <BottomNavigation/> */}
             </BrowserRouter>
         </ThemeProvider>
+        </div>
     );
 }
 

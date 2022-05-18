@@ -34,7 +34,6 @@ function Login(props) {
     };
 
     return ( 
-        
         <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -43,6 +42,7 @@ function Login(props) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            
         }}
         >
         <img style={{width: '20rem'}} src={logo} alt="GPS Logo"/>

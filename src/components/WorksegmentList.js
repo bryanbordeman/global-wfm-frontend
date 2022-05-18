@@ -8,9 +8,12 @@ import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
 import WeekPicker from '../components/WeekPicker'
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import moment from 'moment';
 
 import AddWorksegmentForm from './AddWorksegmentForm'
+import DeleteWorksegmentModal from './DeleteWorksegmentModal';
 
 
 function WorksegmentList(props) {
@@ -48,7 +51,10 @@ function WorksegmentList(props) {
     const createWorksegment = (data) => {
         WorksegmentDataService.createWorksegment(data, token)
         .then(response => {
-            setSubmitted(true);
+            setSubmitted(true)
+            setTimeout(() => {
+                setSubmitted(false)
+            }, 3000)
             setOpen(false)
             retrieveWorksegments()
         })
@@ -94,6 +100,7 @@ function WorksegmentList(props) {
         let totalOvertimeHours = 0
         if(totalRegularHours > 40 ){
             totalOvertimeHours = totalRegularHours - 40
+            totalRegularHours = 40
         }
 
         return {totalHours: totalHours, 
@@ -107,12 +114,12 @@ function WorksegmentList(props) {
     const segmentList = worksegments.map(segment => (
                 <Paper
                     sx={{
-                    my: 2,
+                    my: 1,
                     width: '100%',
                     maxWidth: '500px',
-                    border: 1,
+                    border: 0.5,
                     borderColor: 'primary.main',
-                    borderRadius: '16px'
+                    borderRadius: '16px',
                     }}
                     variant="outlined"
                     key={segment.id}
@@ -173,7 +180,7 @@ function WorksegmentList(props) {
                             </ListItemAvatar>
                             <ListItemText
                                 key={segment.id}
-                                primary={<div style={{fontWeight: 'bold'}}>{moment(segment.date).format("ddd, MMMM Do YYYY")}</div>}
+                                primary={<div style={{fontWeight: '700', marginBottom: '.5rem'}}>{moment(segment.date).format("ddd, MMMM Do YYYY")}</div>}
                                 secondary={
                                 <>
                                     {`${moment(new Date(segment.date + ' ' + segment.start_time)).format('LT')} -  
@@ -189,18 +196,25 @@ function WorksegmentList(props) {
                     </Grid>
                 </Paper>
             ))
-
     return ( 
         <Container
         sx={{
+            backgroundColor: '#f8f8ff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection:'column',
             marginTop: '1rem',
         }}>
+            {submitted ? 
+            <Alert 
+                sx={{marginBottom: '1rem'}}
+                severity="success">
+                <AlertTitle>Submitted</AlertTitle>
+                Your time has been submitted for approval— <strong>Status = Pending</strong>
+            </Alert> : ''}
             <div  style={{width: '100%', maxWidth: '500px' }}>
-            <Stack direction="row" spacing={2}>
+            <Stack style={{marginBottom: '0.75rem', marginTop: '1rem',}}direction="row" spacing={2}>
             <WeekPicker 
                 getIsoWeek={getIsoWeek}
             />
@@ -209,7 +223,8 @@ function WorksegmentList(props) {
                 sx={{ height: '100%'}}
                 fullWidth
                 size="large"
-                variant='outlined' 
+                variant='contained' 
+                color='success'
                 endIcon={<AddIcon />}
                 onClick={handleClickOpen}
             >Add</Button>
@@ -218,14 +233,13 @@ function WorksegmentList(props) {
             <Card 
                 variant='outlined'
                 sx={{
-                    marginTop: '20px',
+                    my: 1,
                     width: '100%',
                     maxWidth: '500px',
-                    border: 1,
+                    border: 0.5,
                     borderColor: 'primary.main',
                     borderRadius: '16px'
                     }}
-                // sx={{ minWidth: 275, marginBottom: '20px', marginTop: '20px' }}
             >
                 <CardContent
                     sx={{
@@ -235,7 +249,7 @@ function WorksegmentList(props) {
                         flexDirection:'column',
                     }}
                     >
-                    <Typography mb={1} variant="h4" component="div">
+                    <Typography style={{fontWeight: '700'}} mb={1} variant="h4" component="div">
                         {isoWeek}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -247,7 +261,7 @@ function WorksegmentList(props) {
                     <Typography variant="body2" color="text.secondary" gutterBottom>
                     Overtime Hours: {totals.totalOvertimeHours}
                     </Typography>
-                    <Typography variant="body1" color="text.primary" gutterBottom>
+                    <Typography style={{fontWeight: '600'}} variant="body1" color="text.primary" gutterBottom>
                     Total Hours: {totals.totalHours}
                     </Typography>
                 </CardContent>
@@ -263,6 +277,7 @@ function WorksegmentList(props) {
                 editing={editing}
                 createWorksegment={createWorksegment}/>
             {segmentList}
+            {/* <DeleteWorksegmentModal/> */}
         </Container>
     );
 }
