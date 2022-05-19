@@ -16,7 +16,16 @@ import Switch from '@mui/material/Switch';
 
 
 export default function AddWorksegmentForm(props) {
-    
+    const { 
+            editing, 
+            createWorksegment, 
+            updateWorksegment,
+            segment,
+            handleClose, 
+            openAdd,
+            setOpenAdd
+            } = props
+
     const [project, setProject] = React.useState('');
     const [date, setDate] = React.useState(new Date());
     const [startTime, setStartTime] = React.useState(new Date());
@@ -24,22 +33,23 @@ export default function AddWorksegmentForm(props) {
     const [lunch, setLunch] = React.useState(true);
     const [travel, setTravel] = React.useState(0);
     const [notes, setNotes] = React.useState('');
-
     
-    const [ submitted, setSubmitted ] = React.useState(false);
-    
-    const {handleClose, openAdd } = props
-    const { user, token, editing, createWorksegment } = props
-
     React.useEffect(() => {
-        setProject('');
-        setDate(new Date());
-        setStartTime(new Date());
-        setEndTime(new Date());
-        setLunch(true);
-        setTravel(0);
-        setNotes('');
+            setProject(editing ? segment.project : '');
+            setDate(editing ? new Date(segment.date.replace('-', '/').replace('-', '/')) : new Date());
+            setStartTime(editing ? getDateFromHours(segment.start_time) : new Date());
+            setEndTime(editing ? getDateFromHours(segment.end_time) : new Date());
+            setLunch(editing ? segment.lunch : true);
+            setTravel(editing ? segment.travel_duration : 0);
+            setNotes(editing ? segment.notes : '');
     },[openAdd])
+
+    function getDateFromHours(time) {
+        time = time.split(':');
+        let now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), ...time);
+    }
+
 
     const data = {
         project: project, 
@@ -52,9 +62,16 @@ export default function AddWorksegmentForm(props) {
         notes: notes
     }
 
-
     const handleSubmit = () => {
-        createWorksegment(data);
+        if(editing){
+            updateWorksegment(segment.id, data);
+            setOpenAdd(false);
+
+        }
+        else {
+            createWorksegment(data);
+            setOpenAdd(false);
+        }
     };
 
 
@@ -114,7 +131,7 @@ export default function AddWorksegmentForm(props) {
                 <FormControlLabel
                     onChange={() => {
                         setLunch(!lunch)}}
-                    control={<Switch defaultChecked color="primary" />}
+                    control={<Switch checked={lunch} color="primary" />}
                     label="Lunch"
                     value={lunch}
                 />
@@ -142,8 +159,8 @@ export default function AddWorksegmentForm(props) {
             </Stack>
             </DialogContent>
             <DialogActions>
-            <Button variant='outlined' color='error' onClick={handleClose}>Cancel</Button>
-            <Button variant='outlined' onClick={handleSubmit}>Submit</Button>
+            <Button variant='outlined' onClick={handleClose}>Cancel</Button>
+            <Button variant='contained' onClick={handleSubmit}>{editing ? 'Update' : 'Submit'}</Button>
             </DialogActions>
         </Dialog>
         </div>

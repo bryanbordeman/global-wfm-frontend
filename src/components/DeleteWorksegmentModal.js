@@ -5,6 +5,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
+import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 
 export default function DeleteWorksegmentModal(props) {
@@ -33,18 +35,19 @@ export default function DeleteWorksegmentModal(props) {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-            {"Are you sure you want to permanently delete this timesheet?"}
+            <Alert severity="error">Permanently delete this timesheet?</Alert>
+            {/* {"Are you sure you want to permanently delete this timesheet?"} */}
             </DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
                 {moment(segment.date).format("ddd, MMMM Do YYYY")}
-                <br/>
+                {/* <br/>
                 {`${moment(new Date(segment.date + ' ' + segment.start_time)).format('LT')} -  
                 ${moment(new Date(segment.date + ' ' + segment.end_time)).format('LT')}`}
                 <br/>
                 Project: {segment.project}
                 <br/>
-                Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}
+                Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'} */}
                 <br/>
                 Total Hours: {`${segment.duration} ${segment.duration > 1 ? 'Hrs' : 'Hr'}`}
  
@@ -52,7 +55,7 @@ export default function DeleteWorksegmentModal(props) {
             </DialogContent>
             <DialogActions>
             <Button variant='outlined' onClick={handleClose}>Close</Button>
-            <Button color='error' variant='outlined' onClick={handleDelete} autoFocus>
+            <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
                 Delete
             </Button>
             </DialogActions>

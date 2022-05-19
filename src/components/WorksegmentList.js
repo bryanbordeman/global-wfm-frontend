@@ -26,6 +26,7 @@ function WorksegmentList(props) {
 
     const [ editing, setEditing ] = React.useState(false)
     const [ submitted, setSubmitted ] = React.useState(false)
+    const [ edited, setEdited] = React.useState(false)
     const [ deleted, setDeleted ] = React.useState(false)
 
     useEffect(() => {
@@ -55,12 +56,11 @@ function WorksegmentList(props) {
         WorksegmentDataService.createWorksegment(data, token)
         .then(response => {
             window.scrollTo(0, 0);
+            retrieveWorksegments();
             setSubmitted(true);
             setTimeout(() => {
                 setSubmitted(false)
             }, 3000);
-            setOpenAdd(false);
-            retrieveWorksegments();
         })
         .catch(e => {
             console.log(e)
@@ -82,6 +82,23 @@ function WorksegmentList(props) {
         });
     };
 
+    const updateWorksegment = (segmentId, data) => {
+        WorksegmentDataService.updateWorksegment(segmentId, data, props.token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            retrieveWorksegments();
+            setEdited(true);
+            setTimeout(() => {
+                setEdited(false)
+            }, 3000);
+            setEditing(false);
+        })
+        .catch( e => {
+            console.log(e)
+        });
+
+    }
+
     const approveWorksegment = (segmentId) => {
         WorksegmentDataService.approveWorksegment(segmentId, props.token)
         .then(response => {
@@ -99,6 +116,12 @@ function WorksegmentList(props) {
 
     const handleClickOpenDelete = (segment) => {
         setOpenDelete(true)
+        setEditSegment(segment)
+    };
+
+    const handleClickOpenEdit = (segment) => {
+        setEditing(true)
+        setOpenAdd(true)
         setEditSegment(segment)
     };
 
@@ -148,8 +171,7 @@ function WorksegmentList(props) {
                                     <IconButton
                                         color='primary'
                                         onClick={ () => {
-                                            // saveWorksegment(segment)
-                                            setEditing(true)} }
+                                            handleClickOpenEdit(segment)}}
                                         >
                                         <Edit/>
                                     </IconButton>
@@ -228,6 +250,13 @@ function WorksegmentList(props) {
                 <AlertTitle>Submitted</AlertTitle>
                 Your time has been submitted for approval— <strong>Status = Pending</strong>
             </Alert> : ''}
+            {edited ? 
+            <Alert 
+                sx={{marginBottom: '1rem', width: '100%', height: '100%'}}
+                severity="info">
+                <AlertTitle>Updated</AlertTitle>
+                Your time has been submitted for approval— <strong>Status = Pending</strong>
+            </Alert> : ''}
             {deleted ? 
             <Alert 
                 sx={{marginBottom: '1rem', width: '100%'}}
@@ -292,14 +321,19 @@ function WorksegmentList(props) {
             </Card>
             </div>
             <AddWorksegmentForm 
+                segment={editSegment}
                 handleClickOpen={handleClickOpen}
                 handleClose={handleClose}
                 openAdd={openAdd}
+                setOpenAdd={setOpenAdd}
                 user={user}
                 token={token}
                 editing={editing}
-                createWorksegment={createWorksegment}/>
+                createWorksegment={createWorksegment}
+                updateWorksegment={updateWorksegment}/>
+
             {segmentList}
+
             <DeleteWorksegmentModal
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}

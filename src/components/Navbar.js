@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/GPS_Navbar_Logo.svg'
 
 const pages = ['Timesheets', 'Schedule', 'Projects', 'Announcements', 'Expenses'];
-const settings = ['Profile', 'Account', 'Dashboard'];
+const settings = ['Profile'];
 
 
 const ResponsiveAppBar = (props) => {
