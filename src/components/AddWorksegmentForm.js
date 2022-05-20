@@ -47,15 +47,17 @@ export default function AddWorksegmentForm(props) {
     }
 
     const [ values, setValues ] = React.useState(initialFormValues);
+    const [ errors, setErrors ] = React.useState({
+        project: null,
+        date: null,
+        startTime: null,
+        endTime: null,
+        travel: null,
+    })
 
     React.useEffect(() => {
         setValues(editing ? editFormValues : initialFormValues)
     },[openAdd]);
-
-    const [errors, setErrors] = React.useState({});
-    const validate = (fieldValues = values) => {
-        // this function will check if the form values are valid
-    }
 
     function getDateFromHours(time) {
         time = time.split(':');
@@ -94,6 +96,49 @@ export default function AddWorksegmentForm(props) {
         });
     };
 
+    function msToTime(duration) {
+        let minutes = Math.floor((duration / (1000 * 60)) % 60);
+        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+    
+        return hours + minutes /60;
+    }
+    
+    const handleValidation = () => {
+        let formIsValid = true;
+
+        if(values.project.length > 5){
+            setErrors({...errors, project: 'Invalid Entry'});
+            formIsValid = false;
+        }
+        else if(values.date > new Date()){
+            setErrors({...errors, date: 'Date cannot be in the future.'});
+            formIsValid = false;
+        }
+        else if(values.startTime > values.endTime){
+            setErrors({...errors, startTime: 'Start time needs to be before end time'});
+            formIsValid = false;
+        }
+        else if(values.travel < 0){
+            setErrors({...errors, travel: 'Travel time can not be negitive'});
+            formIsValid = false;
+        }
+        else if(values.travel > msToTime(values.endTime - values.startTime)){
+            setErrors({...errors, travel: 'Travel time can not be greater then total time'});
+            formIsValid = false;
+        }
+        else{
+            setErrors({
+                project: null,
+                date: null,
+                startTime: null,
+                endTime: null,
+                travel: null,
+            });
+            formIsValid = true;
+        }
+    return formIsValid ? handleSubmit() : null
+    };
+
 
     return (
         <div>
@@ -113,6 +158,8 @@ export default function AddWorksegmentForm(props) {
                     type="text"
                     fullWidth
                     variant="outlined"
+                    helperText={errors.project === null ? '' : errors.project}
+                    error={errors.project? true : false}
                 />
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
@@ -121,7 +168,8 @@ export default function AddWorksegmentForm(props) {
                         name="date"
                         value={values.date}
                         onChange={(date) => {setValues({...values, date: date})}}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} helperText={errors.date === null ? '' : errors.date}
+                        error={errors.date? true : false} />}
                         fullWidth
                     />
                 </LocalizationProvider>
@@ -132,7 +180,8 @@ export default function AddWorksegmentForm(props) {
                         name="startTime"
                         value={values.startTime}
                         onChange={(time) => {setValues({...values, startTime: time})}}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} helperText={errors.startTime === null ? '' : errors.startTime}
+                        error={errors.startTime? true : false}/>}
                     />
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -164,6 +213,8 @@ export default function AddWorksegmentForm(props) {
                     type="number"
                     fullWidth
                     variant="outlined"
+                    helperText={errors.travel === null ? '' : errors.travel}
+                    error={errors.travel? true : false}
                 />
                 <TextField
                     id="notes"
@@ -179,7 +230,7 @@ export default function AddWorksegmentForm(props) {
             <Divider/>
             <DialogActions>
             <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-            <Button variant='contained' onClick={handleSubmit}>{editing ? 'Update' : 'Submit'}</Button>
+            <Button variant='contained' onClick={handleValidation}>{editing ? 'Update' : 'Submit'}</Button>
             </DialogActions>
         </Dialog>
         </div>
