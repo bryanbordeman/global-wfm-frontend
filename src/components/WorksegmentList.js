@@ -28,6 +28,7 @@ function WorksegmentList(props) {
     const [ submitted, setSubmitted ] = React.useState(false)
     const [ edited, setEdited] = React.useState(false)
     const [ deleted, setDeleted ] = React.useState(false)
+    const [ error, setError ] = React.useState(false)
 
     useEffect(() => {
         retrieveWorksegments();
@@ -48,7 +49,11 @@ function WorksegmentList(props) {
             setWorksegments(response.data);
         })
         .catch( e => {
-            console.log(e)
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
         })
     };
 
@@ -63,7 +68,11 @@ function WorksegmentList(props) {
             }, 3000);
         })
         .catch(e => {
-            console.log(e)
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
         });
     };
 
@@ -78,7 +87,11 @@ function WorksegmentList(props) {
             }, 3000)
         })
         .catch( e => {
-            console.log(e)
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
         });
     };
 
@@ -94,7 +107,11 @@ function WorksegmentList(props) {
             setEditing(false);
         })
         .catch( e => {
-            console.log(e)
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
         });
 
     }
@@ -106,7 +123,11 @@ function WorksegmentList(props) {
             console.log("approve segment", segmentId)
         })
         .catch( e => {
-            console.log(e)
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
         });
     };
 
@@ -263,6 +284,14 @@ function WorksegmentList(props) {
                 severity="error">
                 <AlertTitle>Deleted</AlertTitle>
                 Your time has been deleted
+            </Alert> : ''}
+            
+            {error ? 
+            <Alert 
+                sx={{marginBottom: '1rem', width: '100%'}}
+                severity="error">
+                <AlertTitle>Error</AlertTitle>
+                Something Went Wrong!! Please try again.
             </Alert> : ''}
             
             <div  style={{width: '100%', maxWidth: '500px' }}>

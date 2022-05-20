@@ -1,2 +1,2 @@
-- fix background at login page. problem with color on top 
 - add validation on AddWorksegment
+- add user profile. need Django modal?

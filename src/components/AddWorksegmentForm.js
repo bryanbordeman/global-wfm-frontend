@@ -12,8 +12,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Stack } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-
-
+import  Divider from '@mui/material/Divider';
 
 export default function AddWorksegmentForm(props) {
     const { 
@@ -26,23 +25,37 @@ export default function AddWorksegmentForm(props) {
             setOpenAdd
             } = props
 
-    const [project, setProject] = React.useState('');
-    const [date, setDate] = React.useState(new Date());
-    const [startTime, setStartTime] = React.useState(new Date());
-    const [endTime, setEndTime] = React.useState(new Date());
-    const [lunch, setLunch] = React.useState(true);
-    const [travel, setTravel] = React.useState(0);
-    const [notes, setNotes] = React.useState('');
-    
+    const initialFormValues = {
+        project: '',
+        is_approved: false,
+        date: new Date(),
+        startTime: new Date(),
+        endTime: new Date(),
+        lunch: true,
+        travel: 0, 
+        notes: ''
+    }
+
+    const editFormValues = {
+        project: segment.project,
+        date: editing ? new Date(segment.date.replace('-', '/').replace('-', '/')) : new Date(),
+        startTime: editing ? getDateFromHours(segment.start_time) : new Date(),
+        endTime: editing ? getDateFromHours(segment.end_time) : new Date(),
+        lunch: segment.lunch,
+        travel: segment.travel_duration,
+        notes: segment.notes
+    }
+
+    const [ values, setValues ] = React.useState(initialFormValues);
+
     React.useEffect(() => {
-            setProject(editing ? segment.project : '');
-            setDate(editing ? new Date(segment.date.replace('-', '/').replace('-', '/')) : new Date());
-            setStartTime(editing ? getDateFromHours(segment.start_time) : new Date());
-            setEndTime(editing ? getDateFromHours(segment.end_time) : new Date());
-            setLunch(editing ? segment.lunch : true);
-            setTravel(editing ? segment.travel_duration : 0);
-            setNotes(editing ? segment.notes : '');
-    },[openAdd])
+        setValues(editing ? editFormValues : initialFormValues)
+    },[openAdd]);
+
+    const [errors, setErrors] = React.useState({});
+    const validate = (fieldValues = values) => {
+        // this function will check if the form values are valid
+    }
 
     function getDateFromHours(time) {
         time = time.split(':');
@@ -50,19 +63,18 @@ export default function AddWorksegmentForm(props) {
         return new Date(now.getFullYear(), now.getMonth(), now.getDate(), ...time);
     }
 
-
-    const data = {
-        project: project, 
-        is_approved: false,
-        date: date.toISOString().split('T')[0],
-        start_time: startTime.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"),
-        end_time: endTime.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"),
-        lunch: lunch,
-        travel_duration: travel,
-        notes: notes
-    }
-
     const handleSubmit = () => {
+        const data = {
+            project: values.project, 
+            is_approved: false,
+            date: values.date.toISOString().split('T')[0],
+            start_time: values.startTime.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"),
+            end_time: values.endTime.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"),
+            lunch: values.lunch,
+            travel_duration: values.travel,
+            notes: values.notes
+        };
+
         if(editing){
             updateWorksegment(segment.id, data);
             setOpenAdd(false);
@@ -71,25 +83,33 @@ export default function AddWorksegmentForm(props) {
         else {
             createWorksegment(data);
             setOpenAdd(false);
-        }
+        };
+    };
+
+    const handleInputValue = (e) => {
+        const { name, value } = e.target;
+        setValues({
+        ...values,
+        [name]: value
+        });
     };
 
 
-    
     return (
         <div>
         <Dialog fullWidth open={openAdd} onClose={handleClose}>
             <DialogTitle>{`${editing ? 'Edit' : 'Add'} Worksegment`}</DialogTitle>
+            <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>
                 <TextField
                     autoFocus
                     margin="dense"
                     id="project"
+                    name='project'
                     label="Project"
-                    onChange={(project) => {
-                        setProject(project.target.value)}}
-                    value={project}
+                    onChange={handleInputValue}
+                    value={values.project}
                     type="text"
                     fullWidth
                     variant="outlined"
@@ -98,10 +118,9 @@ export default function AddWorksegmentForm(props) {
                     <DatePicker
                         label="Date"
                         id="date"
-                        value={date}
-                        onChange={(newDate) => {
-                        setDate(newDate);
-                        }}
+                        name="date"
+                        value={values.date}
+                        onChange={(date) => {setValues({...values, date: date})}}
                         renderInput={(params) => <TextField {...params} />}
                         fullWidth
                     />
@@ -110,10 +129,9 @@ export default function AddWorksegmentForm(props) {
                     <TimePicker
                         label="Start Time"
                         id="start-time"
-                        value={startTime}
-                        onChange={(newTime) => {
-                        setStartTime(newTime);
-                        }}
+                        name="startTime"
+                        value={values.startTime}
+                        onChange={(time) => {setValues({...values, startTime: time})}}
                         renderInput={(params) => <TextField {...params} />}
                     />
                 </LocalizationProvider>
@@ -121,43 +139,44 @@ export default function AddWorksegmentForm(props) {
                     <TimePicker
                         label="End Time"
                         id="end-time"
-                        value={endTime}
-                        onChange={(newTime) => {
-                        setEndTime(newTime);
-                        }}
+                        name="endTime"
+                        value={values.endTime}
+                        onChange={(time) => {setValues({...values, endTime: time})}}
                         renderInput={(params) => <TextField {...params} />}
                     />
                 </LocalizationProvider>
                 <FormControlLabel
-                    onChange={() => {
-                        setLunch(!lunch)}}
-                    control={<Switch checked={lunch} color="primary" />}
+                    onChange={() => {setValues({...values, lunch: !values.lunch})}}
+                    control={<Switch checked={values.lunch} color="primary" />}
+                    id="lunch"
+                    name="lunch"
                     label="Lunch"
-                    value={lunch}
+                    value={values.lunch}
                 />
                 <TextField
                     autoFocus
                     margin="dense"
                     id="travel"
-                    onChange={(travel) => {
-                        setTravel(travel.target.value)}}
-                    value={travel}
+                    name="travel"
+                    onChange={handleInputValue}
+                    value={values.travel}
                     label="Travel Duration"
                     type="number"
                     fullWidth
                     variant="outlined"
                 />
                 <TextField
-                    id="outlined-multiline-static"
+                    id="notes"
+                    name="notes"
                     label="Notes"
-                    onChange={(notes) => {
-                        setNotes(notes.target.value)}}
-                    value={notes}
+                    onChange={handleInputValue}
+                    value={values.notes}
                     multiline
                     rows={4}
                 />
             </Stack>
             </DialogContent>
+            <Divider/>
             <DialogActions>
             <Button variant='outlined' onClick={handleClose}>Cancel</Button>
             <Button variant='contained' onClick={handleSubmit}>{editing ? 'Update' : 'Submit'}</Button>
