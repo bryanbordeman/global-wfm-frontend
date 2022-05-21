@@ -72,10 +72,6 @@ function Login(props) {
                 value={password}
                 onChange={onChangePassword}
             />
-            <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-            />
             <Button
                 type="submit"
                 size="large"

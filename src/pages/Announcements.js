@@ -1,10 +1,9 @@
 import React from 'react';
 import LoginMessage from '../components/LoginMessage';
 
-
-function Dashboard(props){
+function Announcements(props) {
     const { user } = props
-    return (
+    return ( 
         <div>
             {!user ? 
             <div>
@@ -12,11 +11,11 @@ function Dashboard(props){
             </div>
             : 
             <div> 
-                Dashboard
+                Announcements
             </div>
             }
         </div>
-    )
-};
+     );
+}
 
-export default Dashboard;
+export default Announcements;

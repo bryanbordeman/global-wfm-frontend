@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,10 +14,6 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/GPS_Navbar_Logo.svg'
-
-const pages = ['Timesheets', 'Schedule', 'Projects', 'Announcements', 'Expenses'];
-const settings = ['Profile'];
-
 
 const ResponsiveAppBar = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -98,18 +95,31 @@ const ResponsiveAppBar = (props) => {
                     display: { xs: 'block', md: 'none' },
                     }}
                 >
-                    {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                        <Typography textAlign="center">{page}</Typography>
+                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/'>
+                        <Typography textAlign="center">Dashboard</Typography>
                     </MenuItem>
-                    ))}
+                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/worksegments'>
+                        <Typography textAlign="center">Timesheets</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/schedule'>
+                        <Typography textAlign="center">Schedule</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/projects'>
+                        <Typography textAlign="center">Projects</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/announcements'>
+                        <Typography textAlign="center">Announcements</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/expenses'>
+                        <Typography textAlign="center">Expenses</Typography>
+                    </MenuItem>
                 </Menu>
                 </Box>
                 <Typography
                 variant="h5"
                 noWrap
                 component="a"
-                href=""
+                href="/"
                 sx={{
                     mr: 2,
                     display: { xs: 'flex', md: 'none' },
@@ -124,15 +134,36 @@ const ResponsiveAppBar = (props) => {
                 <img style={{width: '6rem'}} src={logo} alt="GPS Logo"/>
                 </Typography>
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                {pages.map((page) => (
-                    <Button
-                    key={page}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                    >
-                    {page}
+                    <Button component={Link} to='/'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                        Dashboard
                     </Button>
-                ))}
+                    <Button component={Link} to='/worksegments'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                        Timesheets
+                    </Button>
+                    <Button component={Link} to='/schedule'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                        Schedule
+                    </Button>
+                    <Button component={Link} to='/projects'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                        Projects
+                    </Button>
+                    <Button component={Link} to='/announcements'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                        Announcements
+                    </Button>
+                    <Button component={Link} to='/expenses'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                        Expenses
+                    </Button>
                 </Box>
 
                 <Box sx={{ flexGrow: 0 }}>
@@ -156,12 +187,10 @@ const ResponsiveAppBar = (props) => {
                     }}
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
-                >
-                    {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center">{setting}</Typography>
+                > 
+                    <MenuItem onClick={handleCloseUserMenu} component={Link} to='/profile'>
+                        <Typography textAlign="center">Profile</Typography>
                     </MenuItem>
-                    ))}
                     <MenuItem onClick={logout}>
                         <Typography textAlign="center">Logout</Typography>
                     </MenuItem>

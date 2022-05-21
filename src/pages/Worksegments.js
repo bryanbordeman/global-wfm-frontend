@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import LoginMessage from '../components/LoginMessage';
 import WorksegmentDataService from '../services/Worksegment.services'
 import { Container, Typography, CardActions, Button, Card, CardContent, Chip } from '@mui/material';
 import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider } from '@mui/material';
@@ -10,10 +11,12 @@ import AddIcon from '@mui/icons-material/Add';
 import WeekPicker from '../components/WeekPicker'
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import Tooltip from '@mui/material/Tooltip';
+import SpeakerNotesTwoToneIcon from '@mui/icons-material/SpeakerNotesTwoTone';
 import moment from 'moment';
 
-import AddWorksegmentForm from './AddWorksegmentForm'
-import DeleteWorksegmentModal from './DeleteWorksegmentModal';
+import AddWorksegmentForm from '../components/AddWorksegmentForm'
+import DeleteWorksegmentModal from '../components/DeleteWorksegmentModal';
 
 
 function WorksegmentList(props) {
@@ -247,6 +250,12 @@ function WorksegmentList(props) {
                                     Project: {segment.project}
                                     <br/>
                                     Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}
+                                    <br/>
+                                    {segment.notes ? <Tooltip title={segment.notes} enterTouchDelay={0}>
+                                                        <IconButton size="small" aria-label="notes">
+                                                            <SpeakerNotesTwoToneIcon />
+                                                        </IconButton>
+                                                    </Tooltip> : ''}
                                 </>}
                             />
                         </ListItem>
@@ -255,6 +264,12 @@ function WorksegmentList(props) {
                 </Paper>
             ))
     return ( 
+        <div>
+            {!user ? 
+            <div>
+            <LoginMessage/>
+            </div>
+            : 
         <Container
         sx={{
             backgroundColor: '#f8f8ff',
@@ -370,6 +385,8 @@ function WorksegmentList(props) {
                 deleteWorksegment={deleteWorksegment}
                 retrieveWorksegments={retrieveWorksegments}/>
         </Container>
+        }
+    </div>
     );
 }
 

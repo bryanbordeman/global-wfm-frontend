@@ -77,7 +77,7 @@ function Signup(props) {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-            Signup
+            Sign up
             </Button>
             <div style={{display: 'flex', 
                             flexDirection: 'column', 

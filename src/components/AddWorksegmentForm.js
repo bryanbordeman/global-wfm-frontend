@@ -109,23 +109,59 @@ export default function AddWorksegmentForm(props) {
         if(values.project.length > 5){
             setErrors({...errors, project: 'Invalid Entry'});
             formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, project: null});
+            }, 3000);
+        }
+        else if(values.project === ''){
+            setErrors({...errors, project: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, project: null});
+            }, 3000);
         }
         else if(values.date > new Date()){
             setErrors({...errors, date: 'Date cannot be in the future.'});
             formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, date: null});
+            }, 3000);
         }
         else if(values.startTime > values.endTime){
             setErrors({...errors, startTime: 'Start time needs to be before end time'});
             formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, startTime: null});
+            }, 3000);
         }
         else if(values.travel < 0){
             setErrors({...errors, travel: 'Travel time can not be negitive'});
             formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, travel: null});
+            }, 3000);
         }
         else if(values.travel > msToTime(values.endTime - values.startTime)){
             setErrors({...errors, travel: 'Travel time can not be greater then total time'});
             formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, travel: null});
+            }, 3000);
         }
+        // else if(Number.isFinite(Number(values.travel))){
+        //     setErrors({...errors, travel: 'Input must be a number'});
+        //     formIsValid = false;
+        //     setTimeout(() => {
+        //         formIsValid = true;
+        //         setErrors({...errors, travel: null});
+        //     }, 3000);
+        // }
         else{
             setErrors({
                 project: null,
