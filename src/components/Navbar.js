@@ -43,7 +43,7 @@ const ResponsiveAppBar = (props) => {
 
     return (
         <div>
-            {user ? (
+            {user.username ? (
         <AppBar position="static" color='darkBlue' style={{marginBottom: '0px'}} >
             <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -169,7 +169,7 @@ const ResponsiveAppBar = (props) => {
                 <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={user.toUpperCase()} src="/static/images/avatar/2.jpg" />
+                    <Avatar alt={user.firstName.toUpperCase()} src="/static/images/avatar/2.jpg" />
                     </IconButton>
                 </Tooltip>
                 <Menu

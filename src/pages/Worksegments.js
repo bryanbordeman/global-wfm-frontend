@@ -265,7 +265,7 @@ function WorksegmentList(props) {
             ))
     return ( 
         <div>
-            {!user ? 
+            {!user.username ? 
             <div>
             <LoginMessage/>
             </div>

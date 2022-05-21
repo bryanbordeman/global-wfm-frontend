@@ -1,2 +1,2 @@
-- add validation on AddWorksegment
-- add user profile. need Django modal?
+- add validation on login
+

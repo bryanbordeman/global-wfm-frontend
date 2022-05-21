@@ -27,7 +27,7 @@ const theme = createTheme({
 });
 
 function App() {
-    const [ user, setUser ] = useState(localStorage.getItem('user') || null)
+    const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || null)
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
 
@@ -36,9 +36,17 @@ function App() {
         UserService.login(user)
         .then(response => {
             setToken(response.data.token);
-            setUser(user.username);
+            // setUser(user.username);
+            const userData = {
+                username: response.data.user,
+                email: response.data.user_email,
+                firstName: response.data.user_first_name,
+                lastName: response.data.user_last_name,
+                isStaff: response.data.user_is_staff.toLowerCase() === 'true'
+            }
+            setUser(userData)
             localStorage.setItem('token', response.data.token)
-            localStorage.setItem('user', user.username);
+            localStorage.setItem('user', JSON.stringify(userData));
             setError('');
         })
         .catch( e => {
@@ -47,10 +55,17 @@ function App() {
         });
     };
     async function logout(){
+        const userData = {
+            username: '',
+            email: '',
+            firstName: '',
+            lastName:  '',
+            isStaff: ''
+        }
         setToken('');
-        setUser('');
+        setUser(userData);
         localStorage.setItem('token', '');
-        localStorage.setItem('user', '');
+        localStorage.setItem('user', JSON.stringify(userData));
     };
     async function signup(user= null){
         UserService.signup(user)

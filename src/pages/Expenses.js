@@ -5,7 +5,7 @@ function Expenses(props) {
     const { user } = props
     return ( 
         <div>
-            {!user ? 
+            {!user.username  ? 
             <div>
             <LoginMessage/>
             </div>

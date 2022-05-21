@@ -81,7 +81,7 @@ function Login(props) {
             >
             Sign In
             </Button>
-            <div style={{display: 'flex', 
+            {/* <div style={{display: 'flex', 
                             flexDirection: 'column', 
                             alignItems: 'center',
                             justifyContent: 'center'}}>
@@ -91,7 +91,7 @@ function Login(props) {
                     {"Don't have an account? Sign Up"}
                     </Link>
                 </Grid>
-            </div>
+            </div> */}
         </Box>
         </Box>
     </Container>
