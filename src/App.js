@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import MainRoutes from './components/MainRoutes';
@@ -28,8 +28,17 @@ const theme = createTheme({
 
 function App() {
     const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || null)
+    const [ users, setUsers ] = useState('')
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
+
+    useEffect(() => {
+        try {
+            setUsers(JSON.parse(localStorage.getItem('users')))
+        } catch (e) {
+            setUsers({})
+        }
+    },[])
 
     async function login(user= null){
         // console.log('App Login Function')
@@ -44,7 +53,14 @@ function App() {
                 lastName: response.data.user_last_name,
                 isStaff: response.data.user_is_staff.toLowerCase() === 'true'
             }
+            try {
+                setUsers(JSON.parse(response.data.users))
+            } catch (e) {
+                setUsers({})
+            }
+        
             setUser(userData)
+            localStorage.setItem('users', response.data.users)
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user', JSON.stringify(userData));
             setError('');
@@ -62,6 +78,7 @@ function App() {
             lastName:  '',
             isStaff: ''
         }
+        
         setToken('');
         setUser(userData);
         localStorage.setItem('token', '');
@@ -91,6 +108,7 @@ function App() {
                 <div style={{marginTop: '3em',}}></div>
                 <MainRoutes
                     user={user}
+                    users={users}
                     token={token}
                     login={login}
                     signup={signup}

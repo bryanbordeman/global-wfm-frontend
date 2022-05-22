@@ -1,2 +1,4 @@
 - add validation on login
+- fix white spot at top on login page
+- fix edit and delete on admin mode
 

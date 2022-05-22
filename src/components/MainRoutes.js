@@ -11,7 +11,7 @@ import Expenses from '../pages/Expenses';
 import Profile from '../pages/Profile'
 
 function MainRoutes(props) {
-    const { user, token, login, signup } = props
+    const { user, users, token, login, signup } = props
     
     return (
         <div>
@@ -22,6 +22,7 @@ function MainRoutes(props) {
                     element={
                         <Dashboard
                         user={user}
+                        users={users}
                         token={token}
                         />
                     }/>
@@ -31,6 +32,7 @@ function MainRoutes(props) {
                     element={
                         <WorksegmentList
                         user={user}
+                        users={users}
                         token={token}
                         />
                 }/>

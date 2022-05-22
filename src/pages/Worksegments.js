@@ -28,7 +28,7 @@ function WorksegmentList(props) {
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
     const [ openAdd, setOpenAdd ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
-    const { user, token } = props
+    const { user, token, users } = props
     const [ editSegment, setEditSegment ] = React.useState({}) 
 
     const [ editing, setEditing ] = React.useState(false)
@@ -36,6 +36,7 @@ function WorksegmentList(props) {
     const [ edited, setEdited] = React.useState(false)
     const [ deleted, setDeleted ] = React.useState(false)
     const [ error, setError ] = React.useState(false)
+    const [ selectUser, setSelectUser ] = React.useState('')
 
     useEffect(() => {
         retrieveWorksegments();
@@ -51,6 +52,18 @@ function WorksegmentList(props) {
     };
 
     const retrieveWorksegments = () => {
+        user.isStaff? WorksegmentDataService.adminGetWeek(props.token, isoWeek)
+        .then(response => {
+            setWorksegments(response.data);
+        })
+        .catch( e => {
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
+        })
+        :
         WorksegmentDataService.getWeek(props.token, isoWeek)
         .then(response => {
             setWorksegments(response.data);
@@ -62,7 +75,7 @@ function WorksegmentList(props) {
                 setError(false)
             }, 3000);
         })
-    };
+    }
 
     const createWorksegment = (data) => {
         WorksegmentDataService.createWorksegment(data, token)
@@ -174,9 +187,20 @@ function WorksegmentList(props) {
                 totalOvertimeHours: totalOvertimeHours}
     }
 
+    
+    const handleSelectUser = (e) => {
+        const selectedUser = e.target.value;
+        setSelectUser(selectedUser);
+        console.log(Object.keys(users).find(value => 1))
+    }
+
+    function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    }
+
     const totals = getTotalHours()
 
-    const users = ['Bryan Bordeman', 'Yvonne Bordeman', 'Dhru Patel']
+    const usersList = Object.keys(users)
 
     const segmentList = worksegments.map(segment => (
                 <Paper
@@ -242,12 +266,24 @@ function WorksegmentList(props) {
                                         marginTop: '1rem',
                                     }}
                                     key={segment.id}
-                                    primary={`${segment.is_approved ? 'Approved' : 'Pending'}`}
+                                    primary={user.isStaff ? 
+                                        segment.is_approved ? <Button variant='outlined' disabled size='small'>Approved</Button> : 
+                                        <Button variant='outlined' size='small'>Approve ?</Button> : 
+                                        `${segment.is_approved ? 'Approved' : 'Pending'}`
+                                        }
                                 />
+                                
+
                             </ListItemAvatar>
                             <ListItemText
                                 key={segment.id}
-                                primary={<div style={{fontWeight: '700', marginBottom: '.5rem'}}>{moment(segment.date).format("ddd, MMMM Do YYYY")}</div>}
+                                primary={
+                                <div style={{fontWeight: '700', marginBottom: '.5rem'}}>
+                                    {user.isStaff ? segment.user : ''}
+                                    <br/>
+                                    {moment(segment.date).format("ddd, MMMM Do YYYY")}
+                                </div>
+                                }
                                 secondary={
                                 <>
                                     {`${moment(new Date(segment.date + ' ' + segment.start_time)).format('LT')} -  
@@ -340,13 +376,20 @@ function WorksegmentList(props) {
                 sx={{mb: 2}}
                 labelId="employee-select-label"
                 id="employees"
-                value={''}
+                value={selectUser}
                 label="Employee"
-                //    onChange={handleChange}
+                onChange={handleSelectUser}
                 >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {usersList.map((u, index) => {
+                    return (
+                    <MenuItem 
+                        key={index} 
+                        value={u}
+                        >
+                        {u}
+                    </MenuItem>
+                    )
+                })}
                 </Select>
             </div> : ''
             }

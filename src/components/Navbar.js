@@ -39,6 +39,7 @@ const ResponsiveAppBar = (props) => {
     const logout = () => {
         props.logout()
         navigate('/login')
+        setAnchorElUser(null);
     }
 
     return (
