@@ -1,9 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import LoginMessage from '../components/LoginMessage';
+import AdminWorksegments from '../components/AdminWorksegments';
+
 
 
 function Dashboard(props){
-    const { user } = props
+    const { user, token } = props
+
     return (
         <div>
             {!user.username  ? 
@@ -11,6 +14,12 @@ function Dashboard(props){
             <LoginMessage/>
             </div>
             : 
+            user.isStaff ?
+            <div> 
+                <AdminWorksegments
+                    user={user}
+                    token={token} />
+            </div> :
             <div> 
                 Dashboard
             </div>

@@ -44,7 +44,11 @@ const ResponsiveAppBar = (props) => {
     return (
         <div>
             {user.username ? (
-        <AppBar position="static" color='darkBlue' style={{marginBottom: '0px'}} >
+        <AppBar 
+            position="fixed" 
+            color='darkBlue' 
+            sx={{marginBottom: '0px',
+                zIndex: (theme) => theme.zIndex.drawer + 1}} >
             <Container maxWidth="xl">
             <Toolbar disableGutters>
                 <Typography
