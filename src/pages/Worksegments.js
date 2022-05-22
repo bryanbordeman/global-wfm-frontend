@@ -15,6 +15,10 @@ import Tooltip from '@mui/material/Tooltip';
 import SpeakerNotesTwoToneIcon from '@mui/icons-material/SpeakerNotesTwoTone';
 import moment from 'moment';
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+
 import AddWorksegmentForm from '../components/AddWorksegmentForm'
 import DeleteWorksegmentModal from '../components/DeleteWorksegmentModal';
 
@@ -172,6 +176,8 @@ function WorksegmentList(props) {
 
     const totals = getTotalHours()
 
+    const users = ['Bryan Bordeman', 'Yvonne Bordeman', 'Dhru Patel']
+
     const segmentList = worksegments.map(segment => (
                 <Paper
                     sx={{
@@ -310,7 +316,7 @@ function WorksegmentList(props) {
             </Alert> : ''}
             
             <div  style={{width: '100%', maxWidth: '500px' }}>
-            <Stack style={{marginBottom: '0.75rem', marginTop: '1rem',}}direction="row" spacing={2}>
+            <Stack style={{marginBottom: '0.75rem', marginTop: '1.5rem',}}direction="row" spacing={2}>
             <WeekPicker 
                 getIsoWeek={getIsoWeek}
             />
@@ -326,6 +332,24 @@ function WorksegmentList(props) {
             >Add</Button>
             </div>
             </Stack>
+            {user.isStaff ? 
+            <div>
+                <InputLabel id="employee-select-label">Employee</InputLabel>
+                <Select
+                fullWidth
+                sx={{mb: 2}}
+                labelId="employee-select-label"
+                id="employees"
+                value={''}
+                label="Employee"
+                //    onChange={handleChange}
+                >
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+            </div> : ''
+            }
             <Card 
                 variant='outlined'
                 sx={{

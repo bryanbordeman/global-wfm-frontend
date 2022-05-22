@@ -10,7 +10,7 @@ function Schedule(props) {
             <LoginMessage/>
             </div>
             : 
-            <div> 
+            <div style={{paddingTop: '1rem'}}> 
                 Schedule
             </div>
             }

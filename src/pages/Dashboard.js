@@ -15,12 +15,13 @@ function Dashboard(props){
             </div>
             : 
             user.isStaff ?
-            <div> 
-                <AdminWorksegments
+            <div style={{paddingTop: '1rem'}}> 
+                {/* <AdminWorksegments
                     user={user}
-                    token={token} />
+                    token={token} /> */}
+                Admin Dashboard
             </div> :
-            <div> 
+            <div style={{paddingTop: '1rem'}}> 
                 Dashboard
             </div>
             }

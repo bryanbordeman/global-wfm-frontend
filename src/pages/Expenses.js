@@ -10,7 +10,7 @@ function Expenses(props) {
             <LoginMessage/>
             </div>
             : 
-            <div> 
+            <div style={{paddingTop: '1rem'}}> 
                 Expenses
             </div>
             }

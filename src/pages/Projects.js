@@ -10,7 +10,7 @@ function Projects(props) {
             <LoginMessage/>
             </div>
             : 
-            <div> 
+            <div style={{paddingTop: '1rem'}}> 
                 Projects
             </div>
             }

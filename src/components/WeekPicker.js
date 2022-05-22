@@ -84,7 +84,7 @@ return (
         renderDay={renderWeekPickerDay}
         renderInput={(params) => <TextField {...params} />}
         disableMaskedInput={true}
-        inputFormat="'Week of' MMMM w"
+        inputFormat="'Week 'w"
     />
     </LocalizationProvider>
 );

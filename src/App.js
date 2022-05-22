@@ -88,7 +88,7 @@ function App() {
                 <Navbar
                     user={user}
                     logout={logout}/>
-                <div style={{marginTop: '75px'}}></div>
+                <div style={{marginTop: '3em',}}></div>
                 <MainRoutes
                     user={user}
                     token={token}
