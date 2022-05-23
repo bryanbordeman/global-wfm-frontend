@@ -8,6 +8,7 @@ import Edit from '@mui/icons-material/Edit'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import WeekPicker from '../components/WeekPicker'
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -37,10 +38,16 @@ function WorksegmentList(props) {
     const [ deleted, setDeleted ] = React.useState(false)
     const [ error, setError ] = React.useState(false)
     const [ selectUser, setSelectUser ] = React.useState('')
+    const [ selectUserId, setSelectUserId ] = React.useState(2)
+    const [ selectUserObject, setSelectUserObject ] = React.useState({})
 
     useEffect(() => {
         retrieveWorksegments();
-    }, [props.token, isoWeek]);
+    }, [props.token, isoWeek, selectUser]);
+
+    useEffect(() =>{
+        setSelectUserObject(users[String(selectUser)])
+    }, [selectUser])
 
     const handleClickOpen = () => {
         setOpenAdd(true);
@@ -54,7 +61,15 @@ function WorksegmentList(props) {
     const retrieveWorksegments = () => {
         user.isStaff? WorksegmentDataService.adminGetWeek(props.token, isoWeek)
         .then(response => {
-            setWorksegments(response.data);
+            // !sort segments by user request
+            const filteredUser = []
+            Object.values(response.data).find((obj) => {
+                if(obj.user === selectUserId){
+                    filteredUser.push(obj)
+                }
+            });
+
+            setWorksegments(filteredUser);
         })
         .catch( e => {
             console.log(e);
@@ -191,7 +206,7 @@ function WorksegmentList(props) {
     const handleSelectUser = (e) => {
         const selectedUser = e.target.value;
         setSelectUser(selectedUser);
-        console.log(Object.keys(users).find(value => 1))
+        setSelectUserId(users[selectedUser].id)
     }
 
     function getKeyByValue(object, value) {
@@ -268,7 +283,7 @@ function WorksegmentList(props) {
                                     key={segment.id}
                                     primary={user.isStaff ? 
                                         segment.is_approved ? <Button variant='outlined' disabled size='small'>Approved</Button> : 
-                                        <Button variant='outlined' size='small'>Approve ?</Button> : 
+                                        <Button startIcon={<CheckBoxIcon />} variant='outlined' size='small'>Approve</Button> : 
                                         `${segment.is_approved ? 'Approved' : 'Pending'}`
                                         }
                                 />
