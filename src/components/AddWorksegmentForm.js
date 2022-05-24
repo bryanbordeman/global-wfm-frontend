@@ -13,6 +13,9 @@ import { Stack } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 export default function AddWorksegmentForm(props) {
     const { 
@@ -22,7 +25,11 @@ export default function AddWorksegmentForm(props) {
             segment,
             handleClose, 
             openAdd,
-            setOpenAdd
+            setOpenAdd,
+            user,
+            selectUser,
+            usersList,
+            handleSelectUser
             } = props
 
     const initialFormValues = {
@@ -178,11 +185,41 @@ export default function AddWorksegmentForm(props) {
 
     return (
         <div>
-        <Dialog fullWidth open={openAdd} onClose={handleClose}>
+        <Dialog 
+            fullWidth 
+            open={openAdd} 
+            onClose={handleClose}
+            scroll={'body'}
+            
+            >
             <DialogTitle>{`${editing ? 'Edit' : 'Add'} Worksegment`}</DialogTitle>
             <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>
+                {user.isStaff ? 
+                <div>
+                    <InputLabel id="employee-select-label">Employee</InputLabel>
+                    <Select
+                    fullWidth
+                    labelId="employee-select-label"
+                    id="employees"
+                    value={selectUser}
+                    label="Employee"
+                    onChange={handleSelectUser}
+                    >
+                    {usersList.map((u, index) => {
+                        return (
+                        <MenuItem 
+                            key={index} 
+                            value={u}
+                            >
+                            {u}
+                        </MenuItem>
+                        )
+                    })}
+                    </Select>
+                </div> : ''
+                }
                 <TextField
                     autoFocus
                     margin="dense"

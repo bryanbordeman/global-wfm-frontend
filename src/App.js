@@ -83,6 +83,7 @@ function App() {
         setUser(userData);
         localStorage.setItem('token', '');
         localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('users', '');
     };
     async function signup(user= null){
         UserService.signup(user)

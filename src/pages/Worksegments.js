@@ -38,7 +38,7 @@ function WorksegmentList(props) {
     const [ deleted, setDeleted ] = React.useState(false)
     const [ error, setError ] = React.useState(false)
     const [ selectUser, setSelectUser ] = React.useState('')
-    const [ selectUserId, setSelectUserId ] = React.useState(2)
+    const [ selectUserId, setSelectUserId ] = React.useState(0)
     const [ selectUserObject, setSelectUserObject ] = React.useState({})
 
     useEffect(() => {
@@ -155,7 +155,6 @@ function WorksegmentList(props) {
         WorksegmentDataService.approveWorksegment(segmentId, props.token)
         .then(response => {
             retrieveWorksegments();
-            console.log("approve segment", segmentId)
         })
         .catch( e => {
             console.log(e);
@@ -207,10 +206,6 @@ function WorksegmentList(props) {
         const selectedUser = e.target.value;
         setSelectUser(selectedUser);
         setSelectUserId(users[selectedUser].id)
-    }
-
-    function getKeyByValue(object, value) {
-        return Object.keys(object).find(key => object[key] === value);
     }
 
     const totals = getTotalHours()
@@ -282,8 +277,20 @@ function WorksegmentList(props) {
                                     }}
                                     key={segment.id}
                                     primary={user.isStaff ? 
-                                        segment.is_approved ? <Button variant='outlined' disabled size='small'>Approved</Button> : 
-                                        <Button startIcon={<CheckBoxIcon />} variant='outlined' size='small'>Approve</Button> : 
+                                        segment.is_approved ? 
+                                        <Button 
+                                            variant='outlined' 
+                                            startIcon={<CheckBoxIcon />} 
+                                            color='success'
+                                            size='small'
+                                            onClick={() => {approveWorksegment(segment.id)}}
+                                            >Approved</Button> : 
+                                        <Button 
+                                            variant='outlined' 
+                                            color='inherit'
+                                            size='small'
+                                            onClick={() => {approveWorksegment(segment.id)}}
+                                            >Approve</Button> : 
                                         `${segment.is_approved ? 'Approved' : 'Pending'}`
                                         }
                                 />
@@ -294,8 +301,6 @@ function WorksegmentList(props) {
                                 key={segment.id}
                                 primary={
                                 <div style={{fontWeight: '700', marginBottom: '.5rem'}}>
-                                    {user.isStaff ? segment.user : ''}
-                                    <br/>
                                     {moment(segment.date).format("ddd, MMMM Do YYYY")}
                                 </div>
                                 }
@@ -447,6 +452,9 @@ function WorksegmentList(props) {
             </Card>
             </div>
             <AddWorksegmentForm 
+                usersList={usersList}
+                selectUser={selectUser}
+                handleSelectUser={handleSelectUser}
                 segment={editSegment}
                 handleClickOpen={handleClickOpen}
                 handleClose={handleClose}

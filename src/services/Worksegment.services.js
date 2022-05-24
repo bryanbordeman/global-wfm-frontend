@@ -29,7 +29,7 @@ class WorksegmentDataService {
     };
     approveWorksegment(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.put(`${SERVER}/api/worksegment/${id}/approved`);
+        return axios.put(`${SERVER}/api/worksegment/${id}/approved/`);
     };
 }
 
