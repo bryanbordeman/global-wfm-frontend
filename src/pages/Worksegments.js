@@ -93,6 +93,23 @@ function WorksegmentList(props) {
     }
 
     const createWorksegment = (data) => {
+        user.isStaff? 
+        WorksegmentDataService.adminCreateWorksegment(data, token, selectUserId)
+        .then(response => {
+            window.scrollTo(0, 0);
+            retrieveWorksegments();
+            setSubmitted(true);
+            setTimeout(() => {
+                setSubmitted(false)
+            }, 3000);
+        })
+        .catch(e => {
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
+        }) :
         WorksegmentDataService.createWorksegment(data, token)
         .then(response => {
             window.scrollTo(0, 0);

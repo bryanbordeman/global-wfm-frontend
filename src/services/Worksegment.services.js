@@ -19,6 +19,10 @@ class WorksegmentDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.post(`${SERVER}/api/create/worksegment/`, data);
     };
+    adminCreateWorksegment(data, token, userId){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/create/worksegment/${userId}/`, data);
+    };
     updateWorksegment(id, data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.put(`${SERVER}/api/worksegment/${id}`, data);

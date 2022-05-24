@@ -5,7 +5,6 @@ import MainRoutes from './components/MainRoutes';
 import Navbar from './components/Navbar'
 import UserService from "./services/User.services";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import  BottomNavigation  from './components/BottomNavigation';
 
 const theme = createTheme({
     palette: {
@@ -20,10 +19,6 @@ const theme = createTheme({
         },
         
         },
-    // background: {
-    //     paper: 'red',
-    //     default: 'red'
-    // }
 });
 
 function App() {
