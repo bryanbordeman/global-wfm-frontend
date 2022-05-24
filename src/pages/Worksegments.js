@@ -334,7 +334,6 @@ function WorksegmentList(props) {
             : 
         <Container
         sx={{
-            backgroundColor: '#f8f8ff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

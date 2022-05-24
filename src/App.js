@@ -40,6 +40,11 @@ function App() {
         }
     },[])
 
+    useEffect(() => {
+        // add background to app
+        document.body.style.backgroundColor = "#f8f8ff"
+    },[])
+
     async function login(user= null){
         // console.log('App Login Function')
         UserService.login(user)
@@ -100,7 +105,6 @@ function App() {
     };
 
     return (
-        <div style={{backgroundColor: '#f8f8ff', height: '100vh'}}>
         <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Navbar
@@ -117,7 +121,6 @@ function App() {
                 {/* <BottomNavigation/> */}
             </BrowserRouter>
         </ThemeProvider>
-        </div>
     );
 }
 
