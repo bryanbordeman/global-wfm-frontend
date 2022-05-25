@@ -7,34 +7,18 @@ class AnnouncementDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/announcement/`);
     };
-    // getWeek(token, isoweek){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.get(`${SERVER}/api/worksegments/${isoweek}/`);
-    // };
-    // adminGetWeek(token, isoweek){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.get(`${SERVER}/api/admin/worksegments/${isoweek}/`);
-    // };
-    // createWorksegment(data, token){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.post(`${SERVER}/api/create/worksegment/`, data);
-    // };
-    // adminCreateWorksegment(data, token, userId){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.post(`${SERVER}/api/create/worksegment/${userId}/`, data);
-    // };
-    // updateWorksegment(id, data, token){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.put(`${SERVER}/api/worksegment/${id}`, data);
-    // };
-    // deleteWorksegment(id, token){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.delete(`${SERVER}/api/worksegment/${id}`);
-    // };
-    // approveWorksegment(id, token){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.put(`${SERVER}/api/worksegment/${id}/approved/`);
-    // };
+    createAnnouncement(data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/create/announcement/`, data);
+    };
+    updateAnnouncement(id, data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/announcement/${id}`, data);
+    };
+    deleteAnnouncement(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.delete(`${SERVER}/api/announcement/${id}`);
+    };
 }
 
 export default new AnnouncementDataService();
