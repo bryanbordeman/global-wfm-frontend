@@ -5,8 +5,10 @@ import { Paper, Grid, ListItem, ListItemText, Container, Divider, Stack, IconBut
 import DeleteIcon from '@mui/icons-material/Delete'
 import Edit from '@mui/icons-material/Edit'
 import AddIcon from '@mui/icons-material/Add';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import AddAnnouncementForm from '../components/AddAnnouncementForm';
-
+import DeleteAnnouncementModal from '../components/DeleteAnnouncementModal';
 import moment from 'moment';
 
 function Announcements(props) {
@@ -38,10 +40,62 @@ function Announcements(props) {
     }
 
     const createAnnouncement = (data) => {
+        AnnouncementDataService.createAnnouncement(data, token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            retrieveAnnouncements();
+            setSubmitted(true);
+            setTimeout(() => {
+                setSubmitted(false)
+            }, 3000);
+        })
+        .catch(e => {
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
+        });
+    };
+
+    const updateAnnouncement = (announcementId, data) => {
+        AnnouncementDataService.updateAnnouncement(announcementId, data, token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            retrieveAnnouncements();
+            setEdited(true);
+            setTimeout(() => {
+                setEdited(false)
+            }, 3000);
+            setEditing(false);
+        })
+        .catch( e => {
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
+        });
 
     };
 
-    const updateAnnouncement = (data) => {
+    const deleteAnnouncement = (announcementId) => {
+        AnnouncementDataService.deleteAnnouncement(announcementId, token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            retrieveAnnouncements();
+            setDeleted(true)
+            setTimeout(() => {
+                setDeleted(false)
+            }, 3000)
+        })
+        .catch( e => {
+            console.log(e);
+            setError(true);
+            setTimeout(() => {
+                setError(false)
+            }, 3000);
+        });
 
     };
 
@@ -55,11 +109,14 @@ function Announcements(props) {
     };
 
     const handleClickOpenEdit = (announcement) => {
-        console.log('editting', announcement)
+        setEditing(true)
+        setOpenAdd(true)
+        setEditAnnouncement(announcement)
     };
 
     const handleClickOpenDelete = (announcement) => {
-        console.log('delete', announcement)
+        setOpenDelete(true)
+        setEditAnnouncement(announcement)
     };
 
     const announcementList = announcements.map(announcement => (
@@ -73,16 +130,16 @@ function Announcements(props) {
             borderRadius: '16px',
             }}
             variant="outlined"
-            key={announcement.id}
+            key={announcement.title}
         >
             <Grid container wrap="nowrap" spacing={2}>
             <Grid item xs zeroMinWidth>
                 
                 <ListItem 
-                    key={announcement.id}         
+                    key={announcement.title}         
                 >
                     <ListItemText
-                        key={announcement.id}
+                        key={announcement.title}
                         primary={
                         <Stack direction="row" spacing={1}>
                             <div style={{fontWeight: '600', fontSize: '1.5rem', marginBottom: '.5rem'}}>
@@ -90,7 +147,7 @@ function Announcements(props) {
                                 {/* <Divider/> */}
                             </div>
                             {user.isStaff?
-                            <div style={{marginLeft: 'auto'}}>
+                            <div style={{marginLeft: 'auto'}} >
                             <Stack direction="row" spacing={1}>
                             <IconButton
                                 color='primary'
@@ -144,6 +201,36 @@ function Announcements(props) {
                         flexDirection:'column',
                         height: '100%'
                     }}>
+                        {submitted ? 
+                            <Alert 
+                                sx={{marginBottom: '1rem', width: '100%', height: '100%'}}
+                                severity="success">
+                                <AlertTitle>Posted</AlertTitle>
+                                Your announcement has been posted— <strong>Status = Posted</strong>
+                            </Alert> : ''}
+                            {edited ? 
+                            <Alert 
+                                sx={{marginBottom: '1rem', width: '100%', height: '100%'}}
+                                severity="info">
+                                <AlertTitle>Updated</AlertTitle>
+                                Your announcement has been posted— <strong>Status = Updated</strong>
+                            </Alert> : ''}
+                            {deleted ? 
+                            <Alert 
+                                sx={{marginBottom: '1rem', width: '100%'}}
+                                severity="error">
+                                <AlertTitle>Deleted</AlertTitle>
+                                Your time has been deleted
+                            </Alert> : ''}
+                            
+                            {error ? 
+                            <Alert 
+                                sx={{marginBottom: '1rem', width: '100%'}}
+                                severity="error">
+                                <AlertTitle>Error</AlertTitle>
+                                Something Went Wrong!! Please try again.
+                            </Alert> : ''}
+
                     {user.isStaff?
                     <div style={{width: '10rem', marginBottom: '.5rem', marginTop: '.35rem'}}>
                         <Button
@@ -157,11 +244,17 @@ function Announcements(props) {
                         >Add</Button> 
                     </div>
                     : ''}
-
                         {announcementList}
                 </Container>
             </div>
             }
+            <DeleteAnnouncementModal
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
+                announcement={editAnnouncement}
+                deleteAnnouncement={deleteAnnouncement}
+                retrieveAnnouncements={retrieveAnnouncements}/>
+
             <AddAnnouncementForm
                 announcement={editAnnouncement}
                 handleClickOpen={handleClickOpen}

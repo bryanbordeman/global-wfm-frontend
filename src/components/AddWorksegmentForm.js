@@ -201,6 +201,7 @@ export default function AddWorksegmentForm(props) {
                     <InputLabel id="employee-select-label">Employee</InputLabel>
                     <Select
                     fullWidth
+                    disabled={editing? true : false}
                     labelId="employee-select-label"
                     id="employees"
                     value={selectUser}

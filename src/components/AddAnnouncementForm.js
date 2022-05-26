@@ -75,65 +75,30 @@ export default function AddAnnouncementForm(props) {
     const handleValidation = () => {
         let formIsValid = true;
 
-    //     if(values.project.length > 5){
-    //         setErrors({...errors, project: 'Invalid Entry'});
-    //         formIsValid = false;
-    //         setTimeout(() => {
-    //             formIsValid = true;
-    //             setErrors({...errors, project: null});
-    //         }, 3000);
-    //     }
-    //     else if(values.project === ''){
-    //         setErrors({...errors, project: 'Required field'});
-    //         formIsValid = false;
-    //         setTimeout(() => {
-    //             formIsValid = true;
-    //             setErrors({...errors, project: null});
-    //         }, 3000);
-    //     }
-    //     else if(values.date > new Date()){
-    //         setErrors({...errors, date: 'Date cannot be in the future.'});
-    //         formIsValid = false;
-    //         setTimeout(() => {
-    //             formIsValid = true;
-    //             setErrors({...errors, date: null});
-    //         }, 3000);
-    //     }
-    //     else if(values.startTime > values.endTime){
-    //         setErrors({...errors, startTime: 'Start time needs to be before end time'});
-    //         formIsValid = false;
-    //         setTimeout(() => {
-    //             formIsValid = true;
-    //             setErrors({...errors, startTime: null});
-    //         }, 3000);
-    //     }
-    //     else if(values.travel < 0){
-    //         setErrors({...errors, travel: 'Travel time can not be negitive'});
-    //         formIsValid = false;
-    //         setTimeout(() => {
-    //             formIsValid = true;
-    //             setErrors({...errors, travel: null});
-    //         }, 3000);
-    //     }
-    //     else if(values.travel > msToTime(values.endTime - values.startTime)){
-    //         setErrors({...errors, travel: 'Travel time can not be greater then total time'});
-    //         formIsValid = false;
-    //         setTimeout(() => {
-    //             formIsValid = true;
-    //             setErrors({...errors, travel: null});
-    //         }, 3000);
-    //     }
-    //     else{
-    //         setErrors({
-    //             project: null,
-    //             date: null,
-    //             startTime: null,
-    //             endTime: null,
-    //             travel: null,
-    //         });
-    //         formIsValid = true;
-    //     }
-    // return formIsValid ? handleSubmit() : null
+        if(values.title.length > 100){
+            setErrors({...errors, title: '100 character max.'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, title: null});
+            }, 3000);
+        }
+        else if(values.memo.length > 1000){
+            setErrors({...errors, memo: '1000 character max.'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, memo: null});
+            }, 3000);
+        }
+        else{
+            setErrors({
+                title: null,
+                memo: null,
+            });
+            formIsValid = true;
+        }
+    return formIsValid ? handleSubmit() : null
     };
 
 
@@ -172,6 +137,8 @@ export default function AddAnnouncementForm(props) {
                     value={values.memo}
                     multiline
                     rows={10}
+                    helperText={errors.memo === null ? '' : errors.memo}
+                    error={errors.memo? true : false}
                 />
                 <FormControlLabel
                     onChange={() => {setValues({...values, is_active: !values.is_active})}}

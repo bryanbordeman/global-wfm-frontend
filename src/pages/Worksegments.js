@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LoginMessage from '../components/LoginMessage';
 import WorksegmentDataService from '../services/Worksegment.services'
-import { Container, Typography, CardActions, Button, Card, CardContent, Chip } from '@mui/material';
+import { Container, Typography, Button, Card, CardContent, Chip } from '@mui/material';
 import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'
 import Edit from '@mui/icons-material/Edit'
@@ -217,7 +217,6 @@ function WorksegmentList(props) {
                 totalRegularHours: totalRegularHours,
                 totalOvertimeHours: totalOvertimeHours}
     }
-
     
     const handleSelectUser = (e) => {
         const selectedUser = e.target.value;
@@ -311,8 +310,6 @@ function WorksegmentList(props) {
                                         `${segment.is_approved ? 'Approved' : 'Pending'}`
                                         }
                                 />
-                                
-
                             </ListItemAvatar>
                             <ListItemText
                                 key={segment.id}
