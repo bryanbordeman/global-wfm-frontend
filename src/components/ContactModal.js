@@ -18,7 +18,7 @@ const style = {
     };
 
     export default function ContactModal(props) {
-  
+
     const { open, handleContactOpen } = props
     const { project, contact } = props
 

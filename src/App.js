@@ -5,6 +5,7 @@ import MainRoutes from './components/MainRoutes';
 import Navbar from './components/Navbar'
 import UserService from "./services/User.services";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Toolbar } from '@mui/material';
 
 const theme = createTheme({
     palette: {
@@ -105,7 +106,7 @@ function App() {
                 <Navbar
                     user={user}
                     logout={logout}/>
-                <div style={{marginTop: '3em',}}></div>
+                <Toolbar />
                 <MainRoutes
                     user={user}
                     users={users}
