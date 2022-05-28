@@ -1,3 +1,4 @@
 - add validation on login
 - add Snackbar for confirmation and remove alert.
+- fix Django time zone date issue
 

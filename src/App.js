@@ -22,7 +22,7 @@ const theme = createTheme({
 });
 
 function App() {
-    const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || null)
+    const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || {})
     const [ users, setUsers ] = useState('')
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')

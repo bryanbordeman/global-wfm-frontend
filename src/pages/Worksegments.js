@@ -320,8 +320,8 @@ function WorksegmentList(props) {
                                 }
                                 secondary={
                                 <>
-                                    {`${moment(new Date(segment.date + ' ' + segment.start_time)).format('LT')} -  
-                                    ${moment(new Date(segment.date + ' ' + segment.end_time)).format('LT')}`}
+                                    {`${moment(segment.start_time, "HH:mm:ss").format("hh:mm A")} -  
+                                    ${moment(segment.end_time, "HH:mm:ss").format("hh:mm A")}`}
                                     <br/>
                                     Project: {segment.project}
                                     <br/>

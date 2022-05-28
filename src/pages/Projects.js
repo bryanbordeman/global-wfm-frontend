@@ -10,7 +10,6 @@ function Projects(props) {
 
     const handleChangeProject = (newProject) => {
         setProject(newProject)
-        console.log(newProject)
     }
 
     return ( 
