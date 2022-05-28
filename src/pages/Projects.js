@@ -5,8 +5,9 @@ import ProjectCard from '../components/ProjectCard';
 import { Container } from '@mui/material';
 import ContactModal from '../components/ContactModal'
 
+
 function Projects(props) {
-    const { user } = props
+    const { user, token } = props
     const [ project, setProject ] = React.useState({})
     const [ contactOpen, setContactOpen ] = React.useState(false)
     const [ contact, setContact ] = React.useState({})
@@ -41,6 +42,7 @@ function Projects(props) {
                     height: '100%'
                 }}>
                     <ProjectPicker
+                        token={token}
                         handleChangeProject={handleChangeProject}/>
                     {project ? 
                     <>

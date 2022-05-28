@@ -21,11 +21,27 @@ const style = {
 
     const { open, handleContactOpen } = props
     const { project, contact } = props
+    const [ phone, setPhone ] = React.useState([])
+    const [ company, setCompany ] = React.useState('')
+
+    // console.log(contact.phone.map(number =>(number.phone_number, number.phone_type)))
+    React.useEffect(() => {
+        if(contact.phone){
+            setPhone(contact.phone.map(number =>([number.phone_number, number.phone_type])))
+        }else{
+            setPhone([])
+        }
+    },[contact])
 
     React.useEffect(() => {
+        if(contact.company){
+            setCompany(contact.company.name)
+        }else{
+            setCompany('')
+        }
+    },[contact])
 
-    })
-    // const handleOpen = () => setOpen(true);
+
     const handleClose = () => handleContactOpen(false);
 
     return (
@@ -50,12 +66,9 @@ const style = {
                     <Divider sx={{mt:1}}/>
                     <Typography id="contact-information" variant="body2" sx={{ mt: 1 }}>
                         <>
-                        {contact.company ? contact.company : ''}
-                        {contact.company ? <br/> : ''}
-                        {contact.phone ? <a href={`tel:${contact.phone}`}>{contact.phone}</a> : ''}
-                        {contact.phone ? <br/> : ''}
-                        {contact.fax ? contact.fax : ''}
-                        {contact.fax ? <br/> : ''}
+                        {company? <> {company} <br/></> : ''}
+                        {phone ? phone.map((number, key) => (<React.Fragment key={key}> <a href={`tel:${number[0]}`}>{number[0]}</a>{' '}{number[1]}<br/></React.Fragment>)) : ''}
+                        {contact.fax ? <>{`${contact.fax} Fax`}<br/></> : ''}
                         {contact.email ? <a href={`mailto:${contact.email}`}>{contact.email}</a>: ''}
                         </>
                     </Typography>

@@ -1,17 +1,33 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import ProjectDataService from '../services/Project.services'
 
 export default function ProjectPicker(props) {
     const [ value, setValue ] = React.useState(null)
+    const [ projects, setProjects ] = React.useState([{}])
     const [inputValue, setInputValue] = React.useState('');
 
     const { handleChangeProject } = props
 
-    // React.useEffect(() => {
-    //     handleChangeProject(projects[0])
-    // },[])
+    React.useEffect(() => {
+        retrieveProject()
+    },[])
 
+    // React.useEffect(() => {
+    //     console.log(projects)
+    // }, [projects])
+
+    const retrieveProject = () => {
+        ProjectDataService.getAll(props.token)
+        .then(response => {
+            // console.log(response.data);
+            setProjects(response.data);
+        })
+        .catch( e => {
+            console.log(e);
+        })
+    }
     const handleInputValue = (newValue) => {
         setValue(newValue);
         handleChangeProject(newValue)
@@ -41,8 +57,8 @@ export default function ProjectPicker(props) {
 };
 
 
-    // sample list
-    const projects = [{  
+    // // sample list
+    const projectss = [{  
         number: '14122',
         name: 'JFK University Med Center',
         project_category: 'MRI',

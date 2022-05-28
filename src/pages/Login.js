@@ -56,7 +56,6 @@ function Login(props) {
                 label="User Name"
                 name="username"
                 autoComplete="username"
-                autoFocus
                 value={username}
                 onChange={onChangeUsername}
             />

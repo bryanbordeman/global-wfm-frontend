@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/GPS_Navbar_Logo.svg'
 
-const ResponsiveAppBar = (props) => {
+const Navbar = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const { user } = props
@@ -210,4 +210,4 @@ const ResponsiveAppBar = (props) => {
         </div>
     );
 };
-export default ResponsiveAppBar;
+export default Navbar;
