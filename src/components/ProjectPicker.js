@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
 export default function ProjectPicker(props) {
-    const [ value, setValue ] = React.useState(projects[0])
+    const [ value, setValue ] = React.useState(null)
     const [inputValue, setInputValue] = React.useState('');
 
     const { handleChangeProject } = props
@@ -21,6 +21,8 @@ export default function ProjectPicker(props) {
     return (
         <Autocomplete
         disablePortal
+        autoSelect = {false}
+        blurOnSelect = 'touch'
         value={value}
         onChange={(event, newValue) => {
             handleInputValue(newValue);
@@ -33,7 +35,7 @@ export default function ProjectPicker(props) {
         options={projects}
         getOptionLabel={(option) => option.number.toString()}
         sx={{ width: 300, mt: 2 }}
-        renderInput={(params) => <TextField {...params} label="Project" />}
+        renderInput={(params) => <TextField {...params} label="Search Projects" />}
         />
     );
 };
@@ -65,14 +67,23 @@ export default function ProjectPicker(props) {
                 fax: '',
                 website: 'https://www.hackensackmeridianhealth.org/'
             },
-        contact: {
+        contact: [
+            {
                 name: 'Colin Wallace', 
                 company: 'Hackensack Meridian Health',
                 phone: '732-509-5512',
                 fax: '',
                 email: 'Colin.Wallace@hmhn.org'
             },
-        prevailing_rate: false,
+            {
+                name: 'Bryan Bordeman', 
+                company: 'Global Shielding',
+                phone: '845-321-6134',
+                fax: '',
+                email: 'bbordeman@global-shielding.com'
+            },
+        ],
+        prevailing_rate: true,
         travel_job: false,
         notes: '',
     },
@@ -101,13 +112,13 @@ export default function ProjectPicker(props) {
                 fax: '',
                 website: 'https://www.hackensackmeridianhealth.org/'
             },
-        contact: {
+        contact: [{
                 name: 'Colin Wallace', 
                 company: 'Hackensack Meridian Health',
                 phone: '732-509-5512',
                 fax: '',
                 email: 'Colin.Wallace@hmhn.org'
-            },
+            }],
         prevailing_rate: false,
         travel_job: false,
         notes: '',
@@ -137,13 +148,13 @@ export default function ProjectPicker(props) {
                 fax: '',
                 website: 'https://www.hackensackmeridianhealth.org/'
             },
-        contact: {
+        contact: [{
                 name: 'Colin Wallace', 
                 company: 'Hackensack Meridian Health',
                 phone: '732-509-5512',
                 fax: '',
                 email: 'Colin.Wallace@hmhn.org'
-            },
+            }],
         prevailing_rate: false,
         travel_job: false,
         notes: '',
@@ -173,13 +184,13 @@ export default function ProjectPicker(props) {
                 fax: '',
                 website: 'https://www.hackensackmeridianhealth.org/'
             },
-        contact: {
+        contact: [{
                 name: 'Colin Wallace', 
                 company: 'Hackensack Meridian Health',
                 phone: '732-509-5512',
                 fax: '',
                 email: 'Colin.Wallace@hmhn.org'
-            },
+            }],
         prevailing_rate: false,
         travel_job: false,
         notes: '',
@@ -209,13 +220,13 @@ export default function ProjectPicker(props) {
                 fax: '',
                 website: 'https://www.hackensackmeridianhealth.org/'
             },
-        contact: {
+        contact: [{
                 name: 'Colin Wallace', 
                 company: 'Hackensack Meridian Health',
                 phone: '732-509-5512',
                 fax: '',
                 email: 'Colin.Wallace@hmhn.org'
-            },
+            }],
         prevailing_rate: false,
         travel_job: false,
         notes: '',
@@ -245,13 +256,13 @@ export default function ProjectPicker(props) {
                 fax: '',
                 website: 'https://www.hackensackmeridianhealth.org/'
             },
-        contact: {
+        contact: [{
                 name: 'Colin Wallace', 
                 company: 'Hackensack Meridian Health',
                 phone: '732-509-5512',
                 fax: '',
                 email: 'Colin.Wallace@hmhn.org'
-            },
+            }],
         prevailing_rate: false,
         travel_job: false,
         notes: '',
@@ -281,13 +292,13 @@ export default function ProjectPicker(props) {
                 fax: '',
                 website: 'https://www.hackensackmeridianhealth.org/'
             },
-        contact: {
+        contact: [{
                 name: 'Colin Wallace', 
                 company: 'Hackensack Meridian Health',
                 phone: '732-509-5512',
                 fax: '',
                 email: 'Colin.Wallace@hmhn.org'
-            },
+            }],
         prevailing_rate: false,
         travel_job: false,
         notes: '',

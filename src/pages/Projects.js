@@ -3,13 +3,25 @@ import LoginMessage from '../components/LoginMessage';
 import ProjectPicker from '../components/ProjectPicker'
 import ProjectCard from '../components/ProjectCard';
 import { Container } from '@mui/material';
+import ContactModal from '../components/ContactModal'
 
 function Projects(props) {
     const { user } = props
     const [ project, setProject ] = React.useState({})
+    const [ contactOpen, setContactOpen ] = React.useState(false)
+    const [ contact, setContact ] = React.useState({})
 
     const handleChangeProject = (newProject) => {
         setProject(newProject)
+    }
+
+    const handleContactOpen = (value) => {
+        setContactOpen(value)
+    }
+
+    const handleSetContact = (contact) => {
+        setContact(contact)
+        setContactOpen(true)
     }
 
     return ( 
@@ -30,8 +42,21 @@ function Projects(props) {
                 }}>
                     <ProjectPicker
                         handleChangeProject={handleChangeProject}/>
-                    {project ? <ProjectCard
-                        project={project}/> : ''}
+                    {project ? 
+                    <>
+                    <ProjectCard
+                        project={project}
+                        handleSetContact={handleSetContact}
+                    /> 
+                    <ContactModal
+                        project={project}
+                        contact={contact}
+                        handleContactOpen={handleContactOpen}
+                        open={contactOpen}
+                    />
+                    </>
+                    : ''}
+                    
                 </Container>
             </div>
             }

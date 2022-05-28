@@ -222,7 +222,7 @@ export default function AddWorksegmentForm(props) {
                 </div> : ''
                 }
                 <TextField
-                    autoFocus
+                    autoFocus={false}
                     margin="dense"
                     id="project"
                     name='project'
@@ -277,7 +277,7 @@ export default function AddWorksegmentForm(props) {
                     value={values.lunch}
                 />
                 <TextField
-                    autoFocus
+                    autoFocus={false}
                     margin="dense"
                     id="travel"
                     name="travel"
@@ -291,6 +291,7 @@ export default function AddWorksegmentForm(props) {
                     error={errors.travel? true : false}
                 />
                 <TextField
+                    autoFocus={false}
                     id="notes"
                     name="notes"
                     label="Notes"

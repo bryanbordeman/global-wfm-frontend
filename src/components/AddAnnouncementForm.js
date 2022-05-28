@@ -116,7 +116,7 @@ export default function AddAnnouncementForm(props) {
             <DialogContent>
             <Stack direction="column" spacing={2}>
                 <TextField
-                    autoFocus
+                    autoFocus={false}
                     margin="dense"
                     id="title"
                     name='title'
@@ -130,6 +130,7 @@ export default function AddAnnouncementForm(props) {
                     error={errors.title? true : false}
                 />
                 <TextField
+                    autoFocus={false}
                     id="memo"
                     name="memo"
                     label="Memo"
