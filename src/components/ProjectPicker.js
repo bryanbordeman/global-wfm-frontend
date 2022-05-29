@@ -49,7 +49,7 @@ export default function ProjectPicker(props) {
         }}
         id="project-auto-complete"
         options={projects}
-        getOptionLabel={(option) => option.number.toString()}
+        getOptionLabel={(option) => String(option.number).toString()}
         sx={{ width: 300, mt: 2 }}
         renderInput={(params) => <TextField {...params} label="Search Projects" />}
         />
