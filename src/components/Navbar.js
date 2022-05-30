@@ -44,7 +44,6 @@ const Navbar = (props) => {
 
     return (
         <div>
-            {user.username ? (
         <AppBar 
             position="fixed" 
             color='darkBlue' 
@@ -203,10 +202,7 @@ const Navbar = (props) => {
                 </Box>
             </Toolbar>
             </Container>
-        </AppBar> ) : (
-        <div>
-
-        </div>)}
+        </AppBar>
         </div>
     );
 };

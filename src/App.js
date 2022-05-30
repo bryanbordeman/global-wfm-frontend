@@ -103,10 +103,13 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
+                {user.username? 
+                <>
                 <Navbar
                     user={user}
                     logout={logout}/>
                 <Toolbar />
+                </> : ''}
                 <MainRoutes
                     user={user}
                     users={users}

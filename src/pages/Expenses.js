@@ -1,19 +1,20 @@
 import React from 'react';
-import LoginMessage from '../components/LoginMessage';
+import { Container } from '@mui/material';
 
 function Expenses(props) {
     const { user } = props
     return ( 
-        <div>
-            {!user.username  ? 
-            <div>
-            <LoginMessage/>
-            </div>
-            : 
-            <div style={{paddingTop: '1rem'}}> 
-                Expenses
-            </div>
-            }
+        <div style={{paddingTop: '1rem'}}> 
+            <Container
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection:'column',
+                        height: '100%'
+                    }}>
+                    Expenses
+            </Container>
         </div>
     );
 }

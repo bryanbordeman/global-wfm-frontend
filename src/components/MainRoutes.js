@@ -9,6 +9,7 @@ import Projects from '../pages/Projects';
 import Announcements from '../pages/Announcements';
 import Expenses from '../pages/Expenses';
 import Profile from '../pages/Profile'
+import LoginMessage from './LoginMessage';
 
 function MainRoutes(props) {
     const { user, users, token, login, signup } = props
@@ -20,6 +21,9 @@ function MainRoutes(props) {
                     exact 
                     path='/' 
                     element={
+                        !user.username  ? 
+                        <LoginMessage/>
+                        : 
                         <Dashboard
                         user={user}
                         users={users}
@@ -30,6 +34,9 @@ function MainRoutes(props) {
                     exact 
                     path='/worksegments' 
                     element={
+                        !user.username  ? 
+                        <LoginMessage/>
+                        :
                         <WorksegmentList
                         user={user}
                         users={users}
@@ -40,6 +47,9 @@ function MainRoutes(props) {
                     exact 
                     path='/schedule' 
                     element={
+                        !user.username  ? 
+                        <LoginMessage/>
+                        :
                         <Schedule
                         user={user}
                         token={token}
@@ -49,6 +59,9 @@ function MainRoutes(props) {
                     exact 
                     path='/projects' 
                     element={
+                        !user.username  ? 
+                        <LoginMessage/>
+                        :
                         <Projects
                         user={user}
                         token={token}
@@ -58,6 +71,9 @@ function MainRoutes(props) {
                     exact 
                     path='/announcements' 
                     element={
+                        !user.username  ? 
+                        <LoginMessage/>
+                        :
                         <Announcements
                         user={user}
                         token={token}
@@ -67,6 +83,9 @@ function MainRoutes(props) {
                     exact 
                     path='/expenses' 
                     element={
+                        !user.username  ? 
+                        <LoginMessage/>
+                        :
                         <Expenses
                         user={user}
                         token={token}
@@ -76,6 +95,9 @@ function MainRoutes(props) {
                     exact 
                     path='/profile' 
                     element={
+                        !user.username  ? 
+                        <LoginMessage/>
+                        :
                         <Profile
                         user={user}
                         token={token}

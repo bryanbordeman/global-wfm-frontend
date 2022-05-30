@@ -1,19 +1,20 @@
 import React from 'react';
-import LoginMessage from '../components/LoginMessage';
+import { Container } from '@mui/material';
 
 function Schedule(props) {
     const { user } = props
     return ( 
-        <div>
-            {!user.username  ? 
-            <div>
-            <LoginMessage/>
-            </div>
-            : 
-            <div style={{paddingTop: '1rem'}}> 
-                Schedule
-            </div>
-            }
+        <div style={{paddingTop: '1rem'}}> 
+            <Container
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection:'column',
+                        height: '100%'
+                    }}>
+                    Schedule
+            </Container>
         </div>
     );
 }

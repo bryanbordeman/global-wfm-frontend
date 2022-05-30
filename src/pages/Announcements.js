@@ -1,5 +1,4 @@
 import React from 'react';
-import LoginMessage from '../components/LoginMessage';
 import AnnouncementDataService from '../services/Announcement.services'
 import { Paper, Grid, ListItem, ListItemText, Container, Divider, Stack, IconButton, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -187,11 +186,6 @@ function Announcements(props) {
 
     return ( 
         <div>
-            {!user.username ? 
-            <div>
-            <LoginMessage/>
-            </div>
-            : 
             <div style={{paddingTop: '1rem'}}> 
                 <Container
                     sx={{
@@ -247,7 +241,6 @@ function Announcements(props) {
                         {announcementList}
                 </Container>
             </div>
-            }
             <DeleteAnnouncementModal
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}

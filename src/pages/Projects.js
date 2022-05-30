@@ -1,5 +1,4 @@
 import React from 'react';
-import LoginMessage from '../components/LoginMessage';
 import ProjectPicker from '../components/ProjectPicker'
 import ProjectCard from '../components/ProjectCard';
 import { Container } from '@mui/material';
@@ -26,13 +25,7 @@ function Projects(props) {
     }
 
     return ( 
-        <div>
-            {!user.username  ? 
-            <div>
-            <LoginMessage/>
-            </div>
-            : 
-            <div style={{paddingTop: '1rem'}}> 
+        <div style={{paddingTop: '1rem'}}> 
             <Container
                 sx={{
                     display: 'flex',
@@ -58,10 +51,7 @@ function Projects(props) {
                     />
                     </>
                     : ''}
-                    
-                </Container>
-            </div>
-            }
+            </Container>
         </div>
     );
 }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import LoginMessage from '../components/LoginMessage';
 import WorksegmentDataService from '../services/Worksegment.services'
 import { Container, Typography, Button, Card, CardContent, Chip } from '@mui/material';
 import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider } from '@mui/material';
@@ -341,11 +340,6 @@ function WorksegmentList(props) {
             ))
     return ( 
         <div>
-            {!user.username ? 
-            <div>
-            <LoginMessage/>
-            </div>
-            : 
         <Container
         sx={{
             display: 'flex',
@@ -488,7 +482,6 @@ function WorksegmentList(props) {
                 deleteWorksegment={deleteWorksegment}
                 retrieveWorksegments={retrieveWorksegments}/>
         </Container>
-        }
     </div>
     );
 }
