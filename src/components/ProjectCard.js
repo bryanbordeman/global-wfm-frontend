@@ -49,7 +49,10 @@ return (
                         <Typography variant="body2">
                             Project Address:
                         </Typography>
-                        <a href={`http://maps.google.com/?q=1200 ${project.address.address1}, ${project.address.address2}, ${project.address.city}, ${project.address.state} ${project.address.zip_code}`} target="_blank">
+                        <a href={`http://maps.google.com/?q=${project.address.address1}, ${project.address.address2}, ${project.address.city}, ${project.address.state} ${project.address.zip_code}`} 
+                            target="_blank"
+                            rel="noopener noreferrer" 
+                        >
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                 {project.address.address1}
                                 

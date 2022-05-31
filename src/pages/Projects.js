@@ -6,7 +6,8 @@ import ContactModal from '../components/ContactModal'
 
 
 function Projects(props) {
-    const { user, token } = props
+    const { token } = props
+    // const { user, token } = props
     const [ project, setProject ] = React.useState({})
     const [ contactOpen, setContactOpen ] = React.useState(false)
     const [ contact, setContact ] = React.useState({})

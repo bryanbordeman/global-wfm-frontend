@@ -38,15 +38,10 @@ function WorksegmentList(props) {
     const [ error, setError ] = React.useState(false)
     const [ selectUser, setSelectUser ] = React.useState('')
     const [ selectUserId, setSelectUserId ] = React.useState(0)
-    const [ selectUserObject, setSelectUserObject ] = React.useState({})
 
     useEffect(() => {
         retrieveWorksegments();
     }, [props.token, isoWeek, selectUser]);
-
-    useEffect(() =>{
-        setSelectUserObject(users[String(selectUser)])
-    }, [selectUser])
 
     const handleClickOpen = () => {
         setOpenAdd(true);
@@ -61,12 +56,13 @@ function WorksegmentList(props) {
         user.isStaff? WorksegmentDataService.adminGetWeek(props.token, isoWeek)
         .then(response => {
             // !sort segments by user request
-            const filteredUser = []
-            Object.values(response.data).find((obj) => {
-                if(obj.user.id === selectUserId){
-                    filteredUser.push(obj)
-                }
-            });
+        const filteredUser = []
+        Object.values(response.data).find((obj) => {
+            if(obj.user.id === selectUserId){
+                filteredUser.push(obj)
+            }
+        return ''
+        });
 
             setWorksegments(filteredUser);
         })

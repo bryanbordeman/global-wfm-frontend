@@ -2,7 +2,7 @@ import React from 'react';
 import { Container } from '@mui/material';
 
 function Expenses(props) {
-    const { user } = props
+    // const { user } = props
     return ( 
         <div style={{paddingTop: '1rem'}}> 
             <Container

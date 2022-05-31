@@ -13,10 +13,6 @@ export default function DeleteWorksegmentModal(props) {
 
     const { deleteWorksegment, segment , openDelete, setOpenDelete  } = props
 
-    const handleClickOpen = () => {
-        setOpenDelete(true);
-    };
-
     const handleClose = () => {
         setOpenDelete(false);
     };

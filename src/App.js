@@ -116,7 +116,8 @@ function App() {
                     token={token}
                     login={login}
                     signup={signup}
-                    logout={logout}/>
+                    logout={logout}
+                    error={error}/>
                 {/* <BottomNavigation/> */}
             </BrowserRouter>
         </ThemeProvider>

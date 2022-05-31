@@ -46,7 +46,7 @@ export default function AddWorksegmentForm(props) {
     }
 
     const editFormValues = {
-        project: segment.project,
+        project: editing ? segment.project.id : segment.project,
         date: editing ? new Date(segment.date.replace('-', '/').replace('-', '/')) : new Date(),
         startTime: editing ? getDateFromHours(segment.start_time) : new Date(),
         endTime: editing ? getDateFromHours(segment.end_time) : new Date(),
@@ -185,12 +185,13 @@ export default function AddWorksegmentForm(props) {
     };
 
     const handleChangeProject = (newValue) => {
-        setValues({
+        if(newValue){
+            setValues({
             ...values,
             project: newValue.id
             });
+        }
     }
-
 
     return (
         <div>
@@ -230,26 +231,27 @@ export default function AddWorksegmentForm(props) {
                     </Select>
                 </div> : ''
                 }
+                {editing ?
+                <TextField
+                    autoFocus={false}
+                    margin="dense"
+                    disabled
+                    id="project"
+                    name='project'
+                    label="Project"
+                    value={segment.project.number}
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                /> 
+                :
                 <ProjectPicker
                     token={token}
                     handleChangeProject={handleChangeProject}
                     errors={errors}
                     editProject={values.project}
                     />
-                {/* <TextField
-                    autoFocus={false}
-                    margin="dense"
-                    id="project"
-                    name='project'
-                    label="Project"
-                    onChange={handleInputValue}
-                    value={values.project}
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                    helperText={errors.project === null ? '' : errors.project}
-                    error={errors.project? true : false}
-                /> */}
+                }
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Date"

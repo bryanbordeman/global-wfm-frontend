@@ -2,7 +2,7 @@ import React from 'react';
 import { Container } from '@mui/material';
 
 function Schedule(props) {
-    const { user } = props
+    // const { user } = props
     return ( 
         <div style={{paddingTop: '1rem'}}> 
             <Container

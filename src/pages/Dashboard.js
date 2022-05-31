@@ -1,11 +1,12 @@
 import * as React from 'react';
-import AdminDashboardTable from '../components/AdminDashboardTable'
+// import AdminDashboardTable from '../components/AdminDashboardTable'
 import { Container } from '@mui/material';
 
 
 
 function Dashboard(props){
-    const { user, token } = props
+    const { user } = props
+    // const { user, token } = props
 
     return (
         <div>
