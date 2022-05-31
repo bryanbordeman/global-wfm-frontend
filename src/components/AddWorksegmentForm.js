@@ -16,6 +16,7 @@ import  Divider from '@mui/material/Divider';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import ProjectPicker from './ProjectPicker'
 
 export default function AddWorksegmentForm(props) {
     const { 
@@ -27,6 +28,7 @@ export default function AddWorksegmentForm(props) {
             openAdd,
             setOpenAdd,
             user,
+            token,
             selectUser,
             usersList,
             handleSelectUser
@@ -113,15 +115,15 @@ export default function AddWorksegmentForm(props) {
     const handleValidation = () => {
         let formIsValid = true;
 
-        if(values.project.length > 5){
-            setErrors({...errors, project: 'Invalid Entry'});
-            formIsValid = false;
-            setTimeout(() => {
-                formIsValid = true;
-                setErrors({...errors, project: null});
-            }, 3000);
-        }
-        else if(values.project === ''){
+        // if(values.project.length > 5){
+        //     setErrors({...errors, project: 'Invalid Entry'});
+        //     formIsValid = false;
+        //     setTimeout(() => {
+        //         formIsValid = true;
+        //         setErrors({...errors, project: null});
+        //     }, 3000);
+        // }
+        if(values.project === ''){
             setErrors({...errors, project: 'Required field'});
             formIsValid = false;
             setTimeout(() => {
@@ -182,6 +184,13 @@ export default function AddWorksegmentForm(props) {
     return formIsValid ? handleSubmit() : null
     };
 
+    const handleChangeProject = (newValue) => {
+        setValues({
+            ...values,
+            project: newValue.id
+            });
+    }
+
 
     return (
         <div>
@@ -221,7 +230,13 @@ export default function AddWorksegmentForm(props) {
                     </Select>
                 </div> : ''
                 }
-                <TextField
+                <ProjectPicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    errors={errors}
+                    editProject={values.project}
+                    />
+                {/* <TextField
                     autoFocus={false}
                     margin="dense"
                     id="project"
@@ -234,7 +249,7 @@ export default function AddWorksegmentForm(props) {
                     variant="outlined"
                     helperText={errors.project === null ? '' : errors.project}
                     error={errors.project? true : false}
-                />
+                /> */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Date"

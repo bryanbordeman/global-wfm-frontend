@@ -8,7 +8,7 @@ export default function ProjectPicker(props) {
     const [ projects, setProjects ] = React.useState([{}])
     const [inputValue, setInputValue] = React.useState('');
 
-    const { handleChangeProject } = props
+    const { handleChangeProject, errors, editProject} = props
 
     React.useEffect(() => {
         retrieveProject()
@@ -37,6 +37,7 @@ export default function ProjectPicker(props) {
     return (
         <Autocomplete
         disablePortal
+        fullWidth
         autoSelect = {false}
         blurOnSelect = 'touch'
         value={value}
@@ -47,11 +48,16 @@ export default function ProjectPicker(props) {
         onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);
         }}
-        id="project-auto-complete"
         options={projects}
         getOptionLabel={(option) => String(option.number).toString()}
-        sx={{ width: 300, mt: 2 }}
-        renderInput={(params) => <TextField {...params} label="Search Projects" />}
+        renderInput={(params) => <TextField 
+                                helperText={errors.project === null ? '' : errors.project}
+                                error={errors.project? true : false}
+                                {...params} 
+                                id="project"
+                                name='project'
+                                label="Search Projects" 
+                                />}
         />
     );
 };

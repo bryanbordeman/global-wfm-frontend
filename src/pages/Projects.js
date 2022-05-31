@@ -34,9 +34,12 @@ function Projects(props) {
                     flexDirection:'column',
                     height: '100%'
                 }}>
+                    <div style={{width: '100%', maxWidth: '400px',}}>
                     <ProjectPicker
                         token={token}
-                        handleChangeProject={handleChangeProject}/>
+                        handleChangeProject={handleChangeProject}
+                        errors={{project: ''}}/>
+                    </div>
                     {project ? 
                     <>
                     <ProjectCard

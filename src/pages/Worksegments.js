@@ -63,7 +63,7 @@ function WorksegmentList(props) {
             // !sort segments by user request
             const filteredUser = []
             Object.values(response.data).find((obj) => {
-                if(obj.user === selectUserId){
+                if(obj.user.id === selectUserId){
                     filteredUser.push(obj)
                 }
             });
@@ -81,6 +81,7 @@ function WorksegmentList(props) {
         WorksegmentDataService.getWeek(props.token, isoWeek)
         .then(response => {
             setWorksegments(response.data);
+            console.log(response.data)
         })
         .catch( e => {
             console.log(e);
@@ -322,7 +323,7 @@ function WorksegmentList(props) {
                                     {`${moment(segment.start_time, "HH:mm:ss").format("hh:mm A")} -  
                                     ${moment(segment.end_time, "HH:mm:ss").format("hh:mm A")}`}
                                     <br/>
-                                    Project: {segment.project}
+                                    Project: {segment.project.number}
                                     <br/>
                                     Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}
                                     <br/>
