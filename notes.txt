@@ -1,3 +1,2 @@
 - add validation on login
-- add Snackbar for confirmation and remove alert.
 - fix Navlink so we know what page we are on

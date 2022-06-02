@@ -9,11 +9,10 @@ import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import WeekPicker from '../components/WeekPicker'
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import Tooltip from '@mui/material/Tooltip';
 import SpeakerNotesTwoToneIcon from '@mui/icons-material/SpeakerNotesTwoTone';
 import moment from 'moment';
+import SnackbarAlert from '../components/SnackbarAlert';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -32,12 +31,11 @@ function WorksegmentList(props) {
     const [ editSegment, setEditSegment ] = React.useState({}) 
 
     const [ editing, setEditing ] = React.useState(false)
-    const [ submitted, setSubmitted ] = React.useState(false)
-    const [ edited, setEdited] = React.useState(false)
-    const [ deleted, setDeleted ] = React.useState(false)
-    const [ error, setError ] = React.useState(false)
     const [ selectUser, setSelectUser ] = React.useState('')
     const [ selectUserId, setSelectUserId ] = React.useState(0)
+    const [ openSnackbar, setOpenSnackbar ] = React.useState(false);
+    const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
+    const [ snackbarMessage, setSnackbarMessage ] = React.useState('')
 
     useEffect(() => {
         retrieveWorksegments();
@@ -50,6 +48,20 @@ function WorksegmentList(props) {
 
     const handleClose = () => {
         setOpenAdd(false);
+    };
+
+    const handleOpenSnackbar = (severity, message) => {
+        setOpenSnackbar(true);
+        setSnackbarSeverity(severity);
+        setSnackbarMessage(message);
+
+    };
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+        setOpenSnackbar(false);
     };
 
     const retrieveWorksegments = () => {
@@ -68,23 +80,16 @@ function WorksegmentList(props) {
         })
         .catch( e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         })
         :
         WorksegmentDataService.getWeek(props.token, isoWeek)
         .then(response => {
             setWorksegments(response.data);
-            console.log(response.data)
         })
         .catch( e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         })
     }
 
@@ -93,34 +98,22 @@ function WorksegmentList(props) {
         WorksegmentDataService.adminCreateWorksegment(data, token, selectUserId)
         .then(response => {
             window.scrollTo(0, 0);
+            handleOpenSnackbar('success', 'Your time has been submitted for approval')
             retrieveWorksegments();
-            setSubmitted(true);
-            setTimeout(() => {
-                setSubmitted(false)
-            }, 3000);
         })
         .catch(e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         }) :
         WorksegmentDataService.createWorksegment(data, token)
         .then(response => {
             window.scrollTo(0, 0);
+            handleOpenSnackbar('success', 'Your time has been submitted for approval')
             retrieveWorksegments();
-            setSubmitted(true);
-            setTimeout(() => {
-                setSubmitted(false)
-            }, 3000);
         })
         .catch(e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
     };
 
@@ -128,18 +121,12 @@ function WorksegmentList(props) {
         WorksegmentDataService.deleteWorksegment(segmentId, props.token)
         .then(response => {
             window.scrollTo(0, 0);
+            handleOpenSnackbar('error', 'Your time has been deleted')
             retrieveWorksegments();
-            setDeleted(true)
-            setTimeout(() => {
-                setDeleted(false)
-            }, 3000)
         })
         .catch( e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
     };
 
@@ -147,21 +134,13 @@ function WorksegmentList(props) {
         WorksegmentDataService.updateWorksegment(segmentId, data, props.token)
         .then(response => {
             window.scrollTo(0, 0);
+            handleOpenSnackbar('info', 'Your time has been submitted for approval')
             retrieveWorksegments();
-            setEdited(true);
-            setTimeout(() => {
-                setEdited(false)
-            }, 3000);
-            setEditing(false);
         })
         .catch( e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
-
     }
 
     const approveWorksegment = (segmentId) => {
@@ -171,10 +150,7 @@ function WorksegmentList(props) {
         })
         .catch( e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
     };
 
@@ -345,36 +321,6 @@ function WorksegmentList(props) {
             flexDirection:'column',
             height: '100%'
         }}>
-            {submitted ? 
-            <Alert 
-                sx={{marginBottom: '1rem', width: '100%', height: '100%'}}
-                severity="success">
-                <AlertTitle>Submitted</AlertTitle>
-                Your time has been submitted for approval— <strong>Status = Pending</strong>
-            </Alert> : ''}
-            {edited ? 
-            <Alert 
-                sx={{marginBottom: '1rem', width: '100%', height: '100%'}}
-                severity="info">
-                <AlertTitle>Updated</AlertTitle>
-                Your time has been submitted for approval— <strong>Status = Pending</strong>
-            </Alert> : ''}
-            {deleted ? 
-            <Alert 
-                sx={{marginBottom: '1rem', width: '100%'}}
-                severity="error">
-                <AlertTitle>Deleted</AlertTitle>
-                Your time has been deleted
-            </Alert> : ''}
-            
-            {error ? 
-            <Alert 
-                sx={{marginBottom: '1rem', width: '100%'}}
-                severity="error">
-                <AlertTitle>Error</AlertTitle>
-                Something Went Wrong!! Please try again.
-            </Alert> : ''}
-            
             <div  style={{width: '100%', maxWidth: '500px' }}>
             <Stack style={{marginBottom: '0.75rem', marginTop: '1.5rem',}}direction="row" spacing={2}>
             <WeekPicker 
@@ -478,6 +424,11 @@ function WorksegmentList(props) {
                 segment={editSegment}
                 deleteWorksegment={deleteWorksegment}
                 retrieveWorksegments={retrieveWorksegments}/>
+            <SnackbarAlert
+                openSnackbar={openSnackbar}
+                handleCloseSnackbar={handleCloseSnackbar}
+                severity={snackbarSeverity}
+                message={snackbarMessage}/>
         </Container>
     </div>
     );

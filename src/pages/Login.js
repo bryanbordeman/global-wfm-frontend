@@ -47,6 +47,7 @@ function Login(props) {
             <TextField
                 margin="normal"
                 required
+                inputProps={{autoCapitalize: 'none'}}
                 fullWidth
                 id="username"
                 label="User Name"
