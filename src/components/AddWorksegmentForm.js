@@ -17,6 +17,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import ProjectPicker from './ProjectPicker'
+import Box from '@mui/material/Box';
 
 export default function AddWorksegmentForm(props) {
     const { 
@@ -245,12 +246,14 @@ export default function AddWorksegmentForm(props) {
                     variant="outlined"
                 /> 
                 :
-                <ProjectPicker
-                    token={token}
-                    handleChangeProject={handleChangeProject}
-                    errors={errors}
-                    editProject={values.project}
+                <Box>
+                    <ProjectPicker
+                        token={token}
+                        handleChangeProject={handleChangeProject}
+                        errors={errors}
+                        editProject={values.project}
                     />
+                </Box>
                 }
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
