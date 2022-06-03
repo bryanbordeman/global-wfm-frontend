@@ -12,7 +12,6 @@ import WeekPicker from '../components/WeekPicker'
 import Tooltip from '@mui/material/Tooltip';
 import SpeakerNotesTwoToneIcon from '@mui/icons-material/SpeakerNotesTwoTone';
 import moment from 'moment';
-import SnackbarAlert from '../components/SnackbarAlert';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -21,21 +20,16 @@ import Select from '@mui/material/Select';
 import AddWorksegmentForm from '../components/AddWorksegmentForm'
 import DeleteWorksegmentModal from '../components/DeleteWorksegmentModal';
 
-
 function WorksegmentList(props) {
     const [ worksegments, setWorksegments ] = useState([]);
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
     const [ openAdd, setOpenAdd ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
-    const { user, token, users } = props
+    const { user, token, users, handleOpenSnackbar } = props
     const [ editSegment, setEditSegment ] = React.useState({}) 
-
     const [ editing, setEditing ] = React.useState(false)
     const [ selectUser, setSelectUser ] = React.useState('')
     const [ selectUserId, setSelectUserId ] = React.useState(0)
-    const [ openSnackbar, setOpenSnackbar ] = React.useState(false);
-    const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
-    const [ snackbarMessage, setSnackbarMessage ] = React.useState('')
 
     useEffect(() => {
         retrieveWorksegments();
@@ -48,20 +42,6 @@ function WorksegmentList(props) {
 
     const handleClose = () => {
         setOpenAdd(false);
-    };
-
-    const handleOpenSnackbar = (severity, message) => {
-        setOpenSnackbar(true);
-        setSnackbarSeverity(severity);
-        setSnackbarMessage(message);
-
-    };
-
-    const handleCloseSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-        return;
-        }
-        setOpenSnackbar(false);
     };
 
     const retrieveWorksegments = () => {
@@ -424,11 +404,7 @@ function WorksegmentList(props) {
                 segment={editSegment}
                 deleteWorksegment={deleteWorksegment}
                 retrieveWorksegments={retrieveWorksegments}/>
-            <SnackbarAlert
-                openSnackbar={openSnackbar}
-                handleCloseSnackbar={handleCloseSnackbar}
-                severity={snackbarSeverity}
-                message={snackbarMessage}/>
+            
         </Container>
     </div>
     );

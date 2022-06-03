@@ -12,7 +12,7 @@ import Profile from '../pages/Profile'
 import LoginMessage from './LoginMessage';
 
 function MainRoutes(props) {
-    const { user, users, token, login, signup } = props
+    const { user, users, token, login, signup, handleOpenSnackbar } = props
     
     return (
         <div>
@@ -41,6 +41,7 @@ function MainRoutes(props) {
                         user={user}
                         users={users}
                         token={token}
+                        handleOpenSnackbar={handleOpenSnackbar}
                         />
                 }/>
                 <Route 
@@ -77,6 +78,7 @@ function MainRoutes(props) {
                         <Announcements
                         user={user}
                         token={token}
+                        handleOpenSnackbar={handleOpenSnackbar}
                         />
                 }/>
                 <Route 
@@ -89,6 +91,7 @@ function MainRoutes(props) {
                         <Expenses
                         user={user}
                         token={token}
+                        handleOpenSnackbar={handleOpenSnackbar}
                         />
                 }/>
                     <Route 

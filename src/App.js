@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import UserService from "./services/User.services";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Toolbar } from '@mui/material';
+import SnackbarAlert from './components/SnackbarAlert';
 
 const theme = createTheme({
     palette: {
@@ -27,6 +28,10 @@ function App() {
     const [ users, setUsers ] = useState('')
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
+
+    const [ openSnackbar, setOpenSnackbar ] = React.useState(false);
+    const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
+    const [ snackbarMessage, setSnackbarMessage ] = React.useState('')
 
     useEffect(() => {
         try {
@@ -100,6 +105,20 @@ function App() {
         });
     };
 
+    const handleOpenSnackbar = (severity, message) => {
+        setOpenSnackbar(true);
+        setSnackbarSeverity(severity);
+        setSnackbarMessage(message);
+
+    };
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+        setOpenSnackbar(false);
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
@@ -117,7 +136,13 @@ function App() {
                     login={login}
                     signup={signup}
                     logout={logout}
-                    error={error}/>
+                    error={error}
+                    handleOpenSnackbar={handleOpenSnackbar}/>
+                <SnackbarAlert
+                    openSnackbar={openSnackbar}
+                    handleCloseSnackbar={handleCloseSnackbar}
+                    severity={snackbarSeverity}
+                    message={snackbarMessage}/>
                 {/* <BottomNavigation/> */}
             </BrowserRouter>
         </ThemeProvider>

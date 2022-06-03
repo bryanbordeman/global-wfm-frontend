@@ -4,8 +4,6 @@ import { Paper, Grid, ListItem, ListItemText, Container, Divider, Stack, IconBut
 import DeleteIcon from '@mui/icons-material/Delete'
 import Edit from '@mui/icons-material/Edit'
 import AddIcon from '@mui/icons-material/Add';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import AddAnnouncementForm from '../components/AddAnnouncementForm';
 import DeleteAnnouncementModal from '../components/DeleteAnnouncementModal';
 import moment from 'moment';
@@ -15,14 +13,9 @@ function Announcements(props) {
     
     const [ openAdd, setOpenAdd ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
-    const { user, token} = props
+    const { user, token, handleOpenSnackbar} = props
     const [ editAnnouncement, setEditAnnouncement ] = React.useState({}) 
-
     const [ editing, setEditing ] = React.useState(false)
-    const [ submitted, setSubmitted ] = React.useState(false)
-    const [ edited, setEdited] = React.useState(false)
-    const [ deleted, setDeleted ] = React.useState(false)
-    const [ error, setError ] = React.useState(false)
 
     React.useEffect(() => {
         retrieveAnnouncements()
@@ -35,6 +28,7 @@ function Announcements(props) {
         })
         .catch( e => {
             console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         })
     }
 
@@ -42,18 +36,12 @@ function Announcements(props) {
         AnnouncementDataService.createAnnouncement(data, token)
         .then(response => {
             window.scrollTo(0, 0);
+            handleOpenSnackbar('success', 'Your announcement has been posted')
             retrieveAnnouncements();
-            setSubmitted(true);
-            setTimeout(() => {
-                setSubmitted(false)
-            }, 3000);
         })
         .catch(e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
     };
 
@@ -62,18 +50,12 @@ function Announcements(props) {
         .then(response => {
             window.scrollTo(0, 0);
             retrieveAnnouncements();
-            setEdited(true);
-            setTimeout(() => {
-                setEdited(false)
-            }, 3000);
+            handleOpenSnackbar('info', 'Your announcement has been updated')
             setEditing(false);
         })
         .catch( e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
 
     };
@@ -83,17 +65,11 @@ function Announcements(props) {
         .then(response => {
             window.scrollTo(0, 0);
             retrieveAnnouncements();
-            setDeleted(true)
-            setTimeout(() => {
-                setDeleted(false)
-            }, 3000)
+            handleOpenSnackbar('error', 'Your announcement has been deleted')
         })
         .catch( e => {
             console.log(e);
-            setError(true);
-            setTimeout(() => {
-                setError(false)
-            }, 3000);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
 
     };
@@ -195,36 +171,6 @@ function Announcements(props) {
                         flexDirection:'column',
                         height: '100%'
                     }}>
-                        {submitted ? 
-                            <Alert 
-                                sx={{marginBottom: '1rem', width: '100%', height: '100%'}}
-                                severity="success">
-                                <AlertTitle>Posted</AlertTitle>
-                                Your announcement has been posted— <strong>Status = Posted</strong>
-                            </Alert> : ''}
-                            {edited ? 
-                            <Alert 
-                                sx={{marginBottom: '1rem', width: '100%', height: '100%'}}
-                                severity="info">
-                                <AlertTitle>Updated</AlertTitle>
-                                Your announcement has been posted— <strong>Status = Updated</strong>
-                            </Alert> : ''}
-                            {deleted ? 
-                            <Alert 
-                                sx={{marginBottom: '1rem', width: '100%'}}
-                                severity="error">
-                                <AlertTitle>Deleted</AlertTitle>
-                                Your time has been deleted
-                            </Alert> : ''}
-                            
-                            {error ? 
-                            <Alert 
-                                sx={{marginBottom: '1rem', width: '100%'}}
-                                severity="error">
-                                <AlertTitle>Error</AlertTitle>
-                                Something Went Wrong!! Please try again.
-                            </Alert> : ''}
-
                     {user.isStaff?
                     <div style={{width: '10rem', marginBottom: '.5rem', marginTop: '.35rem'}}>
                         <Button
