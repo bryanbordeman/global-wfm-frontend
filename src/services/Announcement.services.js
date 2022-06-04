@@ -1,7 +1,5 @@
 import axios from "axios";
-
-// const SERVER = 'http://localhost:8000'
-const SERVER = 'http://192.168.90.31:8000'
+import { SERVER } from "./SERVER";
 
 class AnnouncementDataService {
     getAll(token){

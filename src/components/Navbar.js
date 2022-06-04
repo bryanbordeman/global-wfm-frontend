@@ -117,6 +117,9 @@ const Navbar = (props) => {
                     <MenuItem onClick={handleCloseNavMenu} component={Link} to='/expenses'>
                         <Typography textAlign="center">Expenses</Typography>
                     </MenuItem>
+                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/task'>
+                        <Typography textAlign="center">Task</Typography>
+                    </MenuItem>
                 </Menu>
                 </Box>
                 <Typography
@@ -167,6 +170,11 @@ const Navbar = (props) => {
                         sx={{ my: 2, color: 'white', display: 'block' }}
                         >
                         Expenses
+                    </Button>
+                    <Button component={Link} to='/task'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                        Task
                     </Button>
                 </Box>
 

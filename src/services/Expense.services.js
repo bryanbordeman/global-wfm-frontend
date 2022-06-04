@@ -1,23 +1,23 @@
 import axios from "axios";
 import { SERVER } from "./SERVER";
 
-class ProjectDataService {
+class ExpenseDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/projects/`);
+        return axios.get(`${SERVER}/api/expenses/`);
     };
-    createAProject(data, token){
+    createExpense(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.post(`${SERVER}/api/create/project/`, data);
+        return axios.post(`${SERVER}/api/create/expense/`, data);
     };
-    updateProject(id, data, token){
+    updateExpense(id, data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.put(`${SERVER}/api/project/${id}`, data);
+        return axios.put(`${SERVER}/api/expense/${id}`, data);
     };
-    deleteAProject(id, token){
+    deleteExpense(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.delete(`${SERVER}/api/project/${id}`);
+        return axios.delete(`${SERVER}/api/expense/${id}`);
     };
 }
 
-export default new ProjectDataService();
+export default new ExpenseDataService();
