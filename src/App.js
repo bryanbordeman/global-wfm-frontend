@@ -28,6 +28,7 @@ function App() {
     const [ users, setUsers ] = useState('')
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
+    const [ loginErrors, setLoginErrors ] = useState({username: null, password: null})
 
     const [ openSnackbar, setOpenSnackbar ] = React.useState(false);
     const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
@@ -50,6 +51,7 @@ function App() {
         // console.log('App Login Function')
         UserService.login(user)
         .then(response => {
+            setLoginErrors({username: null, password: null});
             setToken(response.data.token);
             // setUser(user.username);
             const userData = {
@@ -72,8 +74,8 @@ function App() {
             setError('');
         })
         .catch( e => {
-            console.log('login', e);
-            setError(e.toString());
+            console.log('login', e.toString());
+            setLoginErrors({username: 'Username', password: 'Password'});
         });
     };
     async function logout(){
@@ -137,6 +139,7 @@ function App() {
                     signup={signup}
                     logout={logout}
                     error={error}
+                    loginErrors={loginErrors}
                     handleOpenSnackbar={handleOpenSnackbar}/>
                 <SnackbarAlert
                     openSnackbar={openSnackbar}

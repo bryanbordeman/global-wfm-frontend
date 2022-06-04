@@ -15,32 +15,48 @@ import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/GPS_Navbar_Logo.svg'
 
+const pathname = window.location.pathname
+console.log(pathname);
+
 const Navbar = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const { user } = props
     let navigate = useNavigate();
+    const [activeButton, setActiveButton] = React.useState(pathname === '/' ? 'dashboard' : pathname.substring(1));
+
+    const clickedButtonHandler = (e) => {
+        const { name } = e.target;
+        setActiveButton(name);
+    };
 
     const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+        setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
+        setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+    const handleCloseNavMenu = (e) => {
+        const { name } = e.target;
+        setActiveButton(name);
+        setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+        setAnchorElUser(null);
     };
 
     const logout = () => {
+        setActiveButton('dashboard')
         props.logout()
         navigate('/login')
         setAnchorElUser(null);
+        
     }
+
+    const activeStyle = { my: 2, color: '#1C88B0', display: 'block'}
+    const inactiveStyle = { my: 2, color: 'white', display: 'block'}
 
     return (
         <div>
@@ -99,25 +115,25 @@ const Navbar = (props) => {
                     display: { xs: 'block', md: 'none' },
                     }}
                 >
-                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/'>
+                    <MenuItem name='dashboard' onClick={handleCloseNavMenu} component={Link} to='/'>
                         <Typography textAlign="center">Dashboard</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/worksegments'>
+                    <MenuItem name='worksegments' onClick={handleCloseNavMenu} component={Link} to='/worksegments'>
                         <Typography textAlign="center">Timesheets</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/schedule'>
+                    <MenuItem name='schedule' onClick={handleCloseNavMenu} component={Link} to='/schedule'>
                         <Typography textAlign="center">Schedule</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/projects'>
+                    <MenuItem name='projects' onClick={handleCloseNavMenu} component={Link} to='/projects'>
                         <Typography textAlign="center">Projects</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/announcements'>
+                    <MenuItem name='announcements' onClick={handleCloseNavMenu} component={Link} to='/announcements'>
                         <Typography textAlign="center">Announcements</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/expenses'>
+                    <MenuItem name='expenses' onClick={handleCloseNavMenu} component={Link} to='/expenses'>
                         <Typography textAlign="center">Expenses</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu} component={Link} to='/task'>
+                    <MenuItem name='task' onClick={handleCloseNavMenu} component={Link} to='/task'>
                         <Typography textAlign="center">Task</Typography>
                     </MenuItem>
                 </Menu>
@@ -142,37 +158,51 @@ const Navbar = (props) => {
                 </Typography>
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                     <Button component={Link} to='/'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                        >
+                        name='dashboard'
+                        sx={activeButton === 'dashboard' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
+                    >
                         Dashboard
                     </Button>
                     <Button component={Link} to='/worksegments'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        name='worksegments'
+                        sx={activeButton === 'worksegments' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
                         >
                         Timesheets
                     </Button>
                     <Button component={Link} to='/schedule'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        name='schedule'
+                        sx={activeButton === 'schedule' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
                         >
                         Schedule
                     </Button>
                     <Button component={Link} to='/projects'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        name='projects'
+                        sx={activeButton === 'projects' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
                         >
                         Projects
                     </Button>
                     <Button component={Link} to='/announcements'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        name='announcements'
+                        sx={activeButton === 'announcements' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
                         >
                         Announcements
                     </Button>
                     <Button component={Link} to='/expenses'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        name='expenses'
+                        sx={activeButton === 'expenses' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
                         >
                         Expenses
                     </Button>
                     <Button component={Link} to='/task'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        name='task'
+                        sx={activeButton === 'task' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
                         >
                         Task
                     </Button>

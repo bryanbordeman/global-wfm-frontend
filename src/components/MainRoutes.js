@@ -13,7 +13,7 @@ import Profile from '../pages/Profile'
 import Task from '../pages/Task'
 
 function MainRoutes(props) {
-    const { user, users, token, login, signup, handleOpenSnackbar } = props
+    const { user, users, token, login, signup, loginErrors, handleOpenSnackbar } = props
     
     return (
         <div>
@@ -124,15 +124,13 @@ function MainRoutes(props) {
                     exact 
                     path='/login' 
                     element={
-                        !user.username  ?
+                        user.username  ? 
+                        <Navigate to="/" />
+                        :
                         <Login 
                             login={login} 
-                        /> : 
-                        <Dashboard
-                        user={user}
-                        users={users}
-                        token={token}
-                        />
+                            errors={loginErrors}
+                        /> 
                     }
                     />
                 <Route 

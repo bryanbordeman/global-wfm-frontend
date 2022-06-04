@@ -11,6 +11,8 @@ function Login(props) {
 
     const [username, setUsername ] = useState('');
     const [password, setPassword ] = useState('');
+    const { errors } = props
+
     let navigate = useNavigate();
 
     const onChangeUsername = e => {
@@ -55,6 +57,8 @@ function Login(props) {
                 autoComplete="username"
                 value={username}
                 onChange={onChangeUsername}
+                helperText={errors.username === null ? '' : errors.username}
+                error={errors.username? true : false}
             />
             <TextField
                 margin="normal"
@@ -67,6 +71,8 @@ function Login(props) {
                 autoComplete="current-password"
                 value={password}
                 onChange={onChangePassword}
+                helperText={errors.password === null ? '' : errors.password}
+                error={errors.password? true : false}
             />
             <Button
                 type="submit"
@@ -77,6 +83,8 @@ function Login(props) {
             >
             Sign In
             </Button>
+            {/* <h1>{errors.username}</h1>
+            <h1>{errors.password}</h1> */}
             {/* <div style={{display: 'flex', 
                             flexDirection: 'column', 
                             alignItems: 'center',

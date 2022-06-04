@@ -1,2 +1,2 @@
-- add validation on login
-- fix Navlink so we know what page we are on
+- fix validation on login to be seprate for username and password
+- fix Navlink so burger link works on dashboard
