@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/GPS_Navbar_Logo.svg'
 
 const pathname = window.location.pathname
-console.log(pathname);
 
 const Navbar = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);

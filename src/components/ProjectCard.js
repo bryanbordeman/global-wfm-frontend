@@ -15,7 +15,7 @@ const { project, handleSetContact } = props
     
 return (
     <>
-            {project.number ? 
+        {project.number ? 
         <Card 
             elevation={0}
             sx={{

@@ -35,7 +35,7 @@ function Projects(props) {
                     flexDirection:'column',
                     height: '100%'
                 }}>
-                    <div style={{width: '100%', maxWidth: '400px',}}>
+                    <div style={{width: '100%', maxWidth: '400px', marginTop: '0.5rem'}}>
                     <ProjectPicker
                         token={token}
                         handleChangeProject={handleChangeProject}
