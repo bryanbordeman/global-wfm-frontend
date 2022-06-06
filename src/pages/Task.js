@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container } from '@mui/material';
+import TaskTabs from '../components/TaskTabs'
 
 function Task(props) {
     // const { user } = props
@@ -13,7 +14,7 @@ function Task(props) {
                         flexDirection:'column',
                         height: '100%'
                     }}>
-                    Task
+                    <TaskTabs/>
             </Container>
         </div>
     );
