@@ -298,6 +298,9 @@ export default function AddWorksegmentForm(props) {
                 />
                 <TextField
                     autoFocus={false}
+                    onFocus={event => {
+                        event.target.select();
+                      }}
                     margin="dense"
                     id="travel"
                     name="travel"

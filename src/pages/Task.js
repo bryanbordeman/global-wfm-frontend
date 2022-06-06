@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container } from '@mui/material';
+import { Container, Fab } from '@mui/material';
 import TaskTabs from '../components/TaskTabs'
+import AddIcon from '@mui/icons-material/Add';
 
 function Task(props) {
     // const { user } = props
@@ -15,6 +16,17 @@ function Task(props) {
                         height: '100%'
                     }}>
                     <TaskTabs/>
+                    <Fab 
+                        sx={{margin: 0,
+                            top: 'auto',
+                            // right: '20px',
+                            bottom: '20px',
+                            left: 'auto',
+                            position: 'fixed'}}
+                        color="primary" 
+                        aria-label="add">
+                        <AddIcon />
+                    </Fab>
             </Container>
         </div>
     );

@@ -5,6 +5,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import TaskList from './TaskList'
 import CompletedTaskList from './CompletedTaskList'
+import { Badge } from '@mui/material';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -48,12 +49,31 @@ function TabPanel(props) {
             variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
-            >
-                <Tab label="Sales/ Estimating" />
+            >   
+                <Tab label={<Badge 
+                    badgeContent={4} 
+                    color="error" 
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    Sales/ Estimating
+                </Badge>} />
+                
                 <Tab label="Engineering" />
                 <Tab label="Purchasing" />
                 <Tab label="Accounting" />
-                <Tab label="Field" />
+                <Tab label={<Badge 
+                    badgeContent={0} 
+                    color="error" 
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    Field
+                </Badge>} />
                 <Tab label="Shop" />
                 <Tab label="General/ Misc." />
             </Tabs>

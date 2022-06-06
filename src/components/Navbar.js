@@ -54,7 +54,7 @@ const Navbar = (props) => {
         
     }
 
-    const activeStyle = { my: 2, color: '#1C88B0', display: 'block'}
+    const activeStyle = { my: 2, color: '#60BCD9', display: 'block'}
     const inactiveStyle = { my: 2, color: 'white', display: 'block'}
 
     return (

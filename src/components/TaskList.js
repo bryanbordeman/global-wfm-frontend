@@ -61,11 +61,17 @@ export default function CheckboxList(props) {
                 </ListItemIcon>
                 <ListItemText 
                     id={labelId} 
-                    primary={`12222 | ${props.values} item ${value + 1}`}
+                    primary={ <div style={{fontSize: '1rem'}}>
+                        12222 | {props.values} item {value + 1}
+                    </div>}
                     secondary={
+                        <>
+                        Task Notes
+                        <br/>
                         <Button sx={{mt:1, pt:0, pb: 0}} size='small' variant="outlined" startIcon={<EventAvailableIcon />}>
                             in 5 days
                         </Button>
+                        </>
                     } 
                 />
                 </ListItemButton>
