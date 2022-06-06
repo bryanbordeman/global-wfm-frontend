@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Edit from '@mui/icons-material/Edit'
-import { Stack, Chip } from '@mui/material';
+import { Button } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 export default function CheckboxList(props) {
@@ -35,18 +35,15 @@ export default function CheckboxList(props) {
             const labelId = `checkbox-list-label-${value}`;
 
             return (
-            <>
+            <div key={value}>
             <ListItem
-                key={value}
                 secondaryAction={
-                    <Stack direction="row" spacing={2}>
                         <IconButton
                             edge="end" 
                             color='primary'
                             >
                             <Edit/>
                         </IconButton>
-                    </Stack>
                 }
                 disablePadding
             >
@@ -66,12 +63,15 @@ export default function CheckboxList(props) {
                     id={labelId} 
                     primary={`12222 | ${props.values} item ${value + 1}`}
                     secondary={
-                        <Chip icon={<EventAvailableIcon />} sx={{mt:1}} size="small" color='primary' label="in 5 days" variant="outlined" />
-                    } />
+                        <Button sx={{mt:1, pt:0, pb: 0}} size='small' variant="outlined" startIcon={<EventAvailableIcon />}>
+                            in 5 days
+                        </Button>
+                    } 
+                />
                 </ListItemButton>
             </ListItem>
             {i < items.length - 1 && <Divider/>}
-            </>
+            </div>
             );
         })}
         </List>

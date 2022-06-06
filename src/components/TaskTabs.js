@@ -2,9 +2,9 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TaskList from './TaskList'
+import CompletedTaskList from './CompletedTaskList'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -18,8 +18,8 @@ function TabPanel(props) {
         {...other}
         >
         {value === index && (
-            <Box sx={{ p: 1, pt: 3 }}>
-            <Typography>{children}</Typography>
+            <Box sx={{ p: 1, pt: 3, mb:0, pb:0}}>
+            <>{children}</>
             </Box>
         )}
         </div>
@@ -79,6 +79,7 @@ function TabPanel(props) {
             <TabPanel value={value} index={6}>
                 <TaskList values={'Misc.'}/>
             </TabPanel>
+            <CompletedTaskList/>
         </Box>
     );
     }
