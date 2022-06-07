@@ -300,7 +300,7 @@ export default function AddWorksegmentForm(props) {
                     autoFocus={false}
                     onFocus={event => {
                         event.target.select();
-                      }}
+                    }}
                     margin="dense"
                     id="travel"
                     name="travel"

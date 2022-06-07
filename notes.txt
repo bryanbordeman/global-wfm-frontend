@@ -1,2 +1,3 @@
 - fix validation on login to be seprate for username and password
 - fix Navlink so burger link works on dashboard
+- update frontend to use UserView object instead of login user object
