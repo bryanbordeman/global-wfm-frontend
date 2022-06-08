@@ -13,11 +13,9 @@ import { Stack } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import ProjectPicker from './ProjectPicker'
 import Box from '@mui/material/Box';
+import EmployeePicker from './EmployeePicker';
 
 export default function AddWorksegmentForm(props) {
     const { 
@@ -30,9 +28,7 @@ export default function AddWorksegmentForm(props) {
             setOpenAdd,
             user,
             token,
-            selectUser,
-            usersList,
-            handleSelectUser
+            handleChangeEmployee
             } = props
 
     const initialFormValues = {
@@ -63,6 +59,7 @@ export default function AddWorksegmentForm(props) {
         startTime: null,
         endTime: null,
         travel: null,
+        employee: null
     })
 
     React.useEffect(() => {
@@ -116,14 +113,6 @@ export default function AddWorksegmentForm(props) {
     const handleValidation = () => {
         let formIsValid = true;
 
-        // if(values.project.length > 5){
-        //     setErrors({...errors, project: 'Invalid Entry'});
-        //     formIsValid = false;
-        //     setTimeout(() => {
-        //         formIsValid = true;
-        //         setErrors({...errors, project: null});
-        //     }, 3000);
-        // }
         if(values.project === ''){
             setErrors({...errors, project: 'Required field'});
             formIsValid = false;
@@ -164,6 +153,14 @@ export default function AddWorksegmentForm(props) {
                 setErrors({...errors, travel: null});
             }, 3000);
         }
+        // else if(employee === undefined){
+        //     setErrors({...errors, employee: 'Select Employee'});
+        //     formIsValid = false;
+        //     setTimeout(() => {
+        //         formIsValid = true;
+        //         setErrors({...errors, employee: null});
+        //     }, 3000);
+        // }
         // else if(Number.isFinite(Number(values.travel))){
         //     setErrors({...errors, travel: 'Input must be a number'});
         //     formIsValid = false;
@@ -179,6 +176,7 @@ export default function AddWorksegmentForm(props) {
                 startTime: null,
                 endTime: null,
                 travel: null,
+                employee: null
             });
             formIsValid = true;
         }
@@ -209,27 +207,25 @@ export default function AddWorksegmentForm(props) {
             <Stack direction="column" spacing={2}>
                 {user.isStaff ? 
                 <div>
-                    <InputLabel id="employee-select-label">Employee</InputLabel>
-                    <Select
-                    fullWidth
-                    disabled={editing? true : false}
-                    labelId="employee-select-label"
-                    id="employees"
-                    value={selectUser}
-                    label="Employee"
-                    onChange={handleSelectUser}
-                    >
-                    {usersList.map((u, index) => {
-                        return (
-                        <MenuItem 
-                            key={index} 
-                            value={u}
-                            >
-                            {u}
-                        </MenuItem>
-                        )
-                    })}
-                    </Select>
+                    {editing ?
+                    <TextField
+                        autoFocus={false}
+                        margin="dense"
+                        disabled
+                        id="employee"
+                        name='employee'
+                        label="Employee"
+                        value={`${segment.user.first_name} ${segment.user.last_name}`}
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                    /> 
+                    :
+                        <EmployeePicker
+                        errors={errors}
+                        token={token}
+                        handleChangeEmployee={handleChangeEmployee}/>
+                    }
                 </div> : ''
                 }
                 {editing ?

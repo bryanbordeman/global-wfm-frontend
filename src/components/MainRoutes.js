@@ -13,7 +13,7 @@ import Profile from '../pages/Profile'
 import Task from '../pages/Task'
 
 function MainRoutes(props) {
-    const { user, users, token, login, signup, loginErrors, handleOpenSnackbar } = props
+    const { user, token, login, signup, loginErrors, handleOpenSnackbar } = props
     
     return (
         <div>
@@ -27,7 +27,6 @@ function MainRoutes(props) {
                         : 
                         <Dashboard
                         user={user}
-                        users={users}
                         token={token}
                         />
                     }/>
@@ -40,7 +39,6 @@ function MainRoutes(props) {
                         :
                         <WorksegmentList
                         user={user}
-                        users={users}
                         token={token}
                         handleOpenSnackbar={handleOpenSnackbar}
                         />

@@ -13,27 +13,24 @@ import Tooltip from '@mui/material/Tooltip';
 import SpeakerNotesTwoToneIcon from '@mui/icons-material/SpeakerNotesTwoTone';
 import moment from 'moment';
 
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-
 import AddWorksegmentForm from '../components/AddWorksegmentForm'
 import DeleteWorksegmentModal from '../components/DeleteWorksegmentModal';
+
+import EmployeePicker from '../components/EmployeePicker';
 
 function WorksegmentList(props) {
     const [ worksegments, setWorksegments ] = useState([]);
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
     const [ openAdd, setOpenAdd ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
-    const { user, token, users, handleOpenSnackbar } = props
+    const { user, token, handleOpenSnackbar } = props
     const [ editSegment, setEditSegment ] = React.useState({}) 
     const [ editing, setEditing ] = React.useState(false)
-    const [ selectUser, setSelectUser ] = React.useState('')
-    const [ selectUserId, setSelectUserId ] = React.useState(0)
+    const [ employee, setEmployee ] = React.useState({})
 
     useEffect(() => {
         retrieveWorksegments();
-    }, [props.token, isoWeek, selectUser]);
+    }, [props.token, isoWeek, employee]);
 
     const handleClickOpen = () => {
         setOpenAdd(true);
@@ -48,15 +45,16 @@ function WorksegmentList(props) {
         user.isStaff? WorksegmentDataService.adminGetWeek(props.token, isoWeek)
         .then(response => {
             // !sort segments by user request
-        const filteredUser = []
+        const filteredEmployee = []
+        if(employee){
         Object.values(response.data).find((obj) => {
-            if(obj.user.id === selectUserId){
-                filteredUser.push(obj)
+            if(obj.user.id === employee.id){
+                filteredEmployee.push(obj)
             }
         return ''
-        });
+        });}
 
-            setWorksegments(filteredUser);
+            setWorksegments(filteredEmployee);
         })
         .catch( e => {
             console.log(e);
@@ -75,7 +73,7 @@ function WorksegmentList(props) {
 
     const createWorksegment = (data) => {
         user.isStaff? 
-        WorksegmentDataService.adminCreateWorksegment(data, token, selectUserId)
+        WorksegmentDataService.adminCreateWorksegment(data, token, employee.id)
         .then(response => {
             window.scrollTo(0, 0);
             handleOpenSnackbar('success', 'Your time has been submitted for approval')
@@ -170,15 +168,11 @@ function WorksegmentList(props) {
                 totalOvertimeHours: totalOvertimeHours}
     }
     
-    const handleSelectUser = (e) => {
-        const selectedUser = e.target.value;
-        setSelectUser(selectedUser);
-        setSelectUserId(users[selectedUser].id)
+    const handleChangeEmployee = (newEmployee) => {
+        setEmployee(newEmployee)
     }
 
     const totals = getTotalHours()
-
-    const usersList = Object.keys(users)
 
     const segmentList = worksegments.map(segment => (
                 <Paper
@@ -319,28 +313,10 @@ function WorksegmentList(props) {
             </div>
             </Stack>
             {user.isStaff ? 
-            <div>
-                <InputLabel id="employee-select-label">Employee</InputLabel>
-                <Select
-                fullWidth
-                sx={{mb: 2}}
-                labelId="employee-select-label"
-                id="employees"
-                value={selectUser}
-                label="Employee"
-                onChange={handleSelectUser}
-                >
-                {usersList.map((u, index) => {
-                    return (
-                    <MenuItem 
-                        key={index} 
-                        value={u}
-                        >
-                        {u}
-                    </MenuItem>
-                    )
-                })}
-                </Select>
+            <div style={{marginBottom: '0.75rem'}}>
+                <EmployeePicker
+                    token={token}
+                    handleChangeEmployee={handleChangeEmployee}/>
             </div> : ''
             }
             <Card 
@@ -382,9 +358,7 @@ function WorksegmentList(props) {
             </Card>
             </div>
             <AddWorksegmentForm 
-                usersList={usersList}
-                selectUser={selectUser}
-                handleSelectUser={handleSelectUser}
+                handleChangeEmployee={handleChangeEmployee}
                 segment={editSegment}
                 handleClickOpen={handleClickOpen}
                 handleClose={handleClose}

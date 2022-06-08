@@ -25,7 +25,7 @@ const theme = createTheme({
 
 function App() {
     const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || {})
-    const [ users, setUsers ] = useState('')
+    // const [ users, setUsers ] = useState('')
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
     const [ loginErrors, setLoginErrors ] = useState({username: null, password: null})
@@ -34,13 +34,13 @@ function App() {
     const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
     const [ snackbarMessage, setSnackbarMessage ] = React.useState('')
 
-    useEffect(() => {
-        try {
-            setUsers(JSON.parse(localStorage.getItem('users')))
-        } catch (e) {
-            setUsers({})
-        }
-    },[])
+    // useEffect(() => {
+    //     try {
+    //         setUsers(JSON.parse(localStorage.getItem('users')))
+    //     } catch (e) {
+    //         setUsers({})
+    //     }
+    // },[])
 
     useEffect(() => {
         // add background to app
@@ -61,11 +61,11 @@ function App() {
                 lastName: response.data.user_last_name,
                 isStaff: response.data.user_is_staff.toLowerCase() === 'true'
             }
-            try {
-                setUsers(JSON.parse(response.data.users))
-            } catch (e) {
-                setUsers({})
-            }
+            // try {
+            //     setUsers(JSON.parse(response.data.users))
+            // } catch (e) {
+            //     setUsers({})
+            // }
         
             setUser(userData)
             localStorage.setItem('users', response.data.users)
@@ -133,7 +133,6 @@ function App() {
                 </> : ''}
                 <MainRoutes
                     user={user}
-                    users={users}
                     token={token}
                     login={login}
                     signup={signup}

@@ -2,9 +2,16 @@ import React from 'react';
 import { Container, Fab } from '@mui/material';
 import TaskTabs from '../components/TaskTabs'
 import AddIcon from '@mui/icons-material/Add';
+import EmployeePicker from '../components/EmployeePicker';
 
 function Task(props) {
-    // const { user } = props
+    const { user, token } = props
+    const [ employee, setEmployee ] = React.useState({})
+
+    const handleChangeEmployee = (newEmployee) => {
+        setEmployee(newEmployee)
+    }
+    
     return ( 
         <div style={{paddingTop: '1rem'}}> 
             <Container
@@ -15,6 +22,12 @@ function Task(props) {
                         flexDirection:'column',
                         height: '100%'
                     }}>
+                        <div style={{width: '100%', marginTop: '1rem', marginBottom: '1rem'}}>
+                        <EmployeePicker
+                        handleChangeEmployee={handleChangeEmployee}
+                        token={token}
+                        />
+                        </div>
                     <TaskTabs list={taskList}/>
                     <Fab 
                         sx={{margin: 0,
