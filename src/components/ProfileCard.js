@@ -53,12 +53,12 @@ export default function ProfileCard(props) {
         <CardContent style={{ marginBottom: 0, paddingBottom: 0, display:'flex', justifyContent:'center' }}>
             <Avatar 
                 style={{width: 56, height: 56}}
-                {...stringAvatar(`${user.firstName} ${user.lastName}`)} 
+                {...stringAvatar(`${user.first_name} ${user.last_name}`)} 
             />
         </CardContent>
         <CardContent sx={{ marginTop: 0, paddingTop: 0, textAlign: 'center' }}>
         <Typography sx={{ mb: 1 }}variant="h5" component="div">
-            {`${user.firstName} ${user.lastName}`}
+            {`${user.first_name} ${user.last_name}`}
         </Typography>
         <Divider sx={{ml: 6, mr: 6 }}/>
         <Typography sx={{ fontSize: 14, mb: 2, mt: 2 }} color="text.secondary" gutterBottom>

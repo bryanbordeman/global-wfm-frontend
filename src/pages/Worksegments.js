@@ -42,7 +42,7 @@ function WorksegmentList(props) {
     };
 
     const retrieveWorksegments = () => {
-        user.isStaff? WorksegmentDataService.adminGetWeek(props.token, isoWeek)
+        user.is_staff? WorksegmentDataService.adminGetWeek(props.token, isoWeek)
         .then(response => {
             // !sort segments by user request
         const filteredEmployee = []
@@ -72,7 +72,7 @@ function WorksegmentList(props) {
     }
 
     const createWorksegment = (data) => {
-        user.isStaff? 
+        user.is_staff? 
         WorksegmentDataService.adminCreateWorksegment(data, token, employee.id)
         .then(response => {
             window.scrollTo(0, 0);
@@ -238,7 +238,7 @@ function WorksegmentList(props) {
                                         marginTop: '1rem',
                                     }}
                                     key={segment.id}
-                                    primary={user.isStaff ? 
+                                    primary={user.is_staff ? 
                                         segment.is_approved ? 
                                         <Button 
                                             variant='outlined' 
@@ -312,7 +312,7 @@ function WorksegmentList(props) {
             >Add</Button>
             </div>
             </Stack>
-            {user.isStaff ? 
+            {user.is_staff ? 
             <div style={{marginBottom: '0.75rem'}}>
                 <EmployeePicker
                     token={token}
@@ -359,6 +359,7 @@ function WorksegmentList(props) {
             </div>
             <AddWorksegmentForm 
                 handleChangeEmployee={handleChangeEmployee}
+                employee={employee}
                 segment={editSegment}
                 handleClickOpen={handleClickOpen}
                 handleClose={handleClose}

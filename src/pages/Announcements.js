@@ -121,7 +121,7 @@ function Announcements(props) {
                                 {announcement.title}
                                 {/* <Divider/> */}
                             </div>
-                            {user.isStaff?
+                            {user.is_staff?
                             <div style={{marginLeft: 'auto'}} >
                             <Stack direction="row" spacing={1}>
                             <IconButton
@@ -171,7 +171,7 @@ function Announcements(props) {
                         flexDirection:'column',
                         height: '100%'
                     }}>
-                    {user.isStaff?
+                    {user.is_staff?
                     <div style={{width: '10rem', marginBottom: '.5rem', marginTop: '.35rem'}}>
                         <Button
                             sx={{ height: '100%'}}

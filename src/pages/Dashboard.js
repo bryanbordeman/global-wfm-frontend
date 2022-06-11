@@ -11,7 +11,7 @@ function Dashboard(props){
 
     return (
         <div>
-            {user.isStaff ?
+            {user.is_staff ?
             <div style={{paddingTop: '1rem'}}> 
                 <Container
                     sx={{

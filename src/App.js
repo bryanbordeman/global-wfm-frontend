@@ -54,23 +54,24 @@ function App() {
             setLoginErrors({username: null, password: null});
             setToken(response.data.token);
             // setUser(user.username);
-            const userData = {
-                username: response.data.user,
-                email: response.data.user_email,
-                firstName: response.data.user_first_name,
-                lastName: response.data.user_last_name,
-                isStaff: response.data.user_is_staff.toLowerCase() === 'true'
-            }
+            // const userData = {
+            //     username: response.data.user,
+            //     email: response.data.user_email,
+            //     firstName: response.data.user_first_name,
+            //     lastName: response.data.user_last_name,
+            //     isStaff: response.data.user_is_staff.toLowerCase() === 'true'
+            // }
             // try {
             //     setUsers(JSON.parse(response.data.users))
             // } catch (e) {
             //     setUsers({})
             // }
-        
-            setUser(userData)
-            localStorage.setItem('users', response.data.users)
+            console.log(JSON.parse(response.data.userObject))
+
+            setUser(JSON.parse(response.data.userObject))
+            // localStorage.setItem('users', response.data.users)
             localStorage.setItem('token', response.data.token)
-            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('user', JSON.stringify(JSON.parse(response.data.userObject)));
             setError('');
         })
         .catch( e => {

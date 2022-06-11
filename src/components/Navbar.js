@@ -210,7 +210,7 @@ const Navbar = (props) => {
                 <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={user.firstName.toUpperCase()} src="/static/images/avatar/2.jpg" />
+                    <Avatar alt={user.first_name.toUpperCase()} src="/static/images/avatar/2.jpg" />
                     </IconButton>
                 </Tooltip>
                 <Menu

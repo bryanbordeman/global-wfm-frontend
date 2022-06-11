@@ -28,7 +28,8 @@ export default function AddWorksegmentForm(props) {
             setOpenAdd,
             user,
             token,
-            handleChangeEmployee
+            handleChangeEmployee,
+            employee
             } = props
 
     const initialFormValues = {
@@ -153,14 +154,14 @@ export default function AddWorksegmentForm(props) {
                 setErrors({...errors, travel: null});
             }, 3000);
         }
-        // else if(employee === undefined){
-        //     setErrors({...errors, employee: 'Select Employee'});
-        //     formIsValid = false;
-        //     setTimeout(() => {
-        //         formIsValid = true;
-        //         setErrors({...errors, employee: null});
-        //     }, 3000);
-        // }
+        else if(employee === undefined){
+            setErrors({...errors, employee: 'Select Employee'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, employee: null});
+            }, 3000);
+        }
         // else if(Number.isFinite(Number(values.travel))){
         //     setErrors({...errors, travel: 'Input must be a number'});
         //     formIsValid = false;
@@ -205,7 +206,7 @@ export default function AddWorksegmentForm(props) {
             <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>
-                {user.isStaff ? 
+                {user.is_staff ? 
                 <div>
                     {editing ?
                     <TextField
@@ -222,6 +223,7 @@ export default function AddWorksegmentForm(props) {
                     /> 
                     :
                         <EmployeePicker
+                        employee={employee}
                         errors={errors}
                         token={token}
                         handleChangeEmployee={handleChangeEmployee}/>
