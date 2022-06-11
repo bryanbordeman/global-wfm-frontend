@@ -4,22 +4,22 @@ import Autocomplete from '@mui/material/Autocomplete';
 import UserService from '../services/User.services'
 
 export default function EmployeePicker(props) {
+    const { user } = props
     const { handleChangeEmployee, employee, errors} = props
     const [ value, setValue ] = React.useState(null)
     const [ employees, setEmployees ] = React.useState([{}])
     const [ inputValue, setInputValue ] = React.useState('');
 
-    
-
     React.useEffect(() => {
         retrieveEmployees()
+        handleChangeEmployee(value)
         // if(employee !== undefined)
         //     {setValue(employee)}
         // else{
         //     setValue(null)
         // }
     },[])
-    
+
     // React.useEffect(() => {
     //     if(employee !== {}){
     //         handleInputValue(employee)

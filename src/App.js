@@ -53,23 +53,7 @@ function App() {
         .then(response => {
             setLoginErrors({username: null, password: null});
             setToken(response.data.token);
-            // setUser(user.username);
-            // const userData = {
-            //     username: response.data.user,
-            //     email: response.data.user_email,
-            //     firstName: response.data.user_first_name,
-            //     lastName: response.data.user_last_name,
-            //     isStaff: response.data.user_is_staff.toLowerCase() === 'true'
-            // }
-            // try {
-            //     setUsers(JSON.parse(response.data.users))
-            // } catch (e) {
-            //     setUsers({})
-            // }
-            console.log(JSON.parse(response.data.userObject))
-
             setUser(JSON.parse(response.data.userObject))
-            // localStorage.setItem('users', response.data.users)
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user', JSON.stringify(JSON.parse(response.data.userObject)));
             setError('');
@@ -80,19 +64,11 @@ function App() {
         });
     };
     async function logout(){
-        const userData = {
-            username: '',
-            email: '',
-            firstName: '',
-            lastName:  '',
-            isStaff: ''
-        }
-        
+        const userData = Object.keys(user);
         setToken('');
         setUser(userData);
         localStorage.setItem('token', '');
         localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('users', '');
     };
     async function signup(user= null){
         UserService.signup(user)

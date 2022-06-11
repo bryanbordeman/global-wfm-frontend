@@ -154,7 +154,7 @@ export default function AddWorksegmentForm(props) {
                 setErrors({...errors, travel: null});
             }, 3000);
         }
-        else if(employee === undefined){
+        else if(!employee){
             setErrors({...errors, employee: 'Select Employee'});
             formIsValid = false;
             setTimeout(() => {
@@ -225,6 +225,7 @@ export default function AddWorksegmentForm(props) {
                         <EmployeePicker
                         employee={employee}
                         errors={errors}
+                        user={user}
                         token={token}
                         handleChangeEmployee={handleChangeEmployee}/>
                     }

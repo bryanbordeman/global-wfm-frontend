@@ -5,11 +5,12 @@ import AddIcon from '@mui/icons-material/Add';
 import EmployeePicker from '../components/EmployeePicker';
 
 function Task(props) {
-    const { user, token } = props
-    const [ employee, setEmployee ] = React.useState({})
+    // const { user } = props
+    const { token } = props
+    // const [ employee, setEmployee ] = React.useState({})
 
     const handleChangeEmployee = (newEmployee) => {
-        setEmployee(newEmployee)
+        // setEmployee(newEmployee)
     }
     
     return ( 

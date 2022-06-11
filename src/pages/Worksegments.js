@@ -27,10 +27,11 @@ function WorksegmentList(props) {
     const [ editSegment, setEditSegment ] = React.useState({}) 
     const [ editing, setEditing ] = React.useState(false)
     const [ employee, setEmployee ] = React.useState({})
+    const [ submitted, setSubmitted ] = React.useState(false)
 
     useEffect(() => {
         retrieveWorksegments();
-    }, [props.token, isoWeek, employee]);
+    }, [props.token, isoWeek, employee, submitted]);
 
     const handleClickOpen = () => {
         setOpenAdd(true);
@@ -72,22 +73,17 @@ function WorksegmentList(props) {
     }
 
     const createWorksegment = (data) => {
-        user.is_staff? 
-        WorksegmentDataService.adminCreateWorksegment(data, token, employee.id)
+        const userId = user.is_staff ? Number(employee.id) : Number(user.id)
+        
+        WorksegmentDataService.createWorksegment(data, token, userId)
         .then(response => {
             window.scrollTo(0, 0);
             handleOpenSnackbar('success', 'Your time has been submitted for approval')
             retrieveWorksegments();
-        })
-        .catch(e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        }) :
-        WorksegmentDataService.createWorksegment(data, token)
-        .then(response => {
-            window.scrollTo(0, 0);
-            handleOpenSnackbar('success', 'Your time has been submitted for approval')
-            retrieveWorksegments();
+            setSubmitted(true);
+            setTimeout(() => {
+                setSubmitted(true)
+            }, 3000);
         })
         .catch(e => {
             console.log(e);
@@ -265,7 +261,8 @@ function WorksegmentList(props) {
                                 </div>
                                 }
                                 secondary={
-                                <>
+                                <>  {user.is_staff? `${segment.user.first_name} ${segment.user.last_name}` :''}
+                                    {user.is_staff? <br/> :''}
                                     {`${moment(segment.start_time, "HH:mm:ss").format("hh:mm A")} -  
                                     ${moment(segment.end_time, "HH:mm:ss").format("hh:mm A")}`}
                                     <br/>
@@ -315,6 +312,7 @@ function WorksegmentList(props) {
             {user.is_staff ? 
             <div style={{marginBottom: '0.75rem'}}>
                 <EmployeePicker
+                    user={user}
                     token={token}
                     handleChangeEmployee={handleChangeEmployee}/>
             </div> : ''
