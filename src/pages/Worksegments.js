@@ -261,8 +261,9 @@ function WorksegmentList(props) {
                                 </div>
                                 }
                                 secondary={
-                                <>  {user.is_staff? <Chip sx={{mb:1}}label={`${segment.user.first_name} ${segment.user.last_name}`} />:''}
-                                    {/* {user.is_staff? `${segment.user.first_name} ${segment.user.last_name}` :''} */}
+                                <>  
+                                    {/* {user.is_staff? <Chip sx={{mb:1}}label={`${segment.user.first_name} ${segment.user.last_name}`} />:''} */}
+                                    {user.is_staff? `${segment.user.first_name} ${segment.user.last_name}` :''}
                                     {user.is_staff? <br/> :''}
                                     {`${moment(segment.start_time, "HH:mm:ss").format("hh:mm A")} -  
                                     ${moment(segment.end_time, "HH:mm:ss").format("hh:mm A")}`}
