@@ -36,9 +36,7 @@ const Navbar = (props) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = (e) => {
-        const { name } = e.target;
-        setActiveButton(name);
+    const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
 
@@ -47,14 +45,14 @@ const Navbar = (props) => {
     };
 
     const logout = () => {
-        setActiveButton('dashboard')
+        setActiveButton('dashboard');
         props.logout()
         navigate('/login')
         setAnchorElUser(null);
         
     }
 
-    const activeStyle = { my: 2, color: '#60BCD9', display: 'block'}
+    const activeStyle = { my: 2, color: '#60BCD9', display: 'block', textDecoration: 'underline',}
     const inactiveStyle = { my: 2, color: 'white', display: 'block'}
 
     return (
@@ -69,8 +67,10 @@ const Navbar = (props) => {
                 <Typography
                 variant="h6"
                 noWrap
-                component="a"
-                href="/"
+                name='dashboard'
+                component={Link}
+                to="/"
+                onClick={() => {setActiveButton('dashboard')}}
                 sx={{
                     mr: 2,
                     display: { xs: 'none', md: 'flex' },
@@ -114,25 +114,68 @@ const Navbar = (props) => {
                     display: { xs: 'block', md: 'none' },
                     }}
                 >
-                    <MenuItem name='dashboard' onClick={handleCloseNavMenu} component={Link} to='/'>
+                    <MenuItem 
+                        onClick={() => {
+                            setActiveButton('dashboard');
+                            handleCloseNavMenu()}}
+                        component={Link} 
+                        to='/'
+                        >
                         <Typography textAlign="center">Dashboard</Typography>
                     </MenuItem>
-                    <MenuItem name='worksegments' onClick={handleCloseNavMenu} component={Link} to='/worksegments'>
+                    <MenuItem 
+                        onClick={() => {
+                            setActiveButton('worksegments');
+                            handleCloseNavMenu()}} 
+                        component={Link} 
+                        to='/worksegments'
+                        >
                         <Typography textAlign="center">Timesheets</Typography>
                     </MenuItem>
-                    <MenuItem name='schedule' onClick={handleCloseNavMenu} component={Link} to='/schedule'>
+                    <MenuItem 
+                        onClick={() => {
+                            setActiveButton('schedule');
+                            handleCloseNavMenu()}}
+                        component={Link} 
+                        to='/schedule'
+                        >
                         <Typography textAlign="center">Schedule</Typography>
                     </MenuItem>
-                    <MenuItem name='projects' onClick={handleCloseNavMenu} component={Link} to='/projects'>
+                    <MenuItem 
+                        onClick={() => {
+                            setActiveButton('projects');
+                            handleCloseNavMenu()}}
+                        onChangeCapture={clickedButtonHandler} 
+                        component={Link} 
+                        to='/projects'
+                        >
                         <Typography textAlign="center">Projects</Typography>
                     </MenuItem>
-                    <MenuItem name='announcements' onClick={handleCloseNavMenu} component={Link} to='/announcements'>
+                    <MenuItem 
+                        onClick={() => {
+                            setActiveButton('announcements');
+                            handleCloseNavMenu()}}
+                        component={Link} 
+                        to='/announcements'
+                        >
                         <Typography textAlign="center">Announcements</Typography>
                     </MenuItem>
-                    <MenuItem name='expenses' onClick={handleCloseNavMenu} component={Link} to='/expenses'>
+                    <MenuItem 
+                        onClick={() => {
+                            setActiveButton('expenses');
+                            handleCloseNavMenu()}} 
+                        component={Link} 
+                        to='/expenses'
+                        >
                         <Typography textAlign="center">Expenses</Typography>
                     </MenuItem>
-                    <MenuItem name='task' onClick={handleCloseNavMenu} component={Link} to='/task'>
+                    <MenuItem  
+                        onClick={() => {
+                            setActiveButton('task');
+                            handleCloseNavMenu()}}
+                        component={Link} 
+                        to='/task'
+                        >
                         <Typography textAlign="center">Task</Typography>
                     </MenuItem>
                 </Menu>
@@ -140,8 +183,10 @@ const Navbar = (props) => {
                 <Typography
                 variant="h5"
                 noWrap
-                component="a"
-                href="/"
+                name='dashboard'
+                component={Link}
+                to="/"
+                onClick={() => {setActiveButton('dashboard')}}
                 sx={{
                     mr: 2,
                     display: { xs: 'flex', md: 'none' },
@@ -206,7 +251,6 @@ const Navbar = (props) => {
                         Task
                     </Button>
                 </Box>
-
                 <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -229,10 +273,20 @@ const Navbar = (props) => {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                 > 
-                    <MenuItem onClick={handleCloseUserMenu} component={Link} to='/profile'>
+                    <MenuItem 
+                        onClick={() => {
+                            setActiveButton('');
+                            handleCloseUserMenu()}} 
+                        component={Link} 
+                        to='/profile'
+                        >
                         <Typography textAlign="center">Profile</Typography>
                     </MenuItem>
-                    <MenuItem onClick={logout}>
+                    <MenuItem 
+                        onClick={() => {
+                            setActiveButton('dashboard');
+                            logout()}} 
+                        >
                         <Typography textAlign="center">Logout</Typography>
                     </MenuItem>
                 </Menu>

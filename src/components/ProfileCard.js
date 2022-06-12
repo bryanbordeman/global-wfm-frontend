@@ -69,9 +69,17 @@ export default function ProfileCard(props) {
         </Typography>
         <Divider sx={{ml: 6, mr: 6 }}/>
         <Typography sx={{ mb: 2, mt:2 }} color="text.primary">
-            Permission level: {user.isStaff ? 'Admin' : 'Limited Access'}
+            Permission level: {user.is_staff ? 'Admin' : 'Limited Access'}
         </Typography>
-      </CardContent>
+        {user.groups.length > 0?
+        <>
+        <Divider sx={{ml: 6, mr: 6 }}/>
+        <Typography sx={{ mb: 2, mt:2 }} color="text.primary">
+            Groups: [{user.groups.map((group, i) => (i < user.groups.length - 1? ` ${group.name},` : ` ${group.name} `))}]
+        </Typography>
+        </>
+        : ''}
+        </CardContent>
     </Card>
-  );
+    );
 }

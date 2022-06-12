@@ -1,5 +1,5 @@
 import * as React from 'react';
-import AdminDashboardTable from '../components/AdminDashboardTable'
+// import AdminDashboardTable from '../components/AdminDashboardTable'
 import { Container } from '@mui/material';
 import SnackbarAlert from '../components/SnackbarAlert'
 
@@ -23,7 +23,7 @@ function Dashboard(props){
                     }}>
                         Admin Dashboard
                         <SnackbarAlert/>
-                    <AdminDashboardTable/>
+                    {/* <AdminDashboardTable/> */}
                 </Container>
             </div> :
             <div style={{paddingTop: '1rem'}}> 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import WorksegmentDataService from '../services/Worksegment.services'
 import { Container, Typography, Button, Card, CardContent, Chip } from '@mui/material';
-import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider } from '@mui/material';
+import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider, } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'
 import Edit from '@mui/icons-material/Edit'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
@@ -256,12 +256,13 @@ function WorksegmentList(props) {
                             <ListItemText
                                 key={segment.id}
                                 primary={
-                                <div style={{fontWeight: '700', marginBottom: '.5rem'}}>
+                                <div style={{fontWeight: '700', marginBottom: '.25rem'}}>
                                     {moment(segment.date).format("ddd, MMMM Do YYYY")}
                                 </div>
                                 }
                                 secondary={
-                                <>  {user.is_staff? `${segment.user.first_name} ${segment.user.last_name}` :''}
+                                <>  {user.is_staff? <Chip sx={{mb:1}}label={`${segment.user.first_name} ${segment.user.last_name}`} />:''}
+                                    {/* {user.is_staff? `${segment.user.first_name} ${segment.user.last_name}` :''} */}
                                     {user.is_staff? <br/> :''}
                                     {`${moment(segment.start_time, "HH:mm:ss").format("hh:mm A")} -  
                                     ${moment(segment.end_time, "HH:mm:ss").format("hh:mm A")}`}
@@ -269,6 +270,8 @@ function WorksegmentList(props) {
                                     Project: {segment.project.number}
                                     <br/>
                                     Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}
+                                    <br/>
+                                    Lunch: {segment.lunch ? 'Yes' : 'No'}
                                     <br/>
                                     {segment.notes ? <Tooltip title={segment.notes} enterTouchDelay={0}>
                                                         <IconButton size="small" aria-label="notes">

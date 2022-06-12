@@ -25,7 +25,6 @@ const theme = createTheme({
 
 function App() {
     const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || {})
-    // const [ users, setUsers ] = useState('')
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
     const [ loginErrors, setLoginErrors ] = useState({username: null, password: null})
@@ -34,21 +33,12 @@ function App() {
     const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
     const [ snackbarMessage, setSnackbarMessage ] = React.useState('')
 
-    // useEffect(() => {
-    //     try {
-    //         setUsers(JSON.parse(localStorage.getItem('users')))
-    //     } catch (e) {
-    //         setUsers({})
-    //     }
-    // },[])
-
     useEffect(() => {
         // add background to app
         document.body.style.backgroundColor = "#f8f8ff"
     },[])
 
     async function login(user= null){
-        // console.log('App Login Function')
         UserService.login(user)
         .then(response => {
             setLoginErrors({username: null, password: null});
@@ -122,7 +112,6 @@ function App() {
                     handleCloseSnackbar={handleCloseSnackbar}
                     severity={snackbarSeverity}
                     message={snackbarMessage}/>
-                {/* <BottomNavigation/> */}
             </BrowserRouter>
         </ThemeProvider>
     );
