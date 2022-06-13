@@ -3,9 +3,8 @@ import { Container } from '@mui/material';
 import MonthPicker from '../components/MonthPicker'
 import { Button, Stack } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import ExpenseCard from '../components/ExpenseCard';
 import EmployeePicker from '../components/EmployeePicker';
-import ExpenseSummary from '../components/ExpenseSummary';
+import ExpenseTabs from '../components/ExpenseTabs';
 
 function Expenses(props) {
     const { user, token } = props
@@ -55,9 +54,8 @@ function Expenses(props) {
                         </div> : ''
                         }
                     </div>
-                    <ExpenseSummary
-                        month={month}/>
-                    <ExpenseCard 
+                    <ExpenseTabs
+                        month={month}
                         user={user}/>
             </Container>
         </div>
