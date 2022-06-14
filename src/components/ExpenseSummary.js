@@ -3,7 +3,7 @@ import { Card, CardContent, Typography } from '@mui/material';
 import moment from 'moment';
 
 function ExpenseSummary(props) {
-    const { month } = props
+    const { month, value } = props
     return (  
         <Card 
             variant='outlined'
@@ -27,14 +27,11 @@ function ExpenseSummary(props) {
                 <Typography style={{fontWeight: '700'}} mb={1} variant="h4" component="div">
                     {moment(month).format("MMMM YYYY")}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                Total Reimbursable: $37.94
+                <Typography variant="h6" color="text.secondary" gutterBottom>
+                    {value}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                Total Company Card: $240.00
-                </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                Total Miles: 300 miles at $0.57 mile = $171.00
+                <Typography variant="body1" color="text.secondary" gutterBottom>
+                Total: $240.00
                 </Typography>
             </CardContent>
                 

@@ -5,6 +5,9 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import ExpenseCard from '../components/ExpenseCard';
 import ExpenseSummary from '../components/ExpenseSummary';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -19,7 +22,7 @@ function TabPanel(props) {
         {...other}
         >
         {value === index && (
-            <Box sx={{ p: 1, pt: 3, mb:0, pb:0}}>
+            <Box sx={{ p: 0, pt: 3, mb:0, pb:0}}>
             <>{children}</>
             </Box>
         )}
@@ -43,37 +46,45 @@ export default function ExpaneseTabs(props) {
 
     return (
         <Box sx={{ width: '100%'}}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', display: "flex", justifyContent: "center", width:"100%" }}>
-            <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="scrollable auto tabs example"
-            >   
-                <Tab label="Company Card" />
-                <Tab label="Reimbursable" />
-                <Tab label="Miles" />
-            </Tabs>
-        </Box>
-            <TabPanel value={value} index={0}>
-                <ExpenseSummary
-                    month={month}/>
-                <ExpenseCard 
-                    user={user}/>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <ExpenseSummary
-                    month={month}/>
-                <ExpenseCard 
-                    user={user}/>
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                <ExpenseSummary
-                    month={month}/>
-                <ExpenseCard 
-                    user={user}/>
-            </TabPanel>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', display: "flex", justifyContent: "center", width:"100%" }}>
+                <Tabs
+                value={value}
+                onChange={handleChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+                >   
+                    <Tab icon={<CreditCardIcon />} label="Company Card" />
+                    <Tab icon={<PaidOutlinedIcon />}label="Reimbursable" />
+                    <Tab icon={<DirectionsCarFilledOutlinedIcon />}label="Miles" />
+                </Tabs>
+            </Box>
+            <div  style={{ display: "flex", justifyContent: "center", width:"100%" }}>
+                <TabPanel value={value} index={0}>
+                    <ExpenseSummary
+                        month={month}
+                        value={'Company Card'}/>
+                    <ExpenseCard 
+                        user={user}
+                        value={'Company Card'}/>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <ExpenseSummary
+                        month={month}
+                        value={'Reimbursable'}/>
+                    <ExpenseCard 
+                        user={user}
+                        value={'Reimbursable'}/>
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                    <ExpenseSummary
+                        month={month}
+                        value={'Miles'}/>
+                    <ExpenseCard 
+                        user={user}
+                        value={'Miles'}/>
+                </TabPanel>
+            </div>
         </Box>
     );
 }

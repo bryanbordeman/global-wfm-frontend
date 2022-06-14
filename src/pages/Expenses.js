@@ -13,7 +13,6 @@ function Expenses(props) {
     
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
-        console.log(newEmployee)
     }
 
     const handleChangeMonth = (newEMonth) => {
