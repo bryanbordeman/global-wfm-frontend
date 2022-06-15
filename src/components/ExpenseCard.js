@@ -57,16 +57,30 @@ function ExpenseCard(props) {
                             marginBottom: '1rem',
                         }}
                         >
-                            <Chip 
+                            {/* <Chip 
                                 sx={{ 
                                     marginTop: '1.5rem',
                                     marginBottom: '1.5rem',
                                 }}
                                 color={`${expense.is_approved ? 'success' : 'primary'}`}
-                                icon={expense.is_approved ? <CheckIcon /> : <PaidOutlinedIcon/>} 
+                                icon={expense.is_approved ? <CheckIcon /> : <ReceiptLongOutlinedIcon/>} 
                                 label={`$${expense.price}`} 
                                 // variant="outlined" 
-                            />
+                            /> */}
+                            <Button 
+                                sx={{ 
+                                    marginRight: '0.5rem',
+                                    marginLeft: '0.5rem',
+                                    marginTop: '1.5rem',
+                                    marginBottom: '1.5rem',
+                                }}
+                                variant='contained' 
+                                color='primary' 
+                                size='small' 
+                                startIcon={<ReceiptLongOutlinedIcon />}
+                                >
+                                {`$${parseFloat(expense.price).toFixed(2)}`} 
+                            </Button>
                             <Divider/>
                             <ListItemText
                                 sx={{
@@ -99,7 +113,7 @@ function ExpenseCard(props) {
                             key={expense.id}
                             primary={
                             <div style={{fontWeight: '700', marginBottom: '.25rem'}}>
-                                Company Card
+                                {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")}
                             </div>
                             }
                             secondary={
@@ -107,15 +121,15 @@ function ExpenseCard(props) {
                                 {/* {user.is_staff? <Chip sx={{mb:1}}label={`${expense.user.first_name} ${expense.user.last_name}`} />:''} */}
                                 {user.is_staff? `${expense.user.first_name} ${expense.user.last_name}` :''}
                                 {user.is_staff? <br/> :''}
-                                Date: {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")}
-                                <br/>
                                 Project: {expense.project.number}
                                 <br/>
+                                Merchant: {expense.merchant}
+                                {/* <br/>
                                 {expense.receipt_pic ? 
                                     <IconButton size="small" aria-label="notes">
                                         <ReceiptLongOutlinedIcon />
                                     </IconButton>
-                                    : ''}
+                                    : ''} */}
                             </>
                             }
                         />
@@ -134,7 +148,7 @@ const expense =
     "id": 1,
     "receipt_pic": "http://192.168.1.10:8000/receipt_pic/kodex_RA_logo_rlkDGoJ.jpg",
     "merchant": "Walmart",
-    "price": 15.01,
+    "price": 15.00,
     "notes": "",
     "is_reimbursable": true,
     "is_approved": false,

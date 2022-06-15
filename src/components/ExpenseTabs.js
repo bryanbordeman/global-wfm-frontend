@@ -8,13 +8,27 @@ import ExpenseSummary from '../components/ExpenseSummary';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+    tabpanel: {
+        // position: 'absolute',
+        // top: '50%',
+        // left: '50%',
+        // transform: 'translate(-50%, -50%)'
+        // width: '50%',
+        // minWidth: '300px',
+        // padding: 'auto',
+        // margin: 'auto',
+        // textAlign: 'center'
+    }
+});
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
     return (
         <div
-        // style={{ display: "flex", justifyContent: "center", width:"100%" }}
         role="tabpanel"
         hidden={value !== index}
         id={`simple-tabpanel-${index}`}
@@ -23,7 +37,7 @@ function TabPanel(props) {
         >
         {value === index && (
             <Box sx={{ p: 0, pt: 3, mb:0, pb:0}}>
-            <>{children}</>
+            {children}
             </Box>
         )}
         </div>
@@ -37,6 +51,7 @@ function TabPanel(props) {
     };
 
 export default function ExpaneseTabs(props) {
+    const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const { month, user } = props
 
@@ -45,22 +60,20 @@ export default function ExpaneseTabs(props) {
     };
 
     return (
-        <Box sx={{ width: '100%'}}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', display: "flex", justifyContent: "center", width:"100%" }}>
+        <Box>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
                 <Tabs
                 value={value}
                 onChange={handleChange}
                 variant="scrollable"
                 scrollButtons="auto"
-                aria-label="scrollable auto tabs example"
                 >   
-                    <Tab icon={<CreditCardIcon />} label="Company Card" />
-                    <Tab icon={<PaidOutlinedIcon />}label="Reimbursable" />
-                    <Tab icon={<DirectionsCarFilledOutlinedIcon />}label="Miles" />
+                    <Tab sx={{width: '50%'}} icon={<CreditCardIcon />} label="Company Card" />
+                    <Tab sx={{width: '50%'}} icon={<PaidOutlinedIcon />}label="Reimbursable" />
+                    <Tab sx={{width: '50%'}} icon={<DirectionsCarFilledOutlinedIcon />}label="Miles" />
                 </Tabs>
             </Box>
-            <div  style={{ display: "flex", justifyContent: "center", width:"100%" }}>
-                <TabPanel value={value} index={0}>
+                <TabPanel value={value} index={0} className={ classes.tabpanel }>
                     <ExpenseSummary
                         month={month}
                         value={'Company Card'}/>
@@ -68,7 +81,7 @@ export default function ExpaneseTabs(props) {
                         user={user}
                         value={'Company Card'}/>
                 </TabPanel>
-                <TabPanel value={value} index={1}>
+                <TabPanel value={value} index={1} className={ classes.tabpanel }>
                     <ExpenseSummary
                         month={month}
                         value={'Reimbursable'}/>
@@ -76,7 +89,7 @@ export default function ExpaneseTabs(props) {
                         user={user}
                         value={'Reimbursable'}/>
                 </TabPanel>
-                <TabPanel value={value} index={2}>
+                <TabPanel value={value} index={2} className={ classes.tabpanel }>
                     <ExpenseSummary
                         month={month}
                         value={'Miles'}/>
@@ -84,7 +97,6 @@ export default function ExpaneseTabs(props) {
                         user={user}
                         value={'Miles'}/>
                 </TabPanel>
-            </div>
         </Box>
     );
 }
