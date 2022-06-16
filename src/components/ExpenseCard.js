@@ -1,16 +1,73 @@
 import React from 'react';
-import { Button, Chip } from '@mui/material';
 import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider, } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'
 import Edit from '@mui/icons-material/Edit'
-import CheckIcon from '@mui/icons-material/Check';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import moment from 'moment';
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import receipt from '../assets/sample-receipt.png'
 
-function ExpenseCard(props) {
+function ImageDialog(props) {
+    const { open, setOpen, expense } = props
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    return (
+        <div>
+        <Dialog
+            fullScreen={fullScreen}
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="responsive-dialog-title"
+        >
+            <DialogTitle id="responsive-dialog-title">
+            Expense id: {expense.id}
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText>
+                <img 
+                    src={receipt} 
+                    alt="receipt"
+                    style={{width: '100%'}}
+                    />
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            <Button 
+                variant='contained'
+                color='primary'
+                onClick={handleClose} 
+                autoFocus
+            >
+                Close
+            </Button>
+            </DialogActions>
+        </Dialog>
+        </div>
+    );
+}
+
+
+export default function ExpenseCard(props) {
     const { user } = props
+    const [open, setOpen] = React.useState(false);
+    
+    const handleClickOpen = () => {
+        setOpen(!open);
+    };
+
     return (  
             <Paper
                 sx={{
@@ -78,6 +135,7 @@ function ExpenseCard(props) {
                                 color='primary' 
                                 size='small' 
                                 startIcon={<ReceiptLongOutlinedIcon />}
+                                onClick={handleClickOpen}
                                 >
                                 {`$${parseFloat(expense.price).toFixed(2)}`} 
                             </Button>
@@ -134,6 +192,11 @@ function ExpenseCard(props) {
                             }
                         />
                     </ListItem>
+                    <ImageDialog
+                        open={open}
+                        setOpen={setOpen}
+                        expense={expense}
+                    />
                     {/* <img src={} alt="GPS Logo"/> */}
                 </Grid>
                 </Grid>
@@ -141,14 +204,12 @@ function ExpenseCard(props) {
     );
 };
 
-export default ExpenseCard;
-
 const expense = 
 {
     "id": 1,
     "receipt_pic": "http://192.168.1.10:8000/receipt_pic/kodex_RA_logo_rlkDGoJ.jpg",
-    "merchant": "Walmart",
-    "price": 15.00,
+    "merchant": "Home Depot",
+    "price": 1.91,
     "notes": "",
     "is_reimbursable": true,
     "is_approved": false,
