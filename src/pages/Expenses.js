@@ -7,7 +7,7 @@ import EmployeePicker from '../components/EmployeePicker';
 import ExpenseTabs from '../components/ExpenseTabs';
 
 function Expenses(props) {
-    const { user, token } = props
+    const { user, token, handleOpenSnackbar} = props
     const [ employee, setEmployee ] = React.useState({})
     const [ month, setMonth ] = React.useState(new Date())
     
@@ -54,6 +54,8 @@ function Expenses(props) {
                         }
                     </div>
                     <ExpenseTabs
+                        token={token}
+                        handleOpenSnackbar={handleOpenSnackbar}
                         month={month}
                         user={user}/>
             </Container>

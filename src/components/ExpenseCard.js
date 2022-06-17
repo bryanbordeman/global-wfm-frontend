@@ -13,7 +13,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import receipt from '../assets/sample-receipt.png'
 
 function ImageDialog(props) {
     const { open, setOpen, expense } = props
@@ -38,7 +37,7 @@ function ImageDialog(props) {
             <DialogContent>
             <DialogContentText>
                 <img 
-                    src={receipt} 
+                    src={expense.receipt_pic} 
                     alt="receipt"
                     style={{width: '100%'}}
                     />
@@ -61,7 +60,7 @@ function ImageDialog(props) {
 
 
 export default function ExpenseCard(props) {
-    const { user } = props
+    const { user, expense } = props
     const [open, setOpen] = React.useState(false);
     
     const handleClickOpen = () => {
@@ -204,49 +203,4 @@ export default function ExpenseCard(props) {
     );
 };
 
-const expense = 
-{
-    "id": 1,
-    "receipt_pic": "http://192.168.1.10:8000/receipt_pic/kodex_RA_logo_rlkDGoJ.jpg",
-    "merchant": "Home Depot",
-    "price": 1.91,
-    "notes": "",
-    "is_reimbursable": true,
-    "is_approved": false,
-    "date_purchased": "2022-06-04",
-    "date_created": "2022-06-04",
-    "user": {
-        "id": 1,
-        "password": "pbkdf2_sha256$320000$hQCF672CjQ5VgfmQcwA02z$/TQXapw74utdBKGLIl1+JJ+AoYMncLTEhun4Z5TasXE=",
-        "last_login": "2022-06-12T05:09:21.006256-04:00",
-        "is_superuser": true,
-        "username": "bryanbordeman",
-        "first_name": "Bryan",
-        "last_name": "Bordeman",
-        "email": "bryanbordeman@hotmail.com",
-        "is_staff": true,
-        "is_active": true,
-        "date_joined": "2022-05-11T18:39:43-04:00",
-        "groups": [
-            2
-        ],
-        "user_permissions": []
-    },
-    "project": {
-        "id": 1,
-        "is_active": true,
-        "number": "12345",
-        "name": "Testing First Project from DB",
-        "prevailing_rate": true,
-        "travel_job": true,
-        "notes": "sdcdscdscdsc",
-        "project_category": 1,
-        "project_type": 1,
-        "address": 1,
-        "customer_company": 1,
-        "contact": [
-            1,
-            2
-        ]
-    }
-}
+
