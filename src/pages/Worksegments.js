@@ -23,11 +23,11 @@ function WorksegmentList(props) {
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
     const [ openAdd, setOpenAdd ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
-    const { user, token, handleOpenSnackbar } = props
-    const [ editSegment, setEditSegment ] = React.useState({}) 
-    const [ editing, setEditing ] = React.useState(false)
-    const [ employee, setEmployee ] = React.useState({})
-    const [ submitted, setSubmitted ] = React.useState(false)
+    const [ editing, setEditing ] = React.useState(false);
+    const [ editSegment, setEditSegment ] = React.useState({});
+    const [ submitted, setSubmitted ] = React.useState(false);
+    const { user, token, handleOpenSnackbar } = props;
+    const [ employee, setEmployee ] = React.useState({});
 
     useEffect(() => {
         retrieveWorksegments();

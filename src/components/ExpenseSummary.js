@@ -3,7 +3,7 @@ import { Card, CardContent, Typography } from '@mui/material';
 import moment from 'moment';
 
 function ExpenseSummary(props) {
-    const { month, value } = props
+    const { month, title, amount } = props
     return (  
         <Card 
             variant='outlined'
@@ -28,10 +28,10 @@ function ExpenseSummary(props) {
                     {moment(month).format("MMMM YYYY")}
                 </Typography>
                 <Typography variant="h6" color="text.secondary" gutterBottom>
-                    {value}
+                    {title}
                 </Typography>
                 <Typography variant="body1" color="text.secondary" gutterBottom>
-                Total: $240.00
+                {`Total: $${parseFloat(amount).toFixed(2)}`} 
                 </Typography>
             </CardContent>
                 

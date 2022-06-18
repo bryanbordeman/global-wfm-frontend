@@ -5,25 +5,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import ExpenseCard from '../components/ExpenseCard';
+import MileCard from './MileCard';
 import ExpenseSummary from '../components/ExpenseSummary';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles({
-    tabpanel: {
-        // position: 'absolute',
-        // top: '50%',
-        // left: '50%',
-        // transform: 'translate(-50%, -50%)'
-        // width: '50%',
-        // minWidth: '300px',
-        // padding: 'auto',
-        // margin: 'auto',
-        // textAlign: 'center'
-    }
-});
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -52,13 +38,15 @@ function TabPanel(props) {
     };
 
 export default function ExpaneseTabs(props) {
-    const classes = useStyles();
     const [value, setValue] = React.useState(0);
-    const [ expenses, setExpenses ] = React.useState([])
-    const { month, user, employee, token, handleOpenSnackbar } = props
+    const [ expenses, setExpenses ] = React.useState([]);
+    const [ totalCreditCard, setTotalCreditCard ] = React.useState(0);
+    const [ totalReimbursable, setTotalReimbursable ] = React.useState(0);
+    const { month, user, employee, token, handleOpenSnackbar } = props;
+    
 
     React.useEffect(() => {
-        retrieveExpenses()
+        retrieveExpenses();
     },[month, employee, token])
 
     const retrieveExpenses = () => {
@@ -73,13 +61,34 @@ export default function ExpaneseTabs(props) {
             }
         return ''
         });}
-
             setExpenses(filteredEmployee);
+            setTotalReimbursable(0)
+            setTotalCreditCard(0)
+            let newCreditCardTotal = 0
+            let newReimbursableTotal = 0
+            for(let i = 0; i < filteredEmployee.length; i++) {
+                if(filteredEmployee[i].is_reimbursable){
+                    newReimbursableTotal += filteredEmployee[i].price
+                    setTotalReimbursable(newReimbursableTotal)
+                } else {
+                    newCreditCardTotal += filteredEmployee[i].price
+                    setTotalCreditCard(newCreditCardTotal)
+                }
+            }
         })
         :
         ExpenseDataService.getAll(token, month)
         .then(response => {
             setExpenses(response.data);
+            setTotalReimbursable(0)
+            setTotalCreditCard(0)
+            for(let i = 0; i < response.data.length; i++) {
+                if(response.data[i].is_reimbursable){
+                    setTotalReimbursable(totalReimbursable + response.data[i].price)
+                } else {
+                    setTotalCreditCard(totalCreditCard+ response.data[i].price)
+                }
+            }
         })
         .catch( e => {
             console.log(e);
@@ -105,40 +114,44 @@ export default function ExpaneseTabs(props) {
                     <Tab sx={{width: '50%'}} icon={<DirectionsCarFilledOutlinedIcon />}label="Miles" />
                 </Tabs>
             </Box>
-                <TabPanel value={value} index={0} className={ classes.tabpanel }>
+                <TabPanel value={value} index={0} >
                     <ExpenseSummary
                         month={month}
-                        value={'Company Card'}/>
+                        amount={totalCreditCard}
+                        title={'Company Card'}/>
                     {expenses? (expenses.map(expense => (
+                        !expense.is_reimbursable?
                         <ExpenseCard 
                             key={expense.id}
                             expense={expense}
                             user={user}
-                            value={'Company Card'}/>
+                        /> : ''
                     ))) : ''}
                 </TabPanel>
-                <TabPanel value={value} index={1} className={ classes.tabpanel }>
+                <TabPanel value={value} index={1} >
                     <ExpenseSummary
                         month={month}
-                        value={'Reimbursable'}/>
+                        amount={totalReimbursable}
+                        title={'Reimbursable'}/>
                     {expenses? (expenses.map(expense => (
+                        expense.is_reimbursable?
                         <ExpenseCard 
                             key={expense.id}
                             expense={expense}
                             user={user}
-                            value={'Reimbursable'}/>
+                        /> : ''
                     ))) : ''}
                 </TabPanel>
-                <TabPanel value={value} index={2} className={ classes.tabpanel }>
+                <TabPanel value={value} index={2} >
                     <ExpenseSummary
                         month={month}
-                        value={'Miles'}/>
+                        title={'Miles'}/>
                     {expenses? (expenses.map(expense => (
-                        <ExpenseCard 
+                        <MileCard 
                             key={expense.id}
                             expense={expense}
                             user={user}
-                            value={'Miles'}/>
+                        />
                     ))) : ''}
                 </TabPanel>
         </Box>
