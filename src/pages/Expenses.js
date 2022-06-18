@@ -15,8 +15,8 @@ function Expenses(props) {
         setEmployee(newEmployee)
     }
 
-    const handleChangeMonth = (newEMonth) => {
-        setMonth(newEMonth)
+    const handleChangeMonth = (newMonth) => {
+        setMonth(newMonth)
     }
     return ( 
         <div style={{paddingTop: '1rem'}}> 
@@ -54,6 +54,7 @@ function Expenses(props) {
                         }
                     </div>
                     <ExpenseTabs
+                        employee={employee}
                         token={token}
                         handleOpenSnackbar={handleOpenSnackbar}
                         month={month}

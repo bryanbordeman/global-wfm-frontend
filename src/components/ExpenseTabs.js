@@ -10,7 +10,6 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import { makeStyles } from '@mui/styles';
-import { SERVER } from "../services/SERVER";
 
 const useStyles = makeStyles({
     tabpanel: {
@@ -55,15 +54,30 @@ function TabPanel(props) {
 export default function ExpaneseTabs(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
-    const [ expenses, setExpenses ] = React.useState(initialExpenses)
-    const { month, user, token, handleOpenSnackbar } = props
+    const [ expenses, setExpenses ] = React.useState([])
+    const { month, user, employee, token, handleOpenSnackbar } = props
 
     React.useEffect(() => {
         retrieveExpenses()
-    },[])
+    },[month, employee, token])
 
     const retrieveExpenses = () => {
-        ExpenseDataService.getAll(token)
+        user.is_staff? ExpenseDataService.getAll(token, month)
+        .then(response => {
+            // !sort expense by user request
+        const filteredEmployee = []
+        if(employee){
+        Object.values(response.data).find((obj) => {
+            if(obj.user.id === employee.id){
+                filteredEmployee.push(obj)
+            }
+        return ''
+        });}
+
+            setExpenses(filteredEmployee);
+        })
+        :
+        ExpenseDataService.getAll(token, month)
         .then(response => {
             setExpenses(response.data);
         })
@@ -95,127 +109,38 @@ export default function ExpaneseTabs(props) {
                     <ExpenseSummary
                         month={month}
                         value={'Company Card'}/>
-                    {expenses.map(expense => (
+                    {expenses? (expenses.map(expense => (
                         <ExpenseCard 
+                            key={expense.id}
                             expense={expense}
                             user={user}
                             value={'Company Card'}/>
-                    ))}
+                    ))) : ''}
                 </TabPanel>
                 <TabPanel value={value} index={1} className={ classes.tabpanel }>
                     <ExpenseSummary
                         month={month}
                         value={'Reimbursable'}/>
-                    {expenses.map(expense => (
+                    {expenses? (expenses.map(expense => (
                         <ExpenseCard 
+                            key={expense.id}
                             expense={expense}
                             user={user}
-                            value={'Company Card'}/>
-                    ))}
+                            value={'Reimbursable'}/>
+                    ))) : ''}
                 </TabPanel>
                 <TabPanel value={value} index={2} className={ classes.tabpanel }>
                     <ExpenseSummary
                         month={month}
                         value={'Miles'}/>
-                    {expenses.map(expense => (
+                    {expenses? (expenses.map(expense => (
                         <ExpenseCard 
+                            key={expense.id}
                             expense={expense}
                             user={user}
-                            value={'Company Card'}/>
-                    ))}
+                            value={'Miles'}/>
+                    ))) : ''}
                 </TabPanel>
         </Box>
     );
 }
-
-const initialExpenses = [
-    {
-        "id": 1,
-        "receipt_pic": `${SERVER}/media/None/6756741_14304158430497_rId5.jpeg`,
-        "merchant": "Lowes",
-        "price": 63.51,
-        "notes": "",
-        "is_reimbursable": false,
-        "is_approved": false,
-        "date_purchased": "2022-06-17",
-        "date_created": "2022-06-17",
-        "user": {
-            "id": 1,
-            "password": "pbkdf2_sha256$320000$hQCF672CjQ5VgfmQcwA02z$/TQXapw74utdBKGLIl1+JJ+AoYMncLTEhun4Z5TasXE=",
-            "last_login": "2022-06-17T04:16:01.346839-04:00",
-            "is_superuser": true,
-            "username": "bryanbordeman",
-            "first_name": "Bryan",
-            "last_name": "Bordeman",
-            "email": "bryanbordeman@hotmail.com",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2022-05-11T18:39:43-04:00",
-            "groups": [
-                2
-            ],
-            "user_permissions": []
-        },
-        "project": {
-            "id": 2,
-            "is_active": true,
-            "number": "77777",
-            "name": "Test Project",
-            "prevailing_rate": true,
-            "travel_job": false,
-            "notes": "",
-            "project_category": 1,
-            "project_type": 1,
-            "address": 1,
-            "customer_company": 1,
-            "contact": [
-                2,
-                3
-            ]
-        }
-    },
-    {
-        "id": 2,
-        "receipt_pic": `${SERVER}/media/None/sample-receipt.jpg`,
-        "merchant": "Home Deport",
-        "price": 15.01,
-        "notes": "",
-        "is_reimbursable": false,
-        "is_approved": false,
-        "date_purchased": "2022-06-17",
-        "date_created": "2022-06-17",
-        "user": {
-            "id": 1,
-            "password": "pbkdf2_sha256$320000$hQCF672CjQ5VgfmQcwA02z$/TQXapw74utdBKGLIl1+JJ+AoYMncLTEhun4Z5TasXE=",
-            "last_login": "2022-06-17T04:16:01.346839-04:00",
-            "is_superuser": true,
-            "username": "bryanbordeman",
-            "first_name": "Bryan",
-            "last_name": "Bordeman",
-            "email": "bryanbordeman@hotmail.com",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2022-05-11T18:39:43-04:00",
-            "groups": [
-                2
-            ],
-            "user_permissions": []
-        },
-        "project": {
-            "id": 17,
-            "is_active": false,
-            "number": "44445",
-            "name": "dscdsc",
-            "prevailing_rate": true,
-            "travel_job": false,
-            "notes": "",
-            "project_category": 1,
-            "project_type": 1,
-            "address": 1,
-            "customer_company": 1,
-            "contact": [
-                2
-            ]
-        }
-    }
-]

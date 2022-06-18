@@ -1,1 +1,2 @@
 - Fix alignment issue with ExpenseTabs
+- Make default receipt image if none is selected on ExpenseCard
