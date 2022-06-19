@@ -7,9 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Stack, Typography,TextField, FormControlLabel, Switch, Divider } from '@mui/material';
 import EmployeePicker from './EmployeePicker';
 import ProjectPicker from './ProjectPicker'
-import { styled } from '@mui/material/styles';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import { useRef } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -26,13 +24,10 @@ export default function AddExpenseForm(props) {
     const { createExpense, updateExpense } = props
     const [images, setImages] = React.useState([]);
     
-
     const onChange = (imageList, addUpdateIndex) => {
-        // data for submit
-        // console.log(imageList[0].data_url);
         setValues({
                 ...values,
-                receipt_pic: imageList[0]
+                receipt_pic: imageList[0].data_url
                 });
         setImages(imageList);
     };
@@ -75,19 +70,6 @@ export default function AddExpenseForm(props) {
         }
     }
 
-    const handleImageUpload = (e) => {
-        // console.log(e.target.files)
-        const files = Array.from(e.target.files);
-        const [file] = files;
-        const name = e.target.name
-        console.log(file.webkitRelativePath)
-        // setValues({
-        //     ...values,
-        //     [name]: file
-        //     });
-        
-    }
-
     const handleSubmit = () => {
         const data = {
             project: values.project, 
@@ -112,12 +94,6 @@ export default function AddExpenseForm(props) {
     const handleClose = () => {
         setOpen(false);
     };
-
-    const Input = styled('input')({
-        display: 'none',
-    });
-
-    const uploadInputRef = useRef(null);
 
     return (
         <div>
@@ -165,7 +141,6 @@ export default function AddExpenseForm(props) {
                         {({
                         imageList,
                         onImageUpload,
-                        onImageRemoveAll,
                         onImageUpdate,
                         onImageRemove,
                         isDragging,
@@ -174,15 +149,6 @@ export default function AddExpenseForm(props) {
                         // write your building UI
                         <div>
                             <Stack direction="row" spacing={2}>   
-                                {/* <Button
-                                variant='contained'
-                                color='success'
-                                style={isDragging ? { color: 'red' } : undefined}
-                                onClick={onImageUpload}
-                                {...dragProps}
-                                >
-                                Click or Drop here
-                                </Button> */}
                                 <Button 
                                     variant="contained" 
                                     style={isDragging ? { color: 'red' } : undefined}
@@ -219,33 +185,6 @@ export default function AddExpenseForm(props) {
                             </div>
                         )}
                     </ImageUploading>
-                {/* <label htmlFor="contained-button-file">
-                    <Input 
-                        ref={uploadInputRef}
-                        accept="image/*"
-                        id="contained-button-file" 
-                        multiple 
-                        type="file"
-                        name="receipt_pic"
-                        onChange={handleImageUpload}
-                    />
-                    <Button 
-                        variant="contained" 
-                        component="span" 
-                        startIcon={<PhotoCamera />}
-                        onClick={() => uploadInputRef.current}
-                        >
-                    Receipt
-                    </Button> 
-                </label> */}
-                {/* <Typography
-                    sx={{pt:1}}
-                    variant="body1" 
-                    color="text.secondary" 
-                    gutterBottom
-                >
-                    {values.receipt_pic.name}
-                </Typography> */}
                 <TextField
                     autoFocus={false}
                     margin="dense"
