@@ -70,7 +70,7 @@ export default function ExpenseCard(props) {
     return (  
             <Paper
                 sx={{
-                my: 1,
+                my: 2,
                 width: '100%',
                 maxWidth: '500px',
                 border: 0.5,
@@ -113,16 +113,6 @@ export default function ExpenseCard(props) {
                             marginBottom: '1rem',
                         }}
                         >
-                            {/* <Chip 
-                                sx={{ 
-                                    marginTop: '1.5rem',
-                                    marginBottom: '1.5rem',
-                                }}
-                                color={`${expense.is_approved ? 'success' : 'primary'}`}
-                                icon={expense.is_approved ? <CheckIcon /> : <ReceiptLongOutlinedIcon/>} 
-                                label={`$${expense.price}`} 
-                                // variant="outlined" 
-                            /> */}
                             <Button 
                                 sx={{ 
                                     marginRight: '0.5rem',
@@ -175,18 +165,11 @@ export default function ExpenseCard(props) {
                             }
                             secondary={
                             <>  
-                                {/* {user.is_staff? <Chip sx={{mb:1}}label={`${expense.user.first_name} ${expense.user.last_name}`} />:''} */}
                                 {user.is_staff? `${expense.user.first_name} ${expense.user.last_name}` :''}
                                 {user.is_staff? <br/> :''}
                                 Project: {expense.project.number}
                                 <br/>
                                 Merchant: {expense.merchant}
-                                {/* <br/>
-                                {expense.receipt_pic ? 
-                                    <IconButton size="small" aria-label="notes">
-                                        <ReceiptLongOutlinedIcon />
-                                    </IconButton>
-                                    : ''} */}
                             </>
                             }
                         />
@@ -196,7 +179,6 @@ export default function ExpenseCard(props) {
                         setOpen={setOpen}
                         expense={expense}
                     />
-                    {/* <img src={} alt="GPS Logo"/> */}
                 </Grid>
                 </Grid>
             </Paper>

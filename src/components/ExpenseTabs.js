@@ -10,6 +10,7 @@ import ExpenseSummary from '../components/ExpenseSummary';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
+import AddExpenseForm from '../components/AddExpenseForm';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -42,7 +43,8 @@ export default function ExpaneseTabs(props) {
     const [ expenses, setExpenses ] = React.useState([]);
     const [ totalCreditCard, setTotalCreditCard ] = React.useState(0);
     const [ totalReimbursable, setTotalReimbursable ] = React.useState(0);
-    const { month, user, employee, token, handleOpenSnackbar } = props;
+    const { month, user, employee, token, handleOpenSnackbar, open, setOpen, handleChangeEmployee } = props;
+    const [ editing, setEditing ] = React.useState(false);
     
 
     React.useEffect(() => {
@@ -94,6 +96,25 @@ export default function ExpaneseTabs(props) {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         })
+    }
+
+    const createExpense = (data) => {
+        const userId = user.is_staff ? Number(employee.id) : Number(user.id)
+        
+        ExpenseDataService.createExpense(data, token, userId)
+        .then(response => {
+            window.scrollTo(0, 0);
+            handleOpenSnackbar('success', 'Your expense has been submitted for approval')
+            retrieveExpenses();
+        })
+        .catch(e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
+    const updateExpense = () => {
+        console.log('updated')
     }
 
     const handleChange = (event, newValue) => {
@@ -154,6 +175,17 @@ export default function ExpaneseTabs(props) {
                         />
                     ))) : ''}
                 </TabPanel>
+                <AddExpenseForm
+                    open={open}
+                    setOpen={setOpen}
+                    editing={editing}
+                    user={user}
+                    token={token}
+                    employee={employee}
+                    handleChangeEmployee={handleChangeEmployee}
+                    createExpense={createExpense}
+                    updateExpense={updateExpense}
+                />
         </Box>
     );
 }

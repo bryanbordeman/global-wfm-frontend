@@ -38,6 +38,15 @@ function App() {
         document.body.style.backgroundColor = "#f8f8ff"
     },[])
 
+    function loadWindow(){
+        window.onload = function() {
+            if(!window.location.hash) {
+                window.location = window.location + '#loaded';
+                window.location.reload();
+            }
+        }
+    }
+
     async function login(user= null){
         UserService.login(user)
         .then(response => {
@@ -47,6 +56,8 @@ function App() {
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user', JSON.stringify(JSON.parse(response.data.userObject)));
             setError('');
+            //TODO hack to get dashboard tab highlighted as active page. Need to figure out better solution.
+            loadWindow()
         })
         .catch( e => {
             console.log('login', e.toString());

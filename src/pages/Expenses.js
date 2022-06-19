@@ -10,6 +10,11 @@ function Expenses(props) {
     const { user, token, handleOpenSnackbar} = props
     const [ employee, setEmployee ] = React.useState({})
     const [ month, setMonth ] = React.useState(new Date())
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
     
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
@@ -40,7 +45,7 @@ function Expenses(props) {
                                 variant='contained' 
                                 color='success'
                                 endIcon={<AddIcon />}
-                                // onClick={handleClickOpen}
+                                onClick={handleClickOpen}
                             >Add</Button>
                             </div>
                         </Stack>
@@ -58,7 +63,11 @@ function Expenses(props) {
                         token={token}
                         handleOpenSnackbar={handleOpenSnackbar}
                         month={month}
-                        user={user}/>
+                        user={user}
+                        open={open}
+                        setOpen={setOpen}
+                        handleChangeEmployee={handleChangeEmployee}
+                        />
             </Container>
         </div>
     );

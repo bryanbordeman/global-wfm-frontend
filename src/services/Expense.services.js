@@ -6,10 +6,11 @@ class ExpenseDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/expenses/${month.getMonth()+1}`);
     };
-    createExpense(data, token){
+    createExpense(data, token, userId){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.post(`${SERVER}/api/create/expense/`, data);
+        return axios.post(`${SERVER}/api/create/expense/${userId}/`, data);
     };
+
     updateExpense(id, data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.put(`${SERVER}/api/expense/${id}`, data);
