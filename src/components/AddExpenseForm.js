@@ -19,7 +19,7 @@ import EditIcon from '@mui/icons-material/Edit';
 export default function AddExpenseForm(props) {
     const { user, token } = props
     const { open, setOpen } = props
-    const { editing, setEditing, expense } = props
+    const { editing, expense } = props
     const { employee, handleChangeEmployee } = props
     const { createExpense, updateExpense } = props
     const [ images, setImages ] = React.useState([]);
@@ -37,8 +37,6 @@ export default function AddExpenseForm(props) {
 
     const onChange = (imageList) => {
         setImages(imageList);
-        
-        // console.log(imageList)
         if(imageList.length > 0){ 
             setValues({
                 ...values,
@@ -83,27 +81,37 @@ export default function AddExpenseForm(props) {
     
     React.useEffect(() => {
         setValues(editing ? editFormValues : initialFormValues)
-        // console.log(loadImage)
-
-        // setImages([getBase64Image(expense.receipt_pic)] )
     },[open]);
 
     React.useEffect(() => {
         if(editing === true){
         const url = expense.receipt_pic;
         const fileName = 'myFile.jpg';
+        let editImage = []
 
         fetch(url)
         .then(async response => {
             const contentType = response.headers.get('content-type')
             const blob = await response.blob()
             const file = new File([blob], fileName, { contentType })
-            // access file here
             setEditImage(file)
-            getBase64(file).then(
-                data => (
-                setImages([{data_url: data, file: file}])
-                ))
+            getBase64(file)
+                .then(
+                    data => {
+                    editImage = [{data_url: data, file: file}]
+                    setImages(editImage)
+                    setValues({
+                        project: editing ? expense.project.id : expense.project,
+                        receipt_pic: editImage[0].data_url,
+                        merchant: expense.merchant,
+                        price: expense.price,
+                        is_reimbursable: expense.is_reimbursable,
+                        is_approved: expense.is_approved,
+                        date_purchased: editing ? new Date(expense.date_purchased.replace('-', '/').replace('-', '/')) : new Date(),
+                        notes: expense.notes
+                        })
+
+                    })
         })} else {
             setImages([])
         }
@@ -134,7 +142,7 @@ export default function AddExpenseForm(props) {
             price: values.price,
             is_reimbursable: values.is_reimbursable,
             is_approved: false,
-            date_purchased: values.date_purchased.toISOString().split('T')[0],
+            date_purchased: String(values.date_purchased)? values.date_purchased : values.date_purchased.toISOString().split('T')[0],
             notes: ''
         };
 
