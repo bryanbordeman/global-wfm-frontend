@@ -11,9 +11,11 @@ function Expenses(props) {
     const [ employee, setEmployee ] = React.useState({})
     const [ month, setMonth ] = React.useState(new Date())
     const [open, setOpen] = React.useState(false);
+    const [ editing, setEditing ] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
+        setEditing(false)
     };
     
     const handleChangeEmployee = (newEmployee) => {
@@ -59,6 +61,8 @@ function Expenses(props) {
                         }
                     </div>
                     <ExpenseTabs
+                        editing={editing}
+                        setEditing={setEditing}
                         employee={employee}
                         token={token}
                         handleOpenSnackbar={handleOpenSnackbar}

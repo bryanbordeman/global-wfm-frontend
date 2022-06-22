@@ -19,6 +19,10 @@ class ExpenseDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.delete(`${SERVER}/api/expense/${id}`);
     };
+    approveExpense(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/expense/${id}/approved/`);
+    };
 }
 
 export default new ExpenseDataService();

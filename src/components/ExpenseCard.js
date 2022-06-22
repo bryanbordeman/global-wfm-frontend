@@ -13,21 +13,74 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+
+function DeleteExpenseModal(props) {
+
+    const { deleteExpense, expense , openDelete, setOpenDelete  } = props
+
+    const handleClose = () => {
+        setOpenDelete(false);
+    };
+
+    const handleDelete = () => {
+        deleteExpense(expense.id);
+        setOpenDelete(false);
+    };
+
+    return (
+        <div>
+        <Dialog
+            open={openDelete}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">
+            <Alert severity="error">Permanently delete this expense?</Alert>
+            {/* {"Are you sure you want to permanently delete this timesheet?"} */}
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+                {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")}
+                {/* <br/>
+                {`${moment(new Date(segment.date + ' ' + segment.start_time)).format('LT')} -  
+                ${moment(new Date(segment.date + ' ' + segment.end_time)).format('LT')}`}
+                <br/>
+                Project: {segment.project}
+                <br/>
+                Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'} */}
+                {/* <br/>
+                Total Hours: {`${segment.duration} ${segment.duration > 1 ? 'Hrs' : 'Hr'}`} */}
+ 
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            <Button variant='outlined' onClick={handleClose}>Close</Button>
+            <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
+                Delete
+            </Button>
+            </DialogActions>
+        </Dialog>
+        </div>
+    );
+    }
+
 
 function ImageDialog(props) {
-    const { open, setOpen, expense } = props
+    const { openImage, setOpenImage, expense } = props
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     const handleClose = () => {
-        setOpen(false);
+        setOpenImage(false);
     };
 
     return (
         <div>
         <Dialog
             fullScreen={fullScreen}
-            open={open}
+            open={openImage}
             onClose={handleClose}
             aria-labelledby="responsive-dialog-title"
         >
@@ -60,11 +113,24 @@ function ImageDialog(props) {
 
 
 export default function ExpenseCard(props) {
-    const { user, expense } = props
-    const [open, setOpen] = React.useState(false);
+    const { user } = props
+    const { expense } = props
+    const { approveExpense, deleteExpense, setEditExpense, setEditing, setOpen } = props
+    const [ openImage, setOpenImage ] = React.useState(false);
+    const [ openDelete, setOpenDelete ] = React.useState(false);
     
     const handleClickOpen = () => {
-        setOpen(!open);
+        setOpenImage(!openImage);
+    };
+
+    const handleClickOpenDelete = () => {
+        setOpenDelete(true)
+    };
+
+    const handleClickOpenEdit = (expense) => {
+        setEditExpense(expense)
+        setEditing(true)
+        setOpen(true)
     };
 
     return (  
@@ -89,8 +155,8 @@ export default function ExpenseCard(props) {
                             <Stack spacing={2}>
                                 <IconButton
                                     color='primary'
-                                    // onClick={ () => {
-                                    //     handleClickOpenEdit(expense)}}
+                                    onClick={ () => {
+                                        handleClickOpenEdit(expense)}}
                                     >
                                     <Edit/>
                                 </IconButton>
@@ -99,8 +165,8 @@ export default function ExpenseCard(props) {
                                     edge="end" 
                                     color="error"
                                     aria-label="delete"
-                                    // onClick={ () => {
-                                    //     handleClickOpenDelete(expense)}}
+                                    onClick={ () => {
+                                        handleClickOpenDelete(expense)}}
                                         >
                                     <DeleteIcon />
                                 </IconButton>
@@ -144,13 +210,13 @@ export default function ExpenseCard(props) {
                                         startIcon={<CheckBoxIcon />} 
                                         color='success'
                                         size='small'
-                                        // onClick={() => {approveWorksegment(expense.id)}}
+                                        onClick={() => {approveExpense(expense.id)}}
                                         >Approved</Button> : 
                                     <Button 
                                         variant='outlined' 
                                         color='inherit'
                                         size='small'
-                                        // onClick={() => {approveWorksegment(expense.id)}}
+                                        onClick={() => {approveExpense(expense.id)}}
                                         >Approve</Button> : 
                                     `${expense.is_approved ? 'Approved' : 'Pending'}`
                                     }
@@ -175,9 +241,15 @@ export default function ExpenseCard(props) {
                         />
                     </ListItem>
                     <ImageDialog
-                        open={open}
-                        setOpen={setOpen}
+                        openImage={openImage}
+                        setOpenImage={setOpenImage}
                         expense={expense}
+                    />
+                    <DeleteExpenseModal
+                        expense={expense}
+                        openDelete={openDelete}
+                        setOpenDelete={setOpenDelete}
+                        deleteExpense={deleteExpense}
                     />
                 </Grid>
                 </Grid>

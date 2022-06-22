@@ -44,7 +44,8 @@ export default function ExpaneseTabs(props) {
     const [ totalCreditCard, setTotalCreditCard ] = React.useState(0);
     const [ totalReimbursable, setTotalReimbursable ] = React.useState(0);
     const { month, user, employee, token, handleOpenSnackbar, open, setOpen, handleChangeEmployee } = props;
-    const [ editing, setEditing ] = React.useState(false);
+    const { editing, setEditing } = props;
+    const [ editExpense, setEditExpense ] = React.useState({});
     
 
     React.useEffect(() => {
@@ -113,9 +114,43 @@ export default function ExpaneseTabs(props) {
         });
     };
 
-    const updateExpense = () => {
-        console.log('updated')
+    const deleteExpense = (expenseId) => {
+        ExpenseDataService.deleteExpense(expenseId, props.token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            handleOpenSnackbar('error', 'Your expense has been deleted')
+            retrieveExpenses();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
+    const updateExpense = (expenseId, data) => {
+        ExpenseDataService.updateExpense(expenseId, data, token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            handleOpenSnackbar('info', 'Your expense has been submitted for approval')
+            retrieveExpenses();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
     }
+
+    const approveExpense = (expenseId) => {
+        ExpenseDataService.approveExpense(expenseId, token)
+        .then(response => {
+            retrieveExpenses();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -144,8 +179,13 @@ export default function ExpaneseTabs(props) {
                         !expense.is_reimbursable?
                         <ExpenseCard 
                             key={expense.id}
+                            setOpen={setOpen}
+                            setEditing={setEditing}
+                            setEditExpense={setEditExpense}
                             expense={expense}
                             user={user}
+                            deleteExpense={deleteExpense}
+                            approveExpense={approveExpense}
                         /> : ''
                     ))) : ''}
                 </TabPanel>
@@ -158,8 +198,13 @@ export default function ExpaneseTabs(props) {
                         expense.is_reimbursable?
                         <ExpenseCard 
                             key={expense.id}
+                            setOpen={setOpen}
+                            setEditing={setEditing}
+                            setEditExpense={setEditExpense}
                             expense={expense}
                             user={user}
+                            deleteExpense={deleteExpense}
+                            approveExpense={approveExpense}
                         /> : ''
                     ))) : ''}
                 </TabPanel>
@@ -177,8 +222,10 @@ export default function ExpaneseTabs(props) {
                 </TabPanel>
                 <AddExpenseForm
                     open={open}
+                    expense={editExpense}
                     setOpen={setOpen}
                     editing={editing}
+                    setEditing={setEditing}
                     user={user}
                     token={token}
                     employee={employee}

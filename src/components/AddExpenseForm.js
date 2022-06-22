@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack, Typography,TextField, FormControlLabel, Switch, Divider } from '@mui/material';
+import { Stack, TextField, FormControlLabel, Switch, Divider } from '@mui/material';
 import EmployeePicker from './EmployeePicker';
 import ProjectPicker from './ProjectPicker'
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
@@ -19,17 +19,31 @@ import EditIcon from '@mui/icons-material/Edit';
 export default function AddExpenseForm(props) {
     const { user, token } = props
     const { open, setOpen } = props
-    const { editing } = props
+    const { editing, setEditing, expense } = props
     const { employee, handleChangeEmployee } = props
     const { createExpense, updateExpense } = props
-    const [images, setImages] = React.useState([]);
+    const [ images, setImages ] = React.useState([]);
+    const [ editImage, setEditImage ] = React.useState({})
     
-    const onChange = (imageList, addUpdateIndex) => {
-        setValues({
+
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    const onChange = (imageList) => {
+        setImages(imageList);
+        
+        // console.log(imageList)
+        if(imageList.length > 0){ 
+            setValues({
                 ...values,
                 receipt_pic: imageList[0].data_url
-                });
-        setImages(imageList);
+                });}
     };
     
     const initialFormValues = {
@@ -43,6 +57,20 @@ export default function AddExpenseForm(props) {
         notes: ''
     }
 
+
+    const editFormValues = {
+        project: editing ? expense.project.id : expense.project,
+        receipt_pic: editImage,
+        // receipt_pic: getBase64Image(expense.receipt_pic),
+        merchant: expense.merchant,
+        price: expense.price,
+        is_reimbursable: expense.is_reimbursable,
+        is_approved: expense.is_approved,
+        date_purchased: editing ? new Date(expense.date_purchased.replace('-', '/').replace('-', '/')) : new Date(),
+        notes: expense.notes
+    }
+
+
     const [ values, setValues ] = React.useState(initialFormValues);
     const [ errors, setErrors ] = React.useState({
         project: null,
@@ -52,6 +80,34 @@ export default function AddExpenseForm(props) {
         date_purchased: null,
         employee: null
     })
+    
+    React.useEffect(() => {
+        setValues(editing ? editFormValues : initialFormValues)
+        // console.log(loadImage)
+
+        // setImages([getBase64Image(expense.receipt_pic)] )
+    },[open]);
+
+    React.useEffect(() => {
+        if(editing === true){
+        const url = expense.receipt_pic;
+        const fileName = 'myFile.jpg';
+
+        fetch(url)
+        .then(async response => {
+            const contentType = response.headers.get('content-type')
+            const blob = await response.blob()
+            const file = new File([blob], fileName, { contentType })
+            // access file here
+            setEditImage(file)
+            getBase64(file).then(
+                data => (
+                setImages([{data_url: data, file: file}])
+                ))
+        })} else {
+            setImages([])
+        }
+    },[open])
 
     const handleInputValue = (e) => {
         const { name, value } = e.target;
@@ -82,8 +138,18 @@ export default function AddExpenseForm(props) {
             notes: ''
         };
 
-        createExpense(data);
-        setOpen(false);
+        if(editing){
+            updateExpense(expense.id, data);
+            setOpen(false);
+            setImages([])
+
+        }
+        else {
+            createExpense(data);
+            setOpen(false);
+            setImages([])
+        };
+
     };
 
     const handleValidation = () => {
@@ -93,6 +159,7 @@ export default function AddExpenseForm(props) {
 
     const handleClose = () => {
         setOpen(false);
+        setImages([])
     };
 
     return (
@@ -102,12 +169,26 @@ export default function AddExpenseForm(props) {
             open={open}
             onClose={handleClose}
         >
-            <DialogTitle id="expense-title">
-            Add Expense
-            </DialogTitle>
+            <DialogTitle>{`${editing ? 'Edit' : 'Add'} Expense`}</DialogTitle>
             <Divider/>
             <DialogContent>
                 <Stack direction="column" spacing={2}>
+                {user.is_staff ?
+                <div>
+                {editing ?
+                    <TextField
+                        autoFocus={false}
+                        margin="dense"
+                        disabled
+                        id="employee"
+                        name='employee'
+                        label="Employee"
+                        value={`${expense.user.first_name} ${expense.user.last_name}`}
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                    /> 
+                    :
                 <EmployeePicker
                     employee={employee}
                     errors={errors}
@@ -115,12 +196,29 @@ export default function AddExpenseForm(props) {
                     token={token}
                     handleChangeEmployee={handleChangeEmployee}
                 />
+                }
+                </div> : ''}     
+                {editing ?
+                <TextField
+                    autoFocus={false}
+                    margin="dense"
+                    disabled
+                    id="project"
+                    name='project'
+                    label="Project"
+                    value={expense.project.number}
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                /> 
+                :
                 <ProjectPicker
                     token={token}
                     handleChangeProject={handleChangeProject}
                     errors={errors}
                     editProject={values.project}
                 />
+                }
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Date Purchased"
@@ -244,3 +342,21 @@ export default function AddExpenseForm(props) {
         </div>
     );
 }
+
+
+// const sampleImage = {
+// data_url:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAR+Ao4DASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAUGAwQHAgEI/8QAGQEBAQADAQAAAAAAAAAAAAAAAAEDBAUC/9oADAMBAAIQAxAAAAGT03JuV0utOSfdnB1pyQdbclHWnJR1pyT6daclHWnJfh1tyUdaclHWnJfh1tyUdaclHWnJB1tyQdbckHW3JB1tyT6daclHWnJR1pyUdaclHWnJR1pyUdackHW3JB1tyQdbckHW3JB1tyQdbckHW..."
+// ,
+// file:
+// {arrayBuffer: ƒ arrayBuffer() {}, lastModified: 165…},
+// name:"Sample.jpeg",
+// lastModified:1655646665789
+// lastModifiedDate: 'Sun Jun 19 2022 09:51:05 GMT-0400 (Eastern Daylight Time)',
+// webkitRelativePath: "",
+// size: 120435
+// type : "image/jpeg",
+// arrayBuffer: ƒ arrayBuffer() {},
+// slice: ƒ slice() {},
+// stream: ƒ stream() {},
+// text:ƒ text() {},
+// }
