@@ -35,6 +35,14 @@ export default function AddExpenseForm(props) {
         });
     }
 
+    const isNullish = (obj) => {Object.values(obj).every(value => {
+        if (value === null) {
+            return true;
+            }
+        
+            return false;
+    })};
+
     const onChange = (imageList) => {
         setImages(imageList);
         if(imageList.length > 0){ 
@@ -162,6 +170,74 @@ export default function AddExpenseForm(props) {
 
     const handleValidation = () => {
         let formIsValid = true;
+
+        if(values.project === ''){
+            setErrors({...errors, project: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, project: null});
+            }, 3000);
+        }
+        else if(values.date_purchased > new Date()){
+            setErrors({...errors, date_purchased: 'Date cannot be in the future.'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, date_purchased: null});
+            }, 3000);
+        }
+        else if(!values.price){
+            setErrors({...errors, price: 'Enter valid Price'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, price: null});
+            }, 3000);
+        }
+        else if(isNaN(values.price)){
+            setErrors({...errors, price: 'Price needs to be a number'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, price: null});
+            }, 3000);
+        }
+        else if(values.price <= 0){
+            setErrors({...errors, price: 'Price needs to be greater then 0'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, price: null});
+            }, 3000);
+        }
+        else if(!values.merchant){
+            setErrors({...errors, merchant: 'Enter Merchant'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, merchant: null});
+            }, 3000);
+        }
+        else if(!employee){
+            setErrors({...errors, employee: 'Select Employee'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, employee: null});
+            }, 3000);
+        }
+        else{
+            setErrors({
+                project: null,
+                receipt_pic: null,
+                merchant: null,
+                price: null,
+                date_purchased: null,
+                employee: null
+            });
+            formIsValid = true;
+        }
         return formIsValid ? handleSubmit() : null
     }
 
@@ -232,7 +308,7 @@ export default function AddExpenseForm(props) {
                         label="Date Purchased"
                         id="date_purchased"
                         name="date_purchased"
-                        value={values.date}
+                        value={values.date_purchased}
                         onChange={(date) => {setValues({...values, date_purchased: date})}}
                         renderInput={(params) => <TextField {...params} helperText={errors.date_purchased === null ? '' : errors.date_purchased}
                         error={errors.date_purchased? true : false} />}
@@ -344,7 +420,13 @@ export default function AddExpenseForm(props) {
             </DialogContent>
             <DialogActions>
             <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-            <Button variant='contained' onClick={handleValidation}>{editing ? 'Update' : 'Submit'}</Button>
+            <Button 
+                variant='contained' 
+                onClick={handleValidation}
+                color={`${isNullish(errors)? 'error' : 'primary'}`}
+            >
+                {editing ? 'Update' : 'Submit'}
+            </Button>
             </DialogActions>
         </Dialog>
         </div>
