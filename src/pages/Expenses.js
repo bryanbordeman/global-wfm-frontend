@@ -11,11 +11,20 @@ function Expenses(props) {
     const [ employee, setEmployee ] = React.useState({})
     const [ month, setMonth ] = React.useState(new Date())
     const [open, setOpen] = React.useState(false);
+    const [openMiles, setOpenMiles] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
+    const [ editingMiles, setEditingMiles ] = React.useState(false);
+    const [ tabIndex, setTabIndex ] = React.useState('')
 
     const handleClickOpen = () => {
-        setOpen(true);
-        setEditing(false)
+        if(tabIndex === 2){
+            console.log('Miles')
+            setOpenMiles(true);
+            setEditingMiles(false);
+        } else {
+            setOpen(true);
+            setEditing(false);
+        }
     };
     
     const handleChangeEmployee = (newEmployee) => {
@@ -61,6 +70,7 @@ function Expenses(props) {
                         }
                     </div>
                     <ExpenseTabs
+                        setTabIndex = {setTabIndex}
                         editing={editing}
                         setEditing={setEditing}
                         employee={employee}

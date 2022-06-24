@@ -44,13 +44,17 @@ export default function ExpaneseTabs(props) {
     const [ totalCreditCard, setTotalCreditCard ] = React.useState(0);
     const [ totalReimbursable, setTotalReimbursable ] = React.useState(0);
     const { month, user, employee, token, handleOpenSnackbar, open, setOpen, handleChangeEmployee } = props;
-    const { editing, setEditing } = props;
+    const { editing, setEditing, setTabIndex } = props;
     const [ editExpense, setEditExpense ] = React.useState({});
     
 
     React.useEffect(() => {
         retrieveExpenses();
     },[month, employee, token])
+
+    React.useEffect(() => {
+        setTabIndex(value);
+    }, [value])
 
     const retrieveExpenses = () => {
         user.is_staff? ExpenseDataService.getAll(token, month)
@@ -170,7 +174,7 @@ export default function ExpaneseTabs(props) {
                     <Tab sx={{width: '50%'}} icon={<DirectionsCarFilledOutlinedIcon />}label="Miles" />
                 </Tabs>
             </Box>
-                <TabPanel value={value} index={0} >
+                <TabPanel value={value} index={0}>
                     <ExpenseSummary
                         month={month}
                         amount={totalCreditCard}

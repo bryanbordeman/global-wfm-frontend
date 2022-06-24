@@ -24,6 +24,7 @@ export default function AddExpenseForm(props) {
     const { createExpense, updateExpense } = props
     const [ images, setImages ] = React.useState([]);
     const [ editImage, setEditImage ] = React.useState({})
+    const [ isValid, setIsValid ] = React.useState(true)
     
 
     function getBase64(file) {
@@ -34,15 +35,6 @@ export default function AddExpenseForm(props) {
             reader.onerror = error => reject(error);
         });
     }
-
-    const isNullish = (obj) => {Object.values(obj).every(value => {
-        if (value === null) {
-            return true;
-            }
-        
-            return false;
-    })};
-
     const onChange = (imageList) => {
         setImages(imageList);
         if(imageList.length > 0){ 
@@ -127,10 +119,19 @@ export default function AddExpenseForm(props) {
 
     const handleInputValue = (e) => {
         const { name, value } = e.target;
+        if(name === 'price'){
+            if (value > -1) {
+                setValues({
+                    ...values,
+                    [name]: value
+                    });
+            }
+        } else {
         setValues({
         ...values,
         [name]: value
         });
+    }
     };
 
     const handleChangeProject = (newValue) => {
@@ -238,6 +239,10 @@ export default function AddExpenseForm(props) {
             });
             formIsValid = true;
         }
+        setIsValid(formIsValid)
+        setTimeout(() => {
+            setIsValid(true);
+        }, 3000);
         return formIsValid ? handleSubmit() : null
     }
 
@@ -423,7 +428,7 @@ export default function AddExpenseForm(props) {
             <Button 
                 variant='contained' 
                 onClick={handleValidation}
-                color={`${isNullish(errors)? 'error' : 'primary'}`}
+                color={`${isValid? 'primary' : 'error'}`}
             >
                 {editing ? 'Update' : 'Submit'}
             </Button>

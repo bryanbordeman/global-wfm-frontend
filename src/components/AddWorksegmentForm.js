@@ -62,6 +62,7 @@ export default function AddWorksegmentForm(props) {
         travel: null,
         employee: null
     })
+    const [ isValid, setIsValid ] = React.useState(true)
 
     React.useEffect(() => {
         setValues(editing ? editFormValues : initialFormValues)
@@ -98,10 +99,19 @@ export default function AddWorksegmentForm(props) {
 
     const handleInputValue = (e) => {
         const { name, value } = e.target;
+        if(name === 'travel'){
+            if (value > -1) {
+                setValues({
+                    ...values,
+                    [name]: value
+                    });
+            }
+        } else {
         setValues({
         ...values,
         [name]: value
         });
+    }
     };
 
     function msToTime(duration) {
@@ -181,6 +191,10 @@ export default function AddWorksegmentForm(props) {
             });
             formIsValid = true;
         }
+        setIsValid(formIsValid)
+        setTimeout(() => {
+            setIsValid(true);
+        }, 3000);
     return formIsValid ? handleSubmit() : null
     };
 
@@ -327,7 +341,13 @@ export default function AddWorksegmentForm(props) {
             <Divider/>
             <DialogActions>
             <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-            <Button variant='contained' onClick={handleValidation}>{editing ? 'Update' : 'Submit'}</Button>
+            <Button 
+                variant='contained' 
+                onClick={handleValidation}
+                color={`${isValid? 'primary' : 'error'}`}
+            >
+                {editing ? 'Update' : 'Submit'}
+            </Button>
             </DialogActions>
         </Dialog>
         </div>
