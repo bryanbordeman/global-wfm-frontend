@@ -1,3 +1,1 @@
 - Fix alignment issue with ExpenseTabs
-- Fix empty receipts in AddExpenseForm
-- Fix error check on submit button in AddExpenseForm

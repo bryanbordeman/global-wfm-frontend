@@ -41,8 +41,10 @@ function TabPanel(props) {
 export default function ExpaneseTabs(props) {
     const [value, setValue] = React.useState(0);
     const [ expenses, setExpenses ] = React.useState([]);
+    const [ miles, setMiles ] = React.useState([]);
     const [ totalCreditCard, setTotalCreditCard ] = React.useState(0);
     const [ totalReimbursable, setTotalReimbursable ] = React.useState(0);
+    const [ totalMiles, setTotalMiles ] = React.useState(0);
     const { month, user, employee, token, handleOpenSnackbar, open, setOpen, handleChangeEmployee } = props;
     const { editing, setEditing, setTabIndex } = props;
     const [ editExpense, setEditExpense ] = React.useState({});
@@ -50,6 +52,7 @@ export default function ExpaneseTabs(props) {
 
     React.useEffect(() => {
         retrieveExpenses();
+        retrieveMiles();
     },[month, employee, token])
 
     React.useEffect(() => {
@@ -155,6 +158,52 @@ export default function ExpaneseTabs(props) {
         });
     };
 
+    const retrieveMiles = () => {
+        user.is_staff? 
+        ExpenseDataService.getAllMiles(token, month)
+        .then(response => {
+            // !sort expense by user request
+        const filteredEmployee = []
+        if(employee){
+        Object.values(response.data).find((obj) => {
+            if(obj.user.id === employee.id){
+                filteredEmployee.push(obj)
+            }
+        return ''
+        });}
+            setMiles(filteredEmployee);
+            setTotalMiles(0)
+            let newMilesTotal = 0
+            for(let i = 0; i < filteredEmployee.length; i++) {
+                newMilesTotal += filteredEmployee[i].price
+                setTotalMiles(newMilesTotal)
+            }
+        })
+        :
+        ExpenseDataService.getAllMiles(token, month)
+        .then(response => {
+            setMiles(response.data);
+            setTotalMiles(0)
+            for(let i = 0; i < response.data.length; i++) {
+                setTotalMiles(totalMiles+ response.data[i].price)
+            }
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+    }
+
+    const approveMile = (expenseId) => {
+        ExpenseDataService.approveMile(expenseId, token)
+        .then(response => {
+            retrieveMiles();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -215,12 +264,14 @@ export default function ExpaneseTabs(props) {
                 <TabPanel value={value} index={2} >
                     <ExpenseSummary
                         month={month}
+                        amount={totalMiles}
                         title={'Miles'}/>
-                    {expenses? (expenses.map(expense => (
+                    {miles? (miles.map(mile => (
                         <MileCard 
-                            key={expense.id}
-                            expense={expense}
+                            key={mile.id}
+                            expense={mile}
                             user={user}
+                            approveMile={approveMile}
                         />
                     ))) : ''}
                 </TabPanel>

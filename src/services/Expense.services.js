@@ -23,6 +23,16 @@ class ExpenseDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.put(`${SERVER}/api/expense/${id}/approved/`);
     };
+
+    getAllMiles(token, month){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/miles/${month.getMonth()+1}`);
+    };
+
+    approveMile(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/mile/${id}/approved/`);
+    };
 }
 
 export default new ExpenseDataService();

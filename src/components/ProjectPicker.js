@@ -14,14 +14,9 @@ export default function ProjectPicker(props) {
         retrieveProject()
     },[])
 
-    // React.useEffect(() => {
-    //     console.log(projects)
-    // }, [projects])
-
     const retrieveProject = () => {
         ProjectDataService.getAll(props.token)
         .then(response => {
-            // console.log(response.data);
             setProjects(response.data);
         })
         .catch( e => {
@@ -32,7 +27,6 @@ export default function ProjectPicker(props) {
         setValue(newValue);
         handleChangeProject(newValue)
     };
-
 
     return (
         <Autocomplete

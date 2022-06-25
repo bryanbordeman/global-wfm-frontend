@@ -5,20 +5,17 @@ import Edit from '@mui/icons-material/Edit'
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckIcon from '@mui/icons-material/Check';
 import moment from 'moment';
-import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import Button from '@mui/material/Button';
 
-
-
-
 export default function MileCard(props) {
-    const { user, expense } = props
+    const { user, expense, approveMile } = props
     const [open, setOpen] = React.useState(false);
     
     const handleClickOpen = () => {
         setOpen(!open);
     };
-
+    
     return (  
             <Paper
                 sx={{
@@ -71,9 +68,8 @@ export default function MileCard(props) {
                                     marginBottom: '1.5rem',
                                 }}
                                 color={`${expense.is_approved ? 'success' : 'primary'}`}
-                                icon={expense.is_approved ? <CheckIcon /> : <MonetizationOnOutlinedIcon/>} 
-                                label={`$${expense.price}`} 
-                                // variant="outlined" 
+                                icon={expense.is_approved ? <CheckIcon /> : <DirectionsCarFilledOutlinedIcon/>} 
+                                label={`$${parseFloat(expense.price).toFixed(2)}`}
                             />
                             
                             <Divider/>
@@ -92,13 +88,13 @@ export default function MileCard(props) {
                                         startIcon={<CheckBoxIcon />} 
                                         color='success'
                                         size='small'
-                                        // onClick={() => {approveWorksegment(expense.id)}}
+                                        onClick={() => {approveMile(expense.id)}}
                                         >Approved</Button> : 
                                     <Button 
                                         variant='outlined' 
                                         color='inherit'
                                         size='small'
-                                        // onClick={() => {approveWorksegment(expense.id)}}
+                                        onClick={() => {approveMile(expense.id)}}
                                         >Approve</Button> : 
                                     `${expense.is_approved ? 'Approved' : 'Pending'}`
                                     }
@@ -118,13 +114,9 @@ export default function MileCard(props) {
                                 {user.is_staff? <br/> :''}
                                 Project: {expense.project.number}
                                 <br/>
-                                Miles: 300
-                                {/* <br/>
-                                {expense.receipt_pic ? 
-                                    <IconButton size="small" aria-label="notes">
-                                        <ReceiptLongOutlinedIcon />
-                                    </IconButton>
-                                    : ''} */}
+                                Mile Rate: {`$${parseFloat(expense.rate.rate).toFixed(2)}`}
+                                <br/>
+                                Miles: {expense.miles}
                             </>
                             }
                         />

@@ -5,6 +5,7 @@ import Edit from '@mui/icons-material/Edit'
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import moment from 'moment';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import CheckIcon from '@mui/icons-material/Check';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -187,9 +188,9 @@ export default function ExpenseCard(props) {
                                     marginBottom: '1.5rem',
                                 }}
                                 variant='contained' 
-                                color='primary' 
                                 size='small' 
-                                startIcon={<ReceiptLongOutlinedIcon />}
+                                color={`${expense.is_approved ? 'success' : 'primary'}`}
+                                startIcon={expense.is_approved ? <CheckIcon /> : <ReceiptLongOutlinedIcon/>} 
                                 onClick={handleClickOpen}
                                 >
                                 {`$${parseFloat(expense.price).toFixed(2)}`} 

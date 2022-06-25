@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack, TextField, FormControlLabel, Switch, Divider } from '@mui/material';
+import { Stack, TextField, FormControlLabel, Switch, Divider, Typography } from '@mui/material';
 import EmployeePicker from './EmployeePicker';
 import ProjectPicker from './ProjectPicker'
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
@@ -46,7 +46,7 @@ export default function AddExpenseForm(props) {
     
     const initialFormValues = {
         project: '',
-        receipt_pic: new FileReader(),
+        receipt_pic: null,
         merchant: '',
         price: '',
         is_reimbursable: false,
@@ -228,6 +228,14 @@ export default function AddExpenseForm(props) {
                 setErrors({...errors, employee: null});
             }, 3000);
         }
+        else if(values.receipt_pic === null){
+            setErrors({...errors, receipt_pic: 'Select Image'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, receipt_pic: null});
+            }, 3000);
+        }
         else{
             setErrors({
                 project: null,
@@ -301,12 +309,14 @@ export default function AddExpenseForm(props) {
                     variant="outlined"
                 /> 
                 :
+                <div>
                 <ProjectPicker
                     token={token}
                     handleChangeProject={handleChangeProject}
                     errors={errors}
                     editProject={values.project}
                 />
+                </div>
                 }
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
@@ -336,15 +346,21 @@ export default function AddExpenseForm(props) {
                         // write your building UI
                         <div>
                             <Stack direction="row" spacing={2}>   
+                                <Stack>
                                 <Button 
                                     variant="contained" 
                                     style={isDragging ? { color: 'red' } : undefined}
+                                    color={`${errors.receipt_pic? 'error' : 'primary'}`}
                                     onClick={onImageUpload}
                                     {...dragProps}
                                     startIcon={<PhotoCamera />}
                                     >
                                 Receipt
                                 </Button>
+                                <Typography variant="caption" sx={{color: '#B00020'}}>
+                                    {errors.receipt_pic}
+                                </Typography>
+                                </Stack>
                             </Stack>
                             {imageList.map((image, index) => (
                             <div style={{marginTop: '0.5rem'}} key={index} className="image-item">
@@ -361,7 +377,13 @@ export default function AddExpenseForm(props) {
                                 <IconButton 
                                     color='error' 
                                     aria-label="delete"
-                                    onClick={() => onImageRemove(index)}
+                                    onClick={() => {
+                                        onImageRemove(index);
+                                        setValues({
+                                            ...values,
+                                            receipt_pic: null
+                                            });
+                                    }}
                                 >
                                     <DeleteIcon />
                                 </IconButton>
