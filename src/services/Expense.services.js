@@ -33,6 +33,25 @@ class ExpenseDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.put(`${SERVER}/api/mile/${id}/approved/`);
     };
+
+    createMile(data, token, userId){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/create/mile/${userId}/`, data);
+    };
+
+    deleteMile(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.delete(`${SERVER}/api/mile/${id}`);
+    };
+
+    getAllMileRates(token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/milerates/`);
+    };
+    updateMile(id, data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/mile/${id}`, data);
+    };
 }
 
 export default new ExpenseDataService();

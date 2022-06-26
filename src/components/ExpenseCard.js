@@ -67,7 +67,6 @@ function DeleteExpenseModal(props) {
     );
     }
 
-
 function ImageDialog(props) {
     const { openImage, setOpenImage, expense } = props
     const theme = useTheme();

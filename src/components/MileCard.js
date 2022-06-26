@@ -7,13 +7,70 @@ import CheckIcon from '@mui/icons-material/Check';
 import moment from 'moment';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
+
+
+function DeleteExpenseModal(props) {
+    const { deleteMile, expense , openDelete, setOpenDelete  } = props
+    
+    const handleClose = () => {
+        setOpenDelete(false);
+    };
+
+    const handleDelete = () => {
+        deleteMile(expense.id);
+        setOpenDelete(false);
+    };
+
+    return (
+        <div>
+        <Dialog
+            open={openDelete}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">
+            <Alert severity="error">Permanently delete these miles?</Alert>
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+                Date: {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")} 
+                <br/>
+                Project: {expense.project.number}
+                <br/>
+                Miles: {expense.miles}
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            <Button variant='outlined' onClick={handleClose}>Close</Button>
+            <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
+                Delete
+            </Button>
+            </DialogActions>
+        </Dialog>
+        </div>
+    );
+    }
+
 
 export default function MileCard(props) {
-    const { user, expense, approveMile } = props
-    const [open, setOpen] = React.useState(false);
+    const { user, expense, approveMile, deleteMile, setOpenMiles, setEditExpense, setEditing} = props
+    const [ openDelete, setOpenDelete ] = React.useState(false);
     
-    const handleClickOpen = () => {
-        setOpen(!open);
+    const handleClickOpenDelete = () => {
+        setOpenDelete(true)
+    };
+
+    const handleClickOpenEdit = (expense) => {
+        setEditExpense(expense)
+        setEditing(true)
+        setOpenMiles(true)
     };
     
     return (  
@@ -38,8 +95,8 @@ export default function MileCard(props) {
                             <Stack spacing={2}>
                                 <IconButton
                                     color='primary'
-                                    // onClick={ () => {
-                                    //     handleClickOpenEdit(expense)}}
+                                    onClick={ () => {
+                                        handleClickOpenEdit(expense)}}
                                     >
                                     <Edit/>
                                 </IconButton>
@@ -48,8 +105,8 @@ export default function MileCard(props) {
                                     edge="end" 
                                     color="error"
                                     aria-label="delete"
-                                    // onClick={ () => {
-                                    //     handleClickOpenDelete(expense)}}
+                                    onClick={ () => {
+                                        handleClickOpenDelete(expense)}}
                                         >
                                     <DeleteIcon />
                                 </IconButton>
@@ -123,6 +180,12 @@ export default function MileCard(props) {
                     </ListItem>
                 </Grid>
                 </Grid>
+                <DeleteExpenseModal
+                        expense={expense}
+                        openDelete={openDelete}
+                        setOpenDelete={setOpenDelete}
+                        deleteMile={deleteMile}
+                    />
             </Paper>
     );
 };

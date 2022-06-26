@@ -11,6 +11,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import AddExpenseForm from '../components/AddExpenseForm';
+import AddMileForm from './AddMileForm';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -45,7 +46,9 @@ export default function ExpaneseTabs(props) {
     const [ totalCreditCard, setTotalCreditCard ] = React.useState(0);
     const [ totalReimbursable, setTotalReimbursable ] = React.useState(0);
     const [ totalMiles, setTotalMiles ] = React.useState(0);
-    const { month, user, employee, token, handleOpenSnackbar, open, setOpen, handleChangeEmployee } = props;
+    const { month, user, employee, token, handleOpenSnackbar, 
+        open, setOpen, handleChangeEmployee } = props;
+    const { openMiles, setOpenMiles } = props;
     const { editing, setEditing, setTabIndex } = props;
     const [ editExpense, setEditExpense ] = React.useState({});
     
@@ -205,6 +208,48 @@ export default function ExpaneseTabs(props) {
         });
     };
 
+    const deleteMile = (expenseId) => {
+        ExpenseDataService.deleteMile(expenseId, props.token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            handleOpenSnackbar('error', 'Your miles have been deleted')
+            retrieveMiles();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
+    const createMiles = (data) => {
+        const userId = user.is_staff ? Number(employee.id) : Number(user.id)
+        
+        ExpenseDataService.createMile(data, token, userId)
+        .then(response => {
+            window.scrollTo(0, 0);
+            handleOpenSnackbar('success', 'Your expense has been submitted for approval')
+            retrieveMiles();
+        })
+        .catch(e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
+    const updateMiles = (expenseId, data) => {
+        ExpenseDataService.updateMile(expenseId, data, token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            handleOpenSnackbar('info', 'Your expense has been submitted for approval')
+            retrieveMiles();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    }
+
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -270,7 +315,11 @@ export default function ExpaneseTabs(props) {
                         <MileCard 
                             key={mile.id}
                             expense={mile}
+                            setOpenMiles={setOpenMiles}
+                            setEditing={setEditing}
+                            setEditExpense={setEditExpense}
                             user={user}
+                            deleteMile={deleteMile}
                             approveMile={approveMile}
                         />
                     ))) : ''}
@@ -287,6 +336,19 @@ export default function ExpaneseTabs(props) {
                     handleChangeEmployee={handleChangeEmployee}
                     createExpense={createExpense}
                     updateExpense={updateExpense}
+                />
+                <AddMileForm
+                    user={user}
+                    token={token}
+                    editing={editing}
+                    expense={editExpense}
+                    employee={employee}
+                    openMiles={openMiles}
+                    setOpenMiles={setOpenMiles}
+                    handleChangeEmployee={handleChangeEmployee}
+                    handleOpenSnackbar={handleOpenSnackbar}
+                    createMiles={createMiles}
+                    updateMiles={updateMiles}
                 />
         </Box>
     );

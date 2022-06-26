@@ -458,22 +458,4 @@ export default function AddExpenseForm(props) {
         </Dialog>
         </div>
     );
-}
-
-
-// const sampleImage = {
-// data_url:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAR+Ao4DASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAUGAwQHAgEI/8QAGQEBAQADAQAAAAAAAAAAAAAAAAEDBAUC/9oADAMBAAIQAxAAAAGT03JuV0utOSfdnB1pyQdbclHWnJR1pyT6daclHWnJfh1tyUdaclHWnJfh1tyUdaclHWnJB1tyQdbckHW3JB1tyT6daclHWnJR1pyUdaclHWnJR1pyUdackHW3JB1tyQdbckHW3JB1tyQdbckHW..."
-// ,
-// file:
-// {arrayBuffer: ƒ arrayBuffer() {}, lastModified: 165…},
-// name:"Sample.jpeg",
-// lastModified:1655646665789
-// lastModifiedDate: 'Sun Jun 19 2022 09:51:05 GMT-0400 (Eastern Daylight Time)',
-// webkitRelativePath: "",
-// size: 120435
-// type : "image/jpeg",
-// arrayBuffer: ƒ arrayBuffer() {},
-// slice: ƒ slice() {},
-// stream: ƒ stream() {},
-// text:ƒ text() {},
-// }
+};
