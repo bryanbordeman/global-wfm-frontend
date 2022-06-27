@@ -151,7 +151,7 @@ function Announcements(props) {
                             <br/>
                             {``}
                             <br/>
-                            {`${announcement.memo}`}
+                            <p style={{whiteSpace: 'pre-line'}}>{announcement.memo}</p>
                             </>}
                     />
                 </ListItem>
