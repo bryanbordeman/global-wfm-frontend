@@ -152,14 +152,12 @@ export default function AddExpenseForm(props) {
             is_reimbursable: values.is_reimbursable,
             is_approved: false,
             date_purchased: String(values.date_purchased)? values.date_purchased : values.date_purchased.toISOString().split('T')[0],
-            notes: ''
+            notes: values.notes
         };
-
         if(editing){
             updateExpense(expense.id, data);
             setOpen(false);
             setImages([])
-
         }
         else {
             createExpense(data);

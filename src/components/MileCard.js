@@ -13,6 +13,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
+import Tooltip from '@mui/material/Tooltip';
+import SpeakerNotesTwoToneIcon from '@mui/icons-material/SpeakerNotesTwoTone';
 
 
 function DeleteExpenseModal(props) {
@@ -174,6 +176,16 @@ export default function MileCard(props) {
                                 Mile Rate: {`$${parseFloat(expense.rate.rate).toFixed(2)}`}
                                 <br/>
                                 Miles: {expense.miles}
+                                {expense.notes ? 
+                                <> 
+                                    <br/> 
+                                        <Tooltip title={expense.notes} enterTouchDelay={0}>
+                                            <IconButton size="small" aria-label="notes">
+                                                <SpeakerNotesTwoToneIcon />
+                                            </IconButton>
+                                        </Tooltip> 
+                                </> 
+                                : ''}
                             </>
                             }
                         />

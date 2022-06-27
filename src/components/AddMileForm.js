@@ -91,7 +91,7 @@ export default function AddMileForm(props) {
             miles: values.miles,
             is_approved: false,
             date_purchased: String(values.date_purchased)? values.date_purchased : values.date_purchased.toISOString().split('T')[0],
-            notes: ''
+            notes: values.notes
         };
 
         if(editing){
@@ -106,6 +106,73 @@ export default function AddMileForm(props) {
 
     };
 
+    const handleValidation = () => {
+        let formIsValid = true;
+
+        if(values.project === ''){
+            setErrors({...errors, project: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, project: null});
+            }, 3000);
+        }
+        else if(values.date_purchased > new Date()){
+            setErrors({...errors, date_purchased: 'Date cannot be in the future.'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, date_purchased: null});
+            }, 3000);
+        }
+        else if(!values.miles){
+            setErrors({...errors, miles: 'Enter valid Miles'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, miles: null});
+            }, 3000);
+        }
+        else if(isNaN(values.miles)){
+            setErrors({...errors, miles: 'Miles needs to be a number'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, miles: null});
+            }, 3000);
+        }
+        else if(values.miles <= 0){
+            setErrors({...errors, miles: 'Miles needs to be greater then 0'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, miles: null});
+            }, 3000);
+        }
+        else if(!employee){
+            setErrors({...errors, employee: 'Select Employee'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, employee: null});
+            }, 3000);
+        }
+        else{
+            setErrors({
+                project: null,
+                miles: null,
+                date_purchased: null,
+                employee: null
+            });
+            formIsValid = true;
+        }
+        setIsValid(formIsValid)
+        setTimeout(() => {
+            setIsValid(true);
+        }, 3000);
+        return formIsValid ? handleSubmit() : null
+    }
+
     const handleClose = () => {
         setOpenMiles(!openMiles)
     };
@@ -117,7 +184,7 @@ export default function AddMileForm(props) {
             open={openMiles}
             onClose={handleClose}
         >
-            <DialogTitle>{`Add Miles | $${parseFloat(currentRate.rate).toFixed(2)} mile`} </DialogTitle>
+            <DialogTitle>{`${editing? 'Update' : 'Add'} Miles | $${parseFloat(currentRate.rate).toFixed(2)} mile`} </DialogTitle>
             <Divider/>
             <DialogContent>
                 <Stack direction="column" spacing={2}>
@@ -217,11 +284,10 @@ export default function AddMileForm(props) {
                 >Cancel</Button>
             <Button 
                 variant='contained' 
-                onClick={handleSubmit}
+                onClick={handleValidation}
                 color={`${isValid? 'primary' : 'error'}`}
             >
-                {/* {editing ? 'Update' : 'Submit'} */}
-                Submit
+                {editing ? 'Update' : 'Submit'}
             </Button>
             </DialogActions>
         </Dialog>

@@ -15,6 +15,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
+import Tooltip from '@mui/material/Tooltip';
+import SpeakerNotesTwoToneIcon from '@mui/icons-material/SpeakerNotesTwoTone';
 
 function DeleteExpenseModal(props) {
 
@@ -39,21 +41,10 @@ function DeleteExpenseModal(props) {
         >
             <DialogTitle id="alert-dialog-title">
             <Alert severity="error">Permanently delete this expense?</Alert>
-            {/* {"Are you sure you want to permanently delete this timesheet?"} */}
             </DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
                 {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")}
-                {/* <br/>
-                {`${moment(new Date(segment.date + ' ' + segment.start_time)).format('LT')} -  
-                ${moment(new Date(segment.date + ' ' + segment.end_time)).format('LT')}`}
-                <br/>
-                Project: {segment.project}
-                <br/>
-                Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'} */}
-                {/* <br/>
-                Total Hours: {`${segment.duration} ${segment.duration > 1 ? 'Hrs' : 'Hr'}`} */}
- 
             </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -236,6 +227,16 @@ export default function ExpenseCard(props) {
                                 Project: {expense.project.number}
                                 <br/>
                                 Merchant: {expense.merchant}
+                                {expense.notes ? 
+                                <> 
+                                    <br/> 
+                                        <Tooltip title={expense.notes} enterTouchDelay={0}>
+                                            <IconButton size="small" aria-label="notes">
+                                                <SpeakerNotesTwoToneIcon />
+                                            </IconButton>
+                                        </Tooltip> 
+                                </> 
+                                : ''}
                             </>
                             }
                         />
