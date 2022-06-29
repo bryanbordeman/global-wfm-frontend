@@ -41,7 +41,7 @@ function TabPanel(props) {
     };
 
     return (
-        <Box sx={{ width: '100%'}}>
+        <Box sx={{ width: '100%', mb:2}}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', display: "flex", justifyContent: "center", width:"100%" }}>
             <Tabs
             value={value}
