@@ -6,10 +6,10 @@ class TaskDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/tasklist/`);
     };
-    // getAll(token){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.get(`${SERVER}/api/announcement/`);
-    // };
+    getAll(token, assignee, tasklist){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/tasks/${assignee}/${tasklist}/`);
+    };
     // createAnnouncement(data, token){
     //     axios.defaults.headers.common["Authorization"] = "Token " + token;
     //     return axios.post(`${SERVER}/api/create/announcement/`, data);

@@ -4,47 +4,49 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import TaskDataService from '../services/Task.services';
+import Chip from '@mui/material/Chip';
 
 export default function TaskSelectlist(props) {
-    const { token } = props
-    const { handleOpenSnackbar, handleChangeList } = props
+    const { employee, tasks, taskLists } = props
+    const { handleChangeList } = props
     const [value, setValue] = React.useState('');
-    const [ taskLists, setTaskLists ] = React.useState([]);
-
-    React.useEffect(() => {
-        retrieveTaskList();
-    },[])
-
-    const retrieveTaskList = () => {
-        TaskDataService.getAllTaskList(token)
-        .then(response => {
-            setTaskLists(response.data.sort((a, b) => (a.title > b.title) ? 1 : -1));
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        })
-    }
-
+    
     const handleChange = (event) => {
         setValue(event.target.value);
         handleChangeList(event.target.value);
     };
 
+    React.useEffect(() => {
+
+    },[employee])
+
     return (
         <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
-            <InputLabel id="select-list-label">Select Task List</InputLabel>
+            <InputLabel id="select-list-label">{employee? "Select Task List" : "Select Employee First"}</InputLabel>
             <Select
             labelId="select-list-label"
             id="select-list"
-            value={value}
-            label="Select Task List"
+            value={employee? value : ''}
+            disabled={!employee}
+            label={employee? "Select Task List" : "Select Employee First"}
             onChange={handleChange}
             >
             {taskLists.map(list => (
-                <MenuItem value={list}>{list.title}</MenuItem>
+                <MenuItem 
+                    key={list.id} 
+                    value={list}
+                    >   {list.title}
+                        {tasks[list.title]? tasks[list.title].length === 0 ?
+                        '' :
+                        <Chip 
+                            sx={{ml:1}} 
+                            size="small" 
+                            label={tasks[list.title]? tasks[list.title].length : ''}
+                            // variant="outlined" 
+                            color='primary'
+                        /> : ''}
+                </MenuItem>
             )
                 )}
             </Select>

@@ -20,7 +20,7 @@ export default function TaskSortBy() {
             labelId="sort-by-label"
             id="sort-by"
             value={value}
-            label="Value"
+            label="Sort By"
             onChange={handleChange}
             >
             <MenuItem value={1}>Date</MenuItem>
