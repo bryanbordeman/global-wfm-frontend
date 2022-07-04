@@ -11,14 +11,18 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useRef } from 'react';
+import UserServices from '../services/User.services';
 
 const currentDate = new Date()
 
 export default function TaskList(props) {
-    const { selectedList } = props
+    const { selectedList, user} = props
     const [checked, setChecked] = React.useState([0]);
     const [isForcePickerOpen, setIsOpen] = React.useState(false);
     const [selectedDate, handleDateChange] = React.useState(new Date());
+    // const [ value, setValue ] = React.useState('')
+    const customInputRef = useRef();
 
     const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -58,6 +62,7 @@ return (
                 dueMessage = ''
         }
 
+        // if(list.assignee.id === user.id || list.created_by.id === user.id)
         return (
         <div key={list.id}>
         <ListItem
@@ -90,6 +95,7 @@ return (
                 onClose={() => setIsOpen(false)}
                 value={selectedDate}
                 onChange={handleDateChange}
+                PopperProps={{ anchorEl: customInputRef.current }}
                 renderInput={({
                     ref,
                     inputProps,
@@ -98,12 +104,13 @@ return (
                     value,
                     ...other
                 }) => (
-                    <div ref={ref} {...other}>
+                    <div ref={ref}>
                     <input
-                        style={{ display: "none" }}
+                        style={{ opacity: 0, width: 0, height: 0 }}
                         value={value}
                         onChange={onChange}
                         disabled={disabled}
+                        ref={customInputRef}
                         {...inputProps}
                     />
                     <Button

@@ -55,8 +55,11 @@ function Task(props) {
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         })
         })
+        // taskLists.map((list, i) =>{
+        //     console.log(Object.keys(tempObject)[i])
+        // })
         setTasks(tempObject)
-        // console.log(tempObject)
+        console.log(tempObject)
     }
     }
 
@@ -113,6 +116,7 @@ function Task(props) {
                         </div>
                         {selectedList.length > 0? 
                         <TaskList
+                            user={user}
                             selectedList={selectedList}/>
                         : '' }
                         {/* {selectedList? selectedList.map((task, key) =>(
