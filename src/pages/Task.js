@@ -6,6 +6,7 @@ import { Button, Stack } from '@mui/material';
 import TaskSortBy from '../components/TaskSortBy';
 import TaskSelectlist from '../components/TaskSelectList';
 import TaskDataService from '../services/Task.services';
+import TaskList from '../components/TaskList';
 
 function Task(props) {
     const { user } = props
@@ -17,11 +18,14 @@ function Task(props) {
     const [ tasks, setTasks ] = React.useState([])
 
     React.useEffect(() => {
+        setSelectedList([]) // not a great solution to clear list after employee change
         retrieveTasks();
         setTimeout(function(){
             retrieveTaskList();
         }, 100);
-        if(!employee){ setSelectedList([])};
+        if(!employee){ 
+            setSelectedList([])
+        };
         // retrieveTaskList();
     },[employee])
 
@@ -107,9 +111,13 @@ function Task(props) {
                                 handleChangeList={handleChangeList}
                             />
                         </div>
-                        {selectedList? selectedList.map(task =>(
-                            task.title
-                        )) : ''}
+                        {selectedList.length > 0? 
+                        <TaskList
+                            selectedList={selectedList}/>
+                        : '' }
+                        {/* {selectedList? selectedList.map((task, key) =>(
+                            <div style={{marginBottom: '.5rem'}} key={key}> {task.title} <br/> </div>
+                        )) : ''} */}
                         </div>
             </Container>
         </div>

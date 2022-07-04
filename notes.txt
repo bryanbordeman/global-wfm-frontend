@@ -1,1 +1,2 @@
 - Fix alignment issue with ExpenseTabs
+- Fix TaskList on Task page. task should reset when employee changes.

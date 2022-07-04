@@ -4,82 +4,128 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import Edit from '@mui/icons-material/Edit'
-import { Button } from '@mui/material';
+import { Button, Chip } from '@mui/material';
+import moment from 'moment';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-export default function CheckboxList(props) {
+const currentDate = new Date()
+
+export default function TaskList(props) {
+    const { selectedList } = props
     const [checked, setChecked] = React.useState([0]);
+    const [isForcePickerOpen, setIsOpen] = React.useState(false);
+    const [selectedDate, handleDateChange] = React.useState(new Date());
 
     const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
 
-        if (currentIndex === -1) {
-        newChecked.push(value);
-        } else {
-        newChecked.splice(currentIndex, 1);
+    if (currentIndex === -1) {
+    newChecked.push(value);
+    } else {
+    newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+};
+
+return (
+    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+    {selectedList.map((list, i) => {
+        const labelId = `checkbox-list-label-${list.title}`;
+        let dateDelta = Math.ceil((new Date(list.due).getTime()-currentDate.getTime())/(1000 * 3600 * 24))
+        let dueMessage = ''
+
+        switch(true) {
+            case (dateDelta === 0):
+                dueMessage = 'Today'
+            break;
+            case (dateDelta === 1):
+                dueMessage = 'Tomorrow'
+            break;
+            case (dateDelta < 0):
+                dueMessage = `${Math.abs(dateDelta)} days ago`
+            break;
+            case (dateDelta > 1):
+                dueMessage = `In ${dateDelta} days`
+            break;
+
+            default:
+                dueMessage = ''
         }
 
-        setChecked(newChecked);
-    };
-
-    const items = [0,1,2,3]
-
-    return (
-        <List sx={{ width: '100%', margin: 0, padding: 0, bgcolor: 'background.paper' }}>
-        {items.map((value, i) => {
-            const labelId = `checkbox-list-label-${value}`;
-
-            return (
-            <div key={value}>
-            <ListItem
-                secondaryAction={
-                        <IconButton
-                            edge="end" 
-                            color='primary'
-                            >
-                            <Edit/>
-                        </IconButton>
-                }
-                disablePadding
-            >
-                <ListItemButton role={undefined} dense>
-                <ListItemIcon>
-                    <Checkbox
-                    onClick={handleToggle(value)}
-                    sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }}
-                    edge="start"
-                    // checked={checked.indexOf(value) !== -1}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': labelId }}
+        return (
+        <div key={list.id}>
+        <ListItem
+            // secondaryAction={
+            //     <Checkbox
+            //     edge="end"
+            //     onChange={handleToggle(i)}
+            //     checked={checked.indexOf(i) !== -1}
+            //     inputProps={{ 'aria-labelledby': labelId }}
+            // />
+            // }
+            disablePadding
+        >
+            <ListItemButton>
+            <ListItemIcon>
+            <Chip 
+                sx={{mr:1}} 
+                variant='outlined'
+                size='small' 
+                color='primary' 
+                label={`${list.project.number}`} 
+            />
+            </ListItemIcon>
+            <ListItemText id={labelId} primary={`${list.title}`} />
+            </ListItemButton>
+            
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                open={isForcePickerOpen}
+                onClose={() => setIsOpen(false)}
+                value={selectedDate}
+                onChange={handleDateChange}
+                renderInput={({
+                    ref,
+                    inputProps,
+                    disabled,
+                    onChange,
+                    value,
+                    ...other
+                }) => (
+                    <div ref={ref} {...other}>
+                    <input
+                        style={{ display: "none" }}
+                        value={value}
+                        onChange={onChange}
+                        disabled={disabled}
+                        {...inputProps}
                     />
-                </ListItemIcon>
-                <ListItemText 
-                    id={labelId} 
-                    primary={ <div style={{fontSize: '1rem'}}>
-                        12222 | {props.values} item {value + 1}
-                    </div>}
-                    secondary={
-                        <>
-                        Task Notes
-                        <br/>
-                        <Button sx={{mt:1, pt:0, pb: 0}} size='small' variant="outlined" startIcon={<EventAvailableIcon />}>
-                            in 5 days
-                        </Button>
-                        </>
-                    } 
+                    <Button
+                        sx={{mr: 1, textTransform: 'none', borderColor: 'rgba(0, 0, 0, 0.12)'}}
+                        size='small'
+                        variant="outlined"
+                        color={dateDelta < 0? 'warning' : 'primary'}
+                        onClick={() => setIsOpen(isOpen => !isOpen)}
+                        startIcon={<EventAvailableIcon />}
+                    >
+                        {dueMessage}
+                    </Button>
+                    </div>
+                )}
                 />
-                </ListItemButton>
-            </ListItem>
-            {i < items.length - 1 && <Divider/>}
-            </div>
-            );
-        })}
-        </List>
-    );
-    }
+            </LocalizationProvider>
+        </ListItem>
+        {i < selectedList.length - 1 && <Divider/>}
+        </div>
+        );
+    })}
+    </List>
+);
+}
+
