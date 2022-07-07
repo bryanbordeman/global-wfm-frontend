@@ -1,2 +1,2 @@
 - Fix alignment issue with ExpenseTabs
-- Fix TaskList on Task page. task should reset when employee changes.
+- Fix reload after due date change on TaskList 

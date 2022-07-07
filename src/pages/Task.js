@@ -59,8 +59,21 @@ function Task(props) {
         //     console.log(Object.keys(tempObject)[i])
         // })
         setTasks(tempObject)
-        console.log(tempObject)
+        // console.log(tempObject)
     }
+    }
+
+    const updateTask = (tasktId, data) => {
+        TaskDataService.updateTask(tasktId, data, token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            handleOpenSnackbar('info', 'Due Date has been updated')
+            retrieveTasks();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
     }
 
     const handleChangeEmployee = (newEmployee) => {
@@ -117,11 +130,11 @@ function Task(props) {
                         {selectedList.length > 0? 
                         <TaskList
                             user={user}
-                            selectedList={selectedList}/>
+                            selectedList={selectedList}
+                            updateTask={updateTask}
+                            retrieveTasks={retrieveTasks}
+                        />
                         : '' }
-                        {/* {selectedList? selectedList.map((task, key) =>(
-                            <div style={{marginBottom: '.5rem'}} key={key}> {task.title} <br/> </div>
-                        )) : ''} */}
                         </div>
             </Container>
         </div>
