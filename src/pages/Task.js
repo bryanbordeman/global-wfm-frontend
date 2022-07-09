@@ -12,7 +12,7 @@ function Task(props) {
     const { user } = props
     const { token } = props
     const { handleOpenSnackbar } = props
-    const [ employee, setEmployee ] = React.useState({})
+    const [ employee, setEmployee ] = React.useState(null)
     const [ selectedList, setSelectedList ] = React.useState([])
     const [ taskLists, setTaskLists ] = React.useState([]);
     const [ tasks, setTasks ] = React.useState([])
@@ -41,33 +41,32 @@ function Task(props) {
     }
 
     const retrieveTasks = () => {
-        let tempList = []
-        let tempObject = {}
-        if (employee){
-        taskLists.map( list => {
-            TaskDataService.getAll(token, employee.id, list.id)
-            .then(response => {
-                tempList.push(response.data);
-                tempObject[`${list.title}`] = response.data
+        let allTasks= [];
+        let tempObject = {};
+        if(employee)
+        TaskDataService.getAssigneeTasks(token, employee.id)
+        .then(response => {
+            allTasks = response.data;
+            taskLists.map(list => {
+                // sort results into taskObject
+                let result = allTasks.filter(task => task.tasklist.id === list.id);
+                // sort results based on user and assignee. If user === to assignee or user === created_by show task
+                let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id )
+                if(result) tempObject[`${list.title}`] = userResult
+            })
+            setTasks(tempObject);
         })
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        })
-        })
-        // taskLists.map((list, i) =>{
-        //     console.log(Object.keys(tempObject)[i])
-        // })
-        setTasks(tempObject)
-        // console.log(tempObject)
-    }
-    }
+        });
+    };
 
     const updateTask = (tasktId, data) => {
         TaskDataService.updateTask(tasktId, data, token)
         .then(response => {
             window.scrollTo(0, 0);
-            handleOpenSnackbar('info', 'Due Date has been updated')
+            // handleOpenSnackbar('info', 'Due Date has been updated')
             retrieveTasks();
         })
         .catch( e => {
@@ -142,123 +141,3 @@ function Task(props) {
 }
 
 export default Task;
-
-
-// const tasks = [
-//     {
-//         "id": 2,
-//         "assignee": {
-//             "id": 1,
-//             "first_name": "Bryan",
-//             "last_name": "Bordeman"
-//         },
-//         "project": {
-//             "id": 1,
-//             "number": "10022",
-//             "name": "National Double Doors",
-//             "is_active": true
-//         },
-//         "title": "Test Second User",
-//         "notes": "Testing 1234",
-//         "due": "2022-06-30",
-//         "created": "2022-06-28T05:52:35.621122-04:00",
-//         "is_complete": false,
-//         "is_deleted": false,
-//         "is_read": false,
-//         "completed": null,
-//         "updated": null,
-//         "tasklist": {
-//             "id": 2,
-//             "title": "Field",
-//             "show_completed": true
-//         },
-//         "subtasks": []
-//     },
-//     {
-//         "id": 1,
-//         "assignee": {
-//             "id": 1,
-//             "first_name": "Bryan",
-//             "last_name": "Bordeman"
-//         },
-//         "project": {
-//             "id": 1,
-//             "number": "10022",
-//             "name": "National Double Doors",
-//             "is_active": true
-//         },
-//         "title": "Test Task",
-//         "notes": "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:\r\n\r\n“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.”\r\nThe purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.) that doesn't distract from the layout. A practice not without controversy, laying out pages with meaningless filler text can be very useful when the focus is meant to be on design, not content.",
-//         "due": "2022-06-28",
-//         "created": "2022-06-28T04:40:04.885517-04:00",
-//         "is_complete": false,
-//         "is_deleted": false,
-//         "is_read": false,
-//         "completed": null,
-//         "updated": null,
-//         "tasklist": {
-//             "id": 2,
-//             "title": "Field",
-//             "show_completed": true
-//         },
-//         "subtasks": []
-//     },
-//     {
-//         "id": 1,
-//         "assignee": {
-//             "id": 1,
-//             "first_name": "Bryan",
-//             "last_name": "Bordeman"
-//         },
-//         "project": {
-//             "id": 1,
-//             "number": "10022",
-//             "name": "National Double Doors",
-//             "is_active": true
-//         },
-//         "title": "Test Task",
-//         "notes": "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:\r\n\r\n“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.”\r\nThe purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.) that doesn't distract from the layout. A practice not without controversy, laying out pages with meaningless filler text can be very useful when the focus is meant to be on design, not content.",
-//         "due": "2022-06-28",
-//         "created": "2022-06-28T04:40:04.885517-04:00",
-//         "is_complete": false,
-//         "is_deleted": false,
-//         "is_read": false,
-//         "completed": null,
-//         "updated": null,
-//         "tasklist": {
-//             "id": 2,
-//             "title": "Field",
-//             "show_completed": true
-//         },
-//         "subtasks": []
-//     },
-//     {
-//         "id": 1,
-//         "assignee": {
-//             "id": 1,
-//             "first_name": "Bryan",
-//             "last_name": "Bordeman"
-//         },
-//         "project": {
-//             "id": 1,
-//             "number": "10022",
-//             "name": "National Double Doors",
-//             "is_active": true
-//         },
-//         "title": "Test Task",
-//         "notes": "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:\r\n\r\n“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.”\r\nThe purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.) that doesn't distract from the layout. A practice not without controversy, laying out pages with meaningless filler text can be very useful when the focus is meant to be on design, not content.",
-//         "due": "2022-06-28",
-//         "created": "2022-06-28T04:40:04.885517-04:00",
-//         "is_complete": false,
-//         "is_deleted": false,
-//         "is_read": false,
-//         "completed": null,
-//         "updated": null,
-//         "tasklist": {
-//             "id": 2,
-//             "title": "Field",
-//             "show_completed": true
-//         },
-//         "subtasks": []
-//     }
-// ]

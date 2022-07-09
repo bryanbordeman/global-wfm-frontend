@@ -99,6 +99,7 @@ function DueDate(props) {
                     color={dateDelta < 0? 'warning' : 'primary'}
                     onClick={() => {
                         setIsOpen(isOpen => !isOpen);
+                        
                     }}
                     startIcon={<EventAvailableIcon />}
                 >
