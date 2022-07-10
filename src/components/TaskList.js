@@ -16,7 +16,8 @@ const currentDate = new Date()
 
 function DueDate(props) {
     const { list, updateTask } = props
-    const [isForcePickerOpen, setIsOpen] = React.useState(false);
+    const [ isForcePickerOpen, setIsOpen ] = React.useState(false);
+    const [ value, setValue ] = React.useState(list.due)
     const customInputRef = useRef();
 
     const handleDateChange = (newDate) => {
@@ -38,9 +39,10 @@ function DueDate(props) {
             "subtasks": list.subtasks
         }
         updateTask(list.id, data)
+        setValue(newDate)
     }
 
-    let dateDelta = Math.ceil((new Date(list.due).getTime()-currentDate.getTime())/(1000 * 3600 * 24))-1
+    let dateDelta = Math.ceil((new Date(value).getTime()-currentDate.getTime())/(1000 * 3600 * 24))-1
         let dueMessage = ''
 
         switch(true) {
@@ -71,7 +73,7 @@ function DueDate(props) {
             onClose={() => {
                 setIsOpen(false);
             }}
-            value={list.due}
+            value={value}
             onChange={(newDate) => {
                 handleDateChange(newDate);
             }}
@@ -132,7 +134,6 @@ return (
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
     {selectedList.map((list, i) => {
         const labelId = `checkbox-list-label-${list.title}`;
-        // if(list.assignee.id === user.id || list.created_by.id === user.id)
         return (
         <div key={list.id}>
         <ListItem
@@ -168,6 +169,7 @@ return (
         );
     })}
     </List>
+    
 );
 };
 

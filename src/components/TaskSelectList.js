@@ -9,16 +9,12 @@ import Chip from '@mui/material/Chip';
 export default function TaskSelectlist(props) {
     const { employee, tasks, taskLists } = props
     const { handleChangeList } = props
-    const [value, setValue] = React.useState('');
+    const [ value, setValue ] = React.useState('');
     
     const handleChange = (event) => {
         setValue(event.target.value);
         handleChangeList(event.target.value);
     };
-
-    React.useEffect(() => {
-        
-    },[employee])
 
     return (
         <Box sx={{ minWidth: 120 }}>
@@ -32,6 +28,7 @@ export default function TaskSelectlist(props) {
             label={employee? "Select Task List" : "Select Employee First"}
             onChange={handleChange}
             >
+            
             {taskLists.map(list => (
                 <MenuItem 
                     key={list.id} 
@@ -43,7 +40,6 @@ export default function TaskSelectlist(props) {
                             sx={{ml:1}} 
                             size="small" 
                             label={tasks[list.title]? tasks[list.title].length : ''}
-                            // variant="outlined" 
                             color='primary'
                         /> : ''}
                 </MenuItem>
@@ -53,4 +49,4 @@ export default function TaskSelectlist(props) {
         </FormControl>
         </Box>
     );
-    }
+};

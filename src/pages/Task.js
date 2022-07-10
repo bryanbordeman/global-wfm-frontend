@@ -16,16 +16,18 @@ function Task(props) {
     const [ selectedList, setSelectedList ] = React.useState([])
     const [ taskLists, setTaskLists ] = React.useState([]);
     const [ tasks, setTasks ] = React.useState([])
+    // const forceUpdate = React.useCallback(() => setSelectedList([]), []);
 
     React.useEffect(() => {
         setSelectedList([]) // not a great solution to clear list after employee change
         retrieveTasks();
-        setTimeout(function(){
-            retrieveTaskList();
-        }, 100);
-        if(!employee){ 
-            setSelectedList([])
-        };
+        retrieveTaskList();
+        // setTimeout(function(){
+        //     retrieveTaskList();
+        // }, 100);
+        // if(!employee){ 
+        //     setSelectedList([])
+        // };
         // retrieveTaskList();
     },[employee])
 
@@ -62,12 +64,18 @@ function Task(props) {
         });
     };
 
-    const updateTask = (tasktId, data) => {
+    const updateTask = (tasktId, data, list) => {
+        // const tempSelectList = selectedList
         TaskDataService.updateTask(tasktId, data, token)
         .then(response => {
             window.scrollTo(0, 0);
-            // handleOpenSnackbar('info', 'Due Date has been updated')
+            handleOpenSnackbar('info', 'Due Date has been updated')
             retrieveTasks();
+            // forceUpdate();
+            // retrieveTaskList();
+            // setSelectedList([]);
+            // console.log(tempSelectList)
+            
         })
         .catch( e => {
             console.log(e);
