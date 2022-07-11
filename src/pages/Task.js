@@ -16,6 +16,7 @@ function Task(props) {
     const [ selectedList, setSelectedList ] = React.useState([])
     const [ taskLists, setTaskLists ] = React.useState([]);
     const [ tasks, setTasks ] = React.useState([])
+    const [ editList, setEditList ] = React.useState([])
     // const forceUpdate = React.useCallback(() => setSelectedList([]), []);
 
     React.useEffect(() => {
@@ -30,6 +31,10 @@ function Task(props) {
         // };
         // retrieveTaskList();
     },[employee])
+
+    React.useEffect(() => {
+        retrieveTasks()
+    },[tasks])
 
     const retrieveTaskList = () => {
         TaskDataService.getAllTaskList(token)
@@ -74,6 +79,7 @@ function Task(props) {
             // forceUpdate();
             // retrieveTaskList();
             // setSelectedList([]);
+            // setSelectedList(tasks[`${editList.title}`])
             // console.log(tempSelectList)
             
         })

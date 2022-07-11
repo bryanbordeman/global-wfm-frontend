@@ -11,6 +11,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useRef } from 'react';
+import { parseISO } from 'date-fns';
 
 const currentDate = new Date()
 
@@ -21,11 +22,18 @@ function DueDate(props) {
     const customInputRef = useRef();
 
     const handleDateChange = (newDate) => {
+        const day = newDate.getUTCDate() - 1; // day in is off by one day after it is converted
+        const month = newDate.getUTCMonth() + 1; // Return Value is 0 indexed
+        const year = newDate.getUTCFullYear();
+
+        const pythonDate = newDate.toISOString().split('T')[0]
+
+ 
         let data = 
         {
             "title": list.title,
             "notes": list.notes,
-            "due": newDate.toISOString().split('T')[0],
+            "due": pythonDate,
             "created": list.created,
             "is_complete": list.is_complete,
             "is_deleted": list.is_deleted,
@@ -39,10 +47,10 @@ function DueDate(props) {
             "subtasks": list.subtasks
         }
         updateTask(list.id, data)
-        setValue(newDate)
+        setValue(pythonDate)
     }
 
-    let dateDelta = Math.ceil((new Date(value).getTime()-currentDate.getTime())/(1000 * 3600 * 24))-1
+    let dateDelta = Math.ceil((new Date(value).getTime()-currentDate.getTime())/(1000 * 3600 * 24))
         let dueMessage = ''
 
         switch(true) {
@@ -73,7 +81,7 @@ function DueDate(props) {
             onClose={() => {
                 setIsOpen(false);
             }}
-            value={value}
+            value={parseISO(value)}
             onChange={(newDate) => {
                 handleDateChange(newDate);
             }}
@@ -88,7 +96,7 @@ function DueDate(props) {
                 <div ref={ref}>
                 <input
                     style={{ opacity: 0, width: 0, height: 0 }}
-                    value={value}
+                    value={parseISO(value)}
                     onChange={onChange}
                     disabled={disabled}
                     ref={customInputRef}
@@ -115,7 +123,7 @@ function DueDate(props) {
 };
 
 export default function TaskList(props) {
-    const { selectedList, updateTask} = props
+    const { selectedList, updateTask } = props
     // const [checked, setChecked] = React.useState([0]);
 
     // const handleToggle = (value) => () => {
