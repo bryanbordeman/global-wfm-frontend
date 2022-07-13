@@ -1,3 +1,2 @@
 - Fix alignment issue with ExpenseTabs
-- Fix reload after due date change on TaskList 
-- Date is fucked up on task list.
+- Fix reload after due date change on TaskList. 

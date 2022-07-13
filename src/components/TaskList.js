@@ -12,6 +12,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useRef } from 'react';
 import { parseISO } from 'date-fns';
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 const currentDate = new Date()
 
@@ -22,9 +25,9 @@ function DueDate(props) {
     const customInputRef = useRef();
 
     const handleDateChange = (newDate) => {
-        const day = newDate.getUTCDate() - 1; // day in is off by one day after it is converted
-        const month = newDate.getUTCMonth() + 1; // Return Value is 0 indexed
-        const year = newDate.getUTCFullYear();
+        // const day = newDate.getUTCDate() - 1; // day in is off by one day after it is converted
+        // const month = newDate.getUTCMonth() + 1; // Return Value is 0 indexed
+        // const year = newDate.getUTCFullYear();
 
         const pythonDate = newDate.toISOString().split('T')[0]
 
@@ -44,8 +47,9 @@ function DueDate(props) {
             "assignee": list.assignee.id,
             "tasklist": list.tasklist.id,
             "project": list.project.id,
-            "subtasks": list.subtasks
+            "subtasks": list.subtasks.id
         }
+        console.log(list.subtasks)
         updateTask(list.id, data)
         setValue(pythonDate)
     }
@@ -123,7 +127,13 @@ function DueDate(props) {
 };
 
 export default function TaskList(props) {
-    const { selectedList, updateTask } = props
+    const { selectedList, updateTask, handleOpenAddTask } = props
+    const [open, setOpen] = React.useState(false);
+
+    const handleClick = () => {
+        setOpen(!open);
+    };
+
     // const [checked, setChecked] = React.useState([0]);
 
     // const handleToggle = (value) => () => {
@@ -137,11 +147,13 @@ export default function TaskList(props) {
     // }
     //     setChecked(newChecked);
     // };
+    
 
 return (
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
     {selectedList.map((list, i) => {
         const labelId = `checkbox-list-label-${list.title}`;
+        let subtasks = list.subtasks.map(sublist => (sublist))
         return (
         <div key={list.id}>
         <ListItem
@@ -155,7 +167,8 @@ return (
             // }
             disablePadding
         >
-            <ListItemButton>
+            <ListItemButton
+                onClick={handleOpenAddTask}>
                 <ListItemIcon>
                 <Chip 
                     sx={{mr:1}} 
@@ -172,6 +185,58 @@ return (
                 updateTask={updateTask}
             />
         </ListItem>
+        {subtasks.length > 0 ? 
+        <div>
+        <ListItemButton onClick={handleClick}>
+            <ListItemText 
+                // primary={
+                //     <Chip 
+                //         sx={{ml:1}} 
+                //         size="small" 
+                //         label={subtasks.length}
+                //         color='primary'
+                //     />
+                // } 
+                secondary={
+                    subtasks.length > 1 ? 
+                    <span>
+                        <Chip 
+                        as="span"
+                        sx={{borderColor: 'rgba(0, 0, 0, 0.12)'}} 
+                        size="small" 
+                        label={subtasks.length}
+                        variant='outlined'
+                        color='primary'
+                    />
+                    <span>{` Subtasks`}</span>
+                    </span> : 
+                    <span>
+                        <Chip
+                        as="span" 
+                        sx={{borderColor: 'rgba(0, 0, 0, 0.12)'}} 
+                        size="small" 
+                        label={subtasks.length}
+                        variant='outlined'
+                        color='primary'
+                    />
+                    <span>{` Subtask`}</span>
+                    </span>
+                }
+            />
+            {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse 
+            in={open} 
+            timeout="auto" 
+            unmountOnExit
+        > {subtasks.map(subT => (
+            <List key={subT.id} component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4 }}>
+                <ListItemText secondary={`${subT.title}`} />
+            </ListItemButton>
+            </List>
+        ))}
+        </Collapse> </div>: ''}
         {i < selectedList.length - 1 && <Divider/>}
         </div>
         );

@@ -7,34 +7,26 @@ import TaskSortBy from '../components/TaskSortBy';
 import TaskSelectlist from '../components/TaskSelectList';
 import TaskDataService from '../services/Task.services';
 import TaskList from '../components/TaskList';
+import AddTaskForm from '../components/AddTaskForm';
 
 function Task(props) {
-    const { user } = props
-    const { token } = props
-    const { handleOpenSnackbar } = props
-    const [ employee, setEmployee ] = React.useState(null)
-    const [ selectedList, setSelectedList ] = React.useState([])
+    const { user } = props;
+    const { token } = props;
+    const { handleOpenSnackbar } = props;
+    const [ employee, setEmployee ] = React.useState(null);
+    const [ selectedList, setSelectedList ] = React.useState([]);
     const [ taskLists, setTaskLists ] = React.useState([]);
-    const [ tasks, setTasks ] = React.useState([])
-    const [ editList, setEditList ] = React.useState([])
+    const [ tasks, setTasks ] = React.useState([]);
+    const [ editTask, setEditTask ] = React.useState([]);
+    const [ open, setOpen ] = React.useState(false);
+    const [ editing, setEditing ] = React.useState(false);
     // const forceUpdate = React.useCallback(() => setSelectedList([]), []);
 
     React.useEffect(() => {
         setSelectedList([]) // not a great solution to clear list after employee change
         retrieveTasks();
         retrieveTaskList();
-        // setTimeout(function(){
-        //     retrieveTaskList();
-        // }, 100);
-        // if(!employee){ 
-        //     setSelectedList([])
-        // };
-        // retrieveTaskList();
     },[employee])
-
-    React.useEffect(() => {
-        retrieveTasks()
-    },[tasks])
 
     const retrieveTaskList = () => {
         TaskDataService.getAllTaskList(token)
@@ -69,6 +61,10 @@ function Task(props) {
         });
     };
 
+    const createTask = () => {
+
+    };
+
     const updateTask = (tasktId, data, list) => {
         // const tempSelectList = selectedList
         TaskDataService.updateTask(tasktId, data, token)
@@ -97,6 +93,10 @@ function Task(props) {
         // console.log(tasks[`${newList.title}`])
     }
 
+    const handleOpenAddTask = () => {
+        setOpen(true)
+    }
+
     return ( 
         <div style={{paddingTop: '1rem'}}> 
             <Container
@@ -120,7 +120,7 @@ function Task(props) {
                                 variant='contained' 
                                 color='success'
                                 endIcon={<AddIcon />}
-                                // onClick={handleClickOpen}
+                                onClick={handleOpenAddTask}
                             >Add</Button>
                             </div>
                         </Stack> 
@@ -146,9 +146,23 @@ function Task(props) {
                             selectedList={selectedList}
                             updateTask={updateTask}
                             retrieveTasks={retrieveTasks}
+                            handleOpenAddTask={handleOpenAddTask}
                         />
                         : '' }
                         </div>
+                        <AddTaskForm
+                            open={open}
+                            expense={editTask}
+                            setOpen={setOpen}
+                            editing={editing}
+                            setEditing={setEditing}
+                            user={user}
+                            token={token}
+                            employee={employee}
+                            handleChangeEmployee={handleChangeEmployee}
+                            createExpense={createTask}
+                            updateExpense={updateTask}
+                        />
             </Container>
         </div>
     );
