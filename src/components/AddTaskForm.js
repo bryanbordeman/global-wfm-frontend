@@ -15,7 +15,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 function AddTaskForm(props) {
     const { user, token } = props;
     const { open, setOpen } = props;
-    const { editing, task } = props;
+    const { editing, task, setEditing } = props;
     const { employee, handleChangeEmployee } = props;
     const { createTask, updateTask } = props;
     const [ isValid, setIsValid ] = React.useState(true);
@@ -58,7 +58,8 @@ function AddTaskForm(props) {
     }
 
     const handleClose = () => {
-        setOpen(!open)
+        setOpen(!open);
+        setEditing(false);
     }
 
     return (

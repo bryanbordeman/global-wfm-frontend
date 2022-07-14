@@ -85,6 +85,19 @@ function Task(props) {
         });
     }
 
+    const completeSubtask = (subtaskId) => {
+        TaskDataService.completeSubtask(subtaskId, token)
+        .then(response => {
+            // retrieveTasks();
+            console.log(response)
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
+
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
     }
@@ -147,6 +160,8 @@ function Task(props) {
                             updateTask={updateTask}
                             retrieveTasks={retrieveTasks}
                             handleOpenAddTask={handleOpenAddTask}
+                            setEditing={setEditing}
+                            completeSubtask={completeSubtask}
                         />
                         : '' }
                         </div>

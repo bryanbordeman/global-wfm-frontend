@@ -15,6 +15,7 @@ import { parseISO } from 'date-fns';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import Checkbox from '@mui/material/Checkbox';
 
 const currentDate = new Date()
 
@@ -49,7 +50,6 @@ function DueDate(props) {
             "project": list.project.id,
             "subtasks": list.subtasks.id
         }
-        console.log(list.subtasks)
         updateTask(list.id, data)
         setValue(pythonDate)
     }
@@ -127,33 +127,48 @@ function DueDate(props) {
 };
 
 export default function TaskList(props) {
-    const { selectedList, updateTask, handleOpenAddTask } = props
-    const [open, setOpen] = React.useState(false);
+    const { selectedList, updateTask, handleOpenAddTask, setEditing, completeSubtask} = props
+    const [open, setOpen] = React.useState({});
+    const [checked, setChecked] = React.useState([]);
+    const style = { textDecoration: 'line-through'};
+    // React.useEffect(() => {
+    //     setSelectedList([])
+    // },[selectedList])
 
-    const handleClick = () => {
-        setOpen(!open);
+    const handleClick = (id) => {
+        setOpen((prevState => ({...prevState, [id]: !prevState[id]})));
     };
 
-    // const [checked, setChecked] = React.useState([0]);
-
-    // const handleToggle = (value) => () => {
-    // const currentIndex = checked.indexOf(value);
-    // const newChecked = [...checked];
-
-    // if (currentIndex === -1) {
-    //     newChecked.push(value);
-    // } else {
-    //     newChecked.splice(currentIndex, 1);
-    // }
-    //     setChecked(newChecked);
+    // const findInArray = (myArray, item) => {
+    //     console.log(item)
+    //     return !!myArray.find((el) => el == item);
     // };
-    
 
+    const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+        newChecked.push(value);
+    } else {
+        newChecked.splice(currentIndex, 1);
+    }
+        setChecked(newChecked);
+    };
+
+    const handleSubtaskCompleted = (id) => {
+        completeSubtask(id)
+    }
+    
 return (
-    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+    <List 
+        sx={{ mb: 3, pb: 0, width: '100%', bgcolor: 'background.paper', border: 1, borderColor: 'grey.500' }}
+        
+    >
     {selectedList.map((list, i) => {
-        const labelId = `checkbox-list-label-${list.title}`;
+        const labelId = `list-label-${list.title}`;
         let subtasks = list.subtasks.map(sublist => (sublist))
+        
         return (
         <div key={list.id}>
         <ListItem
@@ -168,7 +183,10 @@ return (
             disablePadding
         >
             <ListItemButton
-                onClick={handleOpenAddTask}>
+                onClick={() => {
+                    handleOpenAddTask();
+                    setEditing(true);
+                    }}>
                 <ListItemIcon>
                 <Chip 
                     sx={{mr:1}} 
@@ -187,7 +205,7 @@ return (
         </ListItem>
         {subtasks.length > 0 ? 
         <div>
-        <ListItemButton onClick={handleClick}>
+        <ListItemButton onClick={() => handleClick(list.id)}>
             <ListItemText 
                 // primary={
                 //     <Chip 
@@ -226,18 +244,62 @@ return (
             {open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
         <Collapse 
-            in={open} 
+            in={open[list.id]}
             timeout="auto" 
             unmountOnExit
-        > {subtasks.map(subT => (
-            <List key={subT.id} component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText secondary={`${subT.title}`} />
+        > {subtasks.map((subT, j) => {
+            const sublistIndex = [list.id, subT.id]
+            const subLabelId = `checkbox-list-label-${subT.title}`;
+            // const [checked, setChecked] = React.useState([]);
+
+            // const handleToggle = (value) => () => {
+            // const currentIndex = checked.indexOf(value);
+            // const newChecked = [...checked];
+
+            // if (currentIndex === -1) {
+            //     newChecked.push(value);
+            // } else {
+            //     newChecked.splice(currentIndex, 1);
+            // }
+            //     setChecked(newChecked);
+            //     setIsComplete(!isComplete)
+            // };
+    
+
+            return (<List 
+                dense 
+                sx={{bgcolor: 'grey.100'}} 
+                key={subT.id} 
+                component="div" 
+                disablePadding
+            >
+                <Divider/>
+                <ListItem
+                    secondaryAction={
+                    <Checkbox
+                    edge="end"
+                    onChange={handleToggle(i+j)}
+                    onClick={() => handleSubtaskCompleted(subT.id)}
+                    checked={checked.indexOf(i+j) !== -1}
+                    // checked={subT.is_complete}
+                    inputProps={{ 'aria-labelledby': subLabelId }}
+                />
+                }
+                >
+            <ListItemButton 
+                sx={{ pl: 4 }}
+            >
+                <ListItemText 
+                    sx={subT.is_complete? style : {}}
+                    secondary={`${subT.title}`} 
+                />
             </ListItemButton>
-            </List>
-        ))}
+            </ListItem>
+            </List>)
+    })}
         </Collapse> </div>: ''}
-        {i < selectedList.length - 1 && <Divider/>}
+        {i < selectedList.length - 1 && <Divider  sx={{ borderColor: 'grey.500' }}
+/>}
         </div>
         );
     })}
