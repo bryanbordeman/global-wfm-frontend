@@ -40,6 +40,7 @@ function WorksegmentList(props) {
 
     const handleClose = () => {
         setOpenAdd(false);
+        // handleChangeEmployee(null);
     };
 
     const retrieveWorksegments = () => {

@@ -16,6 +16,7 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
 
 const currentDate = new Date()
 
@@ -26,13 +27,7 @@ function DueDate(props) {
     const customInputRef = useRef();
 
     const handleDateChange = (newDate) => {
-        // const day = newDate.getUTCDate() - 1; // day in is off by one day after it is converted
-        // const month = newDate.getUTCMonth() + 1; // Return Value is 0 indexed
-        // const year = newDate.getUTCFullYear();
-
-        const pythonDate = newDate.toISOString().split('T')[0]
-
- 
+        const pythonDate = newDate.toISOString().split('T')[0];
         let data = 
         {
             "title": list.title,
@@ -107,7 +102,7 @@ function DueDate(props) {
                     {...inputProps}
                 />
                 <Button
-                    sx={{mr: 1, textTransform: 'none', borderColor: 'rgba(0, 0, 0, 0.12)'}}
+                    sx={{mr: 1, whiteSpace: 'nowrap', textTransform: 'none', borderColor: 'rgba(0, 0, 0, 0.12)'}}
                     size='small'
                     variant="outlined"
                     color={dateDelta < 0? 'warning' : 'primary'}
@@ -129,32 +124,12 @@ function DueDate(props) {
 export default function TaskList(props) {
     const { selectedList, updateTask, handleOpenAddTask, setEditing, completeSubtask} = props
     const [open, setOpen] = React.useState({});
-    const [checked, setChecked] = React.useState([]);
     const style = { textDecoration: 'line-through'};
-    // React.useEffect(() => {
-    //     setSelectedList([])
-    // },[selectedList])
 
     const handleClick = (id) => {
         setOpen((prevState => ({...prevState, [id]: !prevState[id]})));
     };
 
-    // const findInArray = (myArray, item) => {
-    //     console.log(item)
-    //     return !!myArray.find((el) => el == item);
-    // };
-
-    const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-        newChecked.push(value);
-    } else {
-        newChecked.splice(currentIndex, 1);
-    }
-        setChecked(newChecked);
-    };
 
     const handleSubtaskCompleted = (id) => {
         completeSubtask(id)
@@ -162,7 +137,7 @@ export default function TaskList(props) {
     
 return (
     <List 
-        sx={{ mb: 3, pb: 0, width: '100%', bgcolor: 'background.paper', border: 1, borderColor: 'grey.500' }}
+        sx={{ mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: 'grey.500' }}
         
     >
     {selectedList.map((list, i) => {
@@ -196,12 +171,29 @@ return (
                     label={`${list.project.number}`} 
                 />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={`${list.title}`} />
+                <ListItemText 
+                    primaryTypographyProps={{ 
+                        style: {
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }
+                    }}
+                    id={labelId} 
+                    primary={`${list.title}`}
+                    />
             </ListItemButton>
+            <Grid 
+                xs="auto"
+                item
+                container 
+                justifyContent="flex-end" 
+                alignItems="flex-end">
             <DueDate
                 list={list}
                 updateTask={updateTask}
             />
+            </Grid>
         </ListItem>
         {subtasks.length > 0 ? 
         <div>
@@ -265,22 +257,23 @@ return (
             //     setIsComplete(!isComplete)
             // };
     
-
-            return (<List 
-                dense 
-                sx={{bgcolor: 'grey.100'}} 
+            return (
+            <List 
+                dense
                 key={subT.id} 
                 component="div" 
                 disablePadding
             >
                 <Divider/>
                 <ListItem
+                    sx={{ borderRadius: 2 }} 
+                    // sx={{bgcolor: 'grey.100', borderRadius: 2}} 
+
                     secondaryAction={
                     <Checkbox
                     edge="end"
-                    onChange={handleToggle(i+j)}
                     onClick={() => handleSubtaskCompleted(subT.id)}
-                    checked={checked.indexOf(i+j) !== -1}
+                    checked={subT.is_complete}
                     // checked={subT.is_complete}
                     inputProps={{ 'aria-labelledby': subLabelId }}
                 />
@@ -295,7 +288,9 @@ return (
                 />
             </ListItemButton>
             </ListItem>
-            </List>)
+            </List>
+            
+            )
     })}
         </Collapse> </div>: ''}
         {i < selectedList.length - 1 && <Divider  sx={{ borderColor: 'grey.500' }}

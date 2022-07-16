@@ -15,6 +15,7 @@ function Task(props) {
     const { handleOpenSnackbar } = props;
     const [ employee, setEmployee ] = React.useState(null);
     const [ selectedList, setSelectedList ] = React.useState([]);
+    const [ currentList, setCurrentList ] = React.useState('')
     const [ taskLists, setTaskLists ] = React.useState([]);
     const [ tasks, setTasks ] = React.useState([]);
     const [ editTask, setEditTask ] = React.useState([]);
@@ -26,7 +27,13 @@ function Task(props) {
         setSelectedList([]) // not a great solution to clear list after employee change
         retrieveTasks();
         retrieveTaskList();
+        setCurrentList('')
     },[employee])
+
+    React.useEffect(() => {
+        if(currentList)
+        retrieveList();
+    },[currentList, tasks, open])
 
     const retrieveTaskList = () => {
         TaskDataService.getAllTaskList(token)
@@ -61,15 +68,30 @@ function Task(props) {
         });
     };
 
+
+    const retrieveList = () => {
+        if(employee)
+        TaskDataService.getAssigneeList(token, employee.id, currentList.id)
+        .then(response => {
+            const result = response.data;
+            let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
+            setSelectedList(userResult);
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
     const createTask = () => {
 
     };
 
-    const updateTask = (tasktId, data, list) => {
+    const updateTask = (tasktId, data) => {
         // const tempSelectList = selectedList
         TaskDataService.updateTask(tasktId, data, token)
         .then(response => {
-            window.scrollTo(0, 0);
+            // window.scrollTo(0, 0);
             handleOpenSnackbar('info', 'Due Date has been updated')
             retrieveTasks();
             // forceUpdate();
@@ -88,8 +110,8 @@ function Task(props) {
     const completeSubtask = (subtaskId) => {
         TaskDataService.completeSubtask(subtaskId, token)
         .then(response => {
-            // retrieveTasks();
-            console.log(response)
+            retrieveList();
+            // console.log(response)
         })
         .catch( e => {
             console.log(e);
@@ -140,6 +162,7 @@ function Task(props) {
                         <div style={{marginBottom: '0.75rem'}}>
                             <EmployeePicker
                                 user={user}
+                                employee={employee}
                                 token={token}
                                 handleChangeEmployee={handleChangeEmployee}/>
                         </div>
@@ -151,6 +174,7 @@ function Task(props) {
                                 token={token}
                                 handleOpenSnackbar={handleOpenSnackbar}
                                 handleChangeList={handleChangeList}
+                                setCurrentList={setCurrentList}
                             />
                         </div>
                         {selectedList.length > 0? 
@@ -158,7 +182,8 @@ function Task(props) {
                             user={user}
                             selectedList={selectedList}
                             updateTask={updateTask}
-                            retrieveTasks={retrieveTasks}
+                            // retrieveTasks={retrieveTasks}
+                            // retrieveList={retrieveList}
                             handleOpenAddTask={handleOpenAddTask}
                             setEditing={setEditing}
                             completeSubtask={completeSubtask}

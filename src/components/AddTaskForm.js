@@ -60,6 +60,7 @@ function AddTaskForm(props) {
     const handleClose = () => {
         setOpen(!open);
         setEditing(false);
+        handleChangeEmployee(null)
     }
 
     return (

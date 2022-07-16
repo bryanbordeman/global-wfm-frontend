@@ -7,11 +7,12 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 
 export default function TaskSelectlist(props) {
-    const { employee, tasks, taskLists } = props
+    const { employee, tasks, taskLists, setCurrentList } = props
     const { handleChangeList } = props
     const [ value, setValue ] = React.useState('');
     
     const handleChange = (event) => {
+        setCurrentList(event.target.value)
         setValue(event.target.value);
         handleChangeList(event.target.value);
     };
