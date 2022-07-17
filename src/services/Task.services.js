@@ -27,10 +27,14 @@ class TaskDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.put(`${SERVER}/api/subtask/${id}/completed/`);
     };
-    // deleteAnnouncement(id, token){
-    //     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    //     return axios.delete(`${SERVER}/api/announcement/${id}`);
-    // };
+    deleteSubtask(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.delete(`${SERVER}/api/subtask/${id}`);
+    };
+    updateSubtask(id, data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/subtask/${id}`, data);
+    };
 }
 
 export default new TaskDataService();

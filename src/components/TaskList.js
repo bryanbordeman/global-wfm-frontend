@@ -122,7 +122,12 @@ function DueDate(props) {
 };
 
 export default function TaskList(props) {
-    const { selectedList, updateTask, handleOpenAddTask, setEditing, completeSubtask} = props
+    const { selectedList, 
+            updateTask, 
+            handleOpenTaskForm, 
+            handleOpenSubtaskForm,
+            setEditing, 
+            completeSubtask } = props
     const [open, setOpen] = React.useState({});
     const style = { textDecoration: 'line-through'};
 
@@ -159,7 +164,7 @@ return (
         >
             <ListItemButton
                 onClick={() => {
-                    handleOpenAddTask();
+                    handleOpenTaskForm();
                     setEditing(true);
                     }}>
                 <ListItemIcon>
@@ -281,6 +286,10 @@ return (
                 >
             <ListItemButton 
                 sx={{ pl: 4 }}
+                onClick={() => {
+                    handleOpenSubtaskForm(subT.id);
+                    setEditing(true);
+                }}
             >
                 <ListItemText 
                     sx={subT.is_complete? style : {}}

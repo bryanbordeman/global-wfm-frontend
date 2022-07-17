@@ -8,6 +8,7 @@ import TaskSelectlist from '../components/TaskSelectList';
 import TaskDataService from '../services/Task.services';
 import TaskList from '../components/TaskList';
 import AddTaskForm from '../components/AddTaskForm';
+import AddSubtaskForm from '../components/AddSubtaskForm';
 
 function Task(props) {
     const { user } = props;
@@ -18,9 +19,11 @@ function Task(props) {
     const [ currentList, setCurrentList ] = React.useState('')
     const [ taskLists, setTaskLists ] = React.useState([]);
     const [ tasks, setTasks ] = React.useState([]);
+    const [ subtask, setSubtask ] = React.useState({});
     const [ editTask, setEditTask ] = React.useState([]);
     const [ open, setOpen ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
+    const [ openSubtaskForm, setOpenSubtaskForm ] = React.useState(false)
     // const forceUpdate = React.useCallback(() => setSelectedList([]), []);
 
     React.useEffect(() => {
@@ -105,7 +108,7 @@ function Task(props) {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
-    }
+    };
 
     const completeSubtask = (subtaskId) => {
         TaskDataService.completeSubtask(subtaskId, token)
@@ -119,6 +122,32 @@ function Task(props) {
         });
     };
 
+    const updateSubtask = (tasktId, data) => {
+        TaskDataService.updateSubtask(tasktId, data, token)
+        .then(response => {
+            handleOpenSnackbar('info', 'Due Date has been updated')
+            retrieveTasks();     
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
+    const deleteSubtask = (id) => {
+        TaskDataService.deleteSubtask(id, token)
+        .then(response => {
+            window.scrollTo(0, 0);
+            retrieveTasks(); 
+            handleOpenSnackbar('error', 'Your subtask has been deleted')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+
+    };
+
 
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
@@ -128,8 +157,17 @@ function Task(props) {
         // console.log(tasks[`${newList.title}`])
     }
 
-    const handleOpenAddTask = () => {
+    const handleOpenTaskForm = () => {
         setOpen(true)
+    }
+
+    const handleOpenSubtaskForm = (id) => {
+        selectedList.map(task => {
+            task.subtasks.map(sub => {
+                if(sub.id === id) setSubtask(sub)
+            });
+        })
+        setOpenSubtaskForm(true);
     }
 
     return ( 
@@ -155,7 +193,7 @@ function Task(props) {
                                 variant='contained' 
                                 color='success'
                                 endIcon={<AddIcon />}
-                                onClick={handleOpenAddTask}
+                                onClick={handleOpenTaskForm}
                             >Add</Button>
                             </div>
                         </Stack> 
@@ -184,7 +222,9 @@ function Task(props) {
                             updateTask={updateTask}
                             // retrieveTasks={retrieveTasks}
                             // retrieveList={retrieveList}
-                            handleOpenAddTask={handleOpenAddTask}
+                            handleOpenTaskForm={handleOpenTaskForm}
+                            handleOpenSubtaskForm={handleOpenSubtaskForm}
+                            setOpenSubtaskForm={setOpenSubtaskForm}
                             setEditing={setEditing}
                             completeSubtask={completeSubtask}
                         />
@@ -203,6 +243,18 @@ function Task(props) {
                             createExpense={createTask}
                             updateExpense={updateTask}
                         />
+
+                        <AddSubtaskForm
+                            setOpenSubtaskForm={setOpenSubtaskForm}
+                            editing={editing}
+                            setEditing={setEditing}
+                            open={openSubtaskForm}
+                            subtask={subtask}
+                            setSubtask={setSubtask}
+                            updateSubtask={updateSubtask}
+                            deleteSubtask={deleteSubtask}
+                        />
+
             </Container>
         </div>
     );

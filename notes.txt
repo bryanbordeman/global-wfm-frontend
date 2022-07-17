@@ -1,4 +1,5 @@
 - Fix alignment issue with ExpenseTabs
 - Fix reload after due date change on TaskList. 
-- Omit Due date on Sub Tasks.
-- Fix test wrap on task title in list
+- fix dates on subtask completed.
+- fix completed subtask date in model.
+- Add last updated and completed date to subtask UI.
