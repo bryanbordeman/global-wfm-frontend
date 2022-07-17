@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import moment from 'moment';
 
 export default function AddSubtaskForm(props) {
     const { 
@@ -123,7 +124,7 @@ export default function AddSubtaskForm(props) {
             scroll={'body'}
             
             >
-            <DialogTitle>
+            <DialogTitle  sx={{mb:0, pb:0}}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div>
                     {`${editing ? 'Edit' : 'Add'} Subtask`}
@@ -141,6 +142,9 @@ export default function AddSubtaskForm(props) {
                 </div>
                 </div>
             </DialogTitle>
+            <DialogContent sx={{ typography: 'caption', mb:0, pb: 1}}>
+                {`Last Updated | ${moment(subtask.updated).format("ddd, MMMM Do YYYY")}`}
+            </DialogContent>
             <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>
@@ -175,9 +179,13 @@ export default function AddSubtaskForm(props) {
                     control={<Switch checked={values.is_complete} color="primary" />}
                     id="is_complete"
                     name="is_complete"
-                    label="Is Completed"
+                    label="Complete"
                     value={values.is_complete}
                 />
+                {subtask.is_complete?
+                <DialogContent sx={{ typography: 'caption', mb:0, pb: 0, mt:0, pt:0}}>
+                    Completed <br/>{moment(subtask.completed).calendar()}
+                </DialogContent> : ''}
             </Stack>
             </DialogContent>
             <Divider/>

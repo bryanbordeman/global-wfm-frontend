@@ -125,7 +125,7 @@ function Task(props) {
     const updateSubtask = (tasktId, data) => {
         TaskDataService.updateSubtask(tasktId, data, token)
         .then(response => {
-            handleOpenSnackbar('info', 'Due Date has been updated')
+            handleOpenSnackbar('info', 'Subtask has been updated')
             retrieveTasks();     
         })
         .catch( e => {
