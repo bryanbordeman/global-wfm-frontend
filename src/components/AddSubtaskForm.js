@@ -23,7 +23,8 @@ export default function AddSubtaskForm(props) {
             setSubtask,
             openSubtaskForm,
             setOpenSubtaskForm,
-            open
+            open,
+            retrieveLastSubtask
             } = props
 
     const initialFormValues = {
@@ -63,6 +64,7 @@ export default function AddSubtaskForm(props) {
         }
         else {
             createSubtask(data);
+            retrieveLastSubtask();
             setOpenSubtaskForm(false);
         };
     };
@@ -124,11 +126,12 @@ export default function AddSubtaskForm(props) {
             scroll={'body'}
             
             >
-            <DialogTitle  sx={{mb:0, pb:0}}>
+            <DialogTitle  sx={editing? {mb:0, pb:0} : {}}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div>
                     {`${editing ? 'Edit' : 'Add'} Subtask`}
                 </div>
+                {editing? 
                 <div>
                 <IconButton 
                     edge="end" 
@@ -140,11 +143,14 @@ export default function AddSubtaskForm(props) {
                     <DeleteOutlineIcon />
                 </IconButton>
                 </div>
+                : ''}
                 </div>
             </DialogTitle>
+            {editing? 
             <DialogContent sx={{ typography: 'caption', mb:0, pb: 1}}>
                 {`Last Updated | ${moment(subtask.updated).format("ddd, MMMM Do YYYY")}`}
-            </DialogContent>
+            </DialogContent> 
+            : ''}
             <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>
@@ -174,6 +180,7 @@ export default function AddSubtaskForm(props) {
                     helperText={errors.notes === null ? '' : errors.notes}
                     error={errors.notes? true : false}
                 />
+                {editing ?
                 <FormControlLabel
                     onChange={() => {setValues({...values, is_complete: !values.is_complete})}}
                     control={<Switch checked={values.is_complete} color="primary" />}
@@ -181,7 +188,8 @@ export default function AddSubtaskForm(props) {
                     name="is_complete"
                     label="Complete"
                     value={values.is_complete}
-                />
+                /> 
+                : ''}
                 {subtask.is_complete?
                 <DialogContent sx={{ typography: 'caption', mb:0, pb: 0, mt:0, pt:0}}>
                     Completed <br/>{moment(subtask.completed).calendar()}

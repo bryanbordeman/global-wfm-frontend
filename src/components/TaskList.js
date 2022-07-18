@@ -55,8 +55,8 @@ const StyledMenu = styled((props) => (
         },
         '& .MuiMenuItem-root': {
         '& .MuiSvgIcon-root': {
-            fontSize: 18,
-            color: theme.palette.text.secondary,
+            fontSize: '1.25rem',
+            // color: theme.palette.text.secondary,
             marginRight: theme.spacing(1.5),
         },
         '&:active': {
@@ -224,7 +224,7 @@ return (
                 onClose={handleMenuClose}
             >
                 <MenuItem 
-                    // sx={{color: 'primary.main'}} 
+                    sx={{color: 'primary.main'}} 
                     onClick={handleMenuClose} 
                     disableRipple
                 >
@@ -232,15 +232,18 @@ return (
                     Edit
                 </MenuItem>
                 <MenuItem 
-                    // sx={{color: 'primary.main'}} 
-                    onClick={handleMenuClose} 
+                    sx={{color: 'primary.main'}} 
+                    onClick={() => {
+                        handleMenuClose();
+                        handleOpenSubtaskForm(list.id);
+                        }} 
                     disableRipple
                 >
                     <PlaylistAddIcon />
                     Add Subtask
                 </MenuItem>
                 <MenuItem 
-                    sx={{mb:2}} 
+                    sx={{mb:2, color: 'success.main'}} 
                     onClick={handleMenuClose} 
                     disableRipple
                 >
@@ -253,7 +256,9 @@ return (
                     onClick={handleMenuClose} 
                     disableRipple
                 >
-                <DeleteIcon style={{ fill: '#B00020'}}/>
+                <DeleteIcon 
+                    // style={{ fill: '#B00020'}}
+                    />
                     Delete
                 </MenuItem>
             </StyledMenu>
@@ -395,8 +400,8 @@ return (
             <ListItemButton 
                 sx={{ pl: 4 }}
                 onClick={() => {
-                    handleOpenSubtaskForm(subT.id);
                     setEditing(true);
+                    handleOpenSubtaskForm(subT.id);
                 }}
             >
                 <ListItemText 

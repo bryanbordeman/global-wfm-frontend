@@ -148,6 +148,30 @@ function Task(props) {
 
     };
 
+    const createSubtask = (data) => {
+        TaskDataService.createSubtask(data, token)
+        .then(response => {
+            handleOpenSnackbar('success', 'Subtask has been created')
+            retrieveTasks();     
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
+    const retrieveLastSubtask = () => {
+        TaskDataService.lastSubtask(token)
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+    }
+    
+
 
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
@@ -252,7 +276,9 @@ function Task(props) {
                             subtask={subtask}
                             setSubtask={setSubtask}
                             updateSubtask={updateSubtask}
+                            createSubtask={createSubtask}
                             deleteSubtask={deleteSubtask}
+                            retrieveLastSubtask={retrieveLastSubtask}
                         />
 
             </Container>
