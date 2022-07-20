@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Stack, IconButton} from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import  Divider from '@mui/material/Divider';
+import Divider from '@mui/material/Divider';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import moment from 'moment';
 
@@ -21,10 +21,8 @@ export default function AddSubtaskForm(props) {
             deleteSubtask,
             subtask,
             setSubtask,
-            openSubtaskForm,
             setOpenSubtaskForm,
             open,
-            retrieveLastSubtask
             } = props
 
     const initialFormValues = {
@@ -64,7 +62,6 @@ export default function AddSubtaskForm(props) {
         }
         else {
             createSubtask(data);
-            retrieveLastSubtask();
             setOpenSubtaskForm(false);
         };
     };

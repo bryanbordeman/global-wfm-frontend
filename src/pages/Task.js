@@ -20,11 +20,11 @@ function Task(props) {
     const [ taskLists, setTaskLists ] = React.useState([]);
     const [ tasks, setTasks ] = React.useState([]);
     const [ subtask, setSubtask ] = React.useState({});
+    const [ task, setTask ] = React.useState({});
     const [ editTask, setEditTask ] = React.useState([]);
     const [ open, setOpen ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
     const [ openSubtaskForm, setOpenSubtaskForm ] = React.useState(false)
-    // const forceUpdate = React.useCallback(() => setSelectedList([]), []);
 
     React.useEffect(() => {
         setSelectedList([]) // not a great solution to clear list after employee change
@@ -91,18 +91,10 @@ function Task(props) {
     };
 
     const updateTask = (tasktId, data) => {
-        // const tempSelectList = selectedList
         TaskDataService.updateTask(tasktId, data, token)
         .then(response => {
-            // window.scrollTo(0, 0);
-            handleOpenSnackbar('info', 'Due Date has been updated')
+            handleOpenSnackbar('info', 'Tasks has been updated')
             retrieveTasks();
-            // forceUpdate();
-            // retrieveTaskList();
-            // setSelectedList([]);
-            // setSelectedList(tasks[`${editList.title}`])
-            // console.log(tempSelectList)
-            
         })
         .catch( e => {
             console.log(e);
@@ -114,7 +106,6 @@ function Task(props) {
         TaskDataService.completeSubtask(subtaskId, token)
         .then(response => {
             retrieveList();
-            // console.log(response)
         })
         .catch( e => {
             console.log(e);
@@ -151,34 +142,33 @@ function Task(props) {
     const createSubtask = (data) => {
         TaskDataService.createSubtask(data, token)
         .then(response => {
-            handleOpenSnackbar('success', 'Subtask has been created')
-            retrieveTasks();     
+            setTask((prevState) => ({
+                ...prevState,
+                [prevState.subtasks]: prevState.subtasks.push(response.data),
+            }))
+            handleOpenSnackbar('success', 'Subtask has been created');
+            //sanitize data before submitting for update
+            const taskData = task
+            taskData.assignee = task.assignee.id
+            taskData.created_by = task.created_by.id
+            taskData.project = task.project.id
+            taskData.tasklist = task.tasklist.id
+            taskData.subtasks = task.subtasks.map(subT => (subT.id))
+            // ......
+            updateTask(task.id, taskData);
+    
         })
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
     };
-
-    const retrieveLastSubtask = () => {
-        TaskDataService.lastSubtask(token)
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        })
-    }
     
-
-
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
     }
     const handleChangeList = (newList) => {
         setSelectedList(tasks[`${newList.title}`])
-        // console.log(tasks[`${newList.title}`])
     }
 
     const handleOpenTaskForm = () => {
@@ -190,9 +180,9 @@ function Task(props) {
             task.subtasks.map(sub => {
                 if(sub.id === id) setSubtask(sub)
             });
-        })
+        });
         setOpenSubtaskForm(true);
-    }
+    };
 
     return ( 
         <div style={{paddingTop: '1rem'}}> 
@@ -251,6 +241,7 @@ function Task(props) {
                             setOpenSubtaskForm={setOpenSubtaskForm}
                             setEditing={setEditing}
                             completeSubtask={completeSubtask}
+                            setTask={setTask}
                         />
                         : '' }
                         </div>
@@ -267,7 +258,6 @@ function Task(props) {
                             createExpense={createTask}
                             updateExpense={updateTask}
                         />
-
                         <AddSubtaskForm
                             setOpenSubtaskForm={setOpenSubtaskForm}
                             editing={editing}
@@ -278,7 +268,6 @@ function Task(props) {
                             updateSubtask={updateSubtask}
                             createSubtask={createSubtask}
                             deleteSubtask={deleteSubtask}
-                            retrieveLastSubtask={retrieveLastSubtask}
                         />
 
             </Container>

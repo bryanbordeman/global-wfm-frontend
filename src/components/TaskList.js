@@ -114,7 +114,6 @@ function DueDate(props) {
                 dueMessage = `${Math.abs(dateDelta)} days ago`
             break;
             case (dateDelta === -1):
-                // dueMessage = `${Math.abs(dateDelta)} day ago`
                 dueMessage = 'Yesterday'
             break;
             case (dateDelta > 1):
@@ -174,7 +173,8 @@ function DueDate(props) {
 
 export default function TaskList(props) {
     const { selectedList, 
-            updateTask, 
+            updateTask,
+            setTask, 
             handleOpenTaskForm, 
             handleOpenSubtaskForm,
             setEditing, 
@@ -204,7 +204,7 @@ export default function TaskList(props) {
     }
     
 return (
-    <List 
+    <List
         sx={{ mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: 'grey.500' }}
         
     >
@@ -235,7 +235,8 @@ return (
                     sx={{color: 'primary.main'}} 
                     onClick={() => {
                         handleMenuClose();
-                        handleOpenSubtaskForm(list.id);
+                        setTask(list);
+                        handleOpenSubtaskForm();
                         }} 
                     disableRipple
                 >
@@ -256,28 +257,14 @@ return (
                     onClick={handleMenuClose} 
                     disableRipple
                 >
-                <DeleteIcon 
-                    // style={{ fill: '#B00020'}}
-                    />
+                <DeleteIcon/>
                     Delete
                 </MenuItem>
             </StyledMenu>
         <ListItem
-            // secondaryAction={
-            //     <Checkbox
-            //     edge="end"
-            //     onChange={handleToggle(i)}
-            //     checked={checked.indexOf(i) !== -1}
-            //     inputProps={{ 'aria-labelledby': labelId }}
-            // />
-            // }
             disablePadding
         >
             <ListItemButton
-                // onClick={() => {
-                //     handleOpenTaskForm();
-                //     setEditing(true);
-                //     }}
                 onClick={handleMenuClick}
             >
                 <ListItemIcon>
@@ -317,14 +304,6 @@ return (
         <div>
         <ListItemButton onClick={() => handleClick(list.id)}>
             <ListItemText 
-                // primary={
-                //     <Chip 
-                //         sx={{ml:1}} 
-                //         size="small" 
-                //         label={subtasks.length}
-                //         color='primary'
-                //     />
-                // } 
                 secondary={
                     subtasks.length > 1 ? 
                     <span>
@@ -358,63 +337,46 @@ return (
             timeout="auto" 
             unmountOnExit
         > {subtasks.map((subT, j) => {
-            const sublistIndex = [list.id, subT.id]
             const subLabelId = `checkbox-list-label-${subT.title}`;
-            // const [checked, setChecked] = React.useState([]);
-
-            // const handleToggle = (value) => () => {
-            // const currentIndex = checked.indexOf(value);
-            // const newChecked = [...checked];
-
-            // if (currentIndex === -1) {
-            //     newChecked.push(value);
-            // } else {
-            //     newChecked.splice(currentIndex, 1);
-            // }
-            //     setChecked(newChecked);
-            //     setIsComplete(!isComplete)
-            // };
-    
             return (
-            <List 
-                dense
-                key={subT.id} 
-                component="div" 
-                disablePadding
-            >
-                <Divider/>
-                <ListItem
-                    sx={{ borderRadius: 2 }} 
-                    // sx={{bgcolor: 'grey.100', borderRadius: 2}} 
-
-                    secondaryAction={
-                    <Checkbox
-                    edge="end"
-                    onClick={() => handleSubtaskCompleted(subT.id)}
-                    checked={subT.is_complete}
-                    // checked={subT.is_complete}
-                    inputProps={{ 'aria-labelledby': subLabelId }}
-                />
-                }
+                <List 
+                    dense
+                    key={subT.id} 
+                    component="div" 
+                    disablePadding
                 >
-            <ListItemButton 
-                sx={{ pl: 4 }}
-                onClick={() => {
-                    setEditing(true);
-                    handleOpenSubtaskForm(subT.id);
-                }}
-            >
-                <ListItemText 
-                    sx={subT.is_complete? style : {}}
-                    secondary={`${subT.title}`} 
-                />
-            </ListItemButton>
-            </ListItem>
-            </List>
-            
+                    <Divider />
+                    <ListItem
+                        sx={{ borderRadius: 2 }} 
+                        // sx={{bgcolor: 'grey.100', borderRadius: 2}} 
+                        secondaryAction={
+                        <Checkbox
+                        edge="end"
+                        onClick={() => handleSubtaskCompleted(subT.id)}
+                        checked={subT.is_complete}
+                        inputProps={{ 'aria-labelledby': subLabelId }}
+                        />
+                        }
+                    >
+                        <ListItemButton 
+                            sx={{ pl: 4 }}
+                            onClick={() => {
+                                setEditing(true);
+                                handleOpenSubtaskForm(subT.id);
+                            }}
+                        >
+                            <ListItemText 
+                                sx={subT.is_complete? style : {}}
+                                secondary={`${subT.title}`} 
+                            />
+                        </ListItemButton>
+                    </ListItem>
+                </List>
             )
     })}
-        </Collapse> </div>: ''}
+        </Collapse> 
+            </div>
+            : ''}
         {i < selectedList.length - 1 && <Divider  sx={{ borderColor: 'grey.500' }}
 />}
         </div>

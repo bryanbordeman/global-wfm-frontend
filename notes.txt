@@ -1,3 +1,4 @@
 - Fix alignment issue with ExpenseTabs
-
+- Fix Key error on TaskList when subtask is added
+- Fix Employee picker so it clears input when value changes
 
