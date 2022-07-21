@@ -28,6 +28,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
+import SubMenuTask from './SubMenuTask';
+
 const StyledMenu = styled((props) => (
     <Menu
         elevation={0}
@@ -178,21 +180,26 @@ export default function TaskList(props) {
             handleOpenTaskForm, 
             handleOpenSubtaskForm,
             setEditing, 
-            completeSubtask } = props
+            completeSubtask } = props;
+    const { openDelete, setOpenDelete } = props;
+
     const [open, setOpen] = React.useState({});
     const style = { textDecoration: 'line-through'};
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
     
-    const handleMenuClick = (event) => {
+    const handleMenuClick = (event, list) => {
         setAnchorEl(event.currentTarget);
+        setTask(list);
     };
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
 
-
+    const handleOpenDeleteTask = () => {
+        setOpenDelete(true);
+    }
 
     const handleClick = (id) => {
         setOpen((prevState => ({...prevState, [id]: !prevState[id]})));
@@ -202,106 +209,114 @@ export default function TaskList(props) {
     const handleSubtaskCompleted = (id) => {
         completeSubtask(id)
     }
-    
+
 return (
+    
     <List
         sx={{ mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: 'grey.500' }}
-        
     >
     {selectedList.map((list, i) => {
         const labelId = `list-label-${list.title}`;
         let subtasks = list.subtasks.map(sublist => (sublist))
         
         return (
-        <div key={list.id}>
-            <StyledMenu
-                id="demo-customized-menu"
-                MenuListProps={{
-                'aria-labelledby': 'demo-customized-button',
-                }}
-                anchorEl={anchorEl}
-                open={openMenu}
-                onClose={handleMenuClose}
-            >
-                <MenuItem 
-                    sx={{color: 'primary.main'}} 
-                    onClick={handleMenuClose} 
-                    disableRipple
-                >
-                    <EditIcon />
-                    Edit
-                </MenuItem>
-                <MenuItem 
-                    sx={{color: 'primary.main'}} 
-                    onClick={() => {
-                        handleMenuClose();
-                        setTask(list);
-                        handleOpenSubtaskForm();
-                        }} 
-                    disableRipple
-                >
-                    <PlaylistAddIcon />
-                    Add Subtask
-                </MenuItem>
-                <MenuItem 
-                    sx={{mb:2, color: 'success.main'}} 
-                    onClick={handleMenuClose} 
-                    disableRipple
-                >
-                    <CheckCircleIcon />
-                    Complete Task
-                </MenuItem>
-                <Divider sx={{ my: 0.5 }} />
-                <MenuItem 
-                    sx={{color: 'error.dark', mt:2}} 
-                    onClick={handleMenuClose} 
-                    disableRipple
-                >
-                <DeleteIcon/>
-                    Delete
-                </MenuItem>
-            </StyledMenu>
-        <ListItem
-            disablePadding
-        >
-            <ListItemButton
-                onClick={handleMenuClick}
-            >
-                <ListItemIcon>
-                <Chip 
-                    sx={{mr:1}} 
-                    variant='outlined'
-                    size='small' 
-                    color='primary' 
-                    label={`${list.project.number}`} 
-                />
-                </ListItemIcon>
-                <ListItemText 
-                    primaryTypographyProps={{ 
-                        style: {
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                        }
+            <div key={list.id}>
+                <StyledMenu
+                    key={list.id}
+                    id="demo-customized-menu"
+                    MenuListProps={{
+                    'aria-labelledby': 'demo-customized-button',
                     }}
-                    id={labelId} 
-                    primary={`${list.title}`}
-                    />
-            </ListItemButton>
-            <Grid 
-                xs="auto"
-                item
-                container 
-                justifyContent="flex-end" 
-                alignItems="flex-end">
-            <DueDate
-                list={list}
-                updateTask={updateTask}
-            />
-            </Grid>
-        </ListItem>
-        {subtasks.length > 0 ? 
-        <div>
+                    anchorEl={anchorEl}
+                    open={openMenu}
+                    onClose={handleMenuClose}
+                >
+                    <MenuItem 
+                        sx={{color: 'primary.main'}} 
+                        onClick={() => {
+                            handleMenuClose();
+                        }} 
+                        disableRipple
+                    >
+                        <EditIcon />
+                        Edit
+                    </MenuItem>
+                    <MenuItem 
+                        sx={{color: 'primary.main'}} 
+                        onClick={() => {
+                            handleMenuClose();
+                            handleOpenSubtaskForm();
+                            }} 
+                        disableRipple
+                    >
+                        <PlaylistAddIcon />
+                        Add Subtask
+                    </MenuItem>
+                    <MenuItem 
+                        sx={{mb:2, color: 'success.main'}} 
+                        onClick={handleMenuClose} 
+                        disableRipple
+                    >
+                        <CheckCircleIcon />
+                        Complete Task
+                    </MenuItem>
+                    <Divider sx={{ my: 0.5 }} />
+                    <MenuItem 
+                        sx={{color: 'error.dark', mt:2}} 
+                        onClick={() => {
+                            handleMenuClose();
+                            handleOpenDeleteTask();
+                        }} 
+                        disableRipple
+                    >
+                    <DeleteIcon/>
+                        Delete
+                    </MenuItem>
+                </StyledMenu>
+                <ListItem
+                    disablePadding
+                >
+                <ListItemButton
+                    onClick={(e) => {
+                        // use event to set task 
+                        handleMenuClick(e, list);
+                    }}
+                >
+                    <ListItemIcon>
+                        <Chip 
+                            sx={{mr:1}} 
+                            variant='outlined'
+                            size='small' 
+                            color='primary' 
+                            label={`${list.project.number}`} 
+                        />
+                    </ListItemIcon>
+                    <ListItemText 
+                        primaryTypographyProps={{ 
+                            style: {
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }
+                        }}
+                        id={labelId} 
+                        primary={`${list.title}`}
+                        />
+                </ListItemButton>
+                <Grid 
+                    xs="auto"
+                    item
+                    container 
+                    justifyContent="flex-end" 
+                    alignItems="flex-end">
+                <DueDate
+                    list={list}
+                    updateTask={updateTask}
+                />
+                </Grid>
+                </ListItem>
+                {subtasks.length > 0 ? 
+            <div>
         <ListItemButton onClick={() => handleClick(list.id)}>
             <ListItemText 
                 secondary={
@@ -378,12 +393,12 @@ return (
             </div>
             : ''}
         {i < selectedList.length - 1 && <Divider  sx={{ borderColor: 'grey.500' }}
-/>}
+    />}
         </div>
         );
-    })}
+        })}
     </List>
     
-);
+    );
 };
 

@@ -9,6 +9,7 @@ import TaskDataService from '../services/Task.services';
 import TaskList from '../components/TaskList';
 import AddTaskForm from '../components/AddTaskForm';
 import AddSubtaskForm from '../components/AddSubtaskForm';
+import DeleteTaskModal from '../components/DeleteTaskModal';
 
 function Task(props) {
     const { user } = props;
@@ -24,7 +25,8 @@ function Task(props) {
     const [ editTask, setEditTask ] = React.useState([]);
     const [ open, setOpen ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
-    const [ openSubtaskForm, setOpenSubtaskForm ] = React.useState(false)
+    const [ openSubtaskForm, setOpenSubtaskForm ] = React.useState(false);
+    const [ openDelete, setOpenDelete ] = React.useState(false);
 
     React.useEffect(() => {
         setSelectedList([]) // not a great solution to clear list after employee change
@@ -89,6 +91,18 @@ function Task(props) {
     const createTask = () => {
 
     };
+
+    const deleteTask = (id) => {
+        TaskDataService.deleteTask(id, token)
+        .then(response => {
+            handleOpenSnackbar('error', 'Tasks has been deleted')
+            retrieveTasks();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    }
 
     const updateTask = (tasktId, data) => {
         TaskDataService.updateTask(tasktId, data, token)
@@ -242,6 +256,8 @@ function Task(props) {
                             setEditing={setEditing}
                             completeSubtask={completeSubtask}
                             setTask={setTask}
+                            openDelete={openDelete}
+                            setOpenDelete={setOpenDelete}
                         />
                         : '' }
                         </div>
@@ -268,6 +284,13 @@ function Task(props) {
                             updateSubtask={updateSubtask}
                             createSubtask={createSubtask}
                             deleteSubtask={deleteSubtask}
+                        />
+
+                        <DeleteTaskModal
+                            deleteTask={deleteTask}
+                            task={task}
+                            openDelete={openDelete}
+                            setOpenDelete={setOpenDelete}
                         />
 
             </Container>
