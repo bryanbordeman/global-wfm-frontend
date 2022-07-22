@@ -10,6 +10,8 @@ import ProjectPicker from './ProjectPicker'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 
 function AddTaskForm(props) {
@@ -74,7 +76,6 @@ function AddTaskForm(props) {
             <Divider/>
             <DialogContent>
                 <Stack direction="column" spacing={2}>
-                
                 <div>
                 {editing ?
                     <TextField
@@ -158,6 +159,16 @@ function AddTaskForm(props) {
                     multiline
                     rows={4}
                 />
+                {editing ?
+                <FormControlLabel
+                    onChange={() => {setValues({...values, is_complete: !values.is_complete})}}
+                    control={<Switch checked={values.is_complete} color="primary" />}
+                    id="is_complete"
+                    name="is_complete"
+                    label="Complete"
+                    value={values.is_complete}
+                /> 
+                : ''}
                 </Stack>
             </DialogContent>
             <DialogActions>

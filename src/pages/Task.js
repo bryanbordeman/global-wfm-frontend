@@ -115,6 +115,16 @@ function Task(props) {
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
     };
+    const completeTask = () => {
+        TaskDataService.completeTask(task.id, token)
+        .then(response => {
+            retrieveList();
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
 
     const completeSubtask = (subtaskId) => {
         TaskDataService.completeSubtask(subtaskId, token)
@@ -255,6 +265,7 @@ function Task(props) {
                             setOpenSubtaskForm={setOpenSubtaskForm}
                             setEditing={setEditing}
                             completeSubtask={completeSubtask}
+                            completeTask={completeTask}
                             setTask={setTask}
                             openDelete={openDelete}
                             setOpenDelete={setOpenDelete}

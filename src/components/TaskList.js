@@ -180,7 +180,8 @@ export default function TaskList(props) {
             handleOpenTaskForm, 
             handleOpenSubtaskForm,
             setEditing, 
-            completeSubtask } = props;
+            completeSubtask,
+            completeTask } = props;
     const { openDelete, setOpenDelete } = props;
 
     const [open, setOpen] = React.useState({});
@@ -254,7 +255,10 @@ return (
                     </MenuItem>
                     <MenuItem 
                         sx={{mb:2, color: 'success.main'}} 
-                        onClick={handleMenuClose} 
+                        onClick={() => {
+                            handleMenuClose();
+                            completeTask();
+                        }}
                         disableRipple
                     >
                         <CheckCircleIcon />
