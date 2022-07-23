@@ -10,13 +10,15 @@ import TaskList from '../components/TaskList';
 import AddTaskForm from '../components/AddTaskForm';
 import AddSubtaskForm from '../components/AddSubtaskForm';
 import DeleteTaskModal from '../components/DeleteTaskModal';
+import TaskCompletedList from '../components/TaskCompletedList';
 
 function Task(props) {
     const { user } = props;
     const { token } = props;
     const { handleOpenSnackbar } = props;
     const [ employee, setEmployee ] = React.useState(null);
-    const [ selectedList, setSelectedList ] = React.useState([]);
+    const [ selectedList, setSelectedList ] = React.useState([]); // current selected list task in progress
+    const [ selectedCompleteList, setSelectedCompleteList ] = React.useState([]); // current selected list completed task
     const [ currentList, setCurrentList ] = React.useState('')
     const [ taskLists, setTaskLists ] = React.useState([]);
     const [ tasks, setTasks ] = React.useState([]);
@@ -32,12 +34,13 @@ function Task(props) {
         setSelectedList([]) // not a great solution to clear list after employee change
         retrieveTasks();
         retrieveTaskList();
-        setCurrentList('')
+        setCurrentList('');
     },[employee])
 
     React.useEffect(() => {
         if(currentList)
         retrieveList();
+        // retrieveCompletedTasks();
     },[currentList, tasks, open])
 
     const retrieveTaskList = () => {
@@ -73,7 +76,6 @@ function Task(props) {
         });
     };
 
-
     const retrieveList = () => {
         if(employee)
         TaskDataService.getAssigneeList(token, employee.id, currentList.id)
@@ -81,6 +83,13 @@ function Task(props) {
             const result = response.data;
             let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
             setSelectedList(userResult);
+        });
+        TaskDataService.getAssigneeListComplete(token, employee.id, currentList.id)
+        .then(response => {
+                // console.log(currentList.id)
+            const result = response.data;
+            let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
+            setSelectedCompleteList(userResult);
         })
         .catch( e => {
             console.log(e);
@@ -119,6 +128,21 @@ function Task(props) {
         TaskDataService.completeTask(task.id, token)
         .then(response => {
             retrieveList();
+            retrieveTasks();
+            
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    };
+
+    const uncompleteTask = (id) => {
+        TaskDataService.completeTask(id, token)
+        .then(response => {
+            retrieveList();
+            retrieveTasks();
+            
         })
         .catch( e => {
             console.log(e);
@@ -254,6 +278,7 @@ function Task(props) {
                             />
                         </div>
                         {selectedList.length > 0? 
+                        <Stack>
                         <TaskList
                             user={user}
                             selectedList={selectedList}
@@ -270,7 +295,12 @@ function Task(props) {
                             openDelete={openDelete}
                             setOpenDelete={setOpenDelete}
                         />
+                        </Stack>
                         : '' }
+                        <TaskCompletedList
+                            uncompleteTask={uncompleteTask}
+                            selectedCompleteList={selectedCompleteList}
+                        />
                         </div>
                         <AddTaskForm
                             open={open}
