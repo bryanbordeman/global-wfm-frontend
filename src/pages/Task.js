@@ -319,6 +319,7 @@ function Task(props) {
                             handleChangeEmployee={handleChangeEmployee}
                             createExpense={createTask}
                             updateExpense={updateTask}
+                            retrieveTaskList={retrieveTaskList}
                         />
                         <AddSubtaskForm
                             setOpenSubtaskForm={setOpenSubtaskForm}

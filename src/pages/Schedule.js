@@ -1,5 +1,7 @@
 import React from 'react';
 import { Container } from '@mui/material';
+import ScheduleList from '../components/ScheduleList';
+import Typography from '@mui/material/Typography';
 
 function Schedule(props) {
     // const { user } = props
@@ -13,7 +15,10 @@ function Schedule(props) {
                         flexDirection:'column',
                         height: '100%'
                     }}>
-                    Schedule
+                 <Typography style={{fontWeight: '700'}} mb={1} variant="h4" component="div">
+                    2022W25
+                </Typography>
+                <ScheduleList/>
             </Container>
         </div>
     );

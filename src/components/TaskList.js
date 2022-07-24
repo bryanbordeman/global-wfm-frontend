@@ -216,7 +216,6 @@ export default function TaskList(props) {
     }
 
 return (
-    
     <List
         sx={{ mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: "#1C88B0 !important" }}
     >

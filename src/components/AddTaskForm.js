@@ -36,7 +36,7 @@ function AddTaskForm(props) {
         is_complete: false,
         is_deleted: false,
         is_read: false,
-        completed: false,
+        completed: new Date(),
         updated: new Date()
     };
 
