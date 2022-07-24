@@ -8,11 +8,19 @@ import Collapse from '@mui/material/Collapse';
 import Checkbox from '@mui/material/Checkbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import { Chip } from '@mui/material';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 export default function TaskCompletedList(props) {
     const { selectedCompleteList, uncompleteTask } = props
     const [open, setOpen] = React.useState(false);
     
+    React.useEffect(() => {
+        // if you change list completed is closed when new list appears.
+        if(open === true){
+            setOpen(false)
+        };
+    },[selectedCompleteList]);
 
     const handleClick = () => {
         setOpen(!open);
@@ -21,12 +29,16 @@ export default function TaskCompletedList(props) {
     const handleTaskNotCompleted = (id) => {
         uncompleteTask(id) 
     }
+
+    const handleOpenTask = (task) => {
+        console.log(task)
+    }
     
     return ( 
         <div>
             {selectedCompleteList.length > 0? 
             <List
-                sx={{ mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: 'grey.500' }}
+                sx={{ mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: 'grey.300' }}
             >
                 <ListItemButton onClick={() => handleClick()}>
             <ListItemText 
@@ -50,7 +62,7 @@ export default function TaskCompletedList(props) {
                     component="div" 
                     disablePadding
                 >
-                    <Divider />
+                    <Divider sx={{ mr:1, ml:1 }}/>
                     <ListItem
                         sx={{ borderRadius: 2 }} 
                         // sx={{bgcolor: 'grey.100', borderRadius: 2}} 
@@ -65,12 +77,20 @@ export default function TaskCompletedList(props) {
                     >
                         <ListItemButton 
                             sx={{ pl: 4 }}
-                            // onClick={() => {
-                            //     handleTaskCompleted(task);
-                            //     // setEditing(true);
-                            //     // handleOpenSubtaskForm(subT.id);
-                            // }}
+                            onClick={() => {
+                                handleOpenTask(task);
+                                // setEditing(true);
+                                // handleOpenSubtaskForm(subT.id);
+                            }}
                         >
+                            <ListItemIcon>
+                                <Chip 
+                                    sx={{mr:1, color: 'gray'  }} 
+                                    variant='outlined'
+                                    size='small' 
+                                    label={`${task.project.number}`} 
+                                />
+                            </ListItemIcon>
                             <ListItemText 
                                 sx={{ textDecoration: 'line-through'}}
                                 secondary={`${task.title}`} 

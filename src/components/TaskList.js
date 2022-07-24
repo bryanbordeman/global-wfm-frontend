@@ -72,6 +72,8 @@ const StyledMenu = styled((props) => (
     }));
 
 const currentDate = new Date()
+const offset = currentDate.getTimezoneOffset();
+console.log(offset);    // 240
 
 function DueDate(props) {
     const { list, updateTask } = props
@@ -103,7 +105,7 @@ function DueDate(props) {
     }
 
     let dateDelta = Math.ceil((new Date(value).getTime()-currentDate.getTime())/(1000 * 3600 * 24))
-        let dueMessage = ''
+    let dueMessage = ''
 
         switch(true) {
             case (dateDelta === 0):
@@ -174,7 +176,8 @@ function DueDate(props) {
 };
 
 export default function TaskList(props) {
-    const { selectedList, 
+    const { user,
+            selectedList, 
             updateTask,
             setTask, 
             handleOpenTaskForm, 
@@ -214,7 +217,7 @@ export default function TaskList(props) {
 return (
     
     <List
-        sx={{ mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: 'grey.500' }}
+        sx={{ mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: "#1C88B0 !important" }}
     >
     {selectedList.map((list, i) => {
         const labelId = `list-label-${list.title}`;
@@ -253,6 +256,7 @@ return (
                         <PlaylistAddIcon />
                         Add Subtask
                     </MenuItem>
+                    {user.id === list.assignee.id ?
                     <MenuItem 
                         sx={{mb:2, color: 'success.main'}} 
                         onClick={() => {
@@ -263,7 +267,7 @@ return (
                     >
                         <CheckCircleIcon />
                         Complete Task
-                    </MenuItem>
+                    </MenuItem> : ''}
                     <Divider sx={{ my: 0.5 }} />
                     <MenuItem 
                         sx={{color: 'error.dark', mt:2}} 
@@ -364,7 +368,7 @@ return (
                     component="div" 
                     disablePadding
                 >
-                    <Divider />
+                    <Divider sx={{ mr:1, ml:1 }}/>
                     <ListItem
                         sx={{ borderRadius: 2 }} 
                         // sx={{bgcolor: 'grey.100', borderRadius: 2}} 
@@ -396,7 +400,7 @@ return (
         </Collapse> 
             </div>
             : ''}
-        {i < selectedList.length - 1 && <Divider  sx={{ borderColor: 'grey.500' }}
+        {i < selectedList.length - 1 && <Divider  sx={{ borderColor: "#1C88B0 !important" }}
     />}
         </div>
         );

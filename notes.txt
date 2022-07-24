@@ -2,4 +2,7 @@
 - Fix Key error on TaskList when subtask is added
 - Fix Employee picker so it clears input when value changes
 - Make StyleMenu its own component in TaskList.
-
+- Make Animations from Task list to completed list and back
+- forward email to api end point to make into task.
+- Keep an eye on task date. something fishy. needed to add one day to delta??
+_ Date is not working!!

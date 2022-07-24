@@ -11,6 +11,7 @@ import AddTaskForm from '../components/AddTaskForm';
 import AddSubtaskForm from '../components/AddSubtaskForm';
 import DeleteTaskModal from '../components/DeleteTaskModal';
 import TaskCompletedList from '../components/TaskCompletedList';
+import NextTaskDialog from '../components/NextTaskDialog'
 
 function Task(props) {
     const { user } = props;
@@ -29,12 +30,14 @@ function Task(props) {
     const [ editing, setEditing ] = React.useState(false);
     const [ openSubtaskForm, setOpenSubtaskForm ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
+    const [ openNextTask, setOpenNextTask ] = React.useState(false);
 
     React.useEffect(() => {
         setSelectedList([]) // not a great solution to clear list after employee change
         retrieveTasks();
         retrieveTaskList();
         setCurrentList('');
+        setSelectedCompleteList([]);
     },[employee])
 
     React.useEffect(() => {
@@ -129,6 +132,7 @@ function Task(props) {
         .then(response => {
             retrieveList();
             retrieveTasks();
+            setOpenNextTask(true);
             
         })
         .catch( e => {
@@ -332,6 +336,11 @@ function Task(props) {
                             task={task}
                             openDelete={openDelete}
                             setOpenDelete={setOpenDelete}
+                        />
+
+                        <NextTaskDialog
+                            open={openNextTask}
+                            setOpen={setOpenNextTask}
                         />
 
             </Container>
