@@ -302,6 +302,7 @@ function Task(props) {
                         </Stack>
                         : '' }
                         <TaskCompletedList
+                            user={user}
                             uncompleteTask={uncompleteTask}
                             selectedCompleteList={selectedCompleteList}
                         />

@@ -12,7 +12,7 @@ import { Chip } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
 export default function TaskCompletedList(props) {
-    const { selectedCompleteList, uncompleteTask } = props
+    const { selectedCompleteList, uncompleteTask, user } = props
     const [open, setOpen] = React.useState(false);
     
     React.useEffect(() => {
@@ -66,14 +66,15 @@ export default function TaskCompletedList(props) {
                     <ListItem
                         sx={{ borderRadius: 2 }} 
                         // sx={{bgcolor: 'grey.100', borderRadius: 2}} 
-                        secondaryAction={
+                        secondaryAction=
+                        {user.id === task.assignee.id? 
                         <Checkbox
                         edge="end"
                         onClick={() => handleTaskNotCompleted(task.id)}
                         checked={task.is_complete}
                         inputProps={{ 'aria-labelledby': subLabelId }}
-                        />
-                        }
+                        /> : ''}
+                        
                     >
                         <ListItemButton 
                             sx={{ pl: 4 }}

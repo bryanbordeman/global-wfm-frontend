@@ -17,6 +17,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
+import { v4 as uuidv4 } from 'uuid';
 
 import { styled, alpha } from '@mui/material/styles';
 
@@ -27,8 +28,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-
-import SubMenuTask from './SubMenuTask';
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -71,9 +70,11 @@ const StyledMenu = styled((props) => (
     },
     }));
 
+
 const currentDate = new Date()
-const offset = currentDate.getTimezoneOffset();
-console.log(offset);    // 240
+
+// const offset = currentDate.getTimezoneOffset();
+// console.log(offset);    // 240
 
 function DueDate(props) {
     const { list, updateTask } = props
@@ -359,12 +360,12 @@ return (
             in={open[list.id]}
             timeout="auto" 
             unmountOnExit
-        > {subtasks.map((subT, j) => {
+        > {subtasks.map((subT) => {
             const subLabelId = `checkbox-list-label-${subT.title}`;
             return (
                 <List 
                     dense
-                    key={subT.id} 
+                    key={uuidv4()} 
                     component="div" 
                     disablePadding
                 >

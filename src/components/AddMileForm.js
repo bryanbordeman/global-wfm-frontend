@@ -90,7 +90,8 @@ export default function AddMileForm(props) {
             rate: currentRate.id,
             miles: values.miles,
             is_approved: false,
-            date_purchased: String(values.date_purchased)? String(values.date_purchased) : values.date_purchased.toISOString().split('T')[0],
+            date_purchased: values.date_purchased.toISOString().split('T')[0],
+            // date_purchased: String(values.date_purchased)? String(values.date_purchased) : values.date_purchased.toISOString().split('T')[0],
             notes: values.notes
         };
 
@@ -100,8 +101,8 @@ export default function AddMileForm(props) {
 
         }
         else {
-            console.log(data)
-            // createMiles(data);
+            // console.log(data)
+            createMiles(data);
             setOpenMiles(false);
         };
 
