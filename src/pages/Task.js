@@ -55,7 +55,7 @@ function Task(props) {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         })
-    }
+    };
 
     const retrieveTasks = () => {
         let allTasks= [];
@@ -100,8 +100,17 @@ function Task(props) {
         });
     };
 
-    const createTask = () => {
-
+    const createTask = (data) => {
+        TaskDataService.createTask(data, token)
+            .then(response => {
+                window.scrollTo(0, 0);
+                handleOpenSnackbar('success', 'Your Task has been created')
+                retrieveTasks();
+            })
+            .catch(e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            });
     };
 
     const deleteTask = (id) => {
@@ -218,14 +227,15 @@ function Task(props) {
     
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
-    }
+    };
+
     const handleChangeList = (newList) => {
-        setSelectedList(tasks[`${newList.title}`])
-    }
+        setSelectedList(tasks[`${newList.title}`]);
+    };
 
     const handleOpenTaskForm = () => {
-        setOpen(true)
-    }
+        setOpen(true);
+    };
 
     const handleOpenSubtaskForm = (id) => {
         selectedList.map(task => {
@@ -309,17 +319,15 @@ function Task(props) {
                         </div>
                         <AddTaskForm
                             open={open}
-                            expense={editTask}
+                            editTask={editTask}
                             setOpen={setOpen}
                             editing={editing}
                             setEditing={setEditing}
                             user={user}
                             token={token}
-                            employee={employee}
-                            handleChangeEmployee={handleChangeEmployee}
-                            createExpense={createTask}
-                            updateExpense={updateTask}
-                            retrieveTaskList={retrieveTaskList}
+                            createTask={createTask}
+                            updateTask={updateTask}
+                            handleOpenSnackbar={handleOpenSnackbar}
                         />
                         <AddSubtaskForm
                             setOpenSubtaskForm={setOpenSubtaskForm}
@@ -341,6 +349,7 @@ function Task(props) {
                         />
 
                         <NextTaskDialog
+                            setAddOpen={setOpen}
                             open={openNextTask}
                             setOpen={setOpenNextTask}
                         />

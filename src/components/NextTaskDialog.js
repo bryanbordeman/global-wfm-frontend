@@ -13,7 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     });
 
     export default function NextTaskDialog(props) {
-    const {open, setOpen} = props
+    const {open, setOpen, setAddOpen} = props
 
     const handleClose = () => {
         setOpen(false);
@@ -41,7 +41,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
             <Button 
                 color='success' 
                 variant="contained" 
-                onClick={handleClose}
+                onClick={()=> {
+                    setOpen(false);
+                    setAddOpen(true);
+                }}
                 endIcon={<AddIcon />}
             >
                 Add</Button>
