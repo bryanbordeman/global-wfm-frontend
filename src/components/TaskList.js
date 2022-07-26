@@ -238,6 +238,8 @@ return (
                     <MenuItem 
                         sx={{color: 'primary.main'}} 
                         onClick={() => {
+                            setEditing(true);
+                            handleOpenTaskForm();
                             handleMenuClose();
                         }} 
                         disableRipple

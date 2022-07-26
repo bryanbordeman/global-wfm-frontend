@@ -4,14 +4,18 @@ import Autocomplete from '@mui/material/Autocomplete';
 import ProjectDataService from '../services/Project.services'
 
 export default function ProjectPicker(props) {
-    const [ value, setValue ] = React.useState(null)
+    const [ value, setValue ] = React.useState(null);
     const [ projects, setProjects ] = React.useState([{}])
-    const [inputValue, setInputValue] = React.useState('');
+    const [ inputValue, setInputValue ] = React.useState('');
 
     const { handleChangeProject, errors} = props
+    const { editing, task } = props;
 
     React.useEffect(() => {
         retrieveProject()
+        if(editing){
+            handleInputValue(task.project);
+        };
     },[])
 
     const retrieveProject = () => {
@@ -34,7 +38,8 @@ export default function ProjectPicker(props) {
         fullWidth
         autoSelect = {false}
         blurOnSelect = 'touch'
-        value={value}
+        value={editing? task.project : value}
+        // value={value}
         onChange={(event, newValue) => {
             handleInputValue(newValue);
         }}

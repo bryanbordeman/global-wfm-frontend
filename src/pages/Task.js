@@ -297,8 +297,6 @@ function Task(props) {
                             user={user}
                             selectedList={selectedList}
                             updateTask={updateTask}
-                            // retrieveTasks={retrieveTasks}
-                            // retrieveList={retrieveList}
                             handleOpenTaskForm={handleOpenTaskForm}
                             handleOpenSubtaskForm={handleOpenSubtaskForm}
                             setOpenSubtaskForm={setOpenSubtaskForm}
@@ -318,6 +316,7 @@ function Task(props) {
                         />
                         </div>
                         <AddTaskForm
+                            task={task}
                             open={open}
                             editTask={editTask}
                             setOpen={setOpen}

@@ -4,13 +4,17 @@ import Autocomplete from '@mui/material/Autocomplete';
 import UserService from '../services/User.services'
 
 export default function AssigneePicker(props) {
-    const { handleChangeAssignee, errors} = props
-    const [ value, setValue ] = React.useState(null)
-    const [ assignees, setAssignees ] = React.useState([{}])
+    const { handleChangeAssignee, errors} = props;
+    const { task, editing } = props;
+    const [ value, setValue ] = React.useState(null);
+    const [ assignees, setAssignees ] = React.useState([{}]);
     const [ inputValue, setInputValue ] = React.useState('');
 
     React.useEffect(() => {
         retrieveEmployees()
+        if(editing){
+            handleInputValue(task.assignee);
+        };
     },[])
 
     const retrieveEmployees = () => {
@@ -34,8 +38,8 @@ export default function AssigneePicker(props) {
         fullWidth
         autoSelect = {false}
         blurOnSelect = 'touch'
-        
-        value={value || null}
+        value={editing? task.assignee : value}
+        // value={value || null}
         onChange={(event, newValue) => {
             handleInputValue(newValue);
         }}

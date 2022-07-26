@@ -23,10 +23,11 @@ export default function AddTaskForm(props) {
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
 
+
     const initialFormValues = {
         created_by: user.id,
         assignee:'',
-        tasklist: '3',
+        tasklist: '',
         title:'',
         notes:'',
         due: new Date(),
@@ -40,10 +41,33 @@ export default function AddTaskForm(props) {
         updated: new Date()
     };
 
+    const editFormValues = {
+        created_by: user.id,
+        assignee: task.assignee,
+        tasklist: task.tasklist,
+        title: task.title,
+        notes: task.notes,
+        due: editing ? new Date(task.due.replace('-', '/').replace('-', '/')) : new Date(),
+        subtasks:task.subtasks,
+        project:task.project,
+        created: new Date(),
+        is_complete: task.is_complete,
+        is_deleted: false,
+        is_read: false,
+        completed: new Date(),
+        updated: new Date()
+
+    };
+
     const [ values, setValues ] = React.useState(initialFormValues);
 
     React.useEffect(() => {
-        setValues(initialFormValues);
+        console.log(editing)
+        // console.log(JSON.stringify(task))
+        // setValues(task)
+
+        // console.log(editing ? task : 'nothing to log')
+        setValues(editing ? editFormValues : initialFormValues)
     },[open])
     
 
@@ -105,36 +129,39 @@ export default function AddTaskForm(props) {
                 <DialogContent>
                     <Stack direction="column" spacing={2}>
                         <TaskListPicker
+                            editing={editing}
+                            task={task}
                             token={token}
                             handleOpenSnackbar={handleOpenSnackbar}
                             handleChangeList={handleChangeList}
                         />
                     <div>
-                    {editing ?
+                    {/* {editing?
                         <TextField
                             autoFocus={false}
                             margin="dense"
                             disabled
-                            id="employee"
-                            name='employee'
-                            label="Employee"
-                            // value={`${expense.user.first_name} ${expense.user.last_name}`}
+                            id="assignee"
+                            name='assignee'
+                            label="Assignee"
+                            value={`${task.assignee.first_name} ${task.assignee.last_name}`}
                             type="text"
                             fullWidth
                             variant="outlined"
                         /> 
-                        :
-                    <AssigneePicker
-                        // employee={employee}
-                        errors={errors}
-                        user={user}
-                        token={token}
-                        handleChangeAssignee={handleChangeAssignee}
-                    />
-                    }
+                        : */}
+                        <AssigneePicker
+                            editing={editing}
+                            task={task}
+                            errors={errors}
+                            user={user}
+                            token={token}
+                            handleChangeAssignee={handleChangeAssignee}
+                        />
+                    {/* } */}
                     </div>     
-                    {editing ?
-                    <TextField
+                    {/* {editing ? */}
+                    {/* <TextField
                         autoFocus={false}
                         margin="dense"
                         disabled
@@ -146,16 +173,18 @@ export default function AddTaskForm(props) {
                         fullWidth
                         variant="outlined"
                     /> 
-                    :
+                    : */}
                     <div>
                     <ProjectPicker
+                        editing={editing}
+                        task={task}
                         token={token}
                         handleChangeProject={handleChangeProject}
                         errors={errors}
                         editProject={values.project}
                     />
                     </div>
-                    }
+                    {/* } */}
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             label="Due Date"
