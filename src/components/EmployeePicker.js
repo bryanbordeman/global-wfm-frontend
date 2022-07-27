@@ -5,13 +5,17 @@ import UserService from '../services/User.services'
 
 export default function EmployeePicker(props) {
     const { handleChangeEmployee, errors} = props
-    const { employee } = props
+    const { editing, editObject } = props
     const [ value, setValue ] = React.useState(null)
     const [ employees, setEmployees ] = React.useState([{}])
     const [ inputValue, setInputValue ] = React.useState('');
 
     React.useEffect(() => {
         retrieveEmployees()
+        if(editing){
+            handleInputValue(editObject.user);
+            handleChangeEmployee(editObject.user);
+        };
         // if(value !== null){
         //     handleChangeEmployee(value)
         //     setInputValue('')
@@ -47,7 +51,7 @@ export default function EmployeePicker(props) {
         autoSelect = {false}
         blurOnSelect = 'touch'
         
-        value={value || null}
+        value={value}
         onChange={(event, newValue) => {
             handleInputValue(newValue);
         }}

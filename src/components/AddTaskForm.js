@@ -133,21 +133,6 @@ export default function AddTaskForm(props) {
                             handleOpenSnackbar={handleOpenSnackbar}
                             handleChangeList={handleChangeList}
                         />
-                    <div>
-                    {/* {editing?
-                        <TextField
-                            autoFocus={false}
-                            margin="dense"
-                            disabled
-                            id="assignee"
-                            name='assignee'
-                            label="Assignee"
-                            value={`${task.assignee.first_name} ${task.assignee.last_name}`}
-                            type="text"
-                            fullWidth
-                            variant="outlined"
-                        /> 
-                        : */}
                         <AssigneePicker
                             editing={editing}
                             task={task}
@@ -156,79 +141,60 @@ export default function AddTaskForm(props) {
                             token={token}
                             handleChangeAssignee={handleChangeAssignee}
                         />
-                    {/* } */}
-                    </div>     
-                    {/* {editing ? */}
-                    {/* <TextField
-                        autoFocus={false}
-                        margin="dense"
-                        disabled
-                        id="project"
-                        name='project'
-                        label="Project"
-                        // value={expense.project.number}
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                    /> 
-                    : */}
-                    <div>
-                    <ProjectPicker
-                        editing={editing}
-                        task={task}
-                        token={token}
-                        handleChangeProject={handleChangeProject}
-                        errors={errors}
-                        editProject={values.project}
-                    />
-                    </div>
-                    {/* } */}
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            label="Due Date"
-                            id="due"
-                            name="due"
-                            value={values.due}
-                            onChange={(date) => {setValues({...values, due: date})}}
-                            renderInput={(params) => <TextField {...params} helperText={errors.due === null ? '' : errors.date_purchased}
-                            error={errors.due? true : false} />}
-                            fullWidth
+                        <ProjectPicker
+                            editing={editing}
+                            editObject={task}
+                            token={token}
+                            handleChangeProject={handleChangeProject}
+                            errors={errors}
+                            editProject={values.project}
                         />
-                    </LocalizationProvider>
-                    <TextField
-                        autoFocus={false}
-                        margin="dense"
-                        id="title"
-                        name='title'
-                        label="Title"
-                        onChange={handleInputValue}
-                        value={values.title}
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                        helperText={errors.title === null ? '' : errors.title}
-                        error={errors.title? true : false}
-                    />
-                    <TextField
-                        autoFocus={false}
-                        id="notes"
-                        name="notes"
-                        label="Task"
-                        onChange={handleInputValue}
-                        value={values.notes}
-                        multiline
-                        rows={4}
-                    />
-                    {editing ?
-                    <FormControlLabel
-                        onChange={() => {setValues({...values, is_complete: !values.is_complete})}}
-                        control={<Switch checked={values.is_complete} color="primary" />}
-                        id="is_complete"
-                        name="is_complete"
-                        label="Complete"
-                        value={values.is_complete}
-                    /> 
-                    : ''}
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Due Date"
+                                id="due"
+                                name="due"
+                                value={values.due}
+                                onChange={(date) => {setValues({...values, due: date})}}
+                                renderInput={(params) => <TextField {...params} helperText={errors.due === null ? '' : errors.date_purchased}
+                                error={errors.due? true : false} />}
+                                fullWidth
+                            />
+                        </LocalizationProvider>
+                        <TextField
+                            autoFocus={false}
+                            margin="dense"
+                            id="title"
+                            name='title'
+                            label="Title"
+                            onChange={handleInputValue}
+                            value={values.title}
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            helperText={errors.title === null ? '' : errors.title}
+                            error={errors.title? true : false}
+                        />
+                        <TextField
+                            autoFocus={false}
+                            id="notes"
+                            name="notes"
+                            label="Task"
+                            onChange={handleInputValue}
+                            value={values.notes}
+                            multiline
+                            rows={4}
+                        />
+                        {editing ?
+                        <FormControlLabel
+                            onChange={() => {setValues({...values, is_complete: !values.is_complete})}}
+                            control={<Switch checked={values.is_complete} color="primary" />}
+                            id="is_complete"
+                            name="is_complete"
+                            label="Complete"
+                            value={values.is_complete}
+                        /> 
+                        : ''}
                     </Stack>
                 </DialogContent>
                 <DialogActions>

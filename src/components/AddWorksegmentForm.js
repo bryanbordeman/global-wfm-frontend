@@ -14,7 +14,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
 import ProjectPicker from './ProjectPicker'
-import Box from '@mui/material/Box';
 import EmployeePicker from './EmployeePicker';
 
 export default function AddWorksegmentForm(props) {
@@ -33,6 +32,7 @@ export default function AddWorksegmentForm(props) {
             } = props
 
     const initialFormValues = {
+        user: user.id,
         project: '',
         is_approved: false,
         date: new Date(),
@@ -44,6 +44,7 @@ export default function AddWorksegmentForm(props) {
     }
 
     const editFormValues = {
+        user: editing ? segment.user.id : segment.user,
         project: editing ? segment.project.id : segment.project,
         date: editing ? new Date(segment.date.replace('-', '/').replace('-', '/')) : new Date(),
         startTime: editing ? getDateFromHours(segment.start_time) : new Date(),
@@ -65,8 +66,19 @@ export default function AddWorksegmentForm(props) {
     const [ isValid, setIsValid ] = React.useState(true)
 
     React.useEffect(() => {
-        setValues(editing ? editFormValues : initialFormValues)
+        //!! not a great solution. need to figure out something else
+        setTimeout(function(){
+            setValues(editing ? editFormValues : initialFormValues)
+        }, 100);
     },[openAdd]);
+
+    React.useEffect(() => {
+        if(employee) 
+            setValues({
+            ...values,
+            user: employee.id
+            });
+    },[employee])
 
     function getDateFromHours(time) {
         time = time.split(':');
@@ -76,6 +88,7 @@ export default function AddWorksegmentForm(props) {
 
     const handleSubmit = () => {
         const data = {
+            user: values.user,
             project: values.project, 
             is_approved: false,
             date: values.date.toISOString().split('T')[0],
@@ -89,6 +102,7 @@ export default function AddWorksegmentForm(props) {
         if(editing){
             updateWorksegment(segment.id, data);
             setOpenAdd(false);
+            setValues(editFormValues);
 
         }
         else {
@@ -172,14 +186,6 @@ export default function AddWorksegmentForm(props) {
                 setErrors({...errors, employee: null});
             }, 3000);
         }
-        // else if(Number.isFinite(Number(values.travel))){
-        //     setErrors({...errors, travel: 'Input must be a number'});
-        //     formIsValid = false;
-        //     setTimeout(() => {
-        //         formIsValid = true;
-        //         setErrors({...errors, travel: null});
-        //     }, 3000);
-        // }
         else{
             setErrors({
                 project: null,
@@ -222,52 +228,24 @@ export default function AddWorksegmentForm(props) {
             <Stack direction="column" spacing={2}>
                 {user.is_staff ? 
                 <div>
-                    {editing ?
-                    <TextField
-                        autoFocus={false}
-                        margin="dense"
-                        disabled
-                        id="employee"
-                        name='employee'
-                        label="Employee"
-                        value={`${segment.user.first_name} ${segment.user.last_name}`}
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                    /> 
-                    :
-                        <EmployeePicker
-                        employee={employee}
-                        errors={errors}
-                        user={user}
-                        token={token}
-                        handleChangeEmployee={handleChangeEmployee}/>
-                    }
+                    <EmployeePicker
+                    editing={editing}
+                    editObject={segment}
+                    employee={employee}
+                    errors={errors}
+                    user={user}
+                    token={token}
+                    handleChangeEmployee={handleChangeEmployee}/>
                 </div> : ''
                 }
-                {editing ?
-                <TextField
-                    autoFocus={false}
-                    margin="dense"
-                    disabled
-                    id="project"
-                    name='project'
-                    label="Project"
-                    value={segment.project.number}
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                /> 
-                :
-                <Box>
                     <ProjectPicker
+                        editing={editing}
+                        editObject={segment}
                         token={token}
                         handleChangeProject={handleChangeProject}
                         errors={errors}
                         editProject={values.project}
                     />
-                </Box>
-                }
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Date"

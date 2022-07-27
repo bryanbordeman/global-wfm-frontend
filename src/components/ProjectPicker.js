@@ -9,12 +9,12 @@ export default function ProjectPicker(props) {
     const [ inputValue, setInputValue ] = React.useState('');
 
     const { handleChangeProject, errors} = props
-    const { editing, task } = props;
+    const { editing, editObject } = props;
 
     React.useEffect(() => {
         retrieveProject()
         if(editing){
-            handleInputValue(task.project);
+            handleInputValue(editObject.project);
         };
     },[])
 
@@ -38,8 +38,8 @@ export default function ProjectPicker(props) {
         fullWidth
         autoSelect = {false}
         blurOnSelect = 'touch'
-        value={editing? task.project : value}
-        // value={value}
+        // value={editing? editObject.project : value}
+        value={value}
         onChange={(event, newValue) => {
             handleInputValue(newValue);
         }}

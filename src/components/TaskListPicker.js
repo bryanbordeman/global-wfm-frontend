@@ -48,8 +48,9 @@ export default function TaskListPicker(props) {
             <Select
             labelId="select-list-label"
             id="select-list"
-            value={editing? task.tasklist : value}
-            // value={value}
+            // value={editing? task.tasklist : value}
+            renderValue={(v)=> <span>{v.title}</span>}
+            value={value}
             label="Select Task List"
             onChange={handleChange}
             >

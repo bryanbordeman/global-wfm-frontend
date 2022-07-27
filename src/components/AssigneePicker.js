@@ -38,8 +38,8 @@ export default function AssigneePicker(props) {
         fullWidth
         autoSelect = {false}
         blurOnSelect = 'touch'
-        value={editing? task.assignee : value}
-        // value={value || null}
+        // value={editing? task.assignee : value}
+        value={value}
         onChange={(event, newValue) => {
             handleInputValue(newValue);
         }}
