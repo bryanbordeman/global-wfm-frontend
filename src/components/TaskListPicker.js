@@ -30,7 +30,8 @@ export default function TaskListPicker(props) {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         })
-    }
+    };
+    
     const handleChange = (event) => {
         setValue(event.target.value);
         handleChangeList(event.target.value);

@@ -62,12 +62,10 @@ export default function AddTaskForm(props) {
     const [ values, setValues ] = React.useState(initialFormValues);
 
     React.useEffect(() => {
-        console.log(editing)
-        // console.log(JSON.stringify(task))
-        // setValues(task)
-
-        // console.log(editing ? task : 'nothing to log')
-        setValues(editing ? editFormValues : initialFormValues)
+        //!! not a great solution. need to figure out something else
+        setTimeout(function(){
+            setValues(editing ? editFormValues : initialFormValues)
+        }, 100);
     },[open])
     
 
