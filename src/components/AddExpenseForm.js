@@ -79,7 +79,7 @@ export default function AddExpenseForm(props) {
         employee: null
     })
     
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         setValues(editing ? editFormValues : initialFormValues)
     },[open]);
 
@@ -269,53 +269,24 @@ export default function AddExpenseForm(props) {
             <DialogContent>
                 <Stack direction="column" spacing={2}>
                 {user.is_staff ?
-                <div>
-                {editing ?
-                    <TextField
-                        autoFocus={false}
-                        margin="dense"
-                        disabled
-                        id="employee"
-                        name='employee'
-                        label="Employee"
-                        value={`${expense.user.first_name} ${expense.user.last_name}`}
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                    /> 
-                    :
                 <EmployeePicker
+                    editing={editing}
+                    editObject={expense}
                     employee={employee}
                     errors={errors}
                     user={user}
                     token={token}
                     handleChangeEmployee={handleChangeEmployee}
                 />
-                }
-                </div> : ''}     
-                {editing ?
-                <TextField
-                    autoFocus={false}
-                    margin="dense"
-                    disabled
-                    id="project"
-                    name='project'
-                    label="Project"
-                    value={expense.project.number}
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                /> 
-                :
-                <div>
+                : ''}     
                 <ProjectPicker
+                    editing={editing}
+                    editObject={expense}
                     token={token}
                     handleChangeProject={handleChangeProject}
                     errors={errors}
                     editProject={values.project}
                 />
-                </div>
-                }
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Date Purchased"

@@ -186,7 +186,7 @@ export default function TaskList(props) {
             setEditing, 
             completeSubtask,
             completeTask } = props;
-    const { openDelete, setOpenDelete } = props;
+    const { setOpenDelete } = props;
 
     const [open, setOpen] = React.useState({});
     const style = { textDecoration: 'line-through'};

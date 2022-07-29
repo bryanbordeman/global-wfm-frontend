@@ -19,7 +19,8 @@ export default function AddTaskForm(props) {
     const { handleOpenSnackbar } = props;
     const { open, setOpen } = props;
     const { editing, task, setEditing } = props;
-    const { createTask, updateTask } = props;
+    const { createTask } = props;
+    // const { updateTask } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
 
@@ -61,11 +62,8 @@ export default function AddTaskForm(props) {
 
     const [ values, setValues ] = React.useState(initialFormValues);
 
-    React.useEffect(() => {
-        //!! not a great solution. need to figure out something else
-        setTimeout(function(){
-            setValues(editing ? editFormValues : initialFormValues)
-        }, 100);
+    React.useLayoutEffect(() => {
+        setValues(editing ? editFormValues : initialFormValues)
     },[open])
     
 
@@ -102,6 +100,40 @@ export default function AddTaskForm(props) {
             tasklist: newValue.id
             });
         }
+    };
+
+
+    const handleValidation = () => {
+        let formIsValid = true;
+
+        if(values.title.length > 100){
+            setErrors({...errors, title: '100 character max.'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, title: null});
+            }, 3000);
+        }
+        else if(values.notes.length > 1000){
+            setErrors({...errors, notes: '1000 character max.'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, notes: null});
+            }, 3000);
+        }
+        else{
+            setErrors({
+                title: null,
+                notes: null,
+            });
+            formIsValid = true;
+        }
+        setIsValid(formIsValid)
+        setTimeout(() => {
+            setIsValid(true);
+        }, 3000);
+    return formIsValid ? handleSubmit() : null
     };
 
     const handleClose = () => {
@@ -204,7 +236,7 @@ export default function AddTaskForm(props) {
                 >Cancel</Button>
                 <Button 
                     variant='contained' 
-                    onClick={handleSubmit}
+                    onClick={handleValidation}
                     // onClick={handleValidation}
                     color={`${isValid? 'primary' : 'error'}`}
                 >

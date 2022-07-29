@@ -42,8 +42,9 @@ export default function AddSubtaskForm(props) {
         title: null,
         notes: null,
     })
+    const [ isValid, setIsValid ] = React.useState(true)
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         setValues(editing ? editFormValues : initialFormValues)
     },[open]);
 
@@ -85,8 +86,24 @@ export default function AddSubtaskForm(props) {
                 setErrors({...errors, title: null});
             }, 3000);
         }
+        else if(values.title.length < 1){
+            setErrors({...errors, title: 'Enter title'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, title: null});
+            }, 3000);
+        }
         else if(values.notes.length > 1000){
             setErrors({...errors, notes: '1000 character max.'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, notes: null});
+            }, 3000);
+        }
+        else if(values.notes.length < 1){
+            setErrors({...errors, notes: 'Enter Subtask'});
             formIsValid = false;
             setTimeout(() => {
                 formIsValid = true;
@@ -100,6 +117,10 @@ export default function AddSubtaskForm(props) {
             });
             formIsValid = true;
         }
+        setIsValid(formIsValid)
+        setTimeout(() => {
+            setIsValid(true);
+        }, 3000);
     return formIsValid ? handleSubmit() : null
     };
 
@@ -196,7 +217,13 @@ export default function AddSubtaskForm(props) {
             <Divider/>
             <DialogActions>
             <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-            <Button variant='contained' onClick={handleValidation}>{editing ? 'Update' : 'Submit'}</Button>
+            <Button 
+                variant='contained' 
+                onClick={handleValidation}
+                color={`${isValid? 'primary' : 'error'}`}
+            >
+                {editing ? 'Update' : 'Submit'}
+            </Button>
             </DialogActions>
         </Dialog>
         </div>

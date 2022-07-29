@@ -6,5 +6,3 @@
 
 - Keep an eye on task date. something fishy. needed to add one day to delta??
 - Date is not working!! Server time is off by four hours GMT
-
-- AddTaskForm not updating editing task?? 

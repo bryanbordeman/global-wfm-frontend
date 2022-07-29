@@ -65,11 +65,8 @@ export default function AddWorksegmentForm(props) {
     })
     const [ isValid, setIsValid ] = React.useState(true)
 
-    React.useEffect(() => {
-        //!! not a great solution. need to figure out something else
-        setTimeout(function(){
-            setValues(editing ? editFormValues : initialFormValues)
-        }, 100);
+    React.useLayoutEffect(() => {
+        setValues(editing ? editFormValues : initialFormValues)
     },[openAdd]);
 
     React.useEffect(() => {

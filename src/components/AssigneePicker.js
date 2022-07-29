@@ -12,15 +12,15 @@ export default function AssigneePicker(props) {
 
     React.useEffect(() => {
         retrieveEmployees()
-        if(editing){
-            handleInputValue(task.assignee);
-        };
     },[])
 
     const retrieveEmployees = () => {
         UserService.getUsers(props.token)
         .then(response => {
             setAssignees(response.data);
+            if(editing){
+                handleInputValue(task.assignee);
+            };
         })
         .catch( e => {
             console.log(e);
@@ -49,7 +49,9 @@ export default function AssigneePicker(props) {
         }}
         options={assignees}
         getOptionLabel={(option) => (`${option.first_name} ${option.last_name}`)}
-        isOptionEqualToValue={(option, value) => option === value}
+        isOptionEqualToValue={(option, newValue) => {
+            return option.id === newValue.id;
+        }}
         renderInput={(params) => <TextField 
                                 helperText={errors && errors.assignee? errors.assignee : ''}
                                 error={errors && errors.assignee? true : false}

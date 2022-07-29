@@ -25,7 +25,7 @@ function Task(props) {
     const [ tasks, setTasks ] = React.useState([]);
     const [ subtask, setSubtask ] = React.useState({});
     const [ task, setTask ] = React.useState({});
-    const [ editTask, setEditTask ] = React.useState([]);
+    // const [ editTask, setEditTask ] = React.useState([]);
     const [ open, setOpen ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
     const [ openSubtaskForm, setOpenSubtaskForm ] = React.useState(false);
@@ -69,7 +69,12 @@ function Task(props) {
                 let result = allTasks.filter(task => task.tasklist.id === list.id);
                 // sort results based on user and assignee. If user === to assignee or user === created_by show task
                 let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id )
-                if(result) tempObject[`${list.title}`] = userResult
+                
+                if(result) {
+                    return tempObject[`${list.title}`] = userResult
+                }else{
+                    return userResult
+                }
             })
             setTasks(tempObject);
         })
@@ -239,9 +244,14 @@ function Task(props) {
 
     const handleOpenSubtaskForm = (id) => {
         selectedList.map(task => {
+            return (
             task.subtasks.map(sub => {
-                if(sub.id === id) setSubtask(sub)
-            });
+                if(sub.id === id) {
+                    return setSubtask(sub)
+                }else{
+                    return ''
+                }
+            }))
         });
         setOpenSubtaskForm(true);
     };
@@ -318,7 +328,7 @@ function Task(props) {
                         <AddTaskForm
                             task={task}
                             open={open}
-                            editTask={editTask}
+                            // editTask={editTask}
                             setOpen={setOpen}
                             editing={editing}
                             setEditing={setEditing}

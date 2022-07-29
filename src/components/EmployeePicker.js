@@ -12,10 +12,10 @@ export default function EmployeePicker(props) {
 
     React.useEffect(() => {
         retrieveEmployees()
-        if(editing){
-            handleInputValue(editObject.user);
-            handleChangeEmployee(editObject.user);
-        };
+        // if(editing){
+        //     handleInputValue(editObject.user);
+        //     handleChangeEmployee(editObject.user);
+        // };
         // if(value !== null){
         //     handleChangeEmployee(value)
         //     setInputValue('')
@@ -33,6 +33,10 @@ export default function EmployeePicker(props) {
         UserService.getUsers(props.token)
         .then(response => {
             setEmployees(response.data);
+            if(editing){
+                handleInputValue(editObject.user);
+                handleChangeEmployee(editObject.user);
+            };
         })
         .catch( e => {
             console.log(e);
@@ -69,7 +73,9 @@ export default function EmployeePicker(props) {
         }}
         options={employees}
         getOptionLabel={(option) => (`${option.first_name} ${option.last_name}`)}
-        isOptionEqualToValue={(option, value) => option === value}
+        isOptionEqualToValue={(option, newValue) => {
+            return option.id === newValue.id;
+        }}
         renderInput={(params) => <TextField 
                                 helperText={errors && errors.employee? errors.employee : ''}
                                 error={errors && errors.employee? true : false}
