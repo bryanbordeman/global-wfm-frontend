@@ -128,6 +128,7 @@ function DueDate(props) {
             default:
                 dueMessage = ''
         }
+        
     return(
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker

@@ -20,7 +20,7 @@ export default function AddTaskForm(props) {
     const { open, setOpen } = props;
     const { editing, task, setEditing } = props;
     const { createTask } = props;
-    // const { updateTask } = props;
+    const { updateTask } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
 
@@ -143,7 +143,17 @@ export default function AddTaskForm(props) {
     };
 
     const handleSubmit = () => {
-        createTask(values);
+        if(editing){
+            const data = values
+            data.created_by = user.id
+            data.assignee = values.assignee
+            data.project = values.project.id
+            data.tasklist = values.tasklist.id === undefined? values.tasklist : values.tasklist.id
+            data.subtasks = values.subtasks.map(subT => (subT.id))
+            updateTask(task.id, data);
+        }else{
+            createTask(values);
+        }
         setOpen(!open);
     };
 

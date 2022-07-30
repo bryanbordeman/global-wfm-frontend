@@ -45,6 +45,7 @@ function Task(props) {
         retrieveList();
         // retrieveCompletedTasks();
     },[currentList, tasks, open])
+    
 
     const retrieveTaskList = () => {
         TaskDataService.getAllTaskList(token)

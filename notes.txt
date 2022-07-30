@@ -6,3 +6,6 @@
 
 - Keep an eye on task date. something fishy. needed to add one day to delta??
 - Date is not working!! Server time is off by four hours GMT
+
+- Edit task does not update due date button on tasklist after submitting.
+- Edit task gets error when updating to fast.
