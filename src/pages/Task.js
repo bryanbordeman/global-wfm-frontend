@@ -46,7 +46,6 @@ function Task(props) {
         // retrieveCompletedTasks();
     },[currentList, tasks, open])
     
-
     const retrieveTaskList = () => {
         TaskDataService.getAllTaskList(token)
         .then(response => {
@@ -306,6 +305,8 @@ function Task(props) {
                         <Stack>
                         <TaskList
                             user={user}
+                            task={task}
+                            editing={editing}
                             selectedList={selectedList}
                             updateTask={updateTask}
                             handleOpenTaskForm={handleOpenTaskForm}

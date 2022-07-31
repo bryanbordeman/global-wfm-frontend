@@ -146,8 +146,8 @@ export default function AddTaskForm(props) {
         if(editing){
             const data = values
             data.created_by = user.id
-            data.assignee = values.assignee
-            data.project = values.project.id
+            data.assignee = values.assignee.id === undefined? values.assignee : values.assignee.id
+            data.project = values.project.id === undefined? values.project : values.project.id
             data.tasklist = values.tasklist.id === undefined? values.tasklist : values.tasklist.id
             data.subtasks = values.subtasks.map(subT => (subT.id))
             updateTask(task.id, data);

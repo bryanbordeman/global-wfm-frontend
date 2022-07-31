@@ -82,6 +82,10 @@ function DueDate(props) {
     const [ value, setValue ] = React.useState(list.due)
     const customInputRef = useRef();
 
+    React.useLayoutEffect(() => {
+        setValue(list.due)
+    },[list])
+
     const handleDateChange = (newDate) => {
         const pythonDate = newDate.toISOString().split('T')[0];
         let data = 
