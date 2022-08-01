@@ -42,7 +42,7 @@ export default function TaskCompletedList(props) {
             >
                 <ListItemButton onClick={() => handleClick()}>
             <ListItemText 
-                sx={{textDecoration: 'line-through'}}
+                // sx={{textDecoration: 'line-through'}}
                 secondary={
                     <span>{`Completed (${selectedCompleteList.length})`}</span>
                     }

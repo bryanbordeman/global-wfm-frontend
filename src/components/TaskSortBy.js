@@ -5,11 +5,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function TaskSortBy() {
-    const [value, setValue] = React.useState('');
+export default function TaskSortBy(props) {
+    const { setSortBy } = props
+    // const [value, setValue] = React.useState('');
 
     const handleChange = (event) => {
-        setValue(event.target.value);
+        // setValue(event.target.value);
+        setSortBy(event.target.value);
     };
 
     return (
@@ -19,13 +21,15 @@ export default function TaskSortBy() {
             <Select
             labelId="sort-by-label"
             id="sort-by"
-            value={value}
+            // value={value}
+            defaultValue={1}
             label="Sort By"
             onChange={handleChange}
             >
-            <MenuItem value={1}>Date</MenuItem>
-            <MenuItem value={2}>Project</MenuItem>
-            <MenuItem value={3}>Task</MenuItem>
+            <MenuItem value={1}>Due Date (Oldest to Newest)</MenuItem>
+            <MenuItem value={2}>Due Date (Newest to Oldest)</MenuItem>
+            <MenuItem value={3}>Project (Descending)</MenuItem>
+            <MenuItem value={4}>Task (Alphabetically)</MenuItem>
             </Select>
         </FormControl>
         </Box>

@@ -25,7 +25,7 @@ function Task(props) {
     const [ tasks, setTasks ] = React.useState([]);
     const [ subtask, setSubtask ] = React.useState({});
     const [ task, setTask ] = React.useState({});
-    // const [ editTask, setEditTask ] = React.useState([]);
+    const [ sortBy, setSortBy ] = React.useState(1);
     const [ open, setOpen ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
     const [ openSubtaskForm, setOpenSubtaskForm ] = React.useState(false);
@@ -44,11 +44,12 @@ function Task(props) {
         if(currentList)
         retrieveList();
         // retrieveCompletedTasks();
-    },[currentList, tasks, open])
+    },[currentList, tasks, open, sortBy])
     
     const retrieveTaskList = () => {
         TaskDataService.getAllTaskList(token)
         .then(response => {
+            // sort the select list
             setTaskLists(response.data.sort((a, b) => (a.title > b.title) ? 1 : -1));
         })
         .catch( e => {
@@ -90,7 +91,25 @@ function Task(props) {
         .then(response => {
             const result = response.data;
             let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
-            setSelectedList(userResult);
+            
+            // sort list
+            switch(sortBy) {
+                case (1):
+                    setSelectedList(userResult);
+                break;
+                case (2):
+                    setSelectedList(userResult.reverse());
+                break;
+                case (3):
+                    setSelectedList(userResult.sort((a, b) => (a.project.number > b.project.number) ? 1 : -1));
+                break;
+                case (4):
+                    setSelectedList(userResult.sort((a, b) => (a.title > b.title) ? 1 : -1));
+                break;
+    
+                default:
+                    setSelectedList(userResult);
+            }
         });
         TaskDataService.getAssigneeListComplete(token, employee.id, currentList.id)
         .then(response => {
@@ -269,7 +288,9 @@ function Task(props) {
                         <div  style={{width: '100%', maxWidth: '500px' }}>
                     <Stack style={{marginBottom: '0.75rem', marginTop: '1.5rem',}}direction="row" spacing={2}>
                             <div style={{width: '50%' }}>
-                            <TaskSortBy/>
+                            <TaskSortBy
+                                setSortBy={setSortBy}
+                            />
                             </div>
                             <div style={{width: '50%'}}>
                             <Button
