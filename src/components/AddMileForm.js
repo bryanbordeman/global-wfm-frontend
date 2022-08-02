@@ -217,7 +217,7 @@ export default function AddMileForm(props) {
                         id="date_purchased"
                         name="date_purchased"
                         value={values.date_purchased}
-                        onChange={(date) => {setValues({...values, date_purchased: moment.tz(date, "America/New_York")._d})}}
+                        onChange={(date) => {setValues({...values, date_purchased: date})}}
                         renderInput={(params) => <TextField {...params} helperText={errors.date_purchased === null ? '' : errors.date_purchased}
                         error={errors.date_purchased? true : false} />}
                         fullWidth

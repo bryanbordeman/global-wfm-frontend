@@ -251,7 +251,7 @@ export default function AddWorksegmentForm(props) {
                         id="date"
                         name="date"
                         value={values.date}
-                        onChange={(date) => {setValues({...values, date: moment.tz(date, "America/New_York")._d})}}
+                        onChange={(date) => {setValues({...values, date: date})}}
                         renderInput={(params) => <TextField {...params} helperText={errors.date === null ? '' : errors.date}
                         error={errors.date? true : false} />}
                         fullWidth

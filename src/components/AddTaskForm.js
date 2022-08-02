@@ -147,6 +147,7 @@ export default function AddTaskForm(props) {
         if(editing){
             const data = values
             data.created_by = user.id
+            data.due = moment.tz(data.due, "America/New_York")._d
             data.assignee = values.assignee.id === undefined? values.assignee : values.assignee.id
             data.project = values.project.id === undefined? values.project : values.project.id
             data.tasklist = values.tasklist.id === undefined? values.tasklist : values.tasklist.id
@@ -199,7 +200,7 @@ export default function AddTaskForm(props) {
                                 id="due"
                                 name="due"
                                 value={values.due}
-                                onChange={(date) => {setValues({...values, due: moment.tz(date, "America/New_York")._d})}}
+                                onChange={(date) => {setValues({...values, due: date})}}
                                 renderInput={(params) => <TextField {...params} helperText={errors.due === null ? '' : errors.due}
                                 error={errors.due? true : false} />}
                                 fullWidth

@@ -26,6 +26,7 @@ export default function AddExpenseForm(props) {
     const [ images, setImages ] = React.useState([]);
     const [ editImage, setEditImage ] = React.useState({})
     const [ isValid, setIsValid ] = React.useState(true)
+    const today = new Date()
     
 
     function getBase64(file) {
@@ -52,7 +53,7 @@ export default function AddExpenseForm(props) {
         price: '',
         is_reimbursable: false,
         is_approved: false,
-        date_purchased: new Date(),
+        date_purchased: today,
         notes: ''
     }
 
@@ -84,36 +85,37 @@ export default function AddExpenseForm(props) {
         setValues(editing ? editFormValues : initialFormValues)
     },[open]);
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if(editing === true){
-        const url = expense.receipt_pic;
-        const fileName = 'myFile.jpg';
-        let editImage = []
+            const url = expense.receipt_pic;
+            const fileName = 'myFile.jpg';
+            let editImage = []
 
-        fetch(url)
-        .then(async response => {
-            const contentType = response.headers.get('content-type')
-            const blob = await response.blob()
-            const file = new File([blob], fileName, { contentType })
-            setEditImage(file)
-            getBase64(file)
-                .then(
-                    data => {
-                    editImage = [{data_url: data, file: file}]
-                    setImages(editImage)
-                    setValues({
-                        project: editing ? expense.project.id : expense.project,
-                        receipt_pic: editImage[0].data_url,
-                        merchant: expense.merchant,
-                        price: expense.price,
-                        is_reimbursable: expense.is_reimbursable,
-                        is_approved: expense.is_approved,
-                        date_purchased: editing ? new Date(expense.date_purchased.replace('-', '/').replace('-', '/')) : new Date(),
-                        notes: expense.notes
+            fetch(url)
+            .then(async response => {
+                const contentType = response.headers.get('content-type')
+                const blob = await response.blob()
+                const file = new File([blob], fileName, { contentType })
+                setEditImage(file)
+                getBase64(file)
+                    .then(
+                        data => {
+                        editImage = [{data_url: data, file: file}]
+                        setImages(editImage)
+                        setValues({
+                            project: editing ? expense.project.id : expense.project,
+                            receipt_pic: editImage[0].data_url,
+                            merchant: expense.merchant,
+                            price: expense.price,
+                            is_reimbursable: expense.is_reimbursable,
+                            is_approved: expense.is_approved,
+                            date_purchased: editing ? new Date(expense.date_purchased.replace('-', '/').replace('-', '/')) : new Date(),
+                            notes: expense.notes
+                            })
+
                         })
-
-                    })
-        })} else {
+                })
+        } else {
             setImages([])
         }
     },[open])
@@ -145,6 +147,10 @@ export default function AddExpenseForm(props) {
     }
 
     const handleSubmit = () => {
+        //!! value is not consistant. need to figure out solution.
+        console.log(values.receipt_pic)
+
+        const date = moment.tz(values.date_purchased, "America/New_York")._d
         const data = {
             project: values.project, 
             receipt_pic: values.receipt_pic,
@@ -152,7 +158,7 @@ export default function AddExpenseForm(props) {
             price: values.price,
             is_reimbursable: values.is_reimbursable,
             is_approved: false,
-            date_purchased: String(values.date_purchased)? moment.tz(values.date_purchased, "America/New_York")._d : moment.tz(values.date_purchased, "America/New_York")._d.toISOString().split('T')[0],
+            date_purchased: String(values.date_purchased)? date : date.toISOString().split('T')[0],
             notes: values.notes
         };
         if(editing){
@@ -179,7 +185,10 @@ export default function AddExpenseForm(props) {
                 setErrors({...errors, project: null});
             }, 3000);
         }
-        else if(values.date_purchased > new Date()){
+        else if(values.date_purchased > today){
+            // console.log(date)
+            // console.log(today)
+            // console.log(values.date_purchased)
             setErrors({...errors, date_purchased: 'Date cannot be in the future.'});
             formIsValid = false;
             setTimeout(() => {
@@ -295,7 +304,7 @@ export default function AddExpenseForm(props) {
                         id="date_purchased"
                         name="date_purchased"
                         value={values.date_purchased}
-                        onChange={(date) => {setValues({...values, date_purchased: moment.tz(date, "America/New_York")._d})}}
+                        onChange={(date) => {setValues({...values, date_purchased: date})}}
                         renderInput={(params) => <TextField {...params} helperText={errors.date_purchased === null ? '' : errors.date_purchased}
                         error={errors.date_purchased? true : false} />}
                         fullWidth

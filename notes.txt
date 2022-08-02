@@ -7,3 +7,5 @@
 - Keep an eye on task date. something fishy. needed to add one day to delta??
 - Edit task gets error when updating to fast.
 - Create View Task Dialog
+
+- Expense Edit does not work. Image uploads on first attempt but fails on second??
