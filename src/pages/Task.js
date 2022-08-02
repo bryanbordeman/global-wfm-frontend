@@ -12,6 +12,7 @@ import AddSubtaskForm from '../components/AddSubtaskForm';
 import DeleteTaskModal from '../components/DeleteTaskModal';
 import TaskCompletedList from '../components/TaskCompletedList';
 import NextTaskDialog from '../components/NextTaskDialog'
+import TaskDialog from '../components/TaskDialog';
 
 function Task(props) {
     const { user } = props;
@@ -384,6 +385,9 @@ function Task(props) {
                             setAddOpen={setOpen}
                             open={openNextTask}
                             setOpen={setOpenNextTask}
+                        />
+                        <TaskDialog
+                            task={task}
                         />
 
             </Container>

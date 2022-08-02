@@ -75,6 +75,7 @@ function WorksegmentList(props) {
 
     const createWorksegment = (data) => {
         const userId = user.is_staff ? Number(employee.id) : Number(user.id)
+        console.log(data.date)
         
         WorksegmentDataService.createWorksegment(data, token, userId)
         .then(response => {

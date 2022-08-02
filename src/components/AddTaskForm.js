@@ -13,6 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import moment from 'moment-timezone';
 
 export default function AddTaskForm(props) {
     const { user, token } = props;
@@ -161,6 +162,7 @@ export default function AddTaskForm(props) {
         <div>
             <Dialog
                 fullWidth
+                fullScreen
                 open={open}
                 onClose={handleClose}
             >
@@ -197,8 +199,8 @@ export default function AddTaskForm(props) {
                                 id="due"
                                 name="due"
                                 value={values.due}
-                                onChange={(date) => {setValues({...values, due: date})}}
-                                renderInput={(params) => <TextField {...params} helperText={errors.due === null ? '' : errors.date_purchased}
+                                onChange={(date) => {setValues({...values, due: moment.tz(date, "America/New_York")._d})}}
+                                renderInput={(params) => <TextField {...params} helperText={errors.due === null ? '' : errors.due}
                                 error={errors.due? true : false} />}
                                 fullWidth
                             />

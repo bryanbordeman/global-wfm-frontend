@@ -11,6 +11,7 @@ import ProjectPicker from './ProjectPicker'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import moment from 'moment-timezone';
 
 export default function AddMileForm(props) {
     const { user, token } = props
@@ -90,7 +91,7 @@ export default function AddMileForm(props) {
             rate: currentRate.id,
             miles: values.miles,
             is_approved: false,
-            date_purchased: values.date_purchased.toISOString().split('T')[0],
+            date_purchased: moment.tz(values.date_purchased, "America/New_York")._d.toISOString().split('T')[0],
             // date_purchased: String(values.date_purchased)? String(values.date_purchased) : values.date_purchased.toISOString().split('T')[0],
             notes: values.notes
         };
@@ -183,6 +184,7 @@ export default function AddMileForm(props) {
         <div>
         <Dialog
             fullWidth
+            fullScreen
             open={openMiles}
             onClose={handleClose}
         >
@@ -215,7 +217,7 @@ export default function AddMileForm(props) {
                         id="date_purchased"
                         name="date_purchased"
                         value={values.date_purchased}
-                        onChange={(date) => {setValues({...values, date_purchased: date})}}
+                        onChange={(date) => {setValues({...values, date_purchased: moment.tz(date, "America/New_York")._d})}}
                         renderInput={(params) => <TextField {...params} helperText={errors.date_purchased === null ? '' : errors.date_purchased}
                         error={errors.date_purchased? true : false} />}
                         fullWidth

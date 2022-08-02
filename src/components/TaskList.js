@@ -28,6 +28,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import moment from 'moment-timezone';
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -71,7 +72,7 @@ const StyledMenu = styled((props) => (
     }));
 
 
-const currentDate = new Date()
+const currentDate = moment.tz(new Date(), "America/New_York")._d
 
 // const offset = currentDate.getTimezoneOffset();
 // console.log(offset);    // 240

@@ -15,8 +15,10 @@ import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
 import ProjectPicker from './ProjectPicker'
 import EmployeePicker from './EmployeePicker';
+import moment from 'moment-timezone';
 
 export default function AddWorksegmentForm(props) {
+
     const { 
             editing, 
             createWorksegment, 
@@ -88,14 +90,13 @@ export default function AddWorksegmentForm(props) {
             user: values.user,
             project: values.project, 
             is_approved: false,
-            date: values.date.toISOString().split('T')[0],
+            date: moment.tz(values.date, "America/New_York")._d.toISOString().split('T')[0],
             start_time: values.startTime.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"),
             end_time: values.endTime.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"),
             lunch: values.lunch,
             travel_duration: values.travel,
             notes: values.notes
         };
-
         if(editing){
             updateWorksegment(segment.id, data);
             setOpenAdd(false);
@@ -213,7 +214,8 @@ export default function AddWorksegmentForm(props) {
     return (
         <div>
         <Dialog 
-            fullWidth 
+            fullWidth
+            fullScreen 
             open={openAdd} 
             onClose={handleClose}
             scroll={'body'}
@@ -249,7 +251,7 @@ export default function AddWorksegmentForm(props) {
                         id="date"
                         name="date"
                         value={values.date}
-                        onChange={(date) => {setValues({...values, date: date})}}
+                        onChange={(date) => {setValues({...values, date: moment.tz(date, "America/New_York")._d})}}
                         renderInput={(params) => <TextField {...params} helperText={errors.date === null ? '' : errors.date}
                         error={errors.date? true : false} />}
                         fullWidth

@@ -106,6 +106,7 @@ export default function AddAnnouncementForm(props) {
         <div>
         <Dialog 
             fullWidth 
+            fullScreen
             open={openAdd} 
             onClose={handleClose}
             scroll={'body'}

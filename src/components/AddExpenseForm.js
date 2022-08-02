@@ -15,6 +15,7 @@ import ImageUploading from 'react-images-uploading';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import moment from 'moment-timezone';
 
 export default function AddExpenseForm(props) {
     const { user, token } = props
@@ -151,7 +152,7 @@ export default function AddExpenseForm(props) {
             price: values.price,
             is_reimbursable: values.is_reimbursable,
             is_approved: false,
-            date_purchased: String(values.date_purchased)? values.date_purchased : values.date_purchased.toISOString().split('T')[0],
+            date_purchased: String(values.date_purchased)? moment.tz(values.date_purchased, "America/New_York")._d : moment.tz(values.date_purchased, "America/New_York")._d.toISOString().split('T')[0],
             notes: values.notes
         };
         if(editing){
@@ -261,6 +262,7 @@ export default function AddExpenseForm(props) {
         <div>
         <Dialog
             fullWidth
+            fullScreen
             open={open}
             onClose={handleClose}
         >
@@ -293,7 +295,7 @@ export default function AddExpenseForm(props) {
                         id="date_purchased"
                         name="date_purchased"
                         value={values.date_purchased}
-                        onChange={(date) => {setValues({...values, date_purchased: date})}}
+                        onChange={(date) => {setValues({...values, date_purchased: moment.tz(date, "America/New_York")._d})}}
                         renderInput={(params) => <TextField {...params} helperText={errors.date_purchased === null ? '' : errors.date_purchased}
                         error={errors.date_purchased? true : false} />}
                         fullWidth

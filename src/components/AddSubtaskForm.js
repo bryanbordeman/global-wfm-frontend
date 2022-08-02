@@ -139,6 +139,7 @@ export default function AddSubtaskForm(props) {
         <div>
         <Dialog 
             fullWidth 
+            fullScreen
             open={open} 
             onClose={handleClose}
             scroll={'body'}
