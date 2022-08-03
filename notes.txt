@@ -4,8 +4,6 @@
 - Make Animations from Task list to completed list and back
 - forward email to api end point to make into task??
 
-- Keep an eye on task date. something fishy. needed to add one day to delta??
 - Edit task gets error when updating to fast.
-- Create View Task Dialog
 
 - Expense Edit does not work. Image uploads on first attempt but fails on second??

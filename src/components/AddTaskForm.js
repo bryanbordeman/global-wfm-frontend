@@ -49,7 +49,7 @@ export default function AddTaskForm(props) {
         tasklist: task.tasklist,
         title: task.title,
         notes: task.notes,
-        due: editing ? new Date(task.due.replace('-', '/').replace('-', '/')) : new Date(),
+        due: editing && task.due !== undefined? new Date(task.due.replace('-', '/').replace('-', '/')) : new Date(),
         subtasks:task.subtasks,
         project:task.project,
         created: new Date(),
@@ -229,6 +229,8 @@ export default function AddTaskForm(props) {
                             value={values.notes}
                             multiline
                             rows={4}
+                            helperText={errors.notes === null ? '' : errors.notes}
+                            error={errors.notes? true : false}
                         />
                         {editing ?
                         <FormControlLabel

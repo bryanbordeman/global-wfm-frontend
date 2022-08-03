@@ -32,6 +32,7 @@ function Task(props) {
     const [ openSubtaskForm, setOpenSubtaskForm ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
     const [ openNextTask, setOpenNextTask ] = React.useState(false);
+    const [ openTaskDialog, setOpenTaskDialog ] = React.useState(false);
 
     React.useEffect(() => {
         setSelectedList([]) // not a great solution to clear list after employee change
@@ -345,6 +346,8 @@ function Task(props) {
                         : '' }
                         <TaskCompletedList
                             user={user}
+                            setTask={setTask}
+                            setOpenTaskDialog={setOpenTaskDialog}
                             uncompleteTask={uncompleteTask}
                             selectedCompleteList={selectedCompleteList}
                         />
@@ -388,6 +391,10 @@ function Task(props) {
                         />
                         <TaskDialog
                             task={task}
+                            user={user}
+                            setOpenDelete={setOpenDelete}
+                            setOpenTaskDialog={setOpenTaskDialog}
+                            openTaskDialog={openTaskDialog}
                         />
 
             </Container>

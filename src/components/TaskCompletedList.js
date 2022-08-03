@@ -13,6 +13,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 
 export default function TaskCompletedList(props) {
     const { selectedCompleteList, uncompleteTask, user } = props
+    const { setTask, setOpenTaskDialog } = props
     const [open, setOpen] = React.useState(false);
     
     React.useEffect(() => {
@@ -31,7 +32,8 @@ export default function TaskCompletedList(props) {
     }
 
     const handleOpenTask = (task) => {
-        console.log(task)
+        setTask(task);
+        setOpenTaskDialog(true)
     }
     
     return ( 
