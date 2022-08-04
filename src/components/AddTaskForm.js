@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack, TextField, Divider } from '@mui/material';
+import { Stack, TextField, Divider,IconButton} from '@mui/material';
 import AssigneePicker from './AssigneePicker';
 import ProjectPicker from './ProjectPicker';
 import TaskListPicker from './TaskListPicker';
@@ -13,6 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
 
 export default function AddTaskForm(props) {
@@ -167,7 +168,22 @@ export default function AddTaskForm(props) {
                 open={open}
                 onClose={handleClose}
             >
-                <DialogTitle>{`${editing ? 'Edit' : 'Add'} Task`}</DialogTitle>
+                <DialogTitle>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <div>
+                            {`${editing ? 'Edit' : 'Add'} Task`}
+                        </div>
+                        <div>
+                        <IconButton 
+                            edge="end" 
+                            aria-label="close"
+                            onClick={handleClose}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        </div> 
+                    </div>
+                </DialogTitle>
                 <Divider/>
                 <DialogContent>
                     <Stack direction="column" spacing={2}>

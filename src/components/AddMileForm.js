@@ -5,12 +5,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack, TextField, Divider } from '@mui/material';
+import { Stack, TextField, Divider, IconButton } from '@mui/material';
 import EmployeePicker from './EmployeePicker';
 import ProjectPicker from './ProjectPicker'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
 
 export default function AddMileForm(props) {
@@ -188,7 +189,22 @@ export default function AddMileForm(props) {
             open={openMiles}
             onClose={handleClose}
         >
-            <DialogTitle>{`${editing? 'Update' : 'Add'} Miles | $${parseFloat(currentRate.rate).toFixed(2)} mile`} </DialogTitle>
+            <DialogTitle>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <div>
+                    {`${editing? 'Update' : 'Add'} Miles | $${parseFloat(currentRate.rate).toFixed(2)} mile`} 
+                    </div>
+                    <div>
+                    <IconButton 
+                        edge="end" 
+                        aria-label="close"
+                        onClick={handleClose}
+                            >
+                        <CloseIcon />
+                    </IconButton>
+                    </div> 
+                </div>
+            </DialogTitle>
             <Divider/>
             <DialogContent>
                 <Stack direction="column" spacing={2}>

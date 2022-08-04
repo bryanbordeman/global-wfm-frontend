@@ -328,6 +328,7 @@ function Task(props) {
                         <Stack>
                         <TaskList
                             user={user}
+                            setOpenTaskDialog={setOpenTaskDialog}
                             task={task}
                             editing={editing}
                             selectedList={selectedList}
@@ -347,6 +348,7 @@ function Task(props) {
                         <TaskCompletedList
                             user={user}
                             setTask={setTask}
+                            setEditing={setEditing}
                             setOpenTaskDialog={setOpenTaskDialog}
                             uncompleteTask={uncompleteTask}
                             selectedCompleteList={selectedCompleteList}
@@ -392,6 +394,8 @@ function Task(props) {
                         <TaskDialog
                             task={task}
                             user={user}
+                            editing={editing}
+                            handleOpenTaskForm={handleOpenTaskForm}
                             setOpenDelete={setOpenDelete}
                             setOpenTaskDialog={setOpenTaskDialog}
                             openTaskDialog={openTaskDialog}

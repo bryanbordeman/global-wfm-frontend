@@ -5,10 +5,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack } from '@mui/material';
+import { Stack, IconButton } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function AddAnnouncementForm(props) {
     
@@ -110,9 +111,23 @@ export default function AddAnnouncementForm(props) {
             open={openAdd} 
             onClose={handleClose}
             scroll={'body'}
-            
             >
-            <DialogTitle>{`${editing ? 'Edit' : 'Add'} Announcement`}</DialogTitle>
+            <DialogTitle>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <div>
+                        {`${editing ? 'Edit' : 'Add'} Announcement`}
+                    </div>
+                    <div>
+                    <IconButton 
+                        edge="end" 
+                        aria-label="close"
+                        onClick={handleClose}
+                            >
+                        <CloseIcon />
+                    </IconButton>
+                    </div> 
+                </div>
+            </DialogTitle>
             <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>

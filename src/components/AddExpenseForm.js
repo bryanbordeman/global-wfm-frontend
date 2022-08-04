@@ -15,6 +15,7 @@ import ImageUploading from 'react-images-uploading';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
 
 export default function AddExpenseForm(props) {
@@ -275,7 +276,22 @@ export default function AddExpenseForm(props) {
             open={open}
             onClose={handleClose}
         >
-            <DialogTitle>{`${editing ? 'Edit' : 'Add'} Expense`}</DialogTitle>
+            <DialogTitle>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <div>
+                        {`${editing ? 'Edit' : 'Add'} Expense`}
+                    </div>
+                    <div>
+                    <IconButton 
+                        edge="end" 
+                        aria-label="close"
+                        onClick={handleClose}
+                            >
+                        <CloseIcon />
+                    </IconButton>
+                    </div> 
+                </div>
+            </DialogTitle>
             <Divider/>
             <DialogContent>
                 <Stack direction="column" spacing={2}>

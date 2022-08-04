@@ -24,6 +24,7 @@ import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
+import PreviewIcon from '@mui/icons-material/Preview';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -191,7 +192,8 @@ export default function TaskList(props) {
             handleOpenSubtaskForm,
             setEditing, 
             completeSubtask,
-            completeTask } = props;
+            completeTask,
+            setOpenTaskDialog } = props;
     const { setOpenDelete } = props;
 
     const [open, setOpen] = React.useState({});
@@ -241,6 +243,18 @@ return (
                     open={openMenu}
                     onClose={handleMenuClose}
                 >
+                     <MenuItem 
+                        sx={{color: 'primary.main'}} 
+                        onClick={() => {
+                            setEditing(true);
+                            setOpenTaskDialog(true);
+                            handleMenuClose();
+                        }} 
+                        disableRipple
+                    >
+                        <PreviewIcon />
+                        Preview
+                    </MenuItem>
                     <MenuItem 
                         sx={{color: 'primary.main'}} 
                         onClick={() => {

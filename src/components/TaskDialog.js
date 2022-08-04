@@ -4,9 +4,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack, Typography, IconButton } from '@mui/material';
+import { Stack, Typography, IconButton, AppBar } from '@mui/material';
 import  Divider from '@mui/material/Divider';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment';
 
 export default function TaskDialog(props) {
@@ -14,6 +15,7 @@ export default function TaskDialog(props) {
     const { setOpenDelete } = props
     const { created_by } = props.task
     const { project } = props.task
+    const { editing, handleOpenTaskForm } = props
     const { setOpenTaskDialog, openTaskDialog } = props;
 
     const [createdBy, setCreatedBy] = React.useState()
@@ -57,6 +59,21 @@ export default function TaskDialog(props) {
                     {`${task.title}`}
                 </div>
                 
+                {editing ? 
+                <div>
+                <IconButton 
+                    edge="end" 
+                    color="primary"
+                    aria-label="edit"
+                    onClick={ () => {
+                        setOpenTaskDialog(false);
+                        handleOpenTaskForm();
+                    }}
+                        >
+                    <EditIcon />
+                </IconButton>
+                </div> 
+                :
                 <div>
                 <IconButton 
                     edge="end" 
@@ -67,38 +84,42 @@ export default function TaskDialog(props) {
                         >
                     <DeleteOutlineIcon />
                 </IconButton>
-                </div>
+                </div> 
+                }
                 </div>
             </DialogTitle>
                 <Divider/>
-                <DialogContent 
-                    style={{
-                        height: '100%',
-                        maxHeight: 'calc(100vh - 320px)'
-                    }}
-                >
+                <DialogContent>
                     <Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
                         {`${task.notes}`}
                     </Typography>
                 </DialogContent>
-                <Divider/>
-                <DialogContent>
-                <Stack direction="column" spacing={0}>
-                    <Typography variant="caption" color={'primary'}>
-                    Project: {projectNumber}
-                    </Typography>
-                    <Typography variant="caption" color={'primary'}>
-                    Completed: {moment(task.completed).calendar()}
-                    </Typography>
-                    <Typography variant="caption" color={'primary'}>
-                    Created By: {createdBy}
-                    </Typography>
-                </Stack>
-                </DialogContent>
-                <Divider/>
-                <DialogActions >
-                <Button variant='outlined' onClick={handleClose}>Close</Button>
-                </DialogActions>
+                <AppBar position="fixed" color="transparent" elevation={0} sx={{ top: 'auto', bottom: 0 }}>
+                    <Divider/>
+                    <DialogContent>
+                    <Stack direction="column" spacing={0}>
+                        <Typography variant="caption" color={'primary'}>
+                            Project: {projectNumber}
+                        </Typography>
+                        <Typography variant="caption" color={'primary'}>
+                            Created By: {createdBy}
+                        </Typography>
+                        {editing?
+                        <Typography variant="caption" color={'error'}>
+                            Last Updated: {moment(task.updated).calendar()}
+                        </Typography>
+                        :
+                        <Typography variant="caption" color={'error'}>
+                            Completed: {moment(task.completed).calendar()}
+                        </Typography>
+                        }
+                    </Stack>
+                    </DialogContent>
+                    <Divider/>
+                    <DialogActions >
+                        <Button variant="contained" onClick={handleClose}>Close</Button>
+                    </DialogActions>
+                </AppBar>
             </Dialog>
         </div>
     );

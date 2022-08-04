@@ -7,3 +7,5 @@
 - Edit task gets error when updating to fast.
 
 - Expense Edit does not work. Image uploads on first attempt but fails on second??
+
+- When task is uncompleted and recompleted completed date does not update??

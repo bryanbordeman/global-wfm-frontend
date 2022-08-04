@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Divider from '@mui/material/Divider';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment';
 
 export default function AddSubtaskForm(props) {
@@ -162,7 +163,15 @@ export default function AddSubtaskForm(props) {
                     <DeleteOutlineIcon />
                 </IconButton>
                 </div>
-                : ''}
+                : 
+                <IconButton 
+                        edge="end" 
+                        aria-label="close"
+                        onClick={handleClose}
+                            >
+                        <CloseIcon />
+                    </IconButton>
+                }
                 </div>
             </DialogTitle>
             {editing? 

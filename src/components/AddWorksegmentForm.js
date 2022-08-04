@@ -9,13 +9,14 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { Stack } from '@mui/material';
+import { Stack, IconButton } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
 import ProjectPicker from './ProjectPicker'
 import EmployeePicker from './EmployeePicker';
 import moment from 'moment-timezone';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function AddWorksegmentForm(props) {
 
@@ -221,7 +222,22 @@ export default function AddWorksegmentForm(props) {
             scroll={'body'}
             
             >
-            <DialogTitle>{`${editing ? 'Edit' : 'Add'} Worksegment`}</DialogTitle>
+            <DialogTitle>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <div>
+                        {`${editing ? 'Edit' : 'Add'} Worksegment`}
+                    </div>
+                    <div>
+                    <IconButton 
+                        edge="end" 
+                        aria-label="close"
+                        onClick={handleClose}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    </div> 
+                </div>
+            </DialogTitle>
             <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>
