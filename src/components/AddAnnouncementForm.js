@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
 import CloseIcon from '@mui/icons-material/Close';
+import Transition from './DialogTransistion'
 
 export default function AddAnnouncementForm(props) {
     
@@ -106,6 +107,7 @@ export default function AddAnnouncementForm(props) {
     return (
         <div>
         <Dialog 
+            TransitionComponent={Transition}
             fullWidth 
             fullScreen
             open={openAdd} 

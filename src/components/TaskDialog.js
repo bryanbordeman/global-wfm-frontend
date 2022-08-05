@@ -9,6 +9,7 @@ import  Divider from '@mui/material/Divider';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment';
+import Transition from './DialogTransistion'
 
 export default function TaskDialog(props) {
     const { task } = props;
@@ -46,6 +47,7 @@ export default function TaskDialog(props) {
     return (
         <div>
             <Dialog 
+                TransitionComponent={Transition}
                 fullWidth 
                 fullScreen
                 open={openTaskDialog} 

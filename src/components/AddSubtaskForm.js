@@ -12,6 +12,8 @@ import Divider from '@mui/material/Divider';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment';
+import Transition from './DialogTransistion'
+
 
 export default function AddSubtaskForm(props) {
     const { 
@@ -139,6 +141,7 @@ export default function AddSubtaskForm(props) {
     return (
         <div>
         <Dialog 
+            TransitionComponent={Transition}
             fullWidth 
             fullScreen
             open={open} 

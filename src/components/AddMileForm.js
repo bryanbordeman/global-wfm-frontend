@@ -13,6 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
+import Transition from './DialogTransistion'
 
 export default function AddMileForm(props) {
     const { user, token } = props
@@ -184,6 +185,7 @@ export default function AddMileForm(props) {
     return (
         <div>
         <Dialog
+            TransitionComponent={Transition}
             fullWidth
             fullScreen
             open={openMiles}

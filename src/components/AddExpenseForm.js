@@ -17,6 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
+import Transition from './DialogTransistion'
 
 export default function AddExpenseForm(props) {
     const { user, token } = props
@@ -271,6 +272,7 @@ export default function AddExpenseForm(props) {
     return (
         <div>
         <Dialog
+            TransitionComponent={Transition}
             fullWidth
             fullScreen
             open={open}

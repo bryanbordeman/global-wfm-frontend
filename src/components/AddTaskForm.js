@@ -15,6 +15,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
+import Transition from './DialogTransistion'
 
 export default function AddTaskForm(props) {
     const { user, token } = props;
@@ -160,9 +161,11 @@ export default function AddTaskForm(props) {
         setOpen(!open);
     };
 
+
     return (
         <div>
             <Dialog
+                TransitionComponent={Transition}
                 fullWidth
                 fullScreen
                 open={open}
@@ -248,7 +251,7 @@ export default function AddTaskForm(props) {
                             helperText={errors.notes === null ? '' : errors.notes}
                             error={errors.notes? true : false}
                         />
-                        {editing ?
+                        {editing && user.id === values.assignee.id ?
                         <FormControlLabel
                             onChange={() => {setValues({...values, is_complete: !values.is_complete})}}
                             control={<Switch checked={values.is_complete} color="primary" />}

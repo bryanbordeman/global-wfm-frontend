@@ -17,6 +17,7 @@ import ProjectPicker from './ProjectPicker'
 import EmployeePicker from './EmployeePicker';
 import moment from 'moment-timezone';
 import CloseIcon from '@mui/icons-material/Close';
+import Transition from './DialogTransistion'
 
 export default function AddWorksegmentForm(props) {
 
@@ -215,6 +216,7 @@ export default function AddWorksegmentForm(props) {
     return (
         <div>
         <Dialog 
+            TransitionComponent={Transition}
             fullWidth
             fullScreen 
             open={openAdd} 

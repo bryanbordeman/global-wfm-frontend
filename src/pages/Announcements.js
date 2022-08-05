@@ -147,7 +147,10 @@ function Announcements(props) {
                         }
                         secondary={
                             <>
-                            {`Date Posted: ${moment(announcement.created).format("ddd, MMMM Do YYYY")}`}
+                            <span>{`Date Posted: ${moment(announcement.created).format("ddd, MMMM Do YYYY")}`}</span>
+                            <br/>
+                            <span>&emsp;</span>
+                            <br/>
                             <span style={{whiteSpace: 'pre-line'}}>{announcement.memo}</span>
                             </>}
                     />
