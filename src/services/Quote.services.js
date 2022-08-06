@@ -1,23 +1,23 @@
 import axios from "axios";
 import { SERVER } from "./SERVER";
 
-class ProjectDataService {
+class QuoteDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/projects/`);
+        return axios.get(`${SERVER}/api/quotes/`);
     };
-    createProject(data, token){
+    createQuote(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.post(`${SERVER}/api/create/project/`, data);
+        return axios.post(`${SERVER}/api/create/quote/`, data);
     };
-    updateProject(id, data, token){
+    updateQuote(id, data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.put(`${SERVER}/api/project/${id}`, data);
+        return axios.put(`${SERVER}/api/quote/${id}`, data);
     };
-    deleteProject(id, token){
+    deleteQuote(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.delete(`${SERVER}/api/project/${id}`);
+        return axios.delete(`${SERVER}/api/quote/${id}`);
     };
 }
 
-export default new ProjectDataService();
+export default new QuoteDataService();

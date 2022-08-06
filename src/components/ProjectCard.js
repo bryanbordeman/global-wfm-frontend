@@ -45,6 +45,8 @@ return (
                         alignItems: 'center',
                         justifyContent: 'center',
                         height: '100%'}}>
+                    {project.address?
+                    <>
                     <div style={{paddingLeft: 0}}>
                         <Typography variant="body2">
                             Project Address:
@@ -65,8 +67,12 @@ return (
                                 {project.address.country}
                             </Typography>
                         </a>
+                        
                     </div>
+                    
                     <Divider orientation="vertical" flexItem/>
+                    </>
+                    : ''}
                     <div>
                         <Typography variant="body2">
                             Project Category:

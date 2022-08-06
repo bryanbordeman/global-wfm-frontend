@@ -16,6 +16,8 @@ import Switch from '@mui/material/Switch';
 import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
 import Transition from './DialogTransistion'
+import QuoteProjectToggle from './QuoteProjectToggle';
+import QuotePicker from './QuotePicker'
 
 export default function AddTaskForm(props) {
     const { user, token } = props;
@@ -26,6 +28,7 @@ export default function AddTaskForm(props) {
     const { updateTask } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
+    const [choosePicker, setChoosePicker ] = React.useState('projects')
 
 
     const initialFormValues = {
@@ -66,7 +69,7 @@ export default function AddTaskForm(props) {
     const [ values, setValues ] = React.useState(initialFormValues);
 
     React.useLayoutEffect(() => {
-        setValues(editing ? editFormValues : initialFormValues)
+        setValues(editing ? editFormValues : initialFormValues);
     },[open])
     
 
@@ -161,6 +164,10 @@ export default function AddTaskForm(props) {
         setOpen(!open);
     };
 
+    const handleChangePicker = (newValue) => {
+        setChoosePicker(newValue);
+    }
+
 
     return (
         <div>
@@ -205,6 +212,13 @@ export default function AddTaskForm(props) {
                             token={token}
                             handleChangeAssignee={handleChangeAssignee}
                         />
+                        {/* <Stack direction="row"> */}
+                        {user.groups.filter(group => (group.name === 'SALES')).length > 0 ? 
+                        <QuoteProjectToggle
+                            handleChangePicker={handleChangePicker}
+                        />
+                        : ''}
+                        {choosePicker === 'projects'? 
                         <ProjectPicker
                             editing={editing}
                             editObject={task}
@@ -213,6 +227,17 @@ export default function AddTaskForm(props) {
                             errors={errors}
                             editProject={values.project}
                         />
+                        : 
+                        <QuotePicker
+                            editing={editing}
+                            editObject={task}
+                            token={token}
+                            handleChangeQuote={handleChangeProject}
+                            errors={errors}
+                            editProject={values.project}
+                        />
+                        }
+                        {/* </Stack> */}
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 label="Due Date"
