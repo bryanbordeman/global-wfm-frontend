@@ -16,11 +16,13 @@ export default function TaskDialog(props) {
     const { setOpenDelete } = props
     const { created_by } = props.task
     const { project } = props.task
+    const { quote } = props.task
     const { editing, handleOpenTaskForm } = props
     const { setOpenTaskDialog, openTaskDialog } = props;
 
     const [createdBy, setCreatedBy] = React.useState()
     const [projectNumber, setProjectNumber ] = React.useState()
+    const [quoteNumber, setQuoteNumber ] = React.useState()
 
     React.useLayoutEffect(()=>{
         if(created_by)
@@ -28,10 +30,16 @@ export default function TaskDialog(props) {
         }else{
             setCreatedBy(`${props.user.first_name} ${props.user.last_name}`)
         }
-        if(project)
-        {setProjectNumber(`${project.number}`)
+        if(project){
+            setProjectNumber(`${project.number}`);
         }else{
             setProjectNumber('')
+        }
+
+        if(quote){
+            setQuoteNumber(`${quote.number}`);
+        }else{
+            setQuoteNumber('');
         }
     },[task])
 
@@ -100,9 +108,15 @@ export default function TaskDialog(props) {
                     <Divider/>
                     <DialogContent>
                     <Stack direction="column" spacing={0}>
+                        {projectNumber? 
                         <Typography variant="caption" color={'primary'}>
                             Project: {projectNumber}
                         </Typography>
+                        :
+                        <Typography variant="caption" color={'primary'}>
+                            Quote: {quoteNumber}
+                        </Typography>
+                        }
                         <Typography variant="caption" color={'primary'}>
                             Created By: {createdBy}
                         </Typography>

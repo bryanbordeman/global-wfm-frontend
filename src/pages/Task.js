@@ -238,7 +238,8 @@ function Task(props) {
             const taskData = task
             taskData.assignee = task.assignee.id
             taskData.created_by = task.created_by.id
-            taskData.project = task.project.id
+            taskData.project = task.project? task.project.id : ''
+            taskData.quote = task.quote? task.quote.id : ''
             taskData.tasklist = task.tasklist.id
             taskData.subtasks = task.subtasks.map(subT => (subT.id))
             // ......

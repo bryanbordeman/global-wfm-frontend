@@ -104,7 +104,8 @@ function DueDate(props) {
             "created_by": list.created_by.id,
             "assignee": list.assignee.id,
             "tasklist": list.tasklist.id,
-            "project": list.project.id,
+            "project": list.project? list.project.id : '',
+            "quote": list.quote? list.quote.id : '',
             "subtasks": list.subtasks.id
         }
         updateTask(list.id, data)
@@ -318,7 +319,7 @@ return (
                             variant='outlined'
                             size='small' 
                             color='primary' 
-                            label={`${list.project.number}`} 
+                            label={list.project ? `${list.project.number}` :`${list.quote.number}` } 
                         />
                     </ListItemIcon>
                     <ListItemText 

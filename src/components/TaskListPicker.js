@@ -5,12 +5,13 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import FormHelperText from '@mui/material/FormHelperText';
 
 export default function TaskListPicker(props) {
     const [ taskLists, setTaskLists ] = React.useState([]);
     const { handleOpenSnackbar } = props;
     const { handleChangeList, token } = props;
-    const { editing, task } = props;
+    const { editing, task, errors } = props;
     const [ value, setValue ] = React.useState('');
 
     React.useEffect(() => {
@@ -65,6 +66,7 @@ export default function TaskListPicker(props) {
             )
                 )}
             </Select>
+            {errors.tasklist && <FormHelperText error={errors.tasklist? true : false}>This is required!</FormHelperText>}
         </FormControl>
         </Box>
     );

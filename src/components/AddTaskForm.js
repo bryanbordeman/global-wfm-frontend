@@ -28,7 +28,7 @@ export default function AddTaskForm(props) {
     const { updateTask } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
-    const [choosePicker, setChoosePicker ] = React.useState('projects')
+    const [ choosePicker, setChoosePicker ] = React.useState('projects')
 
 
     const initialFormValues = {
@@ -40,6 +40,7 @@ export default function AddTaskForm(props) {
         due: new Date(),
         subtasks:[],
         project:'',
+        quote:'',
         created: new Date(),
         is_complete: false,
         is_deleted: false,
@@ -56,7 +57,8 @@ export default function AddTaskForm(props) {
         notes: task.notes,
         due: editing && task.due !== undefined? new Date(task.due.replace('-', '/').replace('-', '/')) : new Date(),
         subtasks:task.subtasks,
-        project:task.project,
+        project:task.project? task.project : '',
+        quote:task.quote? task.quote : '',
         created: new Date(),
         is_complete: task.is_complete,
         is_deleted: false,
@@ -70,6 +72,13 @@ export default function AddTaskForm(props) {
 
     React.useLayoutEffect(() => {
         setValues(editing ? editFormValues : initialFormValues);
+        if(editing && task.project){
+            setChoosePicker('projects')
+        }
+        else if (editing && task.quote)
+        {
+            setChoosePicker('quotes')
+        }
     },[open])
     
 
@@ -82,10 +91,16 @@ export default function AddTaskForm(props) {
     };
 
     const handleChangeProject = (newValue) => {
-        if(newValue){
+        if(newValue && choosePicker === 'projects'){
             setValues({
             ...values,
             project: newValue.id
+            });
+        }
+        if(newValue && choosePicker === 'quotes'){
+            setValues({
+            ...values,
+            quote: newValue.id
             });
         }
     };
@@ -111,9 +126,50 @@ export default function AddTaskForm(props) {
 
     const handleValidation = () => {
         let formIsValid = true;
+        
+        if(values.tasklist === ''){
+            setErrors({...errors, tasklist: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, tasklist: null});
+            }, 3000);
+        }
+        else if(values.assignee === ''){
+            setErrors({...errors, assignee: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, assignee: null});
+            }, 3000);
+        }
+        else if(values.project === '' && choosePicker === 'projects'){
+            setErrors({...errors, project: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, project: null});
+            }, 3000);
+        }
+        else if(values.quote === '' && choosePicker === 'quotes'){
+            setErrors({...errors, quote: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, quote: null});
+            }, 3000);
+        }
 
-        if(values.title.length > 100){
+        else if(values.title.length > 100){
             setErrors({...errors, title: '100 character max.'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, title: null});
+            }, 3000);
+        }
+        else if(values.title.length < 1){
+            setErrors({...errors, title: 'Required field'});
             formIsValid = false;
             setTimeout(() => {
                 formIsValid = true;
@@ -128,8 +184,12 @@ export default function AddTaskForm(props) {
                 setErrors({...errors, notes: null});
             }, 3000);
         }
+        
         else{
             setErrors({
+                project: null,
+                assignee: null,
+                quote: null,
                 title: null,
                 notes: null,
             });
@@ -154,14 +214,23 @@ export default function AddTaskForm(props) {
             data.created_by = user.id
             data.due = moment.tz(data.due, "America/New_York")._d
             data.assignee = values.assignee.id === undefined? values.assignee : values.assignee.id
-            data.project = values.project.id === undefined? values.project : values.project.id
+
+            if(choosePicker === 'projects'){
+                data.project = values.project.id === undefined? values.project : values.project.id
+                data.quote = ''
+            }else{
+                data.quote = values.quote.id === undefined? values.quote : values.quote.id
+                data.project = ''
+            }
+
             data.tasklist = values.tasklist.id === undefined? values.tasklist : values.tasklist.id
             data.subtasks = values.subtasks.map(subT => (subT.id))
             updateTask(task.id, data);
         }else{
             createTask(values);
         }
-        setOpen(!open);
+        handleClose();
+        
     };
 
     const handleChangePicker = (newValue) => {
@@ -200,6 +269,7 @@ export default function AddTaskForm(props) {
                         <TaskListPicker
                             editing={editing}
                             task={task}
+                            errors={errors}
                             token={token}
                             handleOpenSnackbar={handleOpenSnackbar}
                             handleChangeList={handleChangeList}
@@ -212,12 +282,7 @@ export default function AddTaskForm(props) {
                             token={token}
                             handleChangeAssignee={handleChangeAssignee}
                         />
-                        {/* <Stack direction="row"> */}
-                        {user.groups.filter(group => (group.name === 'SALES')).length > 0 ? 
-                        <QuoteProjectToggle
-                            handleChangePicker={handleChangePicker}
-                        />
-                        : ''}
+                        <Stack direction="row" spacing={1}>
                         {choosePicker === 'projects'? 
                         <ProjectPicker
                             editing={editing}
@@ -237,7 +302,13 @@ export default function AddTaskForm(props) {
                             editProject={values.project}
                         />
                         }
-                        {/* </Stack> */}
+                        {user.groups.filter(group => (group.name === 'SALES')).length > 0 ? 
+                        <QuoteProjectToggle
+                            handleChangePicker={handleChangePicker}
+                            choosePicker={choosePicker}
+                        />
+                        : ''}
+                        </Stack>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 label="Due Date"

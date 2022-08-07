@@ -8,9 +8,8 @@ export default function QuotePicker(props) {
     const [ quotes, setQuotes ] = React.useState([{}])
     const [ inputValue, setInputValue ] = React.useState('');
 
-    const { handleChangeQuote } = props
+    const { handleChangeQuote, errors } = props
     const { editing, editObject } = props;
-    const errors = {project: ''}
 
     React.useEffect(() => {
         retrieveQuotes()
@@ -22,7 +21,7 @@ export default function QuotePicker(props) {
         .then(response => {
             setQuotes(response.data);
             if(editing){
-                handleInputValue(editObject.project);
+                handleInputValue(editObject.quote);
             };
         })
         .catch( e => {
@@ -55,8 +54,8 @@ export default function QuotePicker(props) {
             }}
             getOptionLabel={(option) => String(option.number).toString()}
             renderInput={(params) => <TextField 
-                                    helperText={errors.project === null ? '' : errors.project}
-                                    error={errors.project? true : false}
+                                    helperText={errors.quote === null ? '' : errors.quote}
+                                    error={errors.quote? true : false}
                                     {...params} 
                                     id="quote"
                                     name='quote'
