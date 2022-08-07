@@ -103,7 +103,21 @@ function Task(props) {
                     setSelectedList(userResult.reverse());
                 break;
                 case (3):
-                    // setSelectedList(userResult.sort((a, b) => (a.project.number > b.project.number) ? 1 : -1));
+                    let projectSort = []
+                    let QuoteSort = []
+                    userResult.map(task => {
+                        if(task.project != null){
+                            projectSort.push(task);
+                        }
+                        if(task.quote != null){
+                            QuoteSort.push(task);
+                        }
+                        projectSort.sort((a, b) => (a.project.number > b.project.number) ? 1 : -1);
+                        QuoteSort.sort((a, b) => (a.quote.number > b.quote.number) ? 1 : -1)
+                    })
+                    const sortList = projectSort.concat(QuoteSort);
+                    setSelectedList(sortList)
+
                 break;
                 case (4):
                     setSelectedList(userResult.sort((a, b) => (a.title > b.title) ? 1 : -1));
