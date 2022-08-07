@@ -18,6 +18,7 @@ import EmployeePicker from './EmployeePicker';
 import moment from 'moment-timezone';
 import CloseIcon from '@mui/icons-material/Close';
 import Transition from './DialogTransistion'
+import FieldShopOfficeToggle from './FieldShopOfficeToggle';
 
 export default function AddWorksegmentForm(props) {
 
@@ -37,6 +38,7 @@ export default function AddWorksegmentForm(props) {
 
     const initialFormValues = {
         user: user.id,
+        segment_type: '',
         project: '',
         is_approved: false,
         date: new Date(),
@@ -49,6 +51,7 @@ export default function AddWorksegmentForm(props) {
 
     const editFormValues = {
         user: editing ? segment.user.id : segment.user,
+        segment_type: segment.segment_type,
         project: editing ? segment.project.id : segment.project,
         date: editing ? new Date(segment.date.replace('-', '/').replace('-', '/')) : new Date(),
         startTime: editing ? getDateFromHours(segment.start_time) : new Date(),
@@ -66,8 +69,9 @@ export default function AddWorksegmentForm(props) {
         endTime: null,
         travel: null,
         employee: null
-    })
-    const [ isValid, setIsValid ] = React.useState(true)
+    });
+    const [ isValid, setIsValid ] = React.useState(true);
+    const [ segmentType, setSegmentType ] = React.useState('');
 
     React.useLayoutEffect(() => {
         setValues(editing ? editFormValues : initialFormValues)
@@ -81,6 +85,21 @@ export default function AddWorksegmentForm(props) {
             });
     },[employee])
 
+    React.useEffect(() => {
+        if(editing){
+            setSegmentType(segment.segment_type)
+        }else{
+            if(user.groups.filter(group => (group.name === 'FIELD')).length > 0){
+                setSegmentType('Field');
+            }
+            else if(user.groups.filter(group => (group.name === 'SHOP')).length > 0){
+                setSegmentType('Shop');
+            }else{
+                setSegmentType('Office');
+            }
+        }
+    },[openAdd])
+
     function getDateFromHours(time) {
         time = time.split(':');
         let now = new Date();
@@ -90,6 +109,7 @@ export default function AddWorksegmentForm(props) {
     const handleSubmit = () => {
         const data = {
             user: values.user,
+            segment_type: values.segment_type,
             project: values.project, 
             is_approved: false,
             date: moment.tz(values.date, "America/New_York")._d.toISOString().split('T')[0],
@@ -110,6 +130,15 @@ export default function AddWorksegmentForm(props) {
             setOpenAdd(false);
         };
     };
+
+    const handleChangeSegmentType = (newValue) => {
+        if(newValue){
+            setValues({
+            ...values,
+            segment_type: newValue
+            });
+        }
+    }
 
     const handleInputValue = (e) => {
         const { name, value } = e.target;
@@ -243,6 +272,10 @@ export default function AddWorksegmentForm(props) {
             <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>
+                <FieldShopOfficeToggle
+                    handleChangeSegmentType={handleChangeSegmentType}
+                    segmentType={segmentType}
+                />
                 {user.is_staff ? 
                 <div>
                     <EmployeePicker

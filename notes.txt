@@ -10,5 +10,6 @@
 
 - When task is uncompleted and recompleted completed date does not update??
 
-- Make model and UI for quotes.
-- fox task so it accepts projects or quotes
+- Make QuoteCard for project page
+- Fix project sort in task to accept quote numbers as well as projects. Task.js line 106
+

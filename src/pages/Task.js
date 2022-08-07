@@ -103,7 +103,7 @@ function Task(props) {
                     setSelectedList(userResult.reverse());
                 break;
                 case (3):
-                    setSelectedList(userResult.sort((a, b) => (a.project.number > b.project.number) ? 1 : -1));
+                    // setSelectedList(userResult.sort((a, b) => (a.project.number > b.project.number) ? 1 : -1));
                 break;
                 case (4):
                     setSelectedList(userResult.sort((a, b) => (a.title > b.title) ? 1 : -1));
@@ -396,6 +396,7 @@ function Task(props) {
                             task={task}
                             user={user}
                             editing={editing}
+                            setEditing={setEditing}
                             handleOpenTaskForm={handleOpenTaskForm}
                             setOpenDelete={setOpenDelete}
                             setOpenTaskDialog={setOpenTaskDialog}

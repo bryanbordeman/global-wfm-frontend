@@ -268,6 +268,8 @@ function WorksegmentList(props) {
                                     {`${moment(segment.start_time, "HH:mm:ss").format("hh:mm A")} -  
                                     ${moment(segment.end_time, "HH:mm:ss").format("hh:mm A")}`}
                                     <br/>
+                                    Type: {segment.segment_type}
+                                    <br/>
                                     Project: {segment.project.number}
                                     <br/>
                                     Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}

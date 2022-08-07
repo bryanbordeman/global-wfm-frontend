@@ -17,7 +17,7 @@ export default function TaskDialog(props) {
     const { created_by } = props.task
     const { project } = props.task
     const { quote } = props.task
-    const { editing, handleOpenTaskForm } = props
+    const { editing, setEditing, handleOpenTaskForm } = props
     const { setOpenTaskDialog, openTaskDialog } = props;
 
     const [createdBy, setCreatedBy] = React.useState()
@@ -45,6 +45,7 @@ export default function TaskDialog(props) {
 
     const handleClose = () => {
         setOpenTaskDialog(false);
+        setEditing(false);
     };
 
     const handleDelete = () => {
