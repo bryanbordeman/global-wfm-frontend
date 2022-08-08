@@ -91,11 +91,23 @@ export default function AddWorksegmentForm(props) {
         }else{
             if(user.groups.filter(group => (group.name === 'FIELD')).length > 0){
                 setSegmentType('Field');
+                setValues({
+                    ...values,
+                    segment_type: 'Field'
+                    });
             }
             else if(user.groups.filter(group => (group.name === 'SHOP')).length > 0){
                 setSegmentType('Shop');
+                setValues({
+                    ...values,
+                    segment_type: 'Shop'
+                    });
             }else{
                 setSegmentType('Office');
+                setValues({
+                    ...values,
+                    segment_type: 'Office'
+                    });
             }
         }
     },[openAdd])

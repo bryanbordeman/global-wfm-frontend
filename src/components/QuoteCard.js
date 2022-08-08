@@ -11,11 +11,11 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 export default function ProjectCard(props) {
 
-const { project, handleSetContact } = props
+const { quote, handleSetContact } = props
     
 return (
     <>
-        {project.number ? 
+        {quote.number ? 
         <Card 
             elevation={0}
             sx={{
@@ -31,10 +31,10 @@ return (
             >
             <CardContent>
                 <Typography variant="h5" component="div">
-                    {project.number}
+                    {quote.number}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    {project.name}
+                    {quote.name}
                 </Typography>
                 <Divider/>
                 <Stack 
@@ -45,26 +45,26 @@ return (
                         alignItems: 'center',
                         justifyContent: 'center',
                         height: '100%'}}>
-                    {project.address?
+                    {quote.address?
                     <>
                     <div style={{paddingLeft: 0}}>
                         <Typography variant="body2">
                             Project Address:
                         </Typography>
-                        <a href={`http://maps.google.com/?q=${project.address.address1}, ${project.address.address2}, ${project.address.city}, ${project.address.state} ${project.address.zip_code}`} 
+                        <a href={`http://maps.google.com/?q=${quote.address.address1}, ${quote.address.address2}, ${quote.address.city}, ${quote.address.state} ${quote.address.zip_code}`} 
                             target="_blank"
                             rel="noopener noreferrer" 
                         >
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                {project.address.address1}
+                                {quote.address.address1}
                                 
-                                {project.address.address2 ? 
+                                {quote.address.address2 ? 
                                 <br/> : ''}
-                                {project.address.address2}
+                                {quote.address.address2}
                                 <br/>
-                                {`${project.address.city}, ${project.address.state} ${project.address.zip_code}`}
+                                {`${quote.address.city}, ${quote.address.state} ${quote.address.zip_code}`}
                                 <br/>
-                                {project.address.country === 'US'? '' : project.address.country}
+                                {quote.address.country}
                             </Typography>
                         </a>
                         
@@ -78,13 +78,13 @@ return (
                             Project Category:
                         </Typography>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            {project.project_category.name}
+                            {quote.project_category.name}
                         </Typography>
                         <Typography variant="body2">
                             Project Type:
                         </Typography>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            {project.project_type.name}
+                            {quote.project_type.name}
                         </Typography>
                     </div>
                 </Stack>
@@ -104,7 +104,7 @@ return (
                             Prevailing Rate
                         </Typography>
                         <Typography variant="body2">
-                            {project.prevailing_rate ? <CheckCircleOutlineIcon color='success'/> : <HighlightOffIcon color='error'/>}
+                            {quote.prevailing_rate ? <CheckCircleOutlineIcon color='success'/> : <HighlightOffIcon color='error'/>}
                         </Typography>
                     </Stack>
                 </div>
@@ -115,17 +115,17 @@ return (
                             Travel Job
                         </Typography>
                         <Typography variant="body2">
-                            {project.travel_job ? <CheckCircleOutlineIcon color='success'/> : <HighlightOffIcon color='error'/>}
+                            {quote.travel_job ? <CheckCircleOutlineIcon color='success'/> : <HighlightOffIcon color='error'/>}
                         </Typography>
                     </Stack>
                 </div>
                 </Stack>
-                <Divider/>
+                {/* <Divider/>
                 <Typography variant="body2" sx={{mt:2}}>
                     Contact(s):
-                </Typography>
+                </Typography> */}
 
-                {project.contact.map(contact => (
+                {/* {quote.contacts.map(contact => (
                     <div key={contact.name}>
                         <Button sx={{
                             textTransform: 'unset !important',
@@ -143,27 +143,30 @@ return (
                         />
                         </Button>
                     </div>
-                ))}
+                ))} */}
                 <Divider sx={{mt:2}}/>
                 <Typography variant="body2" sx={{mt:2}}>
-                    Customer:
+                    Customer(s):
                 </Typography>
-                <Button sx={{
-                        textTransform: 'unset !important',
-                        p: 0,
-                        mt: 1}}
-                        // onClick={() => {handleSetContact(contact)}}
-                        >
-                    <Chip
-                        avatar={<Avatar 
-                                alt={`${project.customer_company.name}`}
-                                src="/broken-image.jpg"
-                                />}
-                        label={`${project.customer_company.name}`}
-                        variant="outlined"
-                    />
-                </Button>
-
+                {quote.customers.map(customer => (
+                    <div key={customer.name}>
+                        <Button sx={{
+                            textTransform: 'unset !important',
+                            p: 0,
+                            mt: 1}}
+                            // onClick={() => {handleSetContact(contact)}}
+                            >
+                        <Chip
+                            avatar={<Avatar 
+                                    alt={`${customer.name}`}
+                                    src="/broken-image.jpg"
+                                    />}
+                            label={`${customer.name}`}
+                            variant="outlined"
+                        />
+                        </Button>
+                    </div>
+                ))}
                 
                 </CardContent>
                 <CardActions>

@@ -92,7 +92,7 @@ export default function TaskCompletedList(props) {
                                     sx={{mr:1, color: 'gray'  }} 
                                     variant='outlined'
                                     size='small' 
-                                    label={`${task.project.number}`} 
+                                    label={task.project ? `${task.project.number}` :`${task.quote.number}` } 
                                 />
                             </ListItemIcon>
                             <ListItemText 

@@ -1,6 +1,7 @@
 import React from 'react';
 import ProjectPicker from '../components/ProjectPicker'
 import ProjectCard from '../components/ProjectCard';
+import QuoteCard from '../components/QuoteCard';
 import { Container, Stack } from '@mui/material';
 import ContactModal from '../components/ContactModal'
 import QuoteProjectToggle from '../components/QuoteProjectToggle';
@@ -12,26 +13,34 @@ function Projects(props) {
     const { token, user } = props
     // const { user, token } = props
     const [ project, setProject ] = React.useState({})
+    const [ quote, setQuote ] = React.useState({})
     const [ contactOpen, setContactOpen ] = React.useState(false)
     const [ contact, setContact ] = React.useState({})
     const [ choosePicker, setChoosePicker ] = React.useState('projects')
 
     const handleChangeProject = (newProject) => {
-        setProject(newProject)
-    }
+        setProject(newProject);
+        setQuote({});
+    };
+
+    const handleChangeQuote = (newQuote) => {
+        setQuote(newQuote);
+        setProject({});
+    };
+
 
     const handleContactOpen = (value) => {
-        setContactOpen(value)
-    }
+        setContactOpen(value);
+    };
 
     const handleSetContact = (contact) => {
-        setContact(contact)
-        setContactOpen(true)
-    }
+        setContact(contact);
+        setContactOpen(true);
+    };
 
     const handleChangePicker = (newValue) => {
         setChoosePicker(newValue);
-    }
+    };
 
     return ( 
         <div style={{paddingTop: '1rem'}}> 
@@ -53,7 +62,7 @@ function Projects(props) {
                     :
                         <QuotePicker
                             token={token}
-                            handleChangeQuote={handleChangeProject}
+                            handleChangeQuote={handleChangeQuote}
                             errors={{quote: ''}}
                         />
                     }
@@ -79,6 +88,21 @@ function Projects(props) {
                     />
                     </>
                     : ''}
+                    {quote?
+                    <>
+                    <QuoteCard
+                        quote={quote}
+                        handleSetContact={handleSetContact}
+                    />
+                    <ContactModal
+                        project={quote}
+                        contact={contact}
+                        handleContactOpen={handleContactOpen}
+                        open={contactOpen}
+                    />
+                    </>
+                    : ''
+                    }
             </Container>
         </div>
     );
