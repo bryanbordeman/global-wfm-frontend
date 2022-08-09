@@ -1,22 +1,23 @@
 import * as React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { projectType } from './ToggleObjects';
 
 export default function QuoteProjectToggle(props) {
     const { choosePicker, handleChangePicker } = props
     const [value, setValue] = React.useState('projects');
 
     React.useEffect(() => {
-        if(choosePicker === 'projects'){
-            setValue('projects')
-        }else{
-            setValue('quotes')
-        }
+        projectType.forEach((project) => {
+            if(choosePicker === project.name)
+                setValue(project.id)
+        })
     })
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        handleChangePicker(newValue);
+        if(projectType.find(x => x.id === newValue))
+            handleChangePicker(projectType.find(x => x.id === newValue).name)
     };
 
     return (
@@ -28,8 +29,9 @@ export default function QuoteProjectToggle(props) {
         exclusive
         onChange={handleChange}
         >
-        <ToggleButton sx={{width: '100%', pt:0, pb:0}} value="projects">Projects</ToggleButton>
-        <ToggleButton sx={{width: '100%',  pt:0, pb:0}} value="quotes">Quotes</ToggleButton>
+            {projectType.map(project => (
+                <ToggleButton key={project.id} sx={{width: '100%', pt:0, pb:0}} value={project.id}>{project.name}</ToggleButton>
+            ))}
         </ToggleButtonGroup>
     );
 }

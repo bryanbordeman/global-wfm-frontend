@@ -6,12 +6,10 @@ import { Container, Stack } from '@mui/material';
 import ContactModal from '../components/ContactModal'
 import QuoteProjectToggle from '../components/QuoteProjectToggle';
 import QuotePicker from '../components/QuotePicker'
-
-
+import { projectType } from '../components/ToggleObjects';
 
 function Projects(props) {
     const { token, user } = props
-    // const { user, token } = props
     const [ project, setProject ] = React.useState({})
     const [ quote, setQuote ] = React.useState({})
     const [ contactOpen, setContactOpen ] = React.useState(false)
@@ -27,7 +25,6 @@ function Projects(props) {
         setQuote(newQuote);
         setProject({});
     };
-
 
     const handleContactOpen = (value) => {
         setContactOpen(value);
@@ -54,7 +51,7 @@ function Projects(props) {
                 }}>
                     <div style={{width: '100%', maxWidth: '400px', marginTop: '0.5rem'}}>
                     <Stack direction="row" spacing={1}>
-                    {choosePicker === 'projects'?
+                    {choosePicker === projectType[0].name?
                     <ProjectPicker
                         token={token}
                         handleChangeProject={handleChangeProject}
@@ -106,6 +103,6 @@ function Projects(props) {
             </Container>
         </div>
     );
-}
+};
 
 export default Projects;

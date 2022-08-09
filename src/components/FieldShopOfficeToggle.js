@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { workTypes } from './ToggleObjects';
 
 export default function FieldShopOfficeToggle(props) {
     const { segmentType, handleChangeSegmentType } = props
@@ -8,11 +9,12 @@ export default function FieldShopOfficeToggle(props) {
 
     React.useEffect(() => {
         setValue(segmentType);
-    },[segmentType])
+    },[segmentType]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        handleChangeSegmentType(newValue)
+        if(workTypes.find(x => x.id === newValue))
+            handleChangeSegmentType(workTypes.find(x => x.id === newValue).name);
     };
 
     return (
@@ -23,9 +25,9 @@ export default function FieldShopOfficeToggle(props) {
         exclusive
         onChange={handleChange}
         >
-        <ToggleButton sx={{width: '100%'}} value="Field">Field</ToggleButton>
-        <ToggleButton sx={{width: '100%'}} value="Shop">Shop</ToggleButton>
-        <ToggleButton sx={{width: '100%'}} value="Office">Office</ToggleButton>
+            {workTypes.map(work => (
+                <ToggleButton key={work.id} sx={{width: '100%'}} value={work.id}>{work.name}</ToggleButton>
+            ))}
         </ToggleButtonGroup>
     );
 }

@@ -18,6 +18,7 @@ import moment from 'moment-timezone';
 import Transition from './DialogTransistion'
 import QuoteProjectToggle from './QuoteProjectToggle';
 import QuotePicker from './QuotePicker'
+import { projectType } from './ToggleObjects';
 
 export default function AddTaskForm(props) {
     const { user, token } = props;
@@ -81,7 +82,6 @@ export default function AddTaskForm(props) {
         }
     },[open])
     
-
     const handleInputValue = (e) => {
         const { name, value } = e.target;
         setValues({
@@ -91,13 +91,14 @@ export default function AddTaskForm(props) {
     };
 
     const handleChangeProject = (newValue) => {
-        if(newValue && choosePicker === 'projects'){
+
+        if(newValue && choosePicker === projectType[0].name){
             setValues({
             ...values,
             project: newValue.id
             });
         }
-        if(newValue && choosePicker === 'quotes'){
+        if(newValue && choosePicker === projectType[1].name){
             setValues({
             ...values,
             quote: newValue.id
@@ -205,7 +206,6 @@ export default function AddTaskForm(props) {
     const handleClose = () => {
         setOpen(!open);
         setEditing(false);
-        // handleChangeEmployee(null)
     };
 
     const handleSubmit = () => {
@@ -215,7 +215,7 @@ export default function AddTaskForm(props) {
             data.due = moment.tz(data.due, "America/New_York")._d
             data.assignee = values.assignee.id === undefined? values.assignee : values.assignee.id
 
-            if(choosePicker === 'projects'){
+            if(choosePicker === projectType[0].name){
                 data.project = values.project.id === undefined? values.project : values.project.id
                 data.quote = ''
             }else{
@@ -235,8 +235,7 @@ export default function AddTaskForm(props) {
 
     const handleChangePicker = (newValue) => {
         setChoosePicker(newValue);
-    }
-
+    };
 
     return (
         <div>
@@ -283,7 +282,7 @@ export default function AddTaskForm(props) {
                             handleChangeAssignee={handleChangeAssignee}
                         />
                         <Stack direction="row" spacing={1}>
-                        {choosePicker === 'projects'? 
+                        {choosePicker === projectType[0].name?
                         <ProjectPicker
                             editing={editing}
                             editObject={task}

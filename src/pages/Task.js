@@ -105,7 +105,7 @@ function Task(props) {
                 case (3):
                     let projectSort = []
                     let QuoteSort = []
-                    userResult.map(task => {
+                    userResult.forEach(task => {
                         if(task.project != null){
                             projectSort.push(task);
                         }

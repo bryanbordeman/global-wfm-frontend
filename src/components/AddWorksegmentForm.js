@@ -19,6 +19,7 @@ import moment from 'moment-timezone';
 import CloseIcon from '@mui/icons-material/Close';
 import Transition from './DialogTransistion'
 import FieldShopOfficeToggle from './FieldShopOfficeToggle';
+import { workTypes } from './ToggleObjects';
 
 export default function AddWorksegmentForm(props) {
 
@@ -47,7 +48,7 @@ export default function AddWorksegmentForm(props) {
         lunch: true,
         travel: 0, 
         notes: ''
-    }
+    };
 
     const editFormValues = {
         user: editing ? segment.user.id : segment.user,
@@ -59,7 +60,7 @@ export default function AddWorksegmentForm(props) {
         lunch: segment.lunch,
         travel: segment.travel_duration,
         notes: segment.notes
-    }
+    };
 
     const [ values, setValues ] = React.useState(initialFormValues);
     const [ errors, setErrors ] = React.useState({
@@ -83,40 +84,33 @@ export default function AddWorksegmentForm(props) {
             ...values,
             user: employee.id
             });
-    },[employee])
+    },[employee]);
 
     React.useEffect(() => {
         if(editing){
-            setSegmentType(segment.segment_type)
+            setValues({
+                ...values,
+                segment_type: segment.segment_type
+            });
+            setSegmentType(workTypes.find(x => x.name === segment.segment_type).id);
         }else{
-            if(user.groups.filter(group => (group.name === 'FIELD')).length > 0){
-                setSegmentType('Field');
-                setValues({
-                    ...values,
-                    segment_type: 'Field'
+            workTypes.forEach(work => {
+                if(user.groups.filter(group => (group.name === work.name.toUpperCase()) > 0)){
+                    setSegmentType(work.id);
+                    setValues({
+                        ...values,
+                        segment_type: work.name
                     });
-            }
-            else if(user.groups.filter(group => (group.name === 'SHOP')).length > 0){
-                setSegmentType('Shop');
-                setValues({
-                    ...values,
-                    segment_type: 'Shop'
-                    });
-            }else{
-                setSegmentType('Office');
-                setValues({
-                    ...values,
-                    segment_type: 'Office'
-                    });
-            }
+                }
+            });
         }
-    },[openAdd])
+    },[openAdd]);
 
     function getDateFromHours(time) {
         time = time.split(':');
         let now = new Date();
         return new Date(now.getFullYear(), now.getMonth(), now.getDate(), ...time);
-    }
+    };
 
     const handleSubmit = () => {
         const data = {
@@ -149,8 +143,8 @@ export default function AddWorksegmentForm(props) {
             ...values,
             segment_type: newValue
             });
-        }
-    }
+        };
+    };
 
     const handleInputValue = (e) => {
         const { name, value } = e.target;
@@ -174,7 +168,7 @@ export default function AddWorksegmentForm(props) {
         let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
     
         return hours + minutes /60;
-    }
+    };
     
     const handleValidation = () => {
         let formIsValid = true;
@@ -251,8 +245,8 @@ export default function AddWorksegmentForm(props) {
             ...values,
             project: newValue.id
             });
-        }
-    }
+        };
+    };
 
     return (
         <div>

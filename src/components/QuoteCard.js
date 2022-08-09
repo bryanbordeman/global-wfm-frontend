@@ -8,10 +8,10 @@ import { Chip, Avatar, Divider, Stack } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-
 export default function ProjectCard(props) {
 
-const { quote, handleSetContact } = props
+const { quote } = props
+// const { quote, handleSetContact } = props
     
 return (
     <>
