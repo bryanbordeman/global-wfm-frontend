@@ -51,7 +51,7 @@ export default function AddTaskForm(props) {
     };
 
     const editFormValues = {
-        created_by: user.id,
+        created_by: task.created_by,
         assignee: task.assignee,
         tasklist: task.tasklist,
         title: task.title,
@@ -211,7 +211,7 @@ export default function AddTaskForm(props) {
     const handleSubmit = () => {
         if(editing){
             const data = values
-            data.created_by = user.id
+            data.created_by = values.created_by.id
             data.due = moment.tz(data.due, "America/New_York")._d
             data.assignee = values.assignee.id === undefined? values.assignee : values.assignee.id
 

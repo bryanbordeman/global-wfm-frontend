@@ -94,8 +94,15 @@ export default function AddWorksegmentForm(props) {
             });
             setSegmentType(workTypes.find(x => x.name === segment.segment_type).id);
         }else{
+            // set type to office by default
+            setSegmentType(workTypes[workTypes.length - 1].id);
+            setValues({
+                ...values,
+                segment_type: workTypes[workTypes.length - 1].name
+            });
+            // assign type based on user group if field or shop
             workTypes.forEach(work => {
-                if(user.groups.filter(group => (group.name === work.name.toUpperCase()) > 0)){
+                if(user.groups.filter(group => (group.name === work.name.toUpperCase())).length > 0){
                     setSegmentType(work.id);
                     setValues({
                         ...values,

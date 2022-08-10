@@ -54,7 +54,8 @@ function WorksegmentList(props) {
                 filteredEmployee.push(obj)
             }
         return ''
-        });}
+        });
+    }
 
             setWorksegments(filteredEmployee);
         })
@@ -115,7 +116,7 @@ function WorksegmentList(props) {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         });
-    }
+    };
 
     const approveWorksegment = (segmentId) => {
         WorksegmentDataService.approveWorksegment(segmentId, props.token)
@@ -162,13 +163,17 @@ function WorksegmentList(props) {
                 totalTravelHours: totalTravelHours,
                 totalRegularHours: totalRegularHours,
                 totalOvertimeHours: totalOvertimeHours}
-    }
+    };
     
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
-    }
+    };
 
-    const totals = getTotalHours()
+    const totals = getTotalHours();
 
     const segmentList = worksegments.map(segment => (
                 <Paper
@@ -268,7 +273,7 @@ function WorksegmentList(props) {
                                     {`${moment(segment.start_time, "HH:mm:ss").format("hh:mm A")} -  
                                     ${moment(segment.end_time, "HH:mm:ss").format("hh:mm A")}`}
                                     <br/>
-                                    Type: {segment.segment_type}
+                                    Type: {capitalizeFirstLetter(segment.segment_type)}
                                     <br/>
                                     Project: {segment.project.number}
                                     <br/>

@@ -7,6 +7,7 @@ import ContactModal from '../components/ContactModal'
 import QuoteProjectToggle from '../components/QuoteProjectToggle';
 import QuotePicker from '../components/QuotePicker'
 import { projectType } from '../components/ToggleObjects';
+// import GoogleMapAutocomplete from '../components/GoogleMapAutocomplete';
 
 function Projects(props) {
     const { token, user } = props
@@ -100,6 +101,7 @@ function Projects(props) {
                     </>
                     : ''
                     }
+                    {/* <GoogleMapAutocomplete/> */}
             </Container>
         </div>
     );

@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack, Typography, IconButton, AppBar } from '@mui/material';
+import { Stack, Typography, IconButton } from '@mui/material';
 import  Divider from '@mui/material/Divider';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
@@ -61,7 +61,7 @@ export default function TaskDialog(props) {
                 fullScreen
                 open={openTaskDialog} 
                 onClose={handleClose}
-                scroll={'body'}
+                scroll={'paper'}
                 
                 >
             <DialogTitle>
@@ -100,14 +100,14 @@ export default function TaskDialog(props) {
                 </div>
             </DialogTitle>
                 <Divider/>
-                <DialogContent>
+                <DialogContent >
                     <Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
                         {`${task.notes}`}
                     </Typography>
                 </DialogContent>
-                <AppBar position="fixed" color="transparent" elevation={0} sx={{ top: 'auto', bottom: 0 }}>
-                    <Divider/>
-                    <DialogContent>
+                <Divider/>
+                    <DialogActions >
+                    <DialogContent sx={{pt:0, pb:0}}>
                     <Stack direction="column" spacing={0}>
                         {projectNumber? 
                         <Typography variant="caption" color={'primary'}>
@@ -132,11 +132,11 @@ export default function TaskDialog(props) {
                         }
                     </Stack>
                     </DialogContent>
+                    </DialogActions>
                     <Divider/>
-                    <DialogActions >
+                    <DialogActions>
                         <Button variant="contained" onClick={handleClose}>Close</Button>
                     </DialogActions>
-                </AppBar>
             </Dialog>
         </div>
     );

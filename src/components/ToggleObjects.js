@@ -1,7 +1,7 @@
 export const workTypes = [
-                    {id: 1, name: 'Field'},
-                    {id: 2, name: 'Shop'},
-                    {id: 3, name: 'Office'}
+                    {id: 1, name: 'field'},
+                    {id: 2, name: 'shop'},
+                    {id: 3, name: 'office'}
                 ]
 
 export const projectType =[
