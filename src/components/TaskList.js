@@ -79,7 +79,7 @@ const currentDate = moment.tz(new Date(), "America/New_York")._d
 // console.log(offset);    // 240
 
 function DueDate(props) {
-    const { list, updateTask } = props
+    const { list, updateTask, darkState} = props
     const [ isForcePickerOpen, setIsOpen ] = React.useState(false);
     const [ value, setValue ] = React.useState(list.due)
     const customInputRef = useRef();
@@ -165,7 +165,7 @@ function DueDate(props) {
                     {...inputProps}
                 />
                 <Button
-                    sx={{mr: 1, whiteSpace: 'nowrap', textTransform: 'none', borderColor: 'rgba(0, 0, 0, 0.12)'}}
+                    sx={{mr: 1, whiteSpace: 'nowrap', textTransform: 'none', borderColor: !darkState? 'rgba(0, 0, 0, 0.12)' : ''}}
                     size='small'
                     variant="outlined"
                     color={dateDelta < 0? 'warning' : 'primary'}
@@ -194,7 +194,8 @@ export default function TaskList(props) {
             setEditing, 
             completeSubtask,
             completeTask,
-            setOpenTaskDialog } = props;
+            setOpenTaskDialog,
+            darkState } = props;
     const { setOpenDelete } = props;
 
     const [open, setOpen] = React.useState({});
@@ -244,7 +245,7 @@ return (
                     open={openMenu}
                     onClose={handleMenuClose}
                 >
-                     <MenuItem 
+                    <MenuItem 
                         sx={{color: 'primary.main'}} 
                         onClick={() => {
                             setEditing(true);
@@ -342,6 +343,7 @@ return (
                     alignItems="flex-end">
                 <DueDate
                     list={list}
+                    darkState={darkState}
                     updateTask={updateTask}
                 />
                 </Grid>
@@ -355,7 +357,7 @@ return (
                     <span>
                         <Chip 
                         as="span"
-                        sx={{borderColor: 'rgba(0, 0, 0, 0.12)'}} 
+                        sx={{borderColor: !darkState? 'rgba(0, 0, 0, 0.12)' : ''}} 
                         size="small" 
                         label={subtasks.length}
                         variant='outlined'
@@ -366,7 +368,7 @@ return (
                     <span>
                         <Chip
                         as="span" 
-                        sx={{borderColor: 'rgba(0, 0, 0, 0.12)'}} 
+                        sx={{borderColor: !darkState? 'rgba(0, 0, 0, 0.12)' : ''}} 
                         size="small" 
                         label={subtasks.length}
                         variant='outlined'

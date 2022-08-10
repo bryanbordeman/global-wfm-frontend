@@ -229,14 +229,14 @@ export default function AddSubtaskForm(props) {
             </DialogContent>
             <Divider/>
             <DialogActions>
-            <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-            <Button 
-                variant='contained' 
-                onClick={handleValidation}
-                color={`${isValid? 'primary' : 'error'}`}
-            >
-                {editing ? 'Update' : 'Submit'}
-            </Button>
+                <Button variant='outlined' onClick={handleClose}>Cancel</Button>
+                <Button 
+                    variant='contained' 
+                    onClick={handleValidation}
+                    color={`${isValid? 'primary' : 'error'}`}
+                >
+                    {editing ? 'Update' : 'Submit'}
+                </Button>
             </DialogActions>
         </Dialog>
         </div>

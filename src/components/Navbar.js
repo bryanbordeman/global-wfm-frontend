@@ -14,13 +14,16 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/GPS_Navbar_Logo.svg'
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import { Stack } from '@mui/material';
 
 const pathname = window.location.pathname
 
 const Navbar = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const { user } = props
+    const { user, handleChangeMode, darkState } = props
     let navigate = useNavigate();
     const [activeButton, setActiveButton] = React.useState(pathname === '/' ? 'dashboard' : pathname.substring(1));
 
@@ -281,6 +284,25 @@ const Navbar = (props) => {
                         to='/profile'
                         >
                         <Typography textAlign="center">Profile</Typography>
+                    </MenuItem>
+                    <MenuItem 
+                        onClick={() => {
+                            handleChangeMode()}} 
+                        >
+                        <Stack direction={'row'} spacing={1}>
+                        <Typography 
+                            textAlign="center"
+                        >
+                            Mode
+                        </Typography>
+                        {darkState? 
+                        <LightModeIcon
+                            fontSize={'small'}/>
+                        :
+                        <DarkModeIcon
+                        ontSize={'small'}/>
+                        }
+                        </Stack>
                     </MenuItem>
                     <MenuItem 
                         onClick={() => {

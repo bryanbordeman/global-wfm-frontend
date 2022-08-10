@@ -13,7 +13,7 @@ import Profile from '../pages/Profile'
 import Task from '../pages/Task'
 
 function MainRoutes(props) {
-    const { user, token, login, signup, loginErrors, handleOpenSnackbar } = props
+    const { user, token, login, signup, loginErrors, darkState, handleOpenSnackbar } = props
     return (
         <div>
             <Routes>
@@ -102,6 +102,7 @@ function MainRoutes(props) {
                         <Task
                         user={user}
                         token={token}
+                        darkState={darkState}
                         handleOpenSnackbar={handleOpenSnackbar}
                         />
                 }/>

@@ -7,21 +7,8 @@ import UserService from "./services/User.services";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Toolbar } from '@mui/material';
 import SnackbarAlert from './components/SnackbarAlert';
-
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#1C88B0',
-        },
-        secondary: {
-            main: '#D1DF45',
-        },
-        darkBlue: {
-            main: '#11495F',
-        },
-        
-        },
-});
+import CssBaseline from '@mui/material/CssBaseline';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 function App() {
     const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || {})
@@ -33,10 +20,48 @@ function App() {
     const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
     const [ snackbarMessage, setSnackbarMessage ] = React.useState('')
 
+    const getTheme = localStorage.getItem('theme');
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [darkState, setDarkState] = useState(prefersDarkMode);     
+    let palletType = darkState ? "dark" : "light";
+    
+    const theme = createTheme({
+        palette: {
+            mode: palletType,
+            primary: {
+                main: '#1C88B0',
+            },
+            secondary: {
+                main: '#D1DF45',
+            },
+            darkBlue: {
+                main: '#11495F',
+            },
+            
+            },
+    });
+
+    useEffect(()=> {
+        if(getTheme){
+            getTheme === 'dark'? setDarkState(true) : setDarkState(false)
+        }
+    },[])
+
     useEffect(() => {
         // add background to app
+        if(palletType === 'light'){
         document.body.style.backgroundColor = "#f8f8ff"
-    },[])
+        }else{
+            document.body.style.backgroundColor = "black"
+        }
+        console.log(palletType)
+        localStorage.setItem('theme', palletType)
+
+    },[palletType])
+
+    const handleChangeMode = () =>{
+        setDarkState(!darkState);
+    }
 
     function loadWindow(){
         window.onload = function() {
@@ -101,10 +126,13 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline />
             <BrowserRouter>
                 {user.username? 
                 <>
                 <Navbar
+                    handleChangeMode={handleChangeMode}
+                    darkState={darkState}
                     user={user}
                     logout={logout}/>
                 <Toolbar />
@@ -117,6 +145,7 @@ function App() {
                     logout={logout}
                     error={error}
                     loginErrors={loginErrors}
+                    darkState={darkState}
                     handleOpenSnackbar={handleOpenSnackbar}/>
                 <SnackbarAlert
                     openSnackbar={openSnackbar}

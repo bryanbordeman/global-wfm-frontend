@@ -17,7 +17,7 @@ import TaskDialog from '../components/TaskDialog';
 function Task(props) {
     const { user } = props;
     const { token } = props;
-    const { handleOpenSnackbar } = props;
+    const { handleOpenSnackbar, darkState } = props;
     const [ employee, setEmployee ] = React.useState(null);
     const [ selectedList, setSelectedList ] = React.useState([]); // current selected list task in progress
     const [ selectedCompleteList, setSelectedCompleteList ] = React.useState([]); // current selected list completed task
@@ -343,6 +343,7 @@ function Task(props) {
                         <Stack>
                         <TaskList
                             user={user}
+                            darkState={darkState}
                             setOpenTaskDialog={setOpenTaskDialog}
                             task={task}
                             editing={editing}

@@ -14,6 +14,7 @@
 
 - Make QuoteCard for project page
 
+- addsubtask dialog buttons no at bottom
 
 
 

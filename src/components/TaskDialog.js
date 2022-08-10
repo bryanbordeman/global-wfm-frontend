@@ -100,13 +100,13 @@ export default function TaskDialog(props) {
                 </div>
             </DialogTitle>
                 <Divider/>
-                <DialogContent >
+                <DialogContent>
                     <Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
                         {`${task.notes}`}
                     </Typography>
                 </DialogContent>
                 <Divider/>
-                    <DialogActions >
+                    <DialogActions>
                     <DialogContent sx={{pt:0, pb:0}}>
                     <Stack direction="column" spacing={0}>
                         {projectNumber? 
