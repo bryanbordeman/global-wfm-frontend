@@ -14,7 +14,9 @@
 
 - Make QuoteCard for project page
 
-- addsubtask dialog buttons no at bottom
+- addsubtask dialog buttons not at bottom of dialog
+
+- Make StateSelect for address dialog
 
 
 

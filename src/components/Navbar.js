@@ -297,10 +297,12 @@ const Navbar = (props) => {
                         </Typography>
                         {darkState? 
                         <LightModeIcon
-                            fontSize={'small'}/>
+                            fontSize={'small'}
+                        />
                         :
                         <DarkModeIcon
-                        ontSize={'small'}/>
+                            fontSize={'small'}
+                        />
                         }
                         </Stack>
                     </MenuItem>

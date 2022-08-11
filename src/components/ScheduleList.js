@@ -27,7 +27,7 @@ export default function ScheduleList() {
                 border: 0.5,
                 borderColor: 'primary.main',
                 borderRadius: '8px',
-                bgcolor: 'grey.100'
+                // bgcolor: 'grey.100'
                 }}
         >
             <ListItemButton 

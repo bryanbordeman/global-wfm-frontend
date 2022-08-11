@@ -2,20 +2,22 @@ import React from 'react';
 import ProjectPicker from '../components/ProjectPicker'
 import ProjectCard from '../components/ProjectCard';
 import QuoteCard from '../components/QuoteCard';
-import { Container, Stack } from '@mui/material';
+import { Button, Container, Stack } from '@mui/material';
 import ContactModal from '../components/ContactModal'
 import QuoteProjectToggle from '../components/QuoteProjectToggle';
 import QuotePicker from '../components/QuotePicker'
 import { projectType } from '../components/ToggleObjects';
 // import GoogleMapAutocomplete from '../components/GoogleMapAutocomplete';
+import AddAddressForm from '../components/AddAddressForm';
 
 function Projects(props) {
-    const { token, user } = props
-    const [ project, setProject ] = React.useState({})
-    const [ quote, setQuote ] = React.useState({})
-    const [ contactOpen, setContactOpen ] = React.useState(false)
-    const [ contact, setContact ] = React.useState({})
-    const [ choosePicker, setChoosePicker ] = React.useState('projects')
+    const { token, user } = props;
+    const [ project, setProject ] = React.useState({});
+    const [ quote, setQuote ] = React.useState({});
+    const [ contactOpen, setContactOpen ] = React.useState(false);
+    const [ contact, setContact ] = React.useState({});
+    const [ choosePicker, setChoosePicker ] = React.useState('projects');
+    const [ openAddress, setOpenAddress ] = React.useState(false);
 
     const handleChangeProject = (newProject) => {
         setProject(newProject);
@@ -39,6 +41,11 @@ function Projects(props) {
     const handleChangePicker = (newValue) => {
         setChoosePicker(newValue);
     };
+
+    const handleOpenAddress = () => {
+        setOpenAddress(!openAddress);
+    };
+
 
     return ( 
         <div style={{paddingTop: '1rem'}}> 
@@ -102,6 +109,14 @@ function Projects(props) {
                     : ''
                     }
                     {/* <GoogleMapAutocomplete/> */}
+                    {/* <Button variant='contained' onClick={handleOpenAddress}>
+                        Open Address
+                    </Button> */}
+                    <AddAddressForm
+                        openAddress={openAddress}
+                        setOpenAddress={setOpenAddress}
+                        handleOpenAddress={handleOpenAddress}
+                    />
             </Container>
         </div>
     );

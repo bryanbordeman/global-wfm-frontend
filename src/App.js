@@ -27,6 +27,10 @@ function App() {
     
     const theme = createTheme({
         palette: {
+            background: 
+                {
+                    default: darkState? 'black' : "#f8f8ff"
+                },
             mode: palletType,
             primary: {
                 main: '#1C88B0',
@@ -48,15 +52,7 @@ function App() {
     },[])
 
     useEffect(() => {
-        // add background to app
-        if(palletType === 'light'){
-        document.body.style.backgroundColor = "#f8f8ff"
-        }else{
-            document.body.style.backgroundColor = "black"
-        }
-        console.log(palletType)
         localStorage.setItem('theme', palletType)
-
     },[palletType])
 
     const handleChangeMode = () =>{

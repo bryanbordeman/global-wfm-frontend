@@ -317,7 +317,7 @@ return (
                     <ListItemIcon>
                         <Chip 
                             sx={{mr:1}} 
-                            variant='outlined'
+                            // variant={darkState? '' : 'outlined'}
                             size='small' 
                             color='primary' 
                             label={list.project ? `${list.project.number}` :`${list.quote.number}` } 
