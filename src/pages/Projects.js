@@ -7,7 +7,6 @@ import ContactModal from '../components/ContactModal'
 import QuoteProjectToggle from '../components/QuoteProjectToggle';
 import QuotePicker from '../components/QuotePicker'
 import { projectType } from '../components/ToggleObjects';
-// import GoogleMapAutocomplete from '../components/GoogleMapAutocomplete';
 import AddAddressForm from '../components/AddAddressForm';
 
 function Projects(props) {
@@ -108,7 +107,6 @@ function Projects(props) {
                     </>
                     : ''
                     }
-                    {/* <GoogleMapAutocomplete/> */}
                     {/* <Button variant='contained' onClick={handleOpenAddress}>
                         Open Address
                     </Button> */}

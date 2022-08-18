@@ -9,6 +9,7 @@ import { Stack, IconButton } from '@mui/material';
 import  Divider from '@mui/material/Divider';
 import CloseIcon from '@mui/icons-material/Close';
 import Transition from './DialogTransistion';
+import GoogleMapAutocomplete from './GoogleMapAutocomplete';
 import CountrySelect from './CountrySelect';
 
 export default function AddAddressForm(props) {
@@ -182,6 +183,7 @@ export default function AddAddressForm(props) {
             <Divider/>
             <DialogContent>
             <Stack direction="column" spacing={2}>
+                <GoogleMapAutocomplete/>
                 <TextField
                     autoFocus={false}
                     margin="dense"

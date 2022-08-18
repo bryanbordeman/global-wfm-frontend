@@ -7,12 +7,14 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import logo from '../assets/GPS_Logo.png'
+import logoDark from '../assets/GPS_Logo_dark.png'
 import { useNavigate } from 'react-router-dom';
 
 function Signup(props) {
 
     const [username, setUsername ] = useState('');
     const [password, setPassword ] = useState('');
+    const { darkState } = props
     let navigate = useNavigate();
 
     const onChangeUsername = e => {
@@ -44,7 +46,7 @@ function Signup(props) {
             alignItems: 'center',
         }}
         >
-        <img style={{width: '20rem'}} src={logo} alt="GPS Logo"/>
+        <img style={{width: '20rem'}} src={darkState? logoDark : logo} alt="GPS Logo"/>
         <Box component="form" onSubmit={signup} noValidate sx={{ mt: 1 }}>
             <TextField
                 margin="normal"
