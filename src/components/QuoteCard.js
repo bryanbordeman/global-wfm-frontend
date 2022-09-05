@@ -51,18 +51,14 @@ return (
                         <Typography variant="body2">
                             Project Address:
                         </Typography>
-                        <a href={`http://maps.google.com/?q=${quote.address.address1}, ${quote.address.address2}, ${quote.address.city}, ${quote.address.state} ${quote.address.zip_code}`} 
+                        <a href={`http://maps.google.com/?q=${quote.address.address}, ${quote.address.city}, ${quote.address.state} ${quote.address.zip_code}`} 
                             target="_blank"
                             rel="noopener noreferrer" 
                         >
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                {quote.address.address1}
-                                
-                                {quote.address.address2 ? 
-                                <br/> : ''}
-                                {quote.address.address2}
+                                {quote.address.address}
                                 <br/>
-                                {`${quote.address.city}, ${quote.address.state} ${quote.address.zip_code}`}
+                                {`${quote.address.city}, ${quote.address.state} ${quote.address.postal_code}`}
                                 <br/>
                                 {quote.address.country}
                             </Typography>
