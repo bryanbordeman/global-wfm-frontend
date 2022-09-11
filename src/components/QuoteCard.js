@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { Chip, Avatar, Divider, Stack } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import moment from 'moment';
 
 export default function ProjectCard(props) {
 
@@ -35,6 +36,10 @@ return (
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     {quote.name}
+                </Typography>
+                <Divider/>
+                <Typography sx={{ mb: 1.5, mt: 1.5 }} variant="body2">
+                    Due Date: {moment(quote.due).format("MMM Do YYYY")}
                 </Typography>
                 <Divider/>
                 <Stack 
