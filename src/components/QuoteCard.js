@@ -8,10 +8,11 @@ import { Chip, Avatar, Divider, Stack } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import moment from 'moment';
+import { NumericFormat } from 'react-number-format';
 
 export default function ProjectCard(props) {
 
-const { quote } = props
+const { quote, user } = props
 // const { quote, handleSetContact } = props
     
 return (
@@ -168,6 +169,31 @@ return (
                         </Button>
                     </div>
                 ))}
+                {quote.notes ? 
+                <div>
+                <Divider sx={{mt:2}}/>
+                    <Typography variant="body2" sx={{mt:2}}>
+                        Notes:
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        {quote.notes}
+                    </Typography>
+                </div>
+                : ''}
+
+                {user.groups.filter(group => (group.name === 'ADMIN')).length > 0 && quote.price ? 
+                <div>
+                    <Divider sx={{mt:2}}/>
+                    <Typography sx={{ fontSize: 14, mt:2 }} color="text.secondary">
+                        Revision {quote.revision}
+                    </Typography> 
+                    <Typography variant="body2">
+                        {`Price = `}
+                        <NumericFormat value={quote.price} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                    </Typography> 
+                </div>
+                : ''}
+                
                 
                 </CardContent>
                 <CardActions>
