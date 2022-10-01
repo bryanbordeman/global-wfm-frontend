@@ -52,7 +52,7 @@ export default function QuotePicker(props) {
             isOptionEqualToValue={(option, newValue) => {
                 return option.id === newValue.id;
             }}
-            getOptionLabel={(option) => String(option.number).toString()}
+            getOptionLabel={(option) => `${option.number} ${option.name}`}
             renderInput={(params) => <TextField 
                                     helperText={errors.quote === null ? '' : errors.quote}
                                     error={errors.quote? true : false}

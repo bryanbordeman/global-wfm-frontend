@@ -52,7 +52,7 @@ export default function ProjectPicker(props) {
             isOptionEqualToValue={(option, newValue) => {
                 return option.id === newValue.id;
             }}
-            getOptionLabel={(option) => String(option.number).toString()}
+            getOptionLabel={(option) => `${option.number} ${option.name}`}
             renderInput={(params) => <TextField 
                                     helperText={errors.project === null ? '' : errors.project}
                                     error={errors.project? true : false}
