@@ -120,7 +120,7 @@ return (
                 <Typography variant="body2" sx={{mt:2}}>
                     Contact(s):
                 </Typography>
-
+{/* 
                 {project.contact.map(contact => (
                     <div key={contact.name}>
                         <Button sx={{
@@ -158,7 +158,7 @@ return (
                         label={`${project.customer_company.name}`}
                         variant="outlined"
                     />
-                </Button>
+                </Button> */}
 
                 
                 </CardContent>

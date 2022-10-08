@@ -98,6 +98,7 @@ function Projects(props) {
                     <QuoteCard
                         quote={quote}
                         user={user}
+                        token={token}
                         handleSetContact={handleSetContact}
                     />
                     <ContactModal

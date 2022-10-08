@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ContactServices from '../services/Contact.services';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -12,9 +13,35 @@ import { NumericFormat } from 'react-number-format';
 
 export default function ProjectCard(props) {
 
-const { quote, user } = props
+const { quote, user, token } = props
+const [ contacts, setContacts ] = React.useState([]);
+const didMount = React.useRef(false);
 // const { quote, handleSetContact } = props
-    
+
+React.useEffect(() => {
+    // go to backend and seach for matches. seach starts at third input
+    if (didMount.current) {
+        if(quote.id){
+            recieveContacts(quote.id)
+        }
+    } else {
+        didMount.current = true;
+    }
+},[quote]);
+
+const recieveContacts = (id) => {
+    ContactServices.getContactQuote(id, token)
+    .then(response => {
+        setContacts(response.data)
+        console.log(response.data)
+        // handleOpenSnackbar('info', 'Company was updated')
+    })
+    .catch(e => {
+        console.log(e);
+        // handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+    });
+}
+
 return (
     <>
         {quote.number ? 
