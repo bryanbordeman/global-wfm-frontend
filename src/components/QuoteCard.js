@@ -3,23 +3,21 @@ import ContactServices from '../services/Contact.services';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Chip, Avatar, Divider, Stack } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import moment from 'moment';
 import { NumericFormat } from 'react-number-format';
+import CompanyContactList from './CompanyContactList';
 
 export default function ProjectCard(props) {
 
 const { quote, user, token } = props
 const [ contacts, setContacts ] = React.useState([]);
 const didMount = React.useRef(false);
-// const { quote, handleSetContact } = props
 
 React.useEffect(() => {
-    // go to backend and seach for matches. seach starts at third input
     if (didMount.current) {
         if(quote.id){
             recieveContacts(quote.id)
@@ -33,7 +31,6 @@ const recieveContacts = (id) => {
     ContactServices.getContactQuote(id, token)
     .then(response => {
         setContacts(response.data)
-        console.log(response.data)
         // handleOpenSnackbar('info', 'Company was updated')
     })
     .catch(e => {
@@ -149,53 +146,12 @@ return (
                     </Stack>
                 </div>
                 </Stack>
-                {/* <Divider/>
-                <Typography variant="body2" sx={{mt:2}}>
-                    Contact(s):
-                </Typography> */}
-
-                {/* {quote.contacts.map(contact => (
-                    <div key={contact.name}>
-                        <Button sx={{
-                            textTransform: 'unset !important',
-                            p: 0,
-                            mt: 1}}
-                            onClick={() => {handleSetContact(contact)}}
-                            >
-                        <Chip
-                            avatar={<Avatar 
-                                    alt={`${contact.name}`}
-                                    src="/broken-image.jpg"
-                                    />}
-                            label={`${contact.name}`}
-                            variant="outlined"
-                        />
-                        </Button>
-                    </div>
-                ))} */}
                 <Divider sx={{mt:2}}/>
-                <Typography variant="body2" sx={{mt:2}}>
-                    Customer(s):
-                </Typography>
-                {quote.customers.map(customer => (
-                    <div key={customer.name}>
-                        <Button sx={{
-                            textTransform: 'unset !important',
-                            p: 0,
-                            mt: 1}}
-                            // onClick={() => {handleSetContact(contact)}}
-                            >
-                        <Chip
-                            avatar={<Avatar 
-                                    alt={`${customer.name}`}
-                                    src="/broken-image.jpg"
-                                    />}
-                            label={`${customer.name}`}
-                            variant="outlined"
-                        />
-                        </Button>
-                    </div>
-                ))}
+                <CompanyContactList
+                    customers={quote.customers}
+                    contacts={contacts}
+                    quote={quote}
+                />
                 {quote.notes ? 
                 <div>
                 <Divider sx={{mt:2}}/>
