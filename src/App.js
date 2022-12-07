@@ -25,23 +25,41 @@ function App() {
     const [darkState, setDarkState] = useState(prefersDarkMode);     
     let palletType = darkState ? "dark" : "light";
     
+    // const theme = createTheme({
+    //     palette: {
+    //         background: 
+    //             {
+    //                 default: darkState? 'black' : "#f8f8ff"
+    //             },
+    //         mode: palletType,
+    //         primary: {
+    //             main: '#1C88B0',
+    //         },
+    //         secondary: {
+    //             main: '#D1DF45',
+    //         },
+    //         darkBlue: {
+    //             main: '#11495F',
+    //         },
+    //         },
+    // });
     const theme = createTheme({
         palette: {
             background: 
                 {
-                    default: darkState? 'black' : "#f8f8ff"
+                    default: darkState? '#0C192A' : "#f8f8ff",
+                    paper: darkState? '#0C192A' : '#ffff'
                 },
-            mode: palletType,
-            primary: {
-                main: '#1C88B0',
-            },
-            secondary: {
-                main: '#D1DF45',
-            },
-            darkBlue: {
-                main: '#11495F',
-            },
-            
+                mode: palletType,
+                primary: {
+                    main: '#1C88B0',
+                },
+                secondary: {
+                    main: '#D1DF45',
+                },
+                darkBlue: {
+                    main: '#11495F',
+                },
             },
     });
 
