@@ -14,6 +14,10 @@ class ContactDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/contact/quote/${id}`);
     };
+    getContactProject(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/contact/project/${id}`);
+    };
     getContact(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/contact/${id}`);

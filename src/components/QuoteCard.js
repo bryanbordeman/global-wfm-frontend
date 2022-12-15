@@ -11,7 +11,7 @@ import moment from 'moment';
 import { NumericFormat } from 'react-number-format';
 import CompanyContactList from './CompanyContactList';
 
-export default function ProjectCard(props) {
+export default function QuoteCard(props) {
 
 const { quote, user, token } = props
 const [ contacts, setContacts ] = React.useState([]);

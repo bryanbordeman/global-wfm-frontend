@@ -19,5 +19,7 @@
 
 - Make StateSelect for address dialog
 
+- Add segment type table in worksegment models
+
 
 

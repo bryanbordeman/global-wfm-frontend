@@ -7,4 +7,6 @@ export const workTypes = [
 export const projectType =[
                     {id: 1, name: 'projects'},
                     {id: 2, name: 'quotes'},
+                    // {id: 3, name: 'services'},
+                    // {id: 4, name: "hse's"},
                 ]

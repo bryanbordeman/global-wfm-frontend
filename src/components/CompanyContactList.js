@@ -46,8 +46,8 @@ const Accordion = styled((props) => (
     }));
 
 export default function CompanyContactList(props) {
-    const { customers, contacts, quote } = props
-    const [expanded, setExpanded] = React.useState('panel1');
+    const { customers, contacts, quote, customer, project } = props
+    const [ expanded, setExpanded ] = React.useState('panel1');
 
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
@@ -58,7 +58,7 @@ export default function CompanyContactList(props) {
             <Typography variant="body2" sx={{mt:2, mb:2}}>
                 Customer(s):
             </Typography>
-            {customers.map(customer => (
+            {quote && customers.map(customer => (
             <Accordion key={customer.id} expanded={expanded === customer.id} onChange={handleChange(customer.id)}>
                 <AccordionSummary aria-controls={`${customer.id}-content`} id={`${customer.id}-header`}>
                 <Typography>{customer.name}</Typography>
@@ -87,6 +87,35 @@ export default function CompanyContactList(props) {
                 </AccordionDetails>
             </Accordion>
             ))}
+            { project?
+            <Accordion key={customer.id} expanded={expanded === customer.id} onChange={handleChange(customer.id)}>
+                <AccordionSummary aria-controls={`${customer.id}-content`} id={`${customer.id}-header`}>
+                <Typography>{customer.name}</Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{pb:0}}>
+                {contacts.map((contact) => {
+                    return contact.projects.includes(project.id) && contact.company === customer.id? 
+                    <div key={contact.id}>
+                        <Stack direction="row" spacing={1}>
+                            <IconButton color="primary" sx={{mr:1, ml:0, mb:2}}>
+                                <LaunchIcon />
+                            </IconButton>
+                        <div>
+                            <Typography variant="body2">
+                                {contact.name}
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontSize: 14 }} color="text.secondary">
+                                {contact.job_title}
+                            </Typography>
+                        </div>
+                        </Stack>
+                    </div>
+                    :
+                    ''
+                })}
+                </AccordionDetails>
+            </Accordion>
+            : ''}
         </div>
     );
     }

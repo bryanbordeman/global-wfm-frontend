@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ContactServices from '../services/Contact.services';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -7,11 +8,35 @@ import Typography from '@mui/material/Typography';
 import { Chip, Avatar, Divider, Stack } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-
+import CompanyContactList from './CompanyContactList';
 
 export default function ProjectCard(props) {
-
+const { user, token } = props
 const { project, handleSetContact } = props
+const [ contacts, setContacts ] = React.useState([]);
+const didMount = React.useRef(false);
+
+React.useEffect(() => {
+    if (didMount.current) {
+        if(project.id){
+            recieveContacts(project.id)
+        }
+    } else {
+        didMount.current = true;
+    }
+},[project]);
+
+const recieveContacts = (id) => {
+    ContactServices.getContactProject(id, token)
+    .then(response => {
+        setContacts(response.data)
+        // handleOpenSnackbar('info', 'Company was updated')
+    })
+    .catch(e => {
+        console.log(e);
+        // handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+    });
+}
     
 return (
     <>
@@ -116,10 +141,13 @@ return (
                     </Stack>
                 </div>
                 </Stack>
-                <Divider/>
-                <Typography variant="body2" sx={{mt:2}}>
-                    Contact(s):
-                </Typography>
+                <Divider sx={{mt:2}}/>
+                <CompanyContactList
+                    customer={project.customer}
+                    contacts={contacts}
+                    project={project}
+                    //! need to add project type for service and HSE
+                />
 {/* 
                 {project.contact.map(contact => (
                     <div key={contact.name}>
