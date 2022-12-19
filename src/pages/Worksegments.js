@@ -28,6 +28,21 @@ function WorksegmentList(props) {
     const [ submitted, setSubmitted ] = React.useState(false);
     const { user, token, handleOpenSnackbar } = props;
     const [ employee, setEmployee ] = React.useState({});
+    const [ workTypes, setWorkTypes ] = React.useState([]);
+
+    React.useEffect(() => {
+        recieveTypes();
+    },[]);
+
+    const recieveTypes = () => {
+        WorksegmentDataService.getAllTypes(token)
+        .then(response => {
+            setWorkTypes(response.data);
+        })
+        .catch(e => {
+            console.log(e);
+        });
+    };
 
     useEffect(() => {
         retrieveWorksegments();
@@ -96,7 +111,7 @@ function WorksegmentList(props) {
         WorksegmentDataService.deleteWorksegment(segmentId, props.token)
         .then(response => {
             window.scrollTo(0, 0);
-            handleOpenSnackbar('error', 'Your time has been deleted')
+            handleOpenSnackbar('warning', 'Your time has been deleted')
             retrieveWorksegments();
         })
         .catch( e => {
@@ -145,6 +160,7 @@ function WorksegmentList(props) {
     };
 
     const getTotalHours = () => {
+        //! move this whole function to backend
         let totalHours = 0
         let totalTravelHours = 0
 
@@ -273,9 +289,20 @@ function WorksegmentList(props) {
                                     {`${moment(segment.start_time, "HH:mm:ss").format("hh:mm A")} -  
                                     ${moment(segment.end_time, "HH:mm:ss").format("hh:mm A")}`}
                                     <br/>
-                                    Type: {capitalizeFirstLetter(segment.segment_type)}
+                                    Type: {capitalizeFirstLetter(segment.segment_type.name)}
                                     <br/>
-                                    Project: {segment.project.number}
+                                    {segment.quote?
+                                    `Quote: ${segment.quote.number}`
+                                    : ''}
+                                    {segment.project?
+                                    `Project: ${segment.project.number}`
+                                    : ''}
+                                    {segment.service?
+                                    `Service: ${segment.service.number}`
+                                    : ''}
+                                    {segment.hse?
+                                    `HSE: ${segment.hse.number}`
+                                    : ''}
                                     <br/>
                                     Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}
                                     <br/>
@@ -378,7 +405,9 @@ function WorksegmentList(props) {
                 token={token}
                 editing={editing}
                 createWorksegment={createWorksegment}
-                updateWorksegment={updateWorksegment}/>
+                updateWorksegment={updateWorksegment}
+                workTypes={workTypes}
+            />
 
             {segmentList}
 

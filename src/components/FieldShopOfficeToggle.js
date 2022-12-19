@@ -1,29 +1,41 @@
 import * as React from 'react';
+import WorksegmentServices from '../services/Worksegment.services';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { workTypes } from './ToggleObjects';
 
 export default function FieldShopOfficeToggle(props) {
-    const { segmentType, handleChangeSegmentType } = props
+    const { handleChangeSegmentType } = props
     const [ value, setValue ] = React.useState('');
+    const { workTypes, values } = props
+    const didMount = React.useRef(false);
 
-    React.useEffect(() => {
-        setValue(segmentType);
-    },[segmentType]);
+    React.useLayoutEffect(() => {
+        if (didMount.current) {
+            // if editing update value
+            if(values.segment_type.id === undefined){
+                setValue(workTypes.length > 0 ? workTypes[workTypes.length - 1].id : '');
+            }else{
+                setValue(values.segment_type.id);
+            }
+        } else {
+            didMount.current = true;
+        }
+    },[]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        if(workTypes.find(x => x.id === newValue))
-            handleChangeSegmentType(workTypes.find(x => x.id === newValue).name);
+        // if(workTypes.find(x => x.id === newValue))
+        //     handleChangeSegmentType(workTypes.find(x => x.id === newValue).id);
+        handleChangeSegmentType(newValue)
     };
 
     return (
         <ToggleButtonGroup
-        sx={{width: '100%'}}
-        color="primary"
-        value={value}
-        exclusive
-        onChange={handleChange}
+            sx={{width: '100%'}}
+            color="primary"
+            value={value}
+            exclusive
+            onChange={handleChange}
         >
             {workTypes.map(work => (
                 <ToggleButton key={work.id} sx={{width: '100%'}} value={work.id}>{work.name}</ToggleButton>

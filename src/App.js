@@ -60,6 +60,7 @@ function App() {
                 darkBlue: {
                     main: '#11495F',
                 },
+                
             },
     });
 

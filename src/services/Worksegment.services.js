@@ -6,6 +6,10 @@ class WorksegmentDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/worksegments/`);
     };
+    getAllTypes(token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/worktypes/`);
+    };
     getWeek(token, isoweek){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/worksegments/${isoweek}/`);

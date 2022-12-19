@@ -9,12 +9,14 @@ export default function ProjectPicker(props) {
     const [ inputValue, setInputValue ] = React.useState('');
 
     const { handleChangeProject, errors} = props
-    const { editing, editObject } = props;
+    const { editing, editObject, open } = props;
 
     React.useEffect(() => {
         retrieveProject()
-        
-    },[])
+        if(!open){
+            handleClear();
+        }
+    },[editing, open])
 
     const retrieveProject = () => {
         ProjectDataService.getAll(props.token)
@@ -32,6 +34,10 @@ export default function ProjectPicker(props) {
         setValue(newValue);
         handleChangeProject(newValue)
     };
+
+    const handleClear = () => {
+        setValue(null);
+    }
 
     return (
         <Autocomplete

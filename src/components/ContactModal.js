@@ -3,6 +3,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Avatar, Stack, Divider } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Link from '@mui/material/Link';
 
 const style = {
     position: 'absolute',
@@ -12,41 +15,21 @@ const style = {
     width: '100%',
     maxWidth: '325px',
     bgcolor: 'background.paper',
-    // border: '2px solid #000',
     boxShadow: 24,
     p: 2,
     };
 
-    export default function ContactModal(props) {
+export default function ContactModal(props) {
+    const { open, setOpen, company, contact, setContact, phones } = props
 
-    const { open, handleContactOpen } = props
-    const { project, contact } = props
-    const [ phone, setPhone ] = React.useState([])
-    const [ company, setCompany ] = React.useState('')
-
-    // console.log(contact.phone.map(number =>(number.phone_number, number.phone_type)))
-    React.useEffect(() => {
-        if(contact.phone){
-            setPhone(contact.phone.map(number =>([number.phone_number, number.phone_type])))
-        }else{
-            setPhone([])
-        }
-    },[contact])
-
-    React.useEffect(() => {
-        if(contact.company){
-            setCompany(contact.company.name)
-        }else{
-            setCompany('')
-        }
-    },[contact])
-
-
-    const handleClose = () => handleContactOpen(false);
+    const handleClose = () => {
+        setContact('');
+        setOpen(!open);
+    };
 
     return (
         <div>
-            {project.number ?
+            {contact ?
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -54,22 +37,47 @@ const style = {
                 aria-describedby="contact-information"
             >
                 <Box sx={style}>
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleClose}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        >
+                        <CloseIcon />
+                    </IconButton>
                     <Stack direction="row" spacing={1}>
                         <Avatar 
                             alt={`${contact.name}`}
                             src="/broken-image.jpg"
                             />
-                        <Typography id="contact-name" variant="h5" component="h2">
-                            {contact.name}
-                        </Typography>
+                        <Stack>
+                            <Typography style={{ wordWrap: "break-word", maxWidth:'200px' }} id="contact-name" variant="h5" component="h5">
+                                {contact.name}
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontSize: 14 }} color="text.secondary">
+                                {contact.job_title}
+                            </Typography>
+                        </Stack>
                     </Stack>
                     <Divider sx={{mt:1}}/>
-                    <Typography id="contact-information" variant="body2" sx={{ mt: 1 }}>
+                    <Typography id="contact-information" variant="subtitle1" sx={{ mt: 1 }}>
                         <>
-                        {company? <> {company} <br/></> : ''}
-                        {phone ? phone.map((number, key) => (<React.Fragment key={key}> <a href={`tel:${number[0]}`}>{number[0]}</a>{' '}{number[1]}<br/></React.Fragment>)) : ''}
-                        {contact.fax ? <>{`${contact.fax} Fax`}<br/></> : ''}
-                        {contact.email ? <a href={`mailto:${contact.email}`}>{contact.email}</a>: ''}
+                        {company? <> {company.name} <br/></> : ''}
+                        </>
+                    </Typography>
+                    <Divider sx={{mt:1}}/>
+                    <Typography id="contact-information" variant="body2" sx={{ mt: 2 }}>
+                        <>
+                        {phones ? phones.map((phone, key) => (<React.Fragment key={key}> <Link href={`tel:${phone.phone_number}`}>{phone.phone_number}</Link>{` ${phone.phone_type}`}<br/></React.Fragment>)) : ''}
+                        </>
+                    </Typography>
+                    <Typography id="contact-information" variant="body2" sx={{ mt: 2 }}>
+                        <>
+                        {contact.email ? <Link href={`mailto:${contact.email}`}>{contact.email}</Link>: ''}
                         </>
                     </Typography>
                 </Box>
@@ -77,4 +85,4 @@ const style = {
             : ''}
         </div>
     );
-}
+};

@@ -1,20 +1,17 @@
 import React from 'react';
-import ProjectPicker from '../components/ProjectPicker'
-import QuotePicker from '../components/QuotePicker'
+import ProjectPicker from '../components/ProjectPicker';
+import QuotePicker from '../components/QuotePicker';
 import ServicePicker from '../components/ServicePicker';
 import HSEPicker from '../components/HSEPicker';
 import ProjectCard from '../components/ProjectCard';
 import QuoteCard from '../components/QuoteCard';
 import { Container, Stack } from '@mui/material';
-import ContactModal from '../components/ContactModal'
 import ProjectTypeDropdown from '../components/ProjectTypeDropdown';
 
 export default function Projects(props) {
     const { token, user } = props;
     const [ project, setProject ] = React.useState({});
     const [ quote, setQuote ] = React.useState({});
-    const [ contactOpen, setContactOpen ] = React.useState(false);
-    const [ contact, setContact ] = React.useState({});
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
     const [ menuSelection, setMenuSelection ] = React.useState(0);
     const [ picker, setPicker ] = React.useState('')
@@ -88,19 +85,9 @@ export default function Projects(props) {
         setProject({});
     };
 
-    const handleContactOpen = (value) => {
-        setContactOpen(value);
-    };
-
-    const handleSetContact = (contact) => {
-        setContact(contact);
-        setContactOpen(true);
-    };
-
     const handleClear = () => {
         setProject('');
         setQuote('');
-        setContact('');
     };
 
     return ( 
@@ -130,14 +117,9 @@ export default function Projects(props) {
                         project={project}
                         user={user}
                         token={token}
-                        handleSetContact={handleSetContact}
+                        menuSelection={menuSelection}
                     /> 
-                    <ContactModal
-                        project={project}
-                        contact={contact}
-                        handleContactOpen={handleContactOpen}
-                        open={contactOpen}
-                    />
+                    
                     </>
                     : ''}
                     {quote?
@@ -146,13 +128,6 @@ export default function Projects(props) {
                         quote={quote}
                         user={user}
                         token={token}
-                        handleSetContact={handleSetContact}
-                    />
-                    <ContactModal
-                        project={quote}
-                        contact={contact}
-                        handleContactOpen={handleContactOpen}
-                        open={contactOpen}
                     />
                     </>
                     : ''

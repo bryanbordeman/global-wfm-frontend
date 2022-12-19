@@ -13,34 +13,45 @@ import { Stack, IconButton } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
-import ProjectPicker from './ProjectPicker'
+import ProjectPicker from '../components/ProjectPicker';
+import QuotePicker from '../components/QuotePicker';
+import ServicePicker from '../components/ServicePicker';
+import HSEPicker from '../components/HSEPicker';
+import ProjectTypeDropdown from '../components/ProjectTypeDropdown';
 import EmployeePicker from './EmployeePicker';
 import moment from 'moment-timezone';
 import CloseIcon from '@mui/icons-material/Close';
 import Transition from './DialogTransistion'
 import FieldShopOfficeToggle from './FieldShopOfficeToggle';
-import { workTypes } from './ToggleObjects';
 
 export default function AddWorksegmentForm(props) {
-
     const { 
-            editing, 
-            createWorksegment, 
-            updateWorksegment,
-            segment,
-            handleClose, 
-            openAdd,
-            setOpenAdd,
-            user,
-            token,
-            handleChangeEmployee,
-            employee
-            } = props
+        editing, 
+        workTypes,
+        createWorksegment, 
+        updateWorksegment,
+        segment,
+        handleClose, 
+        openAdd,
+        setOpenAdd,
+        user,
+        token,
+        handleChangeEmployee,
+        employee
+        } = props
+    const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
+    const [ menuSelection, setMenuSelection ] = React.useState(0);
+    const [ picker, setPicker ] = React.useState('');
+    const didMount = React.useRef(false);
+    
 
     const initialFormValues = {
         user: user.id,
         segment_type: '',
+        quote: '',
         project: '',
+        service: '',
+        hse: '',
         is_approved: false,
         date: new Date(),
         startTime: new Date(),
@@ -49,11 +60,14 @@ export default function AddWorksegmentForm(props) {
         travel: 0, 
         notes: ''
     };
-
+    
     const editFormValues = {
         user: editing ? segment.user.id : segment.user,
-        segment_type: segment.segment_type,
-        project: editing ? segment.project.id : segment.project,
+        segment_type: segment.segment_type? segment.segment_type.id : segment.segment_type,
+        quote: editing && segment.quote != null ? segment.quote.id : segment.quote,
+        project: editing && segment.project != null ? segment.project.id : segment.project,
+        service: editing && segment.service != null? segment.service.id : segment.service,
+        hse: editing && segment.hse != null ? segment.hse.id : segment.hse,
         date: editing ? new Date(segment.date.replace('-', '/').replace('-', '/')) : new Date(),
         startTime: editing ? getDateFromHours(segment.start_time) : new Date(),
         endTime: editing ? getDateFromHours(segment.end_time) : new Date(),
@@ -72,10 +86,98 @@ export default function AddWorksegmentForm(props) {
         employee: null
     });
     const [ isValid, setIsValid ] = React.useState(true);
-    const [ segmentType, setSegmentType ] = React.useState('');
+    // const [ segmentType, setSegmentType ] = React.useState('');
+
+    React.useEffect(() => {
+        if(user.groups.filter(group => (group.name === 'SALES')).length > 0){
+            setMenuOptions(['Projects', 'Services', "HSE's", 'Quotes']);
+        }
+    },[])
+
+    React.useEffect(() => {
+        if (didMount.current) {
+            switch(menuSelection) {
+                case 1:
+                    // console.log('Services')
+                    // handleClear();
+                    setPicker(
+                        <ServicePicker
+                            token={token}
+                            handleChangeProject={handleChangeProject}
+                            editing={editing}
+                            editObject={segment}
+                            errors={errors}
+                            editProject={values.project}
+                        />
+                    )
+                break;
+                case 2:
+                    // console.log("HSE's")
+                    // handleClear();
+                    setPicker(
+                        <HSEPicker
+                            token={token}
+                            handleChangeProject={handleChangeProject}
+                            editing={editing}
+                            editObject={segment}
+                            errors={errors}
+                            editProject={values.project}
+                        />
+                    )
+                break;
+                case 3:
+                    // console.log('Quotes')
+                    // handleClear();
+                    setPicker(
+                        <QuotePicker
+                            token={token}
+                            // handleChangeQuote={handleChangeQuote}
+                            errors={{quote: ''}}
+                        />
+                    )
+                break;
+                default:
+                    // console.log('Projects')
+                    // handleClear();
+                    setPicker(
+                        <ProjectPicker
+                            token={token}
+                            handleChangeProject={handleChangeProject}
+                            editing={editing}
+                            editObject={segment}
+                            errors={errors}
+                            editProject={values.project}
+                            open={openAdd}
+                        />
+                    )
+            }
+        } else {
+            didMount.current = true;
+        }
+    },[menuSelection, openAdd]);
 
     React.useLayoutEffect(() => {
-        setValues(editing ? editFormValues : initialFormValues)
+        if (didMount.current) {
+            if(editing){
+                if(segment.service !== null){
+                    setMenuSelection(1)
+                }
+                if(segment.hse !== null){
+                    setMenuSelection(2)
+                }
+                if(segment.quote !== null){
+                    setMenuSelection(3)
+                }
+                if(segment.project !== null){
+                    setMenuSelection(0)
+                }
+                setTimeout(() => {
+                    setValues(editFormValues)
+                }, 500);
+            }
+        } else {
+            didMount.current = true;
+        }
     },[openAdd]);
 
     React.useEffect(() => {
@@ -86,30 +188,29 @@ export default function AddWorksegmentForm(props) {
             });
     },[employee]);
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if(editing){
             setValues({
                 ...values,
                 segment_type: segment.segment_type
             });
-            setSegmentType(workTypes.find(x => x.name === segment.segment_type).id);
+            // setSegmentType(workTypes.find(x => x.name === segment.segment_type).id);
         }else{
             // set type to office by default
-            setSegmentType(workTypes[workTypes.length - 1].id);
             setValues({
                 ...values,
-                segment_type: workTypes[workTypes.length - 1].name
+                segment_type: workTypes.length > 0 ? workTypes[workTypes.length - 1].id : ''
             });
             // assign type based on user group if field or shop
             workTypes.forEach(work => {
                 if(user.groups.filter(group => (group.name === work.name.toUpperCase())).length > 0){
-                    setSegmentType(work.id);
                     setValues({
                         ...values,
-                        segment_type: work.name
+                        segment_type: work
                     });
                 }
             });
+
         }
     },[openAdd]);
 
@@ -287,7 +388,8 @@ export default function AddWorksegmentForm(props) {
             <Stack direction="column" spacing={2}>
                 <FieldShopOfficeToggle
                     handleChangeSegmentType={handleChangeSegmentType}
-                    segmentType={segmentType}
+                    workTypes={workTypes}
+                    values={values}
                 />
                 {user.is_staff ? 
                 <div>
@@ -301,6 +403,16 @@ export default function AddWorksegmentForm(props) {
                     handleChangeEmployee={handleChangeEmployee}/>
                 </div> : ''
                 }
+                    <Stack direction="row" spacing={1}>
+                        {picker}
+                        <ProjectTypeDropdown
+                            user={user}
+                            menuOptions={menuOptions}
+                            menuSelection={menuSelection}
+                            setMenuSelection={setMenuSelection}
+                        />
+                    </Stack>
+{/* 
                     <ProjectPicker
                         editing={editing}
                         editObject={segment}
@@ -308,7 +420,7 @@ export default function AddWorksegmentForm(props) {
                         handleChangeProject={handleChangeProject}
                         errors={errors}
                         editProject={values.project}
-                    />
+                    /> */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Date"
