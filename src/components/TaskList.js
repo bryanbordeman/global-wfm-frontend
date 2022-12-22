@@ -232,7 +232,20 @@ return (
     {selectedList.map((list, i) => {
         const labelId = `list-label-${list.title}`;
         let subtasks = list.subtasks.map(sublist => (sublist))
-        
+        let number = ''
+        // set number based on type
+        if(list.project){
+            number =list.project.number
+        }
+        if(list.service){
+            number =list.service.number
+        }
+        if(list.hse){
+            number =list.hse.number
+        }
+        if(list.quote){
+            number =list.quote.number
+        }
         return (
             <div key={list.id}>
                 <StyledMenu
@@ -320,7 +333,7 @@ return (
                             // variant={darkState? '' : 'outlined'}
                             size='small' 
                             color='primary' 
-                            label={list.project ? `${list.project.number}` :`${list.quote.number}` } 
+                            label={number}
                         />
                     </ListItemIcon>
                     <ListItemText 

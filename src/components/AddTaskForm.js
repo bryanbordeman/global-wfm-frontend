@@ -6,7 +6,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Stack, TextField, Divider,IconButton} from '@mui/material';
 import AssigneePicker from './AssigneePicker';
-import ProjectPicker from './ProjectPicker';
+import ProjectPicker from '../components/ProjectPicker';
+import QuotePicker from '../components/QuotePicker';
+import ServicePicker from '../components/ServicePicker';
+import HSEPicker from '../components/HSEPicker';
+import ProjectTypeDropdown from '../components/ProjectTypeDropdown';
 import TaskListPicker from './TaskListPicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -17,7 +21,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
 import Transition from './DialogTransistion'
 import QuoteProjectToggle from './QuoteProjectToggle';
-import QuotePicker from './QuotePicker'
 import { projectType } from './ToggleObjects';
 
 export default function AddTaskForm(props) {
@@ -30,6 +33,82 @@ export default function AddTaskForm(props) {
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
     const [ choosePicker, setChoosePicker ] = React.useState('projects')
+
+    const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
+    const [ menuSelection, setMenuSelection ] = React.useState(0);
+    const [ picker, setPicker ] = React.useState('');
+    const didMount = React.useRef(false);
+
+    React.useEffect(() => {
+        if(user.groups.filter(group => (group.name === 'SALES')).length > 0){
+            setMenuOptions(['Projects', 'Services', "HSE's", 'Quotes']);
+        }
+    },[])
+
+    React.useEffect(() => {
+        if (didMount.current) {
+            switch(menuSelection) {
+                case 1:
+                    // console.log('Services')
+                    // handleClear();
+                    setPicker(
+                        <ServicePicker
+                            editing={editing}
+                            editObject={task}
+                            token={token}
+                            handleChangeProject={handleChangeProject}
+                            errors={errors}
+                            editProject={values.project}
+                        />
+                    )
+                break;
+                case 2:
+                    // console.log("HSE's")
+                    // handleClear();
+                    setPicker(
+                        <HSEPicker
+                            editing={editing}
+                            editObject={task}
+                            token={token}
+                            handleChangeProject={handleChangeProject}
+                            errors={errors}
+                            editProject={values.project}
+                        />
+                    )
+                break;
+                case 3:
+                    // console.log('Quotes')
+                    // handleClear();
+                    setPicker(
+                        <QuotePicker
+                            editing={editing}
+                            editObject={task}
+                            token={token}
+                            handleChangeQuote={handleChangeProject}
+                            errors={errors}
+                            editProject={values.project}
+                        />
+                    )
+                break;
+                default:
+                    // console.log('Projects')
+                    // handleClear();
+                    setPicker(
+                        <ProjectPicker
+                            editing={editing}
+                            editObject={task}
+                            token={token}
+                            handleChangeProject={handleChangeProject}
+                            errors={errors}
+                            editProject={values.project}
+                        />
+                    )
+            }
+        } else {
+            didMount.current = true;
+        }
+    },[menuSelection, open]);
+    
 
 
     const initialFormValues = {
@@ -282,6 +361,15 @@ export default function AddTaskForm(props) {
                             handleChangeAssignee={handleChangeAssignee}
                         />
                         <Stack direction="row" spacing={1}>
+                            {picker}
+                            <ProjectTypeDropdown
+                                user={user}
+                                menuOptions={menuOptions}
+                                menuSelection={menuSelection}
+                                setMenuSelection={setMenuSelection}
+                            />
+                        </Stack>
+                        {/* <Stack direction="row" spacing={1}>
                         {choosePicker === projectType[0].name?
                         <ProjectPicker
                             editing={editing}
@@ -307,7 +395,7 @@ export default function AddTaskForm(props) {
                             choosePicker={choosePicker}
                         />
                         : ''}
-                        </Stack>
+                        </Stack> */}
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 label="Due Date"

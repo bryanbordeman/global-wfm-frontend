@@ -10,19 +10,25 @@ export default function ProjectPicker(props) {
 
     const { handleChangeProject, errors} = props
     const { editing, editObject, open } = props;
+    const didMount = React.useRef(false);
 
     React.useEffect(() => {
-        retrieveProject()
-        if(!open){
+        //! renders twice??
+        if (didMount.current) {
+            console.log(editing)
             handleClear();
+            retrieveProject();
+        } else {
+            didMount.current = true;
         }
-    },[editing, open])
+    },[])
 
     const retrieveProject = () => {
         ProjectDataService.getAll(props.token)
         .then(response => {
             setProjects(response.data);
             if(editing){
+                console.log(editing)
                 handleInputValue(editObject.project);
             };
         })
@@ -32,12 +38,12 @@ export default function ProjectPicker(props) {
     }
     const handleInputValue = (newValue) => {
         setValue(newValue);
-        handleChangeProject(newValue)
+        handleChangeProject(newValue);
     };
 
     const handleClear = () => {
         setValue(null);
-    }
+    };
 
     return (
         <Autocomplete
