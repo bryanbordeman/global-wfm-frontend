@@ -25,6 +25,7 @@ import Transition from './DialogTransistion'
 import FieldShopOfficeToggle from './FieldShopOfficeToggle';
 
 export default function AddWorksegmentForm(props) {
+
     const { 
         editing, 
         setEditing,
@@ -32,7 +33,6 @@ export default function AddWorksegmentForm(props) {
         createWorksegment, 
         updateWorksegment,
         segment,
-        handleClose, 
         openAdd,
         setOpenAdd,
         user,
@@ -40,12 +40,12 @@ export default function AddWorksegmentForm(props) {
         handleChangeEmployee,
         employee
         } = props
+
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
     const [ menuSelection, setMenuSelection ] = React.useState(0);
     // const [ picker, setPicker ] = React.useState('');
     const didMount = React.useRef(false);
     
-
     const initialFormValues = {
         user: user.id,
         segment_type: '',
@@ -78,6 +78,7 @@ export default function AddWorksegmentForm(props) {
     };
 
     const [ values, setValues ] = React.useState(initialFormValues);
+    
     const [ errors, setErrors ] = React.useState({
         project: null,
         date: null,
@@ -95,69 +96,7 @@ export default function AddWorksegmentForm(props) {
         }
     },[])
 
-    // React.useEffect(() => {
-    //     if (didMount.current) {
-    //         switch(menuSelection) {
-    //             case 1:
-    //                 // console.log('Services')
-    //                 // handleClear();
-    //                 setPicker(
-    //                     <ServicePicker
-    //                         token={token}
-    //                         handleChangeProject={handleChangeProject}
-    //                         editing={editing}
-    //                         editObject={segment}
-    //                         errors={errors}
-    //                         editProject={values.project}
-    //                     />
-    //                 )
-    //             break;
-    //             case 2:
-    //                 // console.log("HSE's")
-    //                 // handleClear();
-    //                 setPicker(
-    //                     <HSEPicker
-    //                         token={token}
-    //                         handleChangeProject={handleChangeProject}
-    //                         editing={editing}
-    //                         editObject={segment}
-    //                         errors={errors}
-    //                         editProject={values.project}
-    //                     />
-    //                 )
-    //             break;
-    //             case 3:
-    //                 // console.log('Quotes')
-    //                 // handleClear();
-    //                 setPicker(
-    //                     <QuotePicker
-    //                         token={token}
-    //                         // handleChangeQuote={handleChangeQuote}
-    //                         errors={{quote: ''}}
-    //                     />
-    //                 )
-    //             break;
-    //             default:
-    //                 // console.log('Projects')
-    //                 // handleClear();
-    //                 setPicker(
-    //                     <ProjectPicker
-    //                         token={token}
-    //                         handleChangeProject={handleChangeProject}
-    //                         editing={editing}
-    //                         editObject={segment}
-    //                         errors={errors}
-    //                         editProject={values.project}
-    //                         open={openAdd}
-    //                     />
-    //                 )
-    //         }
-    //     } else {
-    //         didMount.current = true;
-    //     }
-    // },[menuSelection, openAdd]);
-
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         if (didMount.current) {
             if(editing){
                 if(segment.service !== null){
@@ -172,14 +111,23 @@ export default function AddWorksegmentForm(props) {
                 if(segment.project !== null){
                     setMenuSelection(0)
                 }
-                setTimeout(() => {
-                    setValues(editFormValues)
-                }, 500);
             }
         } else {
             didMount.current = true;
         }
-    },[openAdd]);
+    },[props]);
+
+    React.useEffect(() => {
+        if (didMount.current) {
+            if(editing){
+                // setTimeout(() => {
+                    setValues(editFormValues)
+                // }, 500);
+            }
+        } else {
+            didMount.current = true;
+        }
+    },[props]);
 
     React.useEffect(() => {
         if(employee) 
@@ -225,7 +173,8 @@ export default function AddWorksegmentForm(props) {
         const data = {
             user: values.user,
             segment_type: values.segment_type,
-            quote: values.quote, 
+            //! need to makee sure if one is selected the others are null
+            quote: values.quote,
             project: values.project, 
             service: values.service, 
             hse: values.hse, 
@@ -238,6 +187,7 @@ export default function AddWorksegmentForm(props) {
             notes: values.notes
         };
         if(editing){
+            console.log(data)
             updateWorksegment(segment.id, data); // update segment
             handleClose(); // close dialog
             setValues(initialFormValues); // reset form
@@ -286,7 +236,7 @@ export default function AddWorksegmentForm(props) {
     const handleValidation = () => {
         let formIsValid = true;
 
-        if(values.project === ''){
+        if(values.project === '' && values.service === '' && values.hse === '' && values.quote === ''){
             setErrors({...errors, project: 'Required field'});
             formIsValid = false;
             setTimeout(() => {
@@ -353,15 +303,69 @@ export default function AddWorksegmentForm(props) {
     };
 
     const handleChangeProject = (newValue) => {
-        if(newValue){
-            setValues({
-            ...values,
-            project: newValue.id
-            });
+        switch(menuSelection) {
+            case 1:
+                //Service
+                if(newValue){
+                    setValues({
+                    ...values,
+                    service: newValue.id,
+                    project: null,
+                    hse: null,
+                    quote: null
+                    });
+                };
+            break;
+            case 2:
+                //HSE
+                if(newValue){
+                    setValues({
+                    ...values,
+                    hse: newValue.id,
+                    project: null,
+                    service: null,
+                    quote: null
+                    });
+                };
+            break;
+            case 3:
+               //Quote
+                if(newValue){
+                    setValues({
+                    ...values,
+                    quote: newValue.id,
+                    project: null,
+                    hse: null,
+                    service: null
+                    });
+                };
+            break;
+            default:
+                //Project 
+                if(newValue){
+                    setValues({
+                    ...values,
+                    project: newValue.id,
+                    service: null,
+                    hse: null,
+                    quote: null
+                    });
+                };
         };
     };
 
-    let picker = ''
+    const handleClear = () => {
+        setValues(initialFormValues);
+    };
+
+    const handleClose = () => {
+        setOpenAdd(false);
+        setEditing(false);
+        handleClear();
+        // handleChangeEmployee(null);
+    };
+
+    let picker = <div></div>
 
     switch(menuSelection) {
         case 1:
@@ -406,7 +410,7 @@ export default function AddWorksegmentForm(props) {
                     open={openAdd}
                 />
             
-    }
+    };
 
     return (
         <div>

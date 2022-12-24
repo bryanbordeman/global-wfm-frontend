@@ -1,5 +1,4 @@
 import * as React from 'react';
-import WorksegmentServices from '../services/Worksegment.services';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
@@ -24,8 +23,6 @@ export default function FieldShopOfficeToggle(props) {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        // if(workTypes.find(x => x.id === newValue))
-        //     handleChangeSegmentType(workTypes.find(x => x.id === newValue).id);
         handleChangeSegmentType(newValue)
     };
 

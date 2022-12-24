@@ -9,12 +9,14 @@ import { Toolbar } from '@mui/material';
 import SnackbarAlert from './components/SnackbarAlert';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Loading from './components/Loading';
 
 function App() {
     const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || {})
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
     const [ loginErrors, setLoginErrors ] = useState({username: null, password: null})
+    const [ isLoading, setIsLoading ] = React.useState(false);
 
     const [ openSnackbar, setOpenSnackbar ] = React.useState(false);
     const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
@@ -88,6 +90,7 @@ function App() {
     }
 
     async function login(user= null){
+        setIsLoading(true);
         UserService.login(user)
         .then(response => {
             setLoginErrors({username: null, password: null});
@@ -102,6 +105,9 @@ function App() {
         .catch( e => {
             console.log('login', e.toString());
             setLoginErrors({username: 'Username', password: 'Password'});
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
     };
     async function logout(){
@@ -168,6 +174,9 @@ function App() {
                     severity={snackbarSeverity}
                     message={snackbarMessage}/>
             </BrowserRouter>
+            <Loading
+                open={isLoading}
+            />
         </ThemeProvider>
     );
 }

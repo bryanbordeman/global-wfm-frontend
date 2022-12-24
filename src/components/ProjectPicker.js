@@ -2,11 +2,13 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import ProjectDataService from '../services/Project.services'
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function ProjectPicker(props) {
     const [ value, setValue ] = React.useState(null);
     const [ projects, setProjects ] = React.useState([{}])
     const [ inputValue, setInputValue ] = React.useState('');
+    const [ isLoading, setIsLoading ] = React.useState(true);
 
     const { handleChangeProject, errors} = props
     const { editing, editObject, open } = props;
@@ -15,7 +17,6 @@ export default function ProjectPicker(props) {
     React.useEffect(() => {
         //! renders twice??
         if (didMount.current) {
-            console.log(editing)
             handleClear();
             retrieveProject();
         } else {
@@ -23,22 +24,34 @@ export default function ProjectPicker(props) {
         }
     },[])
 
-    const retrieveProject = () => {
-        ProjectDataService.getAll(props.token)
-        .then(response => {
-            setProjects(response.data);
+    React.useEffect(() => {
+        //! renders twice??
+        if (didMount.current) {
             if(editing){
-                console.log(editing)
                 handleInputValue(editObject.project);
             };
-        })
-        .catch( e => {
-            console.log(e);
-        })
+        } else {
+            didMount.current = true;
+        }
+    },[])
+
+    const retrieveProject = () => {
+        setIsLoading(true);
+        ProjectDataService.getAll(props.token)
+            .then(response => {
+                setProjects(response.data);
+            })
+            .catch( e => {
+                console.log(e);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }
     const handleInputValue = (newValue) => {
         setValue(newValue);
-        handleChangeProject(newValue);
+        if(!isLoading)
+            handleChangeProject(newValue);
     };
 
     const handleClear = () => {
@@ -51,6 +64,8 @@ export default function ProjectPicker(props) {
             fullWidth
             autoSelect = {false}
             blurOnSelect = 'touch'
+            loading={isLoading}
+            disabled={isLoading}
             // value={editing? editObject.project : value}
             value={value}
             onChange={(event, newValue) => {
@@ -64,14 +79,23 @@ export default function ProjectPicker(props) {
             isOptionEqualToValue={(option, newValue) => {
                 return option.id === newValue.id;
             }}
-            getOptionLabel={(option) => `${option.number} ${option.name}`}
+            getOptionLabel={(option) => isLoading? '' : `${option.number} ${option.name}`}
             renderInput={(params) => <TextField 
                                     helperText={errors.project === null ? '' : errors.project}
                                     error={errors.project? true : false}
                                     {...params} 
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                        <React.Fragment>
+                                            {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                                            {params.InputProps.endAdornment}
+                                        </React.Fragment>
+                                        ),
+                                    }}
                                     id="project"
                                     name='project'
-                                    label="Search Projects" 
+                                    label={isLoading? "Loading..." : "Search Projects"}
                                     />}
         />
     );
