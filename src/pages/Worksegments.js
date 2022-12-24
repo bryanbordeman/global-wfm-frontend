@@ -17,6 +17,7 @@ import AddWorksegmentForm from '../components/AddWorksegmentForm'
 import DeleteWorksegmentModal from '../components/DeleteWorksegmentModal';
 
 import EmployeePicker from '../components/EmployeePicker';
+import Loading from '../components/Loading';
 
 function WorksegmentList(props) {
     const [ worksegments, setWorksegments ] = useState([]);
@@ -25,90 +26,109 @@ function WorksegmentList(props) {
     const [ openDelete, setOpenDelete ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
     const [ editSegment, setEditSegment ] = React.useState({});
-    const [ submitted, setSubmitted ] = React.useState(false);
     const { user, token, handleOpenSnackbar } = props;
     const [ employee, setEmployee ] = React.useState({});
     const [ workTypes, setWorkTypes ] = React.useState([]);
+    const [ isLoading, setIsLoading ] = React.useState(true);
+    const [ totals, setTotals ] = React.useState('')
 
     React.useEffect(() => {
         recieveTypes();
     },[]);
+    
+    useEffect(() => {
+        retrieveWorksegments();
+    }, [token, isoWeek, employee,]);
+    
+    useEffect(() => {
+        recieveTotals();
+    }, [worksegments]);
 
     const recieveTypes = () => {
+        // get work types [shop, field, office....]
+        setIsLoading(true);
         WorksegmentDataService.getAllTypes(token)
         .then(response => {
             setWorkTypes(response.data);
         })
         .catch(e => {
             console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
     };
-
-    useEffect(() => {
-        retrieveWorksegments();
-    }, [props.token, isoWeek, employee, submitted]);
 
     const handleClickOpen = () => {
         // setEditing(false);
         setOpenAdd(true);
     };
 
-    const handleClose = () => {
-        setOpenAdd(false);
-        setEditing(false);
-        // handleChangeEmployee(null);
-    };
-
     const retrieveWorksegments = () => {
-        user.is_staff? WorksegmentDataService.adminGetWeek(props.token, isoWeek)
-        .then(response => {
-            // !sort segments by user request
-        const filteredEmployee = []
-        if(employee){
-        Object.values(response.data).find((obj) => {
-            if(obj.user.id === employee.id){
-                filteredEmployee.push(obj)
-            }
-        return ''
-        });
-    }
+        // get segments from API
+        setIsLoading(true);
+        user.is_staff? 
+        WorksegmentDataService.adminGetWeek(props.token, isoWeek)
+            .then(response => {
+                // !sort segments by user request
+                const filteredEmployee = []
+                if(employee){
+                    Object.values(response.data).find((obj) => {
+                        if(obj.user.id === employee.id){
+                            filteredEmployee.push(obj)
+                        }
+                    return ''
+                    });
+                }
 
-            setWorksegments(filteredEmployee);
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        })
+                setWorksegments(filteredEmployee);
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
         :
         WorksegmentDataService.getWeek(props.token, isoWeek)
-        .then(response => {
-            setWorksegments(response.data);
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        })
+            .then(response => {
+                setWorksegments(response.data);
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
 
     const createWorksegment = (data) => {
-        const userId = user.is_staff ? Number(employee.id) : Number(user.id)
+        const userId = user.is_staff ? Number(employee.id) : Number(user.id);
+        setIsLoading(true);
         WorksegmentDataService.createWorksegment(data, token, userId)
         .then(response => {
             window.scrollTo(0, 0);
             handleOpenSnackbar('success', 'Your time has been submitted for approval')
             retrieveWorksegments();
-            setSubmitted(true);
-            setTimeout(() => {
-                setSubmitted(true)
-            }, 3000);
+            // setSubmitted(true);
+            // setTimeout(() => {
+            //     setSubmitted(true)
+            // }, 3000);
         })
         .catch(e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
     };
 
     const deleteWorksegment = (segmentId) => {
+        setIsLoading(true);
         WorksegmentDataService.deleteWorksegment(segmentId, props.token)
         .then(response => {
             window.scrollTo(0, 0);
@@ -118,10 +138,14 @@ function WorksegmentList(props) {
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
     };
 
     const updateWorksegment = (segmentId, data) => {
+        setIsLoading(true);
         WorksegmentDataService.updateWorksegment(segmentId, data, props.token)
         .then(response => {
             window.scrollTo(0, 0);
@@ -131,10 +155,14 @@ function WorksegmentList(props) {
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
     };
 
     const approveWorksegment = (segmentId) => {
+        setIsLoading(true);
         WorksegmentDataService.approveWorksegment(segmentId, props.token)
         .then(response => {
             retrieveWorksegments();
@@ -142,6 +170,36 @@ function WorksegmentList(props) {
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const recieveTotals = () => {
+        // get total hours for all users in isoweek.
+        const isAdmin = user.is_staff ? true : false;
+        setIsLoading(true);
+        WorksegmentDataService.getTotals(token, isoWeek)
+        .then(response => {
+            if(employee && isAdmin){
+                // if user is admin
+                setTotals(response.data.filter((d) => (d.user_id === String(employee.id)))[0]);
+            }
+            else if(employee){
+                // if user is employee
+                setTotals(response.data.filter((d) => (d.user_id === String(user.id)))[0]);
+            }else{
+                // if no employee is selected
+                setTotals('')
+            }
+        })
+        .catch(e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
     };
 
@@ -160,28 +218,6 @@ function WorksegmentList(props) {
         setEditSegment(segment);
     };
 
-    const getTotalHours = () => {
-        //! move this whole function to backend
-        let totalHours = 0
-        let totalTravelHours = 0
-
-        for (let i = 0; i < worksegments.length; i++){
-            totalHours += Number(worksegments[i].duration)
-            totalTravelHours += Number(worksegments[i].travel_duration)
-            }
-        let totalRegularHours = totalHours - totalTravelHours
-        let totalOvertimeHours = 0
-        if(totalRegularHours > 40 ){
-            totalOvertimeHours = totalRegularHours - 40
-            totalRegularHours = 40
-        }
-
-        return {totalHours: totalHours, 
-                totalTravelHours: totalTravelHours,
-                totalRegularHours: totalRegularHours,
-                totalOvertimeHours: totalOvertimeHours}
-    };
-    
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
@@ -189,8 +225,6 @@ function WorksegmentList(props) {
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
     };
-
-    const totals = getTotalHours();
 
     const segmentList = worksegments.map(segment => (
                 <Paper
@@ -379,16 +413,16 @@ function WorksegmentList(props) {
                         {isoWeek}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                    Regular Hours: {totals.totalRegularHours}
+                    Regular Hours: {totals? totals.regular : ''}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                    Travel Hours: {totals.totalTravelHours}
+                    Travel Hours: {totals? totals.travel : ''}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                    Overtime Hours: {totals.totalOvertimeHours}
+                    Overtime Hours: {totals? totals.overtime : ''}
                     </Typography>
                     <Typography style={{fontWeight: '600'}} variant="body1" color="text.primary" gutterBottom>
-                    Total Hours: {totals.totalHours}
+                    Total Hours: {totals? totals.total_duration : ''}
                     </Typography>
                 </CardContent>
                     
@@ -399,12 +433,12 @@ function WorksegmentList(props) {
                 employee={employee}
                 segment={editSegment}
                 handleClickOpen={handleClickOpen}
-                handleClose={handleClose}
                 openAdd={openAdd}
                 setOpenAdd={setOpenAdd}
                 user={user}
                 token={token}
                 editing={editing}
+                setEditing={setEditing}
                 createWorksegment={createWorksegment}
                 updateWorksegment={updateWorksegment}
                 workTypes={workTypes}
@@ -420,6 +454,9 @@ function WorksegmentList(props) {
                 retrieveWorksegments={retrieveWorksegments}/>
             
         </Container>
+        <Loading
+            open={isLoading}
+        />
     </div>
     );
 }

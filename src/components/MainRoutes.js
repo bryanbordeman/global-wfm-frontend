@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Dashboard from '../pages/Dashboard';
-import WorksegmentList from '../pages/WorksegmentsRef';
+import WorksegmentList from '../pages/Worksegments';
 import Schedule from '../pages/Schedule';
 import Projects from '../pages/Projects';
 import Announcements from '../pages/Announcements';
