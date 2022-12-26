@@ -53,6 +53,21 @@ export default function TaskDialog(props) {
         setOpenTaskDialog(false);
     }
 
+    let number = ''
+    // set number based on type
+    if(task.project){
+        number = `Project: ${task.project.number}`
+    }
+    if(task.service){
+        number = `Service: ${task.service.number}`
+    }
+    if(task.hse){
+        number = `HSE: ${task.hse.number}`
+    }
+    if(task.quote){
+        number = `Quote: ${task.quote.number}`
+    }
+
     return (
         <div>
             <Dialog 
@@ -109,15 +124,9 @@ export default function TaskDialog(props) {
                     <DialogActions>
                     <DialogContent sx={{pt:0, pb:0}}>
                     <Stack direction="column" spacing={0}>
-                        {projectNumber? 
                         <Typography variant="caption" color={'primary'}>
-                            Project: {projectNumber}
+                            {number}
                         </Typography>
-                        :
-                        <Typography variant="caption" color={'primary'}>
-                            Quote: {quoteNumber}
-                        </Typography>
-                        }
                         <Typography variant="caption" color={'primary'}>
                             Created By: {createdBy}
                         </Typography>

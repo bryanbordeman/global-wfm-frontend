@@ -13,6 +13,7 @@ import DeleteTaskModal from '../components/DeleteTaskModal';
 import TaskCompletedList from '../components/TaskCompletedList';
 import NextTaskDialog from '../components/NextTaskDialog'
 import TaskDialog from '../components/TaskDialog';
+import Loading from '../components/Loading';
 
 function Task(props) {
     const { user } = props;
@@ -33,6 +34,7 @@ function Task(props) {
     const [ openDelete, setOpenDelete ] = React.useState(false);
     const [ openNextTask, setOpenNextTask ] = React.useState(false);
     const [ openTaskDialog, setOpenTaskDialog ] = React.useState(false);
+    const [ isLoading, setIsLoading ] = React.useState(true);
 
     React.useEffect(() => {
         setSelectedList([]) // not a great solution to clear list after employee change
@@ -49,98 +51,113 @@ function Task(props) {
     },[currentList, tasks, open, sortBy])
     
     const retrieveTaskList = () => {
+        setIsLoading(true);
         TaskDataService.getAllTaskList(token)
-        .then(response => {
-            // sort the select list
-            setTaskLists(response.data.sort((a, b) => (a.title > b.title) ? 1 : -1));
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        })
+            .then(response => {
+                // sort the select list
+                setTaskLists(response.data.sort((a, b) => (a.title > b.title) ? 1 : -1));
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const retrieveTasks = () => {
         let allTasks= [];
         let tempObject = {};
+        setIsLoading(true);
         if(employee)
-        TaskDataService.getAssigneeTasks(token, employee.id)
-        .then(response => {
-            allTasks = response.data;
-            taskLists.map(list => {
-                // sort results into taskObject
-                let result = allTasks.filter(task => task.tasklist.id === list.id);
-                // sort results based on user and assignee. If user === to assignee or user === created_by show task
-                let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id )
-                
-                if(result) {
-                    return tempObject[`${list.title}`] = userResult
-                }else{
-                    return userResult
-                }
-            })
-            setTasks(tempObject);
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+            TaskDataService.getAssigneeTasks(token, employee.id)
+                .then(response => {
+                    allTasks = response.data;
+                    taskLists.map(list => {
+                        // sort results into taskObject
+                        let result = allTasks.filter(task => task.tasklist.id === list.id);
+                        // sort results based on user and assignee. If user === to assignee or user === created_by show task
+                        let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id )
+                        
+                        if(result) {
+                            return tempObject[`${list.title}`] = userResult
+                        }else{
+                            return userResult
+                        }
+                    })
+                    setTasks(tempObject);
+                })
+                .catch( e => {
+                    console.log(e);
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        setIsLoading(false);
+                    }, 3000);
+                });
     };
 
     const retrieveList = () => {
+        setIsLoading(true);
         if(employee)
-        TaskDataService.getAssigneeList(token, employee.id, currentList.id)
-        .then(response => {
-            const result = response.data;
-            let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
-            
-            // sort list
-            switch(sortBy) {
-                case (1):
-                    setSelectedList(userResult);
-                break;
-                case (2):
-                    setSelectedList(userResult.reverse());
-                break;
-                case (3):
-                    let projectSort = []
-                    let QuoteSort = []
-                    userResult.forEach(task => {
-                        if(task.project != null){
-                            projectSort.push(task);
-                        }
-                        if(task.quote != null){
-                            QuoteSort.push(task);
-                        }
-                        projectSort.sort((a, b) => (a.project.number > b.project.number) ? 1 : -1);
-                        QuoteSort.sort((a, b) => (a.quote.number > b.quote.number) ? 1 : -1)
-                    })
-                    const sortList = projectSort.concat(QuoteSort);
-                    setSelectedList(sortList)
+            TaskDataService.getAssigneeList(token, employee.id, currentList.id)
+                .then(response => {
+                    const result = response.data;
+                    let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
+                    
+                    // sort list
+                    switch(sortBy) {
+                        case (1):
+                            setSelectedList(userResult);
+                        break;
+                        case (2):
+                            setSelectedList(userResult.reverse());
+                        break;
+                        case (3):
+                            let projectSort = []
+                            let QuoteSort = []
+                            userResult.forEach(task => {
+                                if(task.project != null){
+                                    projectSort.push(task);
+                                }
+                                if(task.quote != null){
+                                    QuoteSort.push(task);
+                                }
+                                projectSort.sort((a, b) => (a.project.number > b.project.number) ? 1 : -1);
+                                QuoteSort.sort((a, b) => (a.quote.number > b.quote.number) ? 1 : -1)
+                            })
+                            const sortList = projectSort.concat(QuoteSort);
+                            setSelectedList(sortList)
 
-                break;
-                case (4):
-                    setSelectedList(userResult.sort((a, b) => (a.title > b.title) ? 1 : -1));
-                break;
-    
-                default:
-                    setSelectedList(userResult);
-            }
-        });
-        TaskDataService.getAssigneeListComplete(token, employee.id, currentList.id)
-        .then(response => {
-                // console.log(currentList.id)
-            const result = response.data;
-            let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
-            setSelectedCompleteList(userResult);
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+                        break;
+                        case (4):
+                            setSelectedList(userResult.sort((a, b) => (a.title > b.title) ? 1 : -1));
+                        break;
+            
+                        default:
+                            setSelectedList(userResult);
+                    }
+                });
+            TaskDataService.getAssigneeListComplete(token, employee.id, currentList.id)
+                .then(response => {
+                        // console.log(currentList.id)
+                    const result = response.data;
+                    let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
+                    setSelectedCompleteList(userResult);
+                })
+                .catch( e => {
+                    console.log(e);
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
     };
 
     const createTask = (data) => {
+        setIsLoading(true);
         TaskDataService.createTask(data, token)
             .then(response => {
                 window.scrollTo(0, 0);
@@ -150,120 +167,155 @@ function Task(props) {
             .catch(e => {
                 console.log(e);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     };
 
     const deleteTask = (id) => {
+        setIsLoading(true);
         TaskDataService.deleteTask(id, token)
-        .then(response => {
-            handleOpenSnackbar('error', 'Tasks has been deleted')
-            retrieveTasks();
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+            .then(response => {
+                handleOpenSnackbar('error', 'Tasks has been deleted')
+                retrieveTasks();
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }
 
     const updateTask = (tasktId, data) => {
+        setIsLoading(true);
         TaskDataService.updateTask(tasktId, data, token)
-        .then(response => {
-            handleOpenSnackbar('info', 'Tasks has been updated')
-            retrieveTasks();
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+            .then(response => {
+                handleOpenSnackbar('info', 'Tasks has been updated')
+                retrieveTasks();
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
+
     const completeTask = () => {
+        setIsLoading(true);
         TaskDataService.completeTask(task.id, token)
-        .then(response => {
-            retrieveList();
-            retrieveTasks();
-            setOpenNextTask(true);
-            
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+            .then(response => {
+                retrieveList();
+                retrieveTasks();
+                setOpenNextTask(true);
+                
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const uncompleteTask = (id) => {
+        setIsLoading(true);
         TaskDataService.completeTask(id, token)
-        .then(response => {
-            retrieveList();
-            retrieveTasks();
-            
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+            .then(response => {
+                retrieveList();
+                retrieveTasks();
+                
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const completeSubtask = (subtaskId) => {
+        setIsLoading(true);
         TaskDataService.completeSubtask(subtaskId, token)
-        .then(response => {
-            retrieveList();
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+            .then(response => {
+                retrieveList();
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const updateSubtask = (tasktId, data) => {
+        setIsLoading(true);
         TaskDataService.updateSubtask(tasktId, data, token)
-        .then(response => {
-            handleOpenSnackbar('info', 'Subtask has been updated')
-            retrieveTasks();     
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+            .then(response => {
+                handleOpenSnackbar('info', 'Subtask has been updated')
+                retrieveTasks();     
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const deleteSubtask = (id) => {
+        setIsLoading(true);
         TaskDataService.deleteSubtask(id, token)
-        .then(response => {
-            window.scrollTo(0, 0);
-            retrieveTasks(); 
-            handleOpenSnackbar('error', 'Your subtask has been deleted')
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
-
+            .then(response => {
+                window.scrollTo(0, 0);
+                retrieveTasks(); 
+                handleOpenSnackbar('error', 'Your subtask has been deleted')
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const createSubtask = (data) => {
+        setIsLoading(true);
         TaskDataService.createSubtask(data, token)
-        .then(response => {
-            setTask((prevState) => ({
-                ...prevState,
-                [prevState.subtasks]: prevState.subtasks.push(response.data),
-            }))
-            handleOpenSnackbar('success', 'Subtask has been created');
-            //sanitize data before submitting for update
-            const taskData = task
-            taskData.assignee = task.assignee.id
-            taskData.created_by = task.created_by.id
-            taskData.project = task.project? task.project.id : ''
-            taskData.quote = task.quote? task.quote.id : ''
-            taskData.tasklist = task.tasklist.id
-            taskData.subtasks = task.subtasks.map(subT => (subT.id))
-            // ......
-            updateTask(task.id, taskData);
-    
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+            .then(response => {
+                setTask((prevState) => ({
+                    ...prevState,
+                    [prevState.subtasks]: prevState.subtasks.push(response.data),
+                }))
+                handleOpenSnackbar('success', 'Subtask has been created');
+                //sanitize data before submitting for update
+                const taskData = task
+                taskData.assignee = task.assignee.id
+                taskData.created_by = task.created_by.id
+                taskData.project = task.project? task.project.id : ''
+                taskData.quote = task.quote? task.quote.id : ''
+                taskData.tasklist = task.tasklist.id
+                taskData.subtasks = task.subtasks.map(subT => (subT.id))
+                // ......
+                updateTask(task.id, taskData);
+        
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
     
     const handleChangeEmployee = (newEmployee) => {
@@ -417,7 +469,9 @@ function Task(props) {
                             setOpenTaskDialog={setOpenTaskDialog}
                             openTaskDialog={openTaskDialog}
                         />
-
+                <Loading
+                    open={isLoading}
+                />
             </Container>
         </div>
     );

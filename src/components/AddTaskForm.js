@@ -36,7 +36,6 @@ export default function AddTaskForm(props) {
 
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
     const [ menuSelection, setMenuSelection ] = React.useState(0);
-    const [ picker, setPicker ] = React.useState('');
     const didMount = React.useRef(false);
 
     React.useEffect(() => {
@@ -46,70 +45,15 @@ export default function AddTaskForm(props) {
     },[])
 
     React.useEffect(() => {
-        if (didMount.current) {
-            switch(menuSelection) {
-                case 1:
-                    // console.log('Services')
-                    // handleClear();
-                    setPicker(
-                        <ServicePicker
-                            editing={editing}
-                            editObject={task}
-                            token={token}
-                            handleChangeProject={handleChangeProject}
-                            errors={errors}
-                            editProject={values.project}
-                        />
-                    )
-                break;
-                case 2:
-                    // console.log("HSE's")
-                    // handleClear();
-                    setPicker(
-                        <HSEPicker
-                            editing={editing}
-                            editObject={task}
-                            token={token}
-                            handleChangeProject={handleChangeProject}
-                            errors={errors}
-                            editProject={values.project}
-                        />
-                    )
-                break;
-                case 3:
-                    // console.log('Quotes')
-                    // handleClear();
-                    setPicker(
-                        <QuotePicker
-                            editing={editing}
-                            editObject={task}
-                            token={token}
-                            handleChangeQuote={handleChangeProject}
-                            errors={errors}
-                            editProject={values.project}
-                        />
-                    )
-                break;
-                default:
-                    // console.log('Projects')
-                    // handleClear();
-                    setPicker(
-                        <ProjectPicker
-                            editing={editing}
-                            editObject={task}
-                            token={token}
-                            handleChangeProject={handleChangeProject}
-                            errors={errors}
-                            editProject={values.project}
-                        />
-                    )
-            }
-        } else {
-            didMount.current = true;
-        }
-    },[menuSelection, open]);
-    
-
+        // if picker changes clear project value
+        setValues({
+            ...values,
+            hse: '',
+            project: '',
+            service: '',
+            quote: ''
+        });
+    },[menuSelection])
 
     const initialFormValues = {
         created_by: user.id,
@@ -120,6 +64,8 @@ export default function AddTaskForm(props) {
         due: new Date(),
         subtasks:[],
         project:'',
+        service: '',
+        hse: '',
         quote:'',
         created: new Date(),
         is_complete: false,
@@ -137,29 +83,50 @@ export default function AddTaskForm(props) {
         notes: task.notes,
         due: editing && task.due !== undefined? new Date(task.due.replace('-', '/').replace('-', '/')) : new Date(),
         subtasks:task.subtasks,
-        project:task.project? task.project : '',
-        quote:task.quote? task.quote : '',
+        project: task.project? task.project : '',
+        service: task.service? task.service : '',
+        hse: task.hse? task.hse : '',
+        quote: task.quote? task.quote : '',
         created: new Date(),
         is_complete: task.is_complete,
         is_deleted: false,
         is_read: false,
         completed: new Date(),
         updated: new Date()
-
     };
 
     const [ values, setValues ] = React.useState(initialFormValues);
 
-    React.useLayoutEffect(() => {
-        setValues(editing ? editFormValues : initialFormValues);
-        if(editing && task.project){
-            setChoosePicker('projects')
+    React.useEffect(() => {
+        if (didMount.current) {
+            if(editing){
+                if(task.service !== null){
+                    setMenuSelection(1)
+                }
+                if(task.hse !== null){
+                    setMenuSelection(2)
+                }
+                if(task.quote !== null){
+                    setMenuSelection(3)
+                }
+                if(task.project !== null){
+                    setMenuSelection(0)
+                }
+            }
+        } else {
+            didMount.current = true;
         }
-        else if (editing && task.quote)
-        {
-            setChoosePicker('quotes')
+    },[props]);
+
+    React.useEffect(() => {
+        if (didMount.current) {
+            if(editing){
+                setValues(editFormValues)
+            }
+        } else {
+            didMount.current = true;
         }
-    },[open])
+    },[props]);
     
     const handleInputValue = (e) => {
         const { name, value } = e.target;
@@ -170,19 +137,68 @@ export default function AddTaskForm(props) {
     };
 
     const handleChangeProject = (newValue) => {
+        switch(menuSelection) {
+            case 1:
+                //Service
+                if(newValue){
+                    setValues({
+                    ...values,
+                    service: newValue.id,
+                    project: null,
+                    hse: null,
+                    quote: null
+                    });
+                };
+            break;
+            case 2:
+                //HSE
+                if(newValue){
+                    setValues({
+                    ...values,
+                    hse: newValue.id,
+                    project: null,
+                    service: null,
+                    quote: null
+                    });
+                };
+            break;
+            case 3:
+               //Quote
+                if(newValue){
+                    setValues({
+                    ...values,
+                    quote: newValue.id,
+                    project: null,
+                    hse: null,
+                    service: null
+                    });
+                };
+            break;
+            default:
+                //Project 
+                if(newValue){
+                    setValues({
+                    ...values,
+                    project: newValue.id,
+                    service: null,
+                    hse: null,
+                    quote: null
+                    });
+                };
+        };
 
-        if(newValue && choosePicker === projectType[0].name){
-            setValues({
-            ...values,
-            project: newValue.id
-            });
-        }
-        if(newValue && choosePicker === projectType[1].name){
-            setValues({
-            ...values,
-            quote: newValue.id
-            });
-        }
+        // if(newValue && choosePicker === projectType[0].name){
+        //     setValues({
+        //     ...values,
+        //     project: newValue.id
+        //     });
+        // }
+        // if(newValue && choosePicker === projectType[1].name){
+        //     setValues({
+        //     ...values,
+        //     quote: newValue.id
+        //     });
+        // }
     };
 
     const handleChangeAssignee = (newValue) => {
@@ -203,11 +219,19 @@ export default function AddTaskForm(props) {
         }
     };
 
-
     const handleValidation = () => {
         let formIsValid = true;
+
+        if(values.project === '' && values.service === '' && values.hse === '' && values.quote === ''){
+            setErrors({...errors, project: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, project: null});
+            }, 3000);
+        }
         
-        if(values.tasklist === ''){
+        else if(values.tasklist === ''){
             setErrors({...errors, tasklist: 'Required field'});
             formIsValid = false;
             setTimeout(() => {
@@ -221,22 +245,6 @@ export default function AddTaskForm(props) {
             setTimeout(() => {
                 formIsValid = true;
                 setErrors({...errors, assignee: null});
-            }, 3000);
-        }
-        else if(values.project === '' && choosePicker === 'projects'){
-            setErrors({...errors, project: 'Required field'});
-            formIsValid = false;
-            setTimeout(() => {
-                formIsValid = true;
-                setErrors({...errors, project: null});
-            }, 3000);
-        }
-        else if(values.quote === '' && choosePicker === 'quotes'){
-            setErrors({...errors, quote: 'Required field'});
-            formIsValid = false;
-            setTimeout(() => {
-                formIsValid = true;
-                setErrors({...errors, quote: null});
             }, 3000);
         }
 
@@ -293,15 +301,6 @@ export default function AddTaskForm(props) {
             data.created_by = values.created_by.id
             data.due = moment.tz(data.due, "America/New_York")._d
             data.assignee = values.assignee.id === undefined? values.assignee : values.assignee.id
-
-            if(choosePicker === projectType[0].name){
-                data.project = values.project.id === undefined? values.project : values.project.id
-                data.quote = ''
-            }else{
-                data.quote = values.quote.id === undefined? values.quote : values.quote.id
-                data.project = ''
-            }
-
             data.tasklist = values.tasklist.id === undefined? values.tasklist : values.tasklist.id
             data.subtasks = values.subtasks.map(subT => (subT.id))
             updateTask(task.id, data);
@@ -312,8 +311,52 @@ export default function AddTaskForm(props) {
         
     };
 
-    const handleChangePicker = (newValue) => {
-        setChoosePicker(newValue);
+    let picker = <div></div>
+
+    switch(menuSelection) {
+        case 1:
+            picker = 
+                <ServicePicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={task}
+                    errors={errors}
+                    editProject={values.project}
+                />
+        break;
+        case 2:
+            picker = 
+                <HSEPicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={task}
+                    errors={errors}
+                    editProject={values.project}
+                />
+        break;
+        case 3:
+            picker = 
+                <QuotePicker
+                    token={token}
+                    handleChangeQuote={handleChangeProject}
+                    errors={errors}
+                    editing={editing}
+                    editObject={task}
+                    // editProject={values.project}
+                />
+        break;
+        default:
+            picker = 
+                <ProjectPicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={task}
+                    errors={errors}
+                    editProject={values.project}
+                />  
     };
 
     return (

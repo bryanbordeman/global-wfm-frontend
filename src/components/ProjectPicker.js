@@ -11,7 +11,7 @@ export default function ProjectPicker(props) {
     const [ isLoading, setIsLoading ] = React.useState(true);
 
     const { handleChangeProject, errors} = props
-    const { editing, editObject, open } = props;
+    const { editing, editObject } = props;
     const didMount = React.useRef(false);
 
     React.useEffect(() => {

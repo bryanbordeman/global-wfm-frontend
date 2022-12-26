@@ -25,7 +25,6 @@ import Transition from './DialogTransistion'
 import FieldShopOfficeToggle from './FieldShopOfficeToggle';
 
 export default function AddWorksegmentForm(props) {
-
     const { 
         editing, 
         setEditing,
@@ -43,7 +42,6 @@ export default function AddWorksegmentForm(props) {
 
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
     const [ menuSelection, setMenuSelection ] = React.useState(0);
-    // const [ picker, setPicker ] = React.useState('');
     const didMount = React.useRef(false);
     
     const initialFormValues = {
@@ -88,7 +86,6 @@ export default function AddWorksegmentForm(props) {
         employee: null
     });
     const [ isValid, setIsValid ] = React.useState(true);
-    // const [ segmentType, setSegmentType ] = React.useState('');
 
     React.useEffect(() => {
         if(user.groups.filter(group => (group.name === 'SALES')).length > 0){
@@ -120,14 +117,23 @@ export default function AddWorksegmentForm(props) {
     React.useEffect(() => {
         if (didMount.current) {
             if(editing){
-                // setTimeout(() => {
-                    setValues(editFormValues)
-                // }, 500);
+                setValues(editFormValues)
             }
         } else {
             didMount.current = true;
         }
     },[props]);
+
+    React.useEffect(() => {
+        // if picker changes clear project value
+        setValues({
+            ...values,
+            hse: '',
+            project: '',
+            service: '',
+            quote: ''
+        });
+    },[menuSelection])
 
     React.useEffect(() => {
         if(employee) 
@@ -173,7 +179,6 @@ export default function AddWorksegmentForm(props) {
         const data = {
             user: values.user? values.user : user.id ,
             segment_type: values.segment_type,
-            //! need to makee sure if one is selected the others are null
             quote: values.quote,
             project: values.project, 
             service: values.service, 
@@ -392,8 +397,11 @@ export default function AddWorksegmentForm(props) {
             picker = 
                 <QuotePicker
                     token={token}
-                    // handleChangeQuote={handleChangeQuote}
-                    errors={{quote: ''}}
+                    handleChangeQuote={handleChangeProject}
+                    errors={errors}
+                    editing={editing}
+                    editObject={segment}
+                    // editProject={values.project}
                 />
         break;
         default:
@@ -405,15 +413,12 @@ export default function AddWorksegmentForm(props) {
                     editObject={segment}
                     errors={errors}
                     editProject={values.project}
-                    open={openAdd}
-                />
-            
+                />  
     };
 
     return (
         <div>
             <Dialog 
-                // keepMounted
                 TransitionComponent={Transition}
                 fullWidth
                 fullScreen 
@@ -468,15 +473,6 @@ export default function AddWorksegmentForm(props) {
                                 setMenuSelection={setMenuSelection}
                             />
                         </Stack>
-    {/* 
-                        <ProjectPicker
-                            editing={editing}
-                            editObject={segment}
-                            token={token}
-                            handleChangeProject={handleChangeProject}
-                            errors={errors}
-                            editProject={values.project}
-                        /> */}
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             label="Date"
@@ -561,4 +557,4 @@ export default function AddWorksegmentForm(props) {
             </Dialog>
         </div>
     );
-}
+};

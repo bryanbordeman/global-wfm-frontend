@@ -58,6 +58,20 @@ export default function TaskCompletedList(props) {
             unmountOnExit
         > {selectedCompleteList.map((task, j) => {
             const subLabelId = `checkbox-list-label-${task.title}`;
+            let number = ''
+            // set number based on type
+            if(task.project){
+                number =task.project.number
+            }
+            if(task.service){
+                number =task.service.number
+            }
+            if(task.hse){
+                number =task.hse.number
+            }
+            if(task.quote){
+                number =task.quote.number
+            }
             return (
                 <List 
                     dense
@@ -92,7 +106,7 @@ export default function TaskCompletedList(props) {
                                     sx={{mr:1, color: 'gray'  }} 
                                     variant='outlined'
                                     size='small' 
-                                    label={task.project ? `${task.project.number}` :`${task.quote.number}` } 
+                                    label={number}
                                 />
                             </ListItemIcon>
                             <ListItemText 
