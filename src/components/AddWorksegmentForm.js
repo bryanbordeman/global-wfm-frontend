@@ -126,13 +126,14 @@ export default function AddWorksegmentForm(props) {
 
     React.useEffect(() => {
         // if picker changes clear project value
-        setValues({
-            ...values,
-            hse: '',
-            project: '',
-            service: '',
-            quote: ''
-        });
+        if(!editing)
+            setValues({
+                ...values,
+                hse: '',
+                project: '',
+                service: '',
+                quote: ''
+            });
     },[menuSelection])
 
     React.useEffect(() => {

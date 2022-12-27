@@ -44,7 +44,18 @@ function DeleteExpenseModal(props) {
             <DialogContentText id="alert-dialog-description">
                 Date: {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")} 
                 <br/>
-                Project: {expense.project.number}
+                {expense.quote?
+                `Quote: ${expense.quote.number}`
+                : ''}
+                {expense.project?
+                `Project: ${expense.project.number}`
+                : ''}
+                {expense.service?
+                `Service: ${expense.service.number}`
+                : ''}
+                {expense.hse?
+                `HSE: ${expense.hse.number}`
+                : ''}
                 <br/>
                 Miles: {expense.miles}
             </DialogContentText>
@@ -171,7 +182,18 @@ export default function MileCard(props) {
                                 {/* {user.is_staff? <Chip sx={{mb:1}}label={`${expense.user.first_name} ${expense.user.last_name}`} />:''} */}
                                 {user.is_staff? `${expense.user.first_name} ${expense.user.last_name}` :''}
                                 {user.is_staff? <br/> :''}
-                                Project: {expense.project.number}
+                                {expense.quote?
+                                    `Quote: ${expense.quote.number}`
+                                    : ''}
+                                    {expense.project?
+                                    `Project: ${expense.project.number}`
+                                    : ''}
+                                    {expense.service?
+                                    `Service: ${expense.service.number}`
+                                    : ''}
+                                    {expense.hse?
+                                    `HSE: ${expense.hse.number}`
+                                    : ''}
                                 <br/>
                                 Mile Rate: {`$${parseFloat(expense.rate.rate).toFixed(2)}`}
                                 <br/>

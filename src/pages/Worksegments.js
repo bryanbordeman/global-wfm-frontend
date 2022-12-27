@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import WorksegmentDataService from '../services/Worksegment.services'
+import WorksegmentDataService from '../services/Worksegment.services';
 import { Container, Typography, Button, Card, CardContent, Chip } from '@mui/material';
 import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider, } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'

@@ -21,6 +21,8 @@ class WorksegmentDataService {
     adminGetWeek(token, isoweek){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/admin/worksegments/${isoweek}/`);
+        // return axios.get(`${SERVER}/api/admin/worksegments/${isoweek}/`, {timeout: 900});
+
     };
     createWorksegment(data, token, userId){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

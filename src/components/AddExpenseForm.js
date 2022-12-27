@@ -6,7 +6,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Stack, TextField, FormControlLabel, Switch, Divider, Typography } from '@mui/material';
 import EmployeePicker from './EmployeePicker';
-import ProjectPicker from './ProjectPicker'
+import ProjectPicker from './ProjectPicker';
+import QuotePicker from './QuotePicker';
+import ServicePicker from './ServicePicker';
+import HSEPicker from './HSEPicker';
+import ProjectTypeDropdown from './ProjectTypeDropdown';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -26,10 +30,51 @@ export default function AddExpenseForm(props) {
     const { employee, handleChangeEmployee } = props
     const { createExpense, updateExpense } = props
     const [ images, setImages ] = React.useState([]);
-    const [ editImage, setEditImage ] = React.useState({})
-    const [ isValid, setIsValid ] = React.useState(true)
-    const today = new Date()
+    const [ editImage, setEditImage ] = React.useState({});
+    const [ isValid, setIsValid ] = React.useState(true);
+    const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
+    const [ menuSelection, setMenuSelection ] = React.useState(0);
+    const didMount = React.useRef(false);
+    const today = new Date();
+
+    React.useEffect(() => {
+        if(user.groups.filter(group => (group.name === 'SALES')).length > 0){
+            setMenuOptions(['Projects', 'Services', "HSE's", 'Quotes']);
+        }
+    },[])
+
+    React.useEffect(() => {
+        if (didMount.current) {
+            if(editing){
+                if(expense.service !== null){
+                    setMenuSelection(1)
+                }
+                if(expense.hse !== null){
+                    setMenuSelection(2)
+                }
+                if(expense.quote !== null){
+                    setMenuSelection(3)
+                }
+                if(expense.project !== null){
+                    setMenuSelection(0)
+                }
+            }
+        } else {
+            didMount.current = true;
+        }
+    },[props]);
     
+    React.useEffect(() => {
+        // if picker changes clear project value
+        if(!editing)
+            setValues({
+                ...values,
+                hse: '',
+                project: '',
+                service: '',
+                quote: ''
+            });
+    },[menuSelection])
 
     function getBase64(file) {
         return new Promise((resolve, reject) => {
@@ -50,6 +95,9 @@ export default function AddExpenseForm(props) {
     
     const initialFormValues = {
         project: '',
+        service: '',
+        hse: '',
+        quote:'',
         receipt_pic: null,
         merchant: '',
         price: '',
@@ -61,7 +109,10 @@ export default function AddExpenseForm(props) {
 
 
     const editFormValues = {
-        project: editing ? expense.project.id : expense.project,
+        quote: editing && expense.quote != null ? expense.quote.id : expense.quote,
+        project: editing && expense.project != null ? expense.project.id : expense.project,
+        service: editing && expense.service != null? expense.service.id : expense.service,
+        hse: editing && expense.hse != null ? expense.hse.id : expense.hse,
         receipt_pic: editImage,
         // receipt_pic: getBase64Image(expense.receipt_pic),
         merchant: expense.merchant,
@@ -105,7 +156,10 @@ export default function AddExpenseForm(props) {
                         editImage = [{data_url: data, file: file}]
                         setImages(editImage)
                         setValues({
-                            project: editing ? expense.project.id : expense.project,
+                            quote: editing && expense.quote != null ? expense.quote.id : expense.quote,
+                            project: editing && expense.project != null ? expense.project.id : expense.project,
+                            service: editing && expense.service != null? expense.service.id : expense.service,
+                            hse: editing && expense.hse != null ? expense.hse.id : expense.hse,                    
                             receipt_pic: editImage[0].data_url,
                             merchant: expense.merchant,
                             price: expense.price,
@@ -140,13 +194,56 @@ export default function AddExpenseForm(props) {
     };
 
     const handleChangeProject = (newValue) => {
-        if(newValue){
-            setValues({
-            ...values,
-            project: newValue.id
-            });
-        }
-    }
+        switch(menuSelection) {
+            case 1:
+                //Service
+                if(newValue){
+                    setValues({
+                    ...values,
+                    service: newValue.id,
+                    project: null,
+                    hse: null,
+                    quote: null
+                    });
+                };
+            break;
+            case 2:
+                //HSE
+                if(newValue){
+                    setValues({
+                    ...values,
+                    hse: newValue.id,
+                    project: null,
+                    service: null,
+                    quote: null
+                    });
+                };
+            break;
+            case 3:
+               //Quote
+                if(newValue){
+                    setValues({
+                    ...values,
+                    quote: newValue.id,
+                    project: null,
+                    hse: null,
+                    service: null
+                    });
+                };
+            break;
+            default:
+                //Project 
+                if(newValue){
+                    setValues({
+                    ...values,
+                    project: newValue.id,
+                    service: null,
+                    hse: null,
+                    quote: null
+                    });
+                };
+        };
+    };
 
     const handleSubmit = () => {
         //!! value is not consistant. need to figure out solution.
@@ -154,7 +251,10 @@ export default function AddExpenseForm(props) {
 
         const date = moment.tz(values.date_purchased, "America/New_York")._d
         const data = {
+            quote: values.quote,
             project: values.project, 
+            service: values.service, 
+            hse: values.hse, 
             receipt_pic: values.receipt_pic,
             merchant: values.merchant,
             price: values.price,
@@ -179,7 +279,7 @@ export default function AddExpenseForm(props) {
     const handleValidation = () => {
         let formIsValid = true;
 
-        if(values.project === ''){
+        if(values.project === '' && values.service === '' && values.hse === '' && values.quote === ''){
             setErrors({...errors, project: 'Required field'});
             formIsValid = false;
             setTimeout(() => {
@@ -269,6 +369,54 @@ export default function AddExpenseForm(props) {
         setImages([])
     };
 
+    let picker = <div></div>
+
+    switch(menuSelection) {
+        case 1:
+            picker = 
+                <ServicePicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={expense}
+                    errors={errors}
+                    editProject={values.project}
+                />
+        break;
+        case 2:
+            picker = 
+                <HSEPicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={expense}
+                    errors={errors}
+                    editProject={values.project}
+                />
+        break;
+        case 3:
+            picker = 
+                <QuotePicker
+                    token={token}
+                    handleChangeQuote={handleChangeProject}
+                    errors={errors}
+                    editing={editing}
+                    editObject={expense}
+                    // editProject={values.project}
+                />
+        break;
+        default:
+            picker = 
+                <ProjectPicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={expense}
+                    errors={errors}
+                    editProject={values.project}
+                />  
+    };
+
     return (
         <div>
         <Dialog
@@ -308,14 +456,15 @@ export default function AddExpenseForm(props) {
                     handleChangeEmployee={handleChangeEmployee}
                 />
                 : ''}     
-                <ProjectPicker
-                    editing={editing}
-                    editObject={expense}
-                    token={token}
-                    handleChangeProject={handleChangeProject}
-                    errors={errors}
-                    editProject={values.project}
-                />
+                <Stack direction="row" spacing={1}>
+                    {picker}
+                    <ProjectTypeDropdown
+                        user={user}
+                        menuOptions={menuOptions}
+                        menuSelection={menuSelection}
+                        setMenuSelection={setMenuSelection}
+                    />
+                </Stack>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Date Purchased"

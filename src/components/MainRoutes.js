@@ -27,6 +27,7 @@ function MainRoutes(props) {
                         <Dashboard
                         user={user}
                         token={token}
+                        handleOpenSnackbar={handleOpenSnackbar}
                         />
                     }/>
                 <Route 

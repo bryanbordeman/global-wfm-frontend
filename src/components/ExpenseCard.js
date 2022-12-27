@@ -224,7 +224,18 @@ export default function ExpenseCard(props) {
                             <>  
                                 {user.is_staff? `${expense.user.first_name} ${expense.user.last_name}` :''}
                                 {user.is_staff? <br/> :''}
-                                Project: {expense.project.number}
+                                    {expense.quote?
+                                    `Quote: ${expense.quote.number}`
+                                    : ''}
+                                    {expense.project?
+                                    `Project: ${expense.project.number}`
+                                    : ''}
+                                    {expense.service?
+                                    `Service: ${expense.service.number}`
+                                    : ''}
+                                    {expense.hse?
+                                    `HSE: ${expense.hse.number}`
+                                    : ''}
                                 <br/>
                                 Merchant: {expense.merchant}
                                 {expense.notes ? 

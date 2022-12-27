@@ -20,8 +20,6 @@ import Switch from '@mui/material/Switch';
 import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment-timezone';
 import Transition from './DialogTransistion'
-import QuoteProjectToggle from './QuoteProjectToggle';
-import { projectType } from './ToggleObjects';
 
 export default function AddTaskForm(props) {
     const { user, token } = props;
@@ -32,7 +30,6 @@ export default function AddTaskForm(props) {
     const { updateTask } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
-    const [ choosePicker, setChoosePicker ] = React.useState('projects')
 
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
     const [ menuSelection, setMenuSelection ] = React.useState(0);
@@ -46,13 +43,14 @@ export default function AddTaskForm(props) {
 
     React.useEffect(() => {
         // if picker changes clear project value
-        setValues({
-            ...values,
-            hse: '',
-            project: '',
-            service: '',
-            quote: ''
-        });
+        if(!editing)
+            setValues({
+                ...values,
+                hse: '',
+                project: '',
+                service: '',
+                quote: ''
+            });
     },[menuSelection])
 
     const initialFormValues = {
@@ -83,10 +81,10 @@ export default function AddTaskForm(props) {
         notes: task.notes,
         due: editing && task.due !== undefined? new Date(task.due.replace('-', '/').replace('-', '/')) : new Date(),
         subtasks:task.subtasks,
-        project: task.project? task.project : '',
-        service: task.service? task.service : '',
-        hse: task.hse? task.hse : '',
-        quote: task.quote? task.quote : '',
+        project: task.project? task.project.id : '',
+        service: task.service? task.service.id : '',
+        hse: task.hse? task.hse.id : '',
+        quote: task.quote? task.quote.id : '',
         created: new Date(),
         is_complete: task.is_complete,
         is_deleted: false,
@@ -303,6 +301,8 @@ export default function AddTaskForm(props) {
             data.assignee = values.assignee.id === undefined? values.assignee : values.assignee.id
             data.tasklist = values.tasklist.id === undefined? values.tasklist : values.tasklist.id
             data.subtasks = values.subtasks.map(subT => (subT.id))
+            data.updated= moment.tz(data.updated, "America/New_York")._d.toISOString()
+            console.log(moment.tz(data.updated, "America/New_York")._d.toISOString())
             updateTask(task.id, data);
         }else{
             createTask(values);

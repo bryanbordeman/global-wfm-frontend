@@ -7,7 +7,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Stack, TextField, Divider, IconButton } from '@mui/material';
 import EmployeePicker from './EmployeePicker';
-import ProjectPicker from './ProjectPicker'
+import ProjectPicker from './ProjectPicker';
+import QuotePicker from './QuotePicker';
+import ServicePicker from './ServicePicker';
+import HSEPicker from './HSEPicker';
+import ProjectTypeDropdown from './ProjectTypeDropdown';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -21,25 +25,73 @@ export default function AddMileForm(props) {
     const { editing, expense, updateMiles } = props
     const { employee, handleChangeEmployee } = props
     const { handleOpenSnackbar, createMiles } = props
-    const [ currentRate, setCurrentRate ] = React.useState('')
+    const [ currentRate, setCurrentRate ] = React.useState('');
     const [ values, setValues ] = React.useState({});
     const [ errors, setErrors ] = React.useState({
         project: null,
         miles: null,
         date_purchased: null,
         employee: null
-    })
-    const [ isValid, setIsValid ] = React.useState(true)
+    });
+    const [ isValid, setIsValid ] = React.useState(true);
+    const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
+    const [ menuSelection, setMenuSelection ] = React.useState(0);
+    const didMount = React.useRef(false);
+
+    React.useEffect(() => {
+        if(user.groups.filter(group => (group.name === 'SALES')).length > 0){
+            setMenuOptions(['Projects', 'Services', "HSE's", 'Quotes']);
+        }
+    },[])
+
+    React.useEffect(() => {
+        if (didMount.current) {
+            if(editing){
+                if(expense.service !== null){
+                    setMenuSelection(1)
+                }
+                if(expense.hse !== null){
+                    setMenuSelection(2)
+                }
+                if(expense.quote !== null){
+                    setMenuSelection(3)
+                }
+                if(expense.project !== null){
+                    setMenuSelection(0)
+                }
+            }
+        } else {
+            didMount.current = true;
+        }
+    },[props]);
+    
+    React.useEffect(() => {
+        // if picker changes clear project value
+        if(!editing)
+            setValues({
+                ...values,
+                hse: '',
+                project: '',
+                service: '',
+                quote: ''
+            });
+    },[menuSelection])
 
     const initialFormValues = {
         project: '',
+        service: '',
+        hse: '',
+        quote:'',
         miles: '',
         date_purchased: new Date(),
         notes: ''
     }
 
     const editFormValues = {
-        project: editing ? expense.project.id : expense.project,
+        quote: editing && expense.quote != null ? expense.quote.id : expense.quote,
+        project: editing && expense.project != null ? expense.project.id : expense.project,
+        service: editing && expense.service != null? expense.service.id : expense.service,
+        hse: editing && expense.hse != null ? expense.hse.id : expense.hse,
         miles: expense.miles,
         date_purchased: editing ? new Date(expense.date_purchased.replace('-', '/').replace('-', '/')) : new Date(),
         notes: expense.notes
@@ -79,17 +131,63 @@ export default function AddMileForm(props) {
     };
 
     const handleChangeProject = (newValue) => {
-        if(newValue){
-            setValues({
-            ...values,
-            project: newValue.id
-            });
-        }
+        switch(menuSelection) {
+            case 1:
+                //Service
+                if(newValue){
+                    setValues({
+                    ...values,
+                    service: newValue.id,
+                    project: null,
+                    hse: null,
+                    quote: null
+                    });
+                };
+            break;
+            case 2:
+                //HSE
+                if(newValue){
+                    setValues({
+                    ...values,
+                    hse: newValue.id,
+                    project: null,
+                    service: null,
+                    quote: null
+                    });
+                };
+            break;
+            case 3:
+               //Quote
+                if(newValue){
+                    setValues({
+                    ...values,
+                    quote: newValue.id,
+                    project: null,
+                    hse: null,
+                    service: null
+                    });
+                };
+            break;
+            default:
+                //Project 
+                if(newValue){
+                    setValues({
+                    ...values,
+                    project: newValue.id,
+                    service: null,
+                    hse: null,
+                    quote: null
+                    });
+                };
+        };
     };
 
     const handleSubmit = () => {
         const data = {
+            quote: values.quote,
             project: values.project, 
+            service: values.service, 
+            hse: values.hse, 
             rate: currentRate.id,
             miles: values.miles,
             is_approved: false,
@@ -114,7 +212,7 @@ export default function AddMileForm(props) {
     const handleValidation = () => {
         let formIsValid = true;
 
-        if(values.project === ''){
+        if(values.project === '' && values.service === '' && values.hse === '' && values.quote === ''){
             setErrors({...errors, project: 'Required field'});
             formIsValid = false;
             setTimeout(() => {
@@ -182,6 +280,54 @@ export default function AddMileForm(props) {
         setOpenMiles(!openMiles)
     };
 
+    let picker = <div></div>
+
+    switch(menuSelection) {
+        case 1:
+            picker = 
+                <ServicePicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={expense}
+                    errors={errors}
+                    editProject={values.project}
+                />
+        break;
+        case 2:
+            picker = 
+                <HSEPicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={expense}
+                    errors={errors}
+                    editProject={values.project}
+                />
+        break;
+        case 3:
+            picker = 
+                <QuotePicker
+                    token={token}
+                    handleChangeQuote={handleChangeProject}
+                    errors={errors}
+                    editing={editing}
+                    editObject={expense}
+                    // editProject={values.project}
+                />
+        break;
+        default:
+            picker = 
+                <ProjectPicker
+                    token={token}
+                    handleChangeProject={handleChangeProject}
+                    editing={editing}
+                    editObject={expense}
+                    errors={errors}
+                    editProject={values.project}
+                />  
+    };
+
     return (
         <div>
         <Dialog
@@ -221,14 +367,15 @@ export default function AddMileForm(props) {
                     handleChangeEmployee={handleChangeEmployee}
                 />
                 : ''}     
-                <ProjectPicker
-                    editing={editing}
-                    editObject={expense}
-                    token={token}
-                    handleChangeProject={handleChangeProject}
-                    errors={errors}
-                    editProject={values.project}
-                />
+                <Stack direction="row" spacing={1}>
+                    {picker}
+                    <ProjectTypeDropdown
+                        user={user}
+                        menuOptions={menuOptions}
+                        menuSelection={menuSelection}
+                        setMenuSelection={setMenuSelection}
+                    />
+                </Stack>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Date"
