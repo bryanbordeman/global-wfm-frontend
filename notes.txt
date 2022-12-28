@@ -13,8 +13,6 @@
 
 - When task is uncompleted and recompleted completed date does not update??
 
-- Make QuoteCard for project page
-
 - addsubtask dialog buttons not at bottom of dialog
 
 - Make StateSelect for address dialog

@@ -16,6 +16,7 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import LaunchIcon from '@mui/icons-material/Launch';
 import IconButton from '@mui/material/IconButton';
 import ContactModal from './ContactModal';
+import Loading from '../components/Loading';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -62,6 +63,7 @@ export default function ProjectCard(props) {
     const didMount = React.useRef(false);
     const [ expanded, setExpanded ] = React.useState('panel1');
     const [ phones, setPhones ] = React.useState([]);
+    const [ isLoading, setIsLoading ] = React.useState(true);
 
     React.useLayoutEffect(() => {
         if (didMount.current) {
@@ -99,32 +101,44 @@ export default function ProjectCard(props) {
         switch(menuSelection) {
             case 1:
                 // console.log('Services')
+                setIsLoading(true);
                 ContactServices.getContactService(id, token)
                     .then(response => {
                         setContacts(response.data);
                     })
                     .catch(e => {
                         console.log(e);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
                     });
             break;
             case 2:
                 // console.log("HSE's")
+                setIsLoading(true);
                 ContactServices.getContactHSE(id, token)
                     .then(response => {
                         setContacts(response.data);
                     })
                     .catch(e => {
                         console.log(e);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
                     });
             break;
             default:
                 // console.log('Projects')
+                setIsLoading(true);
                 ContactServices.getContactProject(id, token)
                     .then(response => {
                         setContacts(response.data);
                     })
                     .catch(e => {
                         console.log(e);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
                     });
         };
     };
@@ -135,12 +149,16 @@ export default function ProjectCard(props) {
     };
 
     const recievePhone = (id) => {
+        setIsLoading(true);
         PhoneServices.getPhone(id, token)
             .then(response => {
                 setPhones(oldArray => [...oldArray, response.data]);
             })
             .catch(e => {
                 console.log(e);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     };
         
@@ -283,7 +301,7 @@ export default function ProjectCard(props) {
                                         setContact={setContact}
                                         open={openContactModal}
                                         setOpen={setOpenContactModel}
-                                        // project={project}
+                                        isLoading={isLoading}
                                         company={project.customer}
                                     />
                                 </AccordionDetails>
@@ -294,6 +312,9 @@ export default function ProjectCard(props) {
                 </CardActions>
             </Card>
             : ''}
+            <Loading
+                open={isLoading}
+            />
         </>
     );
 };

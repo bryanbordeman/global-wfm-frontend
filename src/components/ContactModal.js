@@ -20,7 +20,7 @@ const style = {
     };
 
 export default function ContactModal(props) {
-    const { open, setOpen, company, contact, setContact, phones } = props
+    const { open, setOpen, company, contact, setContact, phones, isLoading } = props
 
     const handleClose = () => {
         setContact('');
@@ -29,7 +29,7 @@ export default function ContactModal(props) {
 
     return (
         <div>
-            {contact ?
+            {contact && !isLoading?
             <Modal
                 open={open}
                 onClose={handleClose}

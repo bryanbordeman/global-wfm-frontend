@@ -162,7 +162,7 @@ export default function AddWorksegmentForm(props) {
                 if(user.groups.filter(group => (group.name === work.name.toUpperCase())).length > 0){
                     setValues({
                         ...values,
-                        segment_type: work
+                        segment_type: work.id
                     });
                 }
             });

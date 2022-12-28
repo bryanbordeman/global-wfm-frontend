@@ -7,11 +7,9 @@ import Divider from '@mui/material/Divider';
 
 function Dashboard(props){
     const { user, token, handleOpenSnackbar } = props
-    // const { user, token } = props
 
     return (
         <div>
-            {user.is_staff ?
             <div style={{paddingTop: '1rem'}}> 
                 <Container
                     sx={{
@@ -32,22 +30,9 @@ function Dashboard(props){
                         token={token}
                         handleOpenSnackbar={handleOpenSnackbar}
                     />
-                    <SnackbarAlert/>
                 </Container>
-            </div> :
-            <div style={{paddingTop: '1rem'}}> 
-                <Container
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexDirection:'column',
-                        height: '100%'
-                    }}>
-                        Dashboard
-                </Container>
-            </div>
-            }
+            </div> 
+            <SnackbarAlert/>
         </div>
     )
 };

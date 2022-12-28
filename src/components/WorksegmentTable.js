@@ -14,7 +14,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import WorksegmentDataService from '../services/Worksegment.services';
 import moment from 'moment';
-import Loading from '../components/Loading';
+import Loading from './Loading';
 import WeekPicker from './WeekPicker';
 
 function createData(name, regular, overtime, travel, total_duration, summary) {
@@ -129,12 +129,19 @@ export default function WorksegmentTable(props) {
         setIsLoading(true);
         WorksegmentDataService.getTotals(token, isoWeek)
             .then(response => {
-                if(isAdmin){
                     const data = response.data
                     const rows = []
+                if(isAdmin){
                     data.map((d) => {
                         rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['total_duration'], []))
                     })
+                }else{
+                    data.map((d) => {
+                        if(d.user_id == user.id){
+                            rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['total_duration'], []))
+                        }
+                    })
+                }
                     rows.map((r) => {
                         worksegments.map((w) => {
                             if(`${w.user.first_name} ${w.user.last_name}` === r.name){
@@ -158,7 +165,6 @@ export default function WorksegmentTable(props) {
                         }); 
                     });
                     setTotals(rows);
-                };
             })
             .catch(e => {
                 console.log(e);
@@ -172,20 +178,33 @@ export default function WorksegmentTable(props) {
     const retrieveWorksegments = () => {
         // get segments from API
         const isAdmin = user.is_staff ? true : false;
-        setIsLoading(true);
-        WorksegmentDataService.adminGetWeek(props.token, isoWeek)
-            .then(response => {
-                if(isAdmin){
+        if(isAdmin){
+            setIsLoading(true);
+            WorksegmentDataService.adminGetWeek(props.token, isoWeek)
+                .then(response => {
                     setWorksegments(response.data);
-                };
-            })
-            .catch( e => {
-                console.log(e);
-                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-            })
-            .finally(() => {
-                setIsLoading(false);
-            })
+                })
+                .catch( e => {
+                    console.log(e);
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                })
+        }else{
+            setIsLoading(true);
+            WorksegmentDataService.getWeek(props.token, isoWeek)
+                .then(response => {
+                    setWorksegments(response.data);
+                })
+                .catch( e => {
+                    console.log(e);
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                })
+        }
     };
 
     function getDateFromHours(time) {
