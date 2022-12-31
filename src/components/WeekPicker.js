@@ -87,5 +87,5 @@ return (
         inputFormat="'Week 'w"
     />
     </LocalizationProvider>
-);
-}
+    );
+};

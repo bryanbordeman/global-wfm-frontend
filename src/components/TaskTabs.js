@@ -102,4 +102,4 @@ function TabPanel(props) {
             <CompletedTaskList/>
         </Box>
     );
-    }
+};

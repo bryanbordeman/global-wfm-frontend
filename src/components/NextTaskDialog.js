@@ -13,7 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     });
 
 export default function NextTaskDialog(props) {
-    const {open, setOpen, setAddOpen} = props
+    const { open, setOpen, setAddOpen } = props
 
     const handleClose = () => {
         setOpen(false);
@@ -21,35 +21,36 @@ export default function NextTaskDialog(props) {
 
     return (
         <div>
-        <Dialog
-            open={open}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={handleClose}
-            aria-describedby="alert-dialog-slide-description"
-        >
-            <DialogTitle>{"Create the Next Task?"}</DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-                To keep the project progressing forward, a 
-                follow-up task is recommended. This task can 
-                be assigned to you or another employee. 
-            </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-            <Button color='error' variant='outlined' onClick={handleClose}>Cancel</Button>
-            <Button 
-                color='success' 
-                variant="contained" 
-                onClick={()=> {
-                    setOpen(false);
-                    setAddOpen(true);
-                }}
-                endIcon={<AddIcon />}
+            <Dialog
+                open={open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleClose}
+                aria-describedby="alert-dialog-slide-description"
             >
-                Add</Button>
-            </DialogActions>
-        </Dialog>
+                <DialogTitle>{"Create the Next Task?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        To keep the project progressing forward, a 
+                        follow-up task is recommended. This task can 
+                        be assigned to you or another employee. 
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button color='error' variant='outlined' onClick={handleClose}>Cancel</Button>
+                    <Button 
+                        color='success' 
+                        variant="contained" 
+                        onClick={()=> {
+                            setOpen(false);
+                            setAddOpen(true);
+                        }}
+                        endIcon={<AddIcon />}
+                    >
+                        Add
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
-}
+};

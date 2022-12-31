@@ -38,38 +38,38 @@ function DeleteExpenseModal(props) {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-            <Alert severity="error">Permanently delete these miles?</Alert>
+                <Alert severity="error">Permanently delete these miles?</Alert>
             </DialogTitle>
             <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                Date: {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")} 
-                <br/>
-                {expense.quote?
-                `Quote: ${expense.quote.number}`
-                : ''}
-                {expense.project?
-                `Project: ${expense.project.number}`
-                : ''}
-                {expense.service?
-                `Service: ${expense.service.number}`
-                : ''}
-                {expense.hse?
-                `HSE: ${expense.hse.number}`
-                : ''}
-                <br/>
-                Miles: {expense.miles}
-            </DialogContentText>
+                <DialogContentText id="alert-dialog-description">
+                    Date: {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")} 
+                    <br/>
+                    {expense.quote?
+                    `Quote: ${expense.quote.number}`
+                    : ''}
+                    {expense.project?
+                    `Project: ${expense.project.number}`
+                    : ''}
+                    {expense.service?
+                    `Service: ${expense.service.number}`
+                    : ''}
+                    {expense.hse?
+                    `HSE: ${expense.hse.number}`
+                    : ''}
+                    <br/>
+                    Miles: {expense.miles}
+                </DialogContentText>
             </DialogContent>
             <DialogActions>
-            <Button variant='outlined' onClick={handleClose}>Close</Button>
-            <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
-                Delete
-            </Button>
+                <Button variant='outlined' onClick={handleClose}>Close</Button>
+                <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
+                    Delete
+                </Button>
             </DialogActions>
         </Dialog>
         </div>
     );
-    }
+};
 
 
 export default function MileCard(props) {

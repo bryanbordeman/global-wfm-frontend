@@ -24,7 +24,7 @@ export default function Projects(props) {
     },[])
 
     React.useEffect(() => {
-        if (didMount.current) {
+        // if (didMount.current) {
             switch(menuSelection) {
                 case 1:
                     // console.log('Services')
@@ -70,9 +70,9 @@ export default function Projects(props) {
                         />
                     )
             }
-        } else {
-            didMount.current = true;
-        }
+        // } else {
+        //     didMount.current = true;
+        // }
     },[menuSelection]);
 
     const handleChangeProject = (newProject) => {

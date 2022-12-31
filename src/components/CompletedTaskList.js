@@ -50,4 +50,4 @@ export default function SimpleAccordion() {
         </Accordion>
         </div>
     );
-    }
+};

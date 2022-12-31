@@ -1,7 +1,7 @@
 import React from 'react';
 import { Paper, Grid, ListItem, IconButton, ListItemAvatar, ListItemText, Stack, Divider, } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete'
-import Edit from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete';
+import Edit from '@mui/icons-material/Edit';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import moment from 'moment';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
@@ -20,7 +20,7 @@ import SpeakerNotesTwoToneIcon from '@mui/icons-material/SpeakerNotesTwoTone';
 
 function DeleteExpenseModal(props) {
 
-    const { deleteExpense, expense , openDelete, setOpenDelete  } = props
+    const { deleteExpense, expense , openDelete, setOpenDelete  } = props;
 
     const handleClose = () => {
         setOpenDelete(false);
@@ -33,30 +33,30 @@ function DeleteExpenseModal(props) {
 
     return (
         <div>
-        <Dialog
-            open={openDelete}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-        >
-            <DialogTitle id="alert-dialog-title">
-            <Alert severity="error">Permanently delete this expense?</Alert>
-            </DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")}
-            </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-            <Button variant='outlined' onClick={handleClose}>Close</Button>
-            <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
-                Delete
-            </Button>
-            </DialogActions>
-        </Dialog>
+            <Dialog
+                open={openDelete}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    <Alert severity="error">Permanently delete this expense?</Alert>
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {moment(expense.date_purchased).format("ddd, MMMM Do YYYY")}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant='outlined' onClick={handleClose}>Close</Button>
+                    <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
-    }
+};
 
 function ImageDialog(props) {
     const { openImage, setOpenImage, expense } = props
@@ -76,31 +76,31 @@ function ImageDialog(props) {
             aria-labelledby="responsive-dialog-title"
         >
             <DialogTitle id="responsive-dialog-title">
-            Expense id: {expense.id}
+                Expense id: {expense.id}
             </DialogTitle>
             <DialogContent>
-            <DialogContentText>
-                <img 
-                    src={expense.receipt_pic} 
-                    alt="receipt"
-                    style={{width: '100%'}}
-                    />
-            </DialogContentText>
+                <DialogContentText>
+                    <img 
+                        src={expense.receipt_pic} 
+                        alt="receipt"
+                        style={{width: '100%'}}
+                        />
+                </DialogContentText>
             </DialogContent>
             <DialogActions>
-            <Button 
-                variant='contained'
-                color='primary'
-                onClick={handleClose} 
-                autoFocus
-            >
-                Close
-            </Button>
+                <Button 
+                    variant='contained'
+                    color='primary'
+                    onClick={handleClose} 
+                    autoFocus
+                >
+                    Close
+                </Button>
             </DialogActions>
         </Dialog>
         </div>
     );
-}
+};
 
 
 export default function ExpenseCard(props) {

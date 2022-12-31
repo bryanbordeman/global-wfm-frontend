@@ -6,19 +6,13 @@ export default function FieldShopOfficeToggle(props) {
     const { handleChangeSegmentType } = props
     const [ value, setValue ] = React.useState('');
     const { workTypes, values } = props
-    const didMount = React.useRef(false);
 
     React.useLayoutEffect(() => {
-        if (didMount.current) {
-            // if editing update value
             if(values.segment_type.id === undefined){
                 setValue(workTypes.length > 0 ? workTypes[workTypes.length - 1].id : '');
             }else{
                 setValue(values.segment_type.id);
             }
-        } else {
-            didMount.current = true;
-        }
     },[]);
 
     const handleChange = (event, newValue) => {
@@ -39,4 +33,4 @@ export default function FieldShopOfficeToggle(props) {
             ))}
         </ToggleButtonGroup>
     );
-}
+};

@@ -39,7 +39,7 @@ export default function AddTaskForm(props) {
         if(user.groups.filter(group => (group.name === 'SALES')).length > 0){
             setMenuOptions(['Projects', 'Services', "HSE's", 'Quotes']);
         }
-    },[])
+    },[]);
 
     React.useEffect(() => {
         // if picker changes clear project value
@@ -51,7 +51,7 @@ export default function AddTaskForm(props) {
                 service: '',
                 quote: ''
             });
-    },[menuSelection])
+    },[menuSelection]);
 
     const initialFormValues = {
         created_by: user.id,
@@ -184,19 +184,6 @@ export default function AddTaskForm(props) {
                     });
                 };
         };
-
-        // if(newValue && choosePicker === projectType[0].name){
-        //     setValues({
-        //     ...values,
-        //     project: newValue.id
-        //     });
-        // }
-        // if(newValue && choosePicker === projectType[1].name){
-        //     setValues({
-        //     ...values,
-        //     quote: newValue.id
-        //     });
-        // }
     };
 
     const handleChangeAssignee = (newValue) => {
@@ -402,6 +389,7 @@ export default function AddTaskForm(props) {
                             user={user}
                             token={token}
                             handleChangeAssignee={handleChangeAssignee}
+                            handleOpenSnackbar={handleOpenSnackbar}
                         />
                         <Stack direction="row" spacing={1}>
                             {picker}
@@ -412,33 +400,6 @@ export default function AddTaskForm(props) {
                                 setMenuSelection={setMenuSelection}
                             />
                         </Stack>
-                        {/* <Stack direction="row" spacing={1}>
-                        {choosePicker === projectType[0].name?
-                        <ProjectPicker
-                            editing={editing}
-                            editObject={task}
-                            token={token}
-                            handleChangeProject={handleChangeProject}
-                            errors={errors}
-                            editProject={values.project}
-                        />
-                        : 
-                        <QuotePicker
-                            editing={editing}
-                            editObject={task}
-                            token={token}
-                            handleChangeQuote={handleChangeProject}
-                            errors={errors}
-                            editProject={values.project}
-                        />
-                        }
-                        {user.groups.filter(group => (group.name === 'SALES')).length > 0 ? 
-                        <QuoteProjectToggle
-                            handleChangePicker={handleChangePicker}
-                            choosePicker={choosePicker}
-                        />
-                        : ''}
-                        </Stack> */}
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 label="Due Date"

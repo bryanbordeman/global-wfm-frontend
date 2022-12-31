@@ -108,11 +108,11 @@ export default function WorksegmentTable(props) {
     const didMount = React.useRef(false);
 
     React.useEffect(() => {
-        if (didMount.current) {
+        // if (didMount.current) {
             retrieveWorksegments();
-        } else {
-            didMount.current = true;
-        }
+        // } else {
+        //     didMount.current = true;
+        // }
     },[isoWeek]);
 
     React.useEffect(() => {

@@ -22,25 +22,25 @@ export default function AddAnnouncementForm(props) {
             handleClose, 
             openAdd,
             setOpenAdd,
-            } = props
+            } = props;
 
     const initialFormValues = {
         title: '', 
         memo: '',
         is_active: true
-    }
+    };
 
     const editFormValues = {
         title: announcement.title,
         memo: announcement.memo,
         is_active: announcement.is_active
-    }
+    };
 
     const [ values, setValues ] = React.useState(initialFormValues);
     const [ errors, setErrors ] = React.useState({
         title: null,
         memo: null,
-    })
+    });
 
     React.useEffect(() => {
         setValues(editing ? editFormValues : initialFormValues)
@@ -73,7 +73,6 @@ export default function AddAnnouncementForm(props) {
         });
     };
 
-  
     const handleValidation = () => {
         let formIsValid = true;
 
@@ -106,75 +105,75 @@ export default function AddAnnouncementForm(props) {
 
     return (
         <div>
-        <Dialog 
-            TransitionComponent={Transition}
-            fullWidth 
-            fullScreen
-            open={openAdd} 
-            onClose={handleClose}
-            scroll={'body'}
-            >
-            <DialogTitle>
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <div>
-                        {`${editing ? 'Edit' : 'Add'} Announcement`}
+            <Dialog 
+                TransitionComponent={Transition}
+                fullWidth 
+                fullScreen
+                open={openAdd} 
+                onClose={handleClose}
+                scroll={'body'}
+                >
+                <DialogTitle>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <div>
+                            {`${editing ? 'Edit' : 'Add'} Announcement`}
+                        </div>
+                        <div>
+                        <IconButton 
+                            edge="end" 
+                            aria-label="close"
+                            onClick={handleClose}
+                                >
+                            <CloseIcon />
+                        </IconButton>
+                        </div> 
                     </div>
-                    <div>
-                    <IconButton 
-                        edge="end" 
-                        aria-label="close"
-                        onClick={handleClose}
-                            >
-                        <CloseIcon />
-                    </IconButton>
-                    </div> 
-                </div>
-            </DialogTitle>
-            <Divider/>
-            <DialogContent>
-            <Stack direction="column" spacing={2}>
-                <TextField
-                    autoFocus={false}
-                    margin="dense"
-                    id="title"
-                    name='title'
-                    label="Title"
-                    onChange={handleInputValue}
-                    value={values.title}
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                    helperText={errors.title === null ? '' : errors.title}
-                    error={errors.title? true : false}
-                />
-                <TextField
-                    autoFocus={false}
-                    id="memo"
-                    name="memo"
-                    label="Memo"
-                    onChange={handleInputValue}
-                    value={values.memo}
-                    multiline
-                    rows={10}
-                    helperText={errors.memo === null ? '' : errors.memo}
-                    error={errors.memo? true : false}
-                />
-                <FormControlLabel
-                    onChange={() => {setValues({...values, is_active: !values.is_active})}}
-                    control={<Switch checked={values.is_active} color="primary" />}
-                    id="is_active"
-                    name="is_active"
-                    label="Is Active"
-                    value={values.is_active}
-                />
-            </Stack>
-            </DialogContent>
-            <Divider/>
-            <DialogActions>
-            <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-            <Button variant='contained' onClick={handleValidation}>{editing ? 'Update' : 'Submit'}</Button>
-            </DialogActions>
-        </Dialog>
+                </DialogTitle>
+                <Divider/>
+                <DialogContent>
+                <Stack direction="column" spacing={2}>
+                    <TextField
+                        autoFocus={false}
+                        margin="dense"
+                        id="title"
+                        name='title'
+                        label="Title"
+                        onChange={handleInputValue}
+                        value={values.title}
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        helperText={errors.title === null ? '' : errors.title}
+                        error={errors.title? true : false}
+                    />
+                    <TextField
+                        autoFocus={false}
+                        id="memo"
+                        name="memo"
+                        label="Memo"
+                        onChange={handleInputValue}
+                        value={values.memo}
+                        multiline
+                        rows={10}
+                        helperText={errors.memo === null ? '' : errors.memo}
+                        error={errors.memo? true : false}
+                    />
+                    <FormControlLabel
+                        onChange={() => {setValues({...values, is_active: !values.is_active})}}
+                        control={<Switch checked={values.is_active} color="primary" />}
+                        id="is_active"
+                        name="is_active"
+                        label="Is Active"
+                        value={values.is_active}
+                    />
+                </Stack>
+                </DialogContent>
+                <Divider/>
+                <DialogActions>
+                <Button variant='outlined' onClick={handleClose}>Cancel</Button>
+                <Button variant='contained' onClick={handleValidation}>{editing ? 'Update' : 'Submit'}</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
-}
+};

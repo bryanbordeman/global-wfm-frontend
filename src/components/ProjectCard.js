@@ -63,7 +63,7 @@ export default function ProjectCard(props) {
     const didMount = React.useRef(false);
     const [ expanded, setExpanded ] = React.useState('panel1');
     const [ phones, setPhones ] = React.useState([]);
-    const [ isLoading, setIsLoading ] = React.useState(true);
+    const [ isLoading, setIsLoading ] = React.useState(false);
 
     React.useLayoutEffect(() => {
         if (didMount.current) {

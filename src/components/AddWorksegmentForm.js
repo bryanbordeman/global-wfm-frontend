@@ -91,7 +91,7 @@ export default function AddWorksegmentForm(props) {
         if(user.groups.filter(group => (group.name === 'SALES')).length > 0){
             setMenuOptions(['Projects', 'Services', "HSE's", 'Quotes']);
         }
-    },[])
+    },[]);
 
     React.useEffect(() => {
         if (didMount.current) {
@@ -134,7 +134,7 @@ export default function AddWorksegmentForm(props) {
                 service: '',
                 quote: ''
             });
-    },[menuSelection])
+    },[menuSelection]);
 
     React.useEffect(() => {
         if(employee) 
@@ -366,7 +366,6 @@ export default function AddWorksegmentForm(props) {
         setOpenAdd(false);
         setEditing(false);
         handleClear();
-        // handleChangeEmployee(null);
     };
 
     let picker = <div></div>

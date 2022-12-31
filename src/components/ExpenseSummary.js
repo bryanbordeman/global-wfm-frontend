@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 import moment from 'moment';
 
-function ExpenseSummary(props) {
+export default function ExpenseSummary(props) {
     const { month, title, amount } = props
     return (  
         <Card 
@@ -37,6 +37,4 @@ function ExpenseSummary(props) {
                 
         </Card>
     );
-}
-
-export default ExpenseSummary;
+};

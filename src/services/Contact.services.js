@@ -4,31 +4,31 @@ import { SERVER } from "./SERVER";
 class ContactDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/contacts/`);
+        return axios.get(`${SERVER}/api/contacts/`, {timeout: 900});
     };
     getContactCompany(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/contact/company/${id}`);
+        return axios.get(`${SERVER}/api/contact/company/${id}`, {timeout: 900});
     };
     getContactQuote(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/contact/quote/${id}`);
+        return axios.get(`${SERVER}/api/contact/quote/${id}`, {timeout: 900});
     };
     getContactProject(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/contact/project/${id}`);
+        return axios.get(`${SERVER}/api/contact/project/${id}`, {timeout: 900});
     };
     getContactService(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/contact/service/${id}`);
+        return axios.get(`${SERVER}/api/contact/service/${id}`, {timeout: 900});
     };
     getContactHSE(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/contact/hse/${id}`);
+        return axios.get(`${SERVER}/api/contact/hse/${id}`, {timeout: 900});
     };
     getContact(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/contact/${id}`);
+        return axios.get(`${SERVER}/api/contact/${id}`, {timeout: 900});
     };
     createContact(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

@@ -4,11 +4,11 @@ import { SERVER } from "./SERVER";
 class PhoneDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/phone_numbers/`);
+        return axios.get(`${SERVER}/api/phone_numbers/`, {timeout: 900});
     };
     getPhone(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/phone_number/${id}`);
+        return axios.get(`${SERVER}/api/phone_number/${id}`, {timeout: 900});
     };
     createPhone(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

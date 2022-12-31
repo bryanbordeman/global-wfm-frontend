@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 
 function Dashboard(props){
     const { user, token, handleOpenSnackbar } = props
-
+    
     return (
         <div>
             <div style={{paddingTop: '1rem'}}> 

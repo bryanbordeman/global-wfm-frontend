@@ -19,35 +19,35 @@ export default function TaskSelectlist(props) {
 
     return (
         <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-            <InputLabel id="select-list-label">{employee? "Select Task List" : "Select Employee First"}</InputLabel>
-            <Select
-            labelId="select-list-label"
-            id="select-list"
-            value={employee? value : ''}
-            disabled={!employee}
-            label={employee? "Select Task List" : "Select Employee First"}
-            onChange={handleChange}
-            >
-            
-            {taskLists.map(list => (
-                <MenuItem 
-                    key={list.id} 
-                    value={list}
-                    >   {list.title}
-                        {tasks[list.title]? tasks[list.title].length === 0 ?
-                        '' :
-                        <Chip 
-                            sx={{ml:1}} 
-                            size="small" 
-                            label={tasks[list.title]? tasks[list.title].length : ''}
-                            color='primary'
-                        /> : ''}
-                </MenuItem>
-            )
-                )}
-            </Select>
-        </FormControl>
+            <FormControl fullWidth>
+                <InputLabel id="select-list-label">{employee? "Select Task List" : "Select Employee First"}</InputLabel>
+                <Select
+                labelId="select-list-label"
+                id="select-list"
+                value={employee? value : ''}
+                disabled={!employee}
+                label={employee? "Select Task List" : "Select Employee First"}
+                onChange={handleChange}
+                >
+                
+                {taskLists.map(list => (
+                    <MenuItem 
+                        key={list.id} 
+                        value={list}
+                        >   {list.title}
+                            {tasks[list.title]? tasks[list.title].length === 0 ?
+                            '' :
+                            <Chip 
+                                sx={{ml:1}} 
+                                size="small" 
+                                label={tasks[list.title]? tasks[list.title].length : ''}
+                                color='primary'
+                            /> : ''}
+                    </MenuItem>
+                )
+                    )}
+                </Select>
+            </FormControl>
         </Box>
     );
 };

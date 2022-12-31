@@ -19,6 +19,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import ContactModal from './ContactModal';
+import Loading from './Loading';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -64,6 +65,7 @@ export default function QuoteCard(props) {
     const [ company, setCompany ] = React.useState('');
     const [ expanded, setExpanded ] = React.useState('panel1');
     const [ phones, setPhones ] = React.useState([]);
+    const [ isLoading, setIsLoading ] = React.useState(false);
     const didMount = React.useRef(false);
 
     React.useLayoutEffect(() => {
@@ -99,12 +101,17 @@ export default function QuoteCard(props) {
     },[quote]);
 
     const recieveContacts = (id) => {
+        setIsLoading(true);
         ContactServices.getContactQuote(id, token)
         .then(response => {
             setContacts(response.data);
         })
-        .catch(e => {
+        .catch( e => {
             console.log(e);
+            setIsLoading(false);
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
     };
 
@@ -115,12 +122,17 @@ export default function QuoteCard(props) {
     };
 
     const recievePhone = (id) => {
+        setIsLoading(true);
         PhoneServices.getPhone(id, token)
             .then(response => {
                 setPhones(oldArray => [...oldArray, response.data]);
             })
-            .catch(e => {
+            .catch( e => {
                 console.log(e);
+                setIsLoading(false);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     };
 
@@ -310,6 +322,9 @@ export default function QuoteCard(props) {
                 </CardActions>
             </Card>
             : ''}
+            <Loading
+                open={isLoading}
+            />
         </>
     );
 };

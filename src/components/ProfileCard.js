@@ -7,7 +7,7 @@ import { Divider } from '@mui/material';
 
 
 export default function ProfileCard(props) {
-    const {user} = props
+    const { user } = props;
 
     function stringToColor(string) {
         let hash = 0;
@@ -23,11 +23,11 @@ export default function ProfileCard(props) {
         for (i = 0; i < 3; i += 1) {
             const value = (hash >> (i * 8)) & 0xff;
             color += `00${value.toString(16)}`.slice(-2);
-        }
+            }
         /* eslint-enable no-bitwise */
         
-        return color;
-        }
+            return color;
+        };
 
     function stringAvatar(name) {
         return {
@@ -35,9 +35,10 @@ export default function ProfileCard(props) {
             bgcolor: stringToColor(name),
             },
             children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+            };
         };
-        }
-  return (
+
+return (
     <Card 
         elevation={0}
         sx={{
@@ -57,29 +58,29 @@ export default function ProfileCard(props) {
             />
         </CardContent>
         <CardContent sx={{ marginTop: 0, paddingTop: 0, textAlign: 'center' }}>
-        <Typography sx={{ mb: 1 }}variant="h5" component="div">
-            {`${user.first_name} ${user.last_name}`}
-        </Typography>
-        <Divider sx={{ml: 6, mr: 6 }}/>
-        <Typography sx={{ fontSize: 14, mb: 2, mt: 2 }} color="text.secondary" gutterBottom>
-            User Name: {user.username}
-            <br/>
-            Email: {user.email}
-            <br/>
-        </Typography>
-        <Divider sx={{ml: 6, mr: 6 }}/>
-        <Typography sx={{ mb: 2, mt:2 }} color="text.primary">
-            Permission level: {user.is_staff ? 'Admin' : 'Limited Access'}
-        </Typography>
-        {user.groups.length > 0?
-        <>
-        <Divider sx={{ml: 6, mr: 6 }}/>
-        <Typography sx={{ mb: 2, mt:2 }} color="text.primary">
-            Groups: [{user.groups.map((group, i) => (i < user.groups.length - 1? ` ${group.name},` : ` ${group.name} `))}]
-        </Typography>
-        </>
-        : ''}
+            <Typography sx={{ mb: 1 }}variant="h5" component="div">
+                {`${user.first_name} ${user.last_name}`}
+            </Typography>
+            <Divider sx={{ml: 6, mr: 6 }}/>
+            <Typography sx={{ fontSize: 14, mb: 2, mt: 2 }} color="text.secondary" gutterBottom>
+                User Name: {user.username}
+                <br/>
+                Email: {user.email}
+                <br/>
+            </Typography>
+            <Divider sx={{ml: 6, mr: 6 }}/>
+            <Typography sx={{ mb: 2, mt:2 }} color="text.primary">
+                Permission level: {user.is_staff ? 'Admin' : 'Limited Access'}
+            </Typography>
+            {user.groups.length > 0?
+            <>
+            <Divider sx={{ml: 6, mr: 6 }}/>
+            <Typography sx={{ mb: 2, mt:2 }} color="text.primary">
+                Groups: [{user.groups.map((group, i) => (i < user.groups.length - 1? ` ${group.name},` : ` ${group.name} `))}]
+            </Typography>
+            </>
+            : ''}
         </CardContent>
     </Card>
     );
-}
+};

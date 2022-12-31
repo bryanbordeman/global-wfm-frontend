@@ -25,5 +25,5 @@ return (
         {message}
         </Alert>
     </Snackbar>
-);
-}
+    );
+};

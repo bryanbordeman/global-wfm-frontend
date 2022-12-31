@@ -16,22 +16,22 @@ export default function TaskSortBy(props) {
 
     return (
         <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-            <InputLabel id="sort-by-label">Sort By</InputLabel>
-            <Select
-            labelId="sort-by-label"
-            id="sort-by"
-            // value={value}
-            defaultValue={1}
-            label="Sort By"
-            onChange={handleChange}
-            >
-            <MenuItem value={1}>Due Date (Oldest to Newest)</MenuItem>
-            <MenuItem value={2}>Due Date (Newest to Oldest)</MenuItem>
-            <MenuItem value={3}>Project (Descending)</MenuItem>
-            <MenuItem value={4}>Task (Alphabetically)</MenuItem>
-            </Select>
-        </FormControl>
+            <FormControl fullWidth>
+                <InputLabel id="sort-by-label">Sort By</InputLabel>
+                <Select
+                labelId="sort-by-label"
+                id="sort-by"
+                // value={value}
+                defaultValue={1}
+                label="Sort By"
+                onChange={handleChange}
+                >
+                <MenuItem value={1}>Due Date (Oldest to Newest)</MenuItem>
+                <MenuItem value={2}>Due Date (Newest to Oldest)</MenuItem>
+                <MenuItem value={3}>Project (Descending)</MenuItem>
+                <MenuItem value={4}>Task (Alphabetically)</MenuItem>
+                </Select>
+            </FormControl>
         </Box>
     );
     }

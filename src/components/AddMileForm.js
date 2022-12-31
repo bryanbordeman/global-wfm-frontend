@@ -25,7 +25,7 @@ export default function AddMileForm(props) {
     const { editing, expense, updateMiles } = props
     const { employee, handleChangeEmployee } = props
     const { handleOpenSnackbar, createMiles } = props
-    const [ currentRate, setCurrentRate ] = React.useState('');
+    const [ currentRate, setCurrentRate ] = React.useState(0);
     const [ values, setValues ] = React.useState({});
     const [ errors, setErrors ] = React.useState({
         project: null,
@@ -340,7 +340,7 @@ export default function AddMileForm(props) {
             <DialogTitle>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <div>
-                    {`${editing? 'Update' : 'Add'} Miles | $${parseFloat(currentRate.rate).toFixed(2)} mile`} 
+                    {`${editing? 'Update' : 'Add'} Miles | $${parseFloat(currentRate? currentRate.rate : 0).toFixed(2)} mile`} 
                     </div>
                     <div>
                     <IconButton 

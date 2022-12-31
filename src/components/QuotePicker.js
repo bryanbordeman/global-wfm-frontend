@@ -8,14 +8,13 @@ export default function QuotePicker(props) {
     const [ value, setValue ] = React.useState(null);
     const [ quotes, setQuotes ] = React.useState([{}])
     const [ inputValue, setInputValue ] = React.useState('');
-    const [ isLoading, setIsLoading ] = React.useState(true);
+    const [ isLoading, setIsLoading ] = React.useState(false);
 
     const { handleChangeQuote, errors } = props
     const { editing, editObject } = props;
 
     React.useEffect(() => {
         retrieveQuotes()
-        
     },[])
 
     const retrieveQuotes = () => {
@@ -29,6 +28,7 @@ export default function QuotePicker(props) {
         })
         .catch( e => {
             console.log(e);
+            setIsLoading(false);
         })
         .finally(() => {
             setIsLoading(false);

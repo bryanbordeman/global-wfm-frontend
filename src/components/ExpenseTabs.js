@@ -12,6 +12,7 @@ import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import AddExpenseForm from '../components/AddExpenseForm';
 import AddMileForm from './AddMileForm';
+import Loading from '../components/Loading';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -40,7 +41,7 @@ function TabPanel(props) {
     };
 
 export default function ExpaneseTabs(props) {
-    const [value, setValue] = React.useState(0);
+    const [ value, setValue ] = React.useState(0);
     const [ expenses, setExpenses ] = React.useState([]);
     const [ miles, setMiles ] = React.useState([]);
     const [ totalCreditCard, setTotalCreditCard ] = React.useState(0);
@@ -51,6 +52,7 @@ export default function ExpaneseTabs(props) {
     const { openMiles, setOpenMiles } = props;
     const { editing, setEditing, setTabIndex } = props;
     const [ editExpense, setEditExpense ] = React.useState({});
+    const [ isLoading, setIsLoading ] = React.useState(false);
     
 
     React.useEffect(() => {
@@ -63,17 +65,20 @@ export default function ExpaneseTabs(props) {
     }, [value])
 
     const retrieveExpenses = () => {
-        user.is_staff? ExpenseDataService.getAll(token, month)
+        setIsLoading(true);
+        user.is_staff? 
+        ExpenseDataService.getAll(token, month)
         .then(response => {
             // !sort expense by user request
-        const filteredEmployee = []
-        if(employee){
-        Object.values(response.data).find((obj) => {
-            if(obj.user.id === employee.id){
-                filteredEmployee.push(obj)
-            }
-        return ''
-        });}
+            const filteredEmployee = []
+            if(employee){
+                Object.values(response.data).find((obj) => {
+                    if(obj.user.id === employee.id){
+                        filteredEmployee.push(obj)
+                    }
+                return ''
+                });
+            };
             setExpenses(filteredEmployee);
             setTotalReimbursable(0)
             setTotalCreditCard(0)
@@ -88,6 +93,14 @@ export default function ExpaneseTabs(props) {
                     setTotalCreditCard(newCreditCardTotal)
                 }
             }
+        })
+        .catch( e => {
+            console.log(e);
+            setIsLoading(false);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         })
         :
         ExpenseDataService.getAll(token, month)
@@ -105,8 +118,12 @@ export default function ExpaneseTabs(props) {
         })
         .catch( e => {
             console.log(e);
+            setIsLoading(false);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
         })
+        .finally(() => {
+            setIsLoading(false);
+        });
     }
 
     const createExpense = (data) => {
@@ -128,7 +145,7 @@ export default function ExpaneseTabs(props) {
         ExpenseDataService.deleteExpense(expenseId, props.token)
         .then(response => {
             window.scrollTo(0, 0);
-            handleOpenSnackbar('error', 'Your expense has been deleted')
+            handleOpenSnackbar('warning', 'Your expense has been deleted')
             retrieveExpenses();
         })
         .catch( e => {
@@ -162,26 +179,36 @@ export default function ExpaneseTabs(props) {
     };
 
     const retrieveMiles = () => {
+        setIsLoading(true);
         user.is_staff? 
         ExpenseDataService.getAllMiles(token, month)
-        .then(response => {
-            // !sort expense by user request
-        const filteredEmployee = []
-        if(employee){
-        Object.values(response.data).find((obj) => {
-            if(obj.user.id === employee.id){
-                filteredEmployee.push(obj)
-            }
-        return ''
-        });}
-            setMiles(filteredEmployee);
-            setTotalMiles(0)
-            let newMilesTotal = 0
-            for(let i = 0; i < filteredEmployee.length; i++) {
-                newMilesTotal += filteredEmployee[i].price
-                setTotalMiles(newMilesTotal)
-            }
-        })
+            .then(response => {
+                // !sort expense by user request
+                const filteredEmployee = []
+                if(employee){
+                    Object.values(response.data).find((obj) => {
+                        if(obj.user.id === employee.id){
+                            filteredEmployee.push(obj)
+                        }
+                    return ''
+                    });
+                }
+                setMiles(filteredEmployee);
+                setTotalMiles(0)
+                let newMilesTotal = 0
+                for(let i = 0; i < filteredEmployee.length; i++) {
+                    newMilesTotal += filteredEmployee[i].price
+                    setTotalMiles(newMilesTotal)
+                }
+            })
+            .catch( e => {
+                console.log(e);
+                setIsLoading(false);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
         :
         ExpenseDataService.getAllMiles(token, month)
         .then(response => {
@@ -194,6 +221,9 @@ export default function ExpaneseTabs(props) {
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         })
     }
 
@@ -350,6 +380,9 @@ export default function ExpaneseTabs(props) {
                     createMiles={createMiles}
                     updateMiles={updateMiles}
                 />
+                <Loading
+                    open={isLoading}
+                />
         </Box>
     );
-}
+};

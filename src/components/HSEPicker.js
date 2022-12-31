@@ -8,19 +8,21 @@ export default function ProjectPicker(props) {
     const [ value, setValue ] = React.useState(null);
     const [ projects, setProjects ] = React.useState([{}])
     const [ inputValue, setInputValue ] = React.useState('');
-    const [ isLoading, setIsLoading ] = React.useState(true);
+    const [ isLoading, setIsLoading ] = React.useState(false);
 
     const { handleChangeProject, errors} = props
-    const { editing, editObject, open } = props;
+    const { editing, editObject, token } = props;
     const didMount = React.useRef(false);
 
     React.useEffect(() => {
         //! renders twice??
-        if (didMount.current) {
+        if (didMount.current && editing) {
             handleClear();
             retrieveProject();
         } else {
             didMount.current = true;
+            handleClear();
+            retrieveProject();
         }
     },[])
 
@@ -37,12 +39,13 @@ export default function ProjectPicker(props) {
 
     const retrieveProject = () => {
         setIsLoading(true);
-        ProjectDataService.getAllHSEs(props.token)
+        ProjectDataService.getAllHSEs(token)
             .then(response => {
                 setProjects(response.data);
             })
             .catch( e => {
                 console.log(e);
+                setIsLoading(false);
             })
             .finally(() => {
                 setIsLoading(false);

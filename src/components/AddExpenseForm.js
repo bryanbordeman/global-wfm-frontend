@@ -288,9 +288,6 @@ export default function AddExpenseForm(props) {
             }, 3000);
         }
         else if(values.date_purchased > today){
-            // console.log(date)
-            // console.log(today)
-            // console.log(values.date_purchased)
             setErrors({...errors, date_purchased: 'Date cannot be in the future.'});
             formIsValid = false;
             setTimeout(() => {

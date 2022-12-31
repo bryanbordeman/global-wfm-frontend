@@ -46,7 +46,7 @@ const StyledMenu = styled((props) => (
     },
     }));
 
-    export default function ProjectTypeDropdown(props) {
+export default function ProjectTypeDropdown(props) {
     const [ anchorEl, setAnchorEl ] = React.useState(null);
     const { menuOptions, menuSelection, setMenuSelection} = props
     const open = Boolean(anchorEl);
@@ -100,4 +100,4 @@ const StyledMenu = styled((props) => (
             </StyledMenu>
         </div>
     );
-}
+};

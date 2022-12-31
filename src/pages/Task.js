@@ -90,12 +90,11 @@ function Task(props) {
                 })
                 .catch( e => {
                     console.log(e);
+                    setIsLoading(false);
                     handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
                 })
                 .finally(() => {
-                    setTimeout(() => {
-                        setIsLoading(false);
-                    }, 3000);
+                    setIsLoading(false);
                 });
     };
 
@@ -149,6 +148,7 @@ function Task(props) {
                 })
                 .catch( e => {
                     console.log(e);
+                    setIsLoading(false);
                     handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
                 })
                 .finally(() => {
@@ -166,6 +166,7 @@ function Task(props) {
             })
             .catch(e => {
                 console.log(e);
+                setIsLoading(false);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
             .finally(() => {
@@ -182,6 +183,7 @@ function Task(props) {
             })
             .catch( e => {
                 console.log(e);
+                setIsLoading(false);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
             .finally(() => {
@@ -198,6 +200,7 @@ function Task(props) {
             })
             .catch( e => {
                 console.log(e);
+                setIsLoading(false);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
             .finally(() => {
@@ -216,6 +219,7 @@ function Task(props) {
             })
             .catch( e => {
                 console.log(e);
+                setIsLoading(false);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
             .finally(() => {
@@ -233,6 +237,7 @@ function Task(props) {
             })
             .catch( e => {
                 console.log(e);
+                setIsLoading(false);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
             .finally(() => {
@@ -248,6 +253,7 @@ function Task(props) {
             })
             .catch( e => {
                 console.log(e);
+                setIsLoading(false);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
             .finally(() => {
@@ -264,6 +270,7 @@ function Task(props) {
             })
             .catch( e => {
                 console.log(e);
+                setIsLoading(false);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
             .finally(() => {
@@ -277,10 +284,11 @@ function Task(props) {
             .then(response => {
                 window.scrollTo(0, 0);
                 retrieveTasks(); 
-                handleOpenSnackbar('error', 'Your subtask has been deleted')
+                handleOpenSnackbar('warning', 'Your subtask has been deleted')
             })
             .catch( e => {
                 console.log(e);
+                setIsLoading(false);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
             .finally(() => {

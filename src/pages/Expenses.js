@@ -6,12 +6,12 @@ import AddIcon from '@mui/icons-material/Add';
 import EmployeePicker from '../components/EmployeePicker';
 import ExpenseTabs from '../components/ExpenseTabs';
 
-function Expenses(props) {
+export default function Expenses(props) {
     const { user, token, handleOpenSnackbar} = props
     const [ employee, setEmployee ] = React.useState({})
     const [ month, setMonth ] = React.useState(new Date())
-    const [open, setOpen] = React.useState(false);
-    const [openMiles, setOpenMiles] = React.useState(false);
+    const [ open, setOpen ] = React.useState(false);
+    const [ openMiles, setOpenMiles ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
     const [ tabIndex, setTabIndex ] = React.useState('')
 
@@ -27,11 +27,12 @@ function Expenses(props) {
     
     const handleChangeEmployee = (newEmployee) => {
         setEmployee(newEmployee)
-    }
+    };
 
     const handleChangeMonth = (newMonth) => {
         setMonth(newMonth)
-    }
+    };
+
     return ( 
         <div style={{paddingTop: '1rem'}}> 
             <Container
@@ -85,6 +86,4 @@ function Expenses(props) {
             </Container>
         </div>
     );
-}
-
-export default Expenses;
+};

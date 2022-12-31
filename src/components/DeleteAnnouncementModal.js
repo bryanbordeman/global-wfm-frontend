@@ -24,29 +24,29 @@ export default function DeleteAnnouncementModal(props) {
 
     return (
         <div>
-        <Dialog
-            open={openDelete}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-        >
-            <DialogTitle id="alert-dialog-title">
-            <Alert severity="error">Permanently delete this announcement?</Alert>
-            </DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                {moment(announcement.created).format("ddd, MMMM Do YYYY")}
-                <br/>
-                Tilte: {`${announcement.title}`}
-            </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-            <Button variant='outlined' onClick={handleClose}>Close</Button>
-            <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
-                Delete
-            </Button>
-            </DialogActions>
-        </Dialog>
+            <Dialog
+                open={openDelete}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    <Alert severity="error">Permanently delete this announcement?</Alert>
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {moment(announcement.created).format("ddd, MMMM Do YYYY")}
+                        <br/>
+                        Tilte: {`${announcement.title}`}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant='outlined' onClick={handleClose}>Close</Button>
+                    <Button color='error' variant="contained" onClick={handleDelete} startIcon={<DeleteIcon />}>
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
-    }
+};

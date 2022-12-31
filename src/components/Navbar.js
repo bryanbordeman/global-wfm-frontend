@@ -18,7 +18,9 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Stack } from '@mui/material';
 
+
 const pathname = window.location.pathname
+
 
 const Navbar = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -135,7 +137,7 @@ const Navbar = (props) => {
                         >
                         <Typography textAlign="center">Timesheets</Typography>
                     </MenuItem>
-                    <MenuItem 
+                    {/* <MenuItem 
                         onClick={() => {
                             setActiveButton('schedule');
                             handleCloseNavMenu()}}
@@ -143,7 +145,7 @@ const Navbar = (props) => {
                         to='/schedule'
                         >
                         <Typography textAlign="center">Schedule</Typography>
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem 
                         onClick={() => {
                             setActiveButton('projects');
@@ -218,13 +220,13 @@ const Navbar = (props) => {
                         >
                         Timesheets
                     </Button>
-                    <Button component={Link} to='/schedule'
+                    {/* <Button component={Link} to='/schedule'
                         name='schedule'
                         sx={activeButton === 'schedule' ? activeStyle : inactiveStyle}
                         onClick={clickedButtonHandler}
                         >
                         Schedule
-                    </Button>
+                    </Button> */}
                     <Button component={Link} to='/projects'
                         name='projects'
                         sx={activeButton === 'projects' ? activeStyle : inactiveStyle}
@@ -257,7 +259,7 @@ const Navbar = (props) => {
                 <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={user.first_name.toUpperCase()} src="/static/images/avatar/2.jpg" />
+                        <Avatar>{user.first_name.toUpperCase()[0]}</Avatar>
                     </IconButton>
                 </Tooltip>
                 <Menu

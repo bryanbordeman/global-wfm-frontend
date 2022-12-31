@@ -16,6 +16,7 @@ export default function EmployeePicker(props) {
         retrieveEmployees()
     },[]);
 
+
     const retrieveEmployees = () => {
         setIsLoading(true);
         UserService.getUsers(props.token)
@@ -28,11 +29,10 @@ export default function EmployeePicker(props) {
         })
         .catch( e => {
             console.log(e);
+            setIsLoading(false);
         })
         .finally(() => {
-            // setTimeout(() => {
-                setIsLoading(false);
-            // }, 3000);
+            setIsLoading(false);
         });
     }
     const handleInputValue = (newValue) => {

@@ -7,11 +7,14 @@ import Container from '@mui/material/Container';
 import logo from '../assets/GPS_Logo.png'
 import logoDark from '../assets/GPS_Logo_dark.png'
 import { useNavigate } from 'react-router-dom';
+import InstallPWA from '../components/InstallPWA';
+import useIsIOS from '../components/useIsIOS';
 
 function Login(props) {
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
-    const { login, errors, darkState } = props
+    const { login, errors, darkState } = props;
+    const { prompt } = useIsIOS();
 
     let navigate = useNavigate();
 
@@ -33,6 +36,7 @@ function Login(props) {
 
     return ( 
         <Container component="main" maxWidth="xs">
+            {prompt && <InstallPWA />}
             <CssBaseline />
             <Box
             sx={{

@@ -14,7 +14,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment';
 import Transition from './DialogTransistion'
 
-
 export default function AddSubtaskForm(props) {
     const { 
             editing, 
@@ -131,12 +130,12 @@ export default function AddSubtaskForm(props) {
         setOpenSubtaskForm(false);
         setSubtask({});
         setEditing(false);
-    }
+    };
 
     const handleDelete = () => {
         deleteSubtask(subtask.id)
         handleClose();
-    }
+    };
 
     return (
         <div>
@@ -241,4 +240,4 @@ export default function AddSubtaskForm(props) {
         </Dialog>
         </div>
     );
-}
+};

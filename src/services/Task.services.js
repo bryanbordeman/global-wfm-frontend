@@ -4,20 +4,20 @@ import { SERVER } from "./SERVER";
 class TaskDataService {
     getAllTaskList(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/tasklist/`);
+        return axios.get(`${SERVER}/api/tasklist/`, {timeout: 900});
     };
 
     getAssigneeTasks(token, assignee){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/tasks/${assignee}/`);
+        return axios.get(`${SERVER}/api/tasks/${assignee}/`, {timeout: 900});
     };
     getAssigneeList(token, assignee, list){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/tasks/${assignee}/${list}/`);
+        return axios.get(`${SERVER}/api/tasks/${assignee}/${list}/`, {timeout: 900});
     };
     getAssigneeListComplete(token, assignee, list){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/complete/tasks/${assignee}/${list}/`);
+        return axios.get(`${SERVER}/api/complete/tasks/${assignee}/${list}/`, {timeout: 900});
     };
     createTask(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

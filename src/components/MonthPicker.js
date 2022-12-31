@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function MonthPicker(props) {
-    const [value, setValue] = React.useState(new Date());
+    const [ value, setValue ] = React.useState(new Date());
     const { handleChangeMonth } = props
 
     return (
@@ -24,4 +24,4 @@ export default function MonthPicker(props) {
             />
         </LocalizationProvider>
     );
-}
+};
