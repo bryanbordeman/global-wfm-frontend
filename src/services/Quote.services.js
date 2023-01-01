@@ -4,11 +4,11 @@ import { SERVER } from "./SERVER";
 class QuoteDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/quotes/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/quotes/`, {timeout: 3000});
     };
     getNextQuoteNumber(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/next/quote/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/next/quote/`, {timeout: 3000});
     };
     createQuote(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

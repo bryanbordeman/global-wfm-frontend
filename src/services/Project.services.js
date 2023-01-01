@@ -4,15 +4,15 @@ import { SERVER } from "./SERVER";
 class ProjectDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/projects/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/projects/`, {timeout: 3000});
     };
     getAllServices(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/services/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/services/`, {timeout: 3000});
     };
     getAllHSEs(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/hses/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/hses/`, {timeout: 3000});
     };
     createProject(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

@@ -4,23 +4,23 @@ import { SERVER } from "./SERVER";
 class WorksegmentDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/worksegments/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/worksegments/`, {timeout: 3000});
     };
     getAllTypes(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/worktypes/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/worktypes/`, {timeout: 3000});
     };
     getWeek(token, isoweek){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/worksegments/${isoweek}/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/worksegments/${isoweek}/`, {timeout: 3000});
     };
     getTotals(token, isoweek){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/worksegments/totals/${isoweek}/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/worksegments/totals/${isoweek}/`, {timeout: 3000});
     };
     adminGetWeek(token, isoweek){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/admin/worksegments/${isoweek}/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/admin/worksegments/${isoweek}/`, {timeout: 3000});
     };
     createWorksegment(data, token, userId){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

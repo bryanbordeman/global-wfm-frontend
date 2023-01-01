@@ -15,7 +15,7 @@
 
 - addsubtask dialog buttons not at bottom of dialog
 
-- Make StateSelect for address dialog
+- Show Version number under profile page.
 
 
 

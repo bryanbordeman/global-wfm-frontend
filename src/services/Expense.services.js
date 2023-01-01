@@ -4,7 +4,7 @@ import { SERVER } from "./SERVER";
 class ExpenseDataService {
     getAll(token, month){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/expenses/${month.getMonth()+1}`, {timeout: 900});
+        return axios.get(`${SERVER}/api/expenses/${month.getMonth()+1}`, {timeout: 3000});
     };
     createExpense(data, token, userId){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
