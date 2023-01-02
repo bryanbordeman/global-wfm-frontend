@@ -54,18 +54,24 @@ export default function TaskDialog(props) {
     }
 
     let number = ''
+    let name = ''
     // set number based on type
     if(task.project){
         number = `Project: ${task.project.number}`
+        name = `Project Name: ${task.project.name}`
     }
     if(task.service){
         number = `Service: ${task.service.number}`
+        name = `Service Name: ${task.service.name}`
     }
     if(task.hse){
         number = `HSE: ${task.hse.number}`
+        name = `HSE Name: ${task.hse.name}`
     }
     if(task.quote){
         number = `Quote: ${task.quote.number}`
+        name = `Quote Name: ${task.quote.name}`
+        
     }
 
     return (
@@ -126,6 +132,9 @@ export default function TaskDialog(props) {
                     <Stack direction="column" spacing={0}>
                         <Typography variant="caption" color={'primary'}>
                             {number}
+                        </Typography>
+                        <Typography variant="caption" color={'primary'}>
+                            {name}
                         </Typography>
                         <Typography variant="caption" color={'primary'}>
                             Created By: {createdBy}
