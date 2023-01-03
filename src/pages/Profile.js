@@ -1,6 +1,7 @@
 import React from 'react';
 import ProfileCard from '../components/ProfileCard'
 import { Container } from '@mui/material';
+import SoftwareCard from '../components/SoftwareCard';
 
 function Profile(props) {
     const { user } = props
@@ -13,6 +14,7 @@ function Profile(props) {
                     flexDirection:'column',
                     height: '100%'}}> 
                 <ProfileCard user={user}/>
+                <SoftwareCard/>
             </Container>
         </div>
     );

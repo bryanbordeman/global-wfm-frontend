@@ -20,7 +20,7 @@ const style = {
     };
 
 export default function ContactModal(props) {
-    const { open, setOpen, company, contact, setContact, phones, isLoading } = props
+    const { open, setOpen, contact, setContact, isLoading } = props
 
     const handleClose = () => {
         setContact('');
@@ -66,13 +66,13 @@ export default function ContactModal(props) {
                     <Divider sx={{mt:1}}/>
                     <Typography id="contact-information" variant="subtitle1" sx={{ mt: 1 }}>
                         <>
-                        {company? <> {company.name} <br/></> : ''}
+                        {contact.company? <> {contact.company.name} <br/></> : ''}
                         </>
                     </Typography>
                     <Divider sx={{mt:1}}/>
                     <Typography id="contact-information" variant="body2" sx={{ mt: 2 }}>
                         <>
-                        {phones ? phones.map((phone, key) => (<React.Fragment key={key}> <Link href={`tel:${phone.phone_number}`}>{phone.phone_number}</Link>{` ${phone.phone_type}`}<br/></React.Fragment>)) : ''}
+                        {contact.phone ? contact.phone.map((phone, key) => (<React.Fragment key={key}> <Link href={`tel:${phone.phone_number}`}>{phone.phone_number}</Link>{` ${phone.phone_type}`}<br/></React.Fragment>)) : ''}
                         </>
                     </Typography>
                     <Typography id="contact-information" variant="body2" sx={{ mt: 2 }}>

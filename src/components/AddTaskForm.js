@@ -81,10 +81,10 @@ export default function AddTaskForm(props) {
         notes: task.notes,
         due: editing && task.due !== undefined? new Date(task.due.replace('-', '/').replace('-', '/')) : new Date(),
         subtasks:task.subtasks,
-        project: task.project? task.project.id : '',
-        service: task.service? task.service.id : '',
-        hse: task.hse? task.hse.id : '',
-        quote: task.quote? task.quote.id : '',
+        quote: editing && task.quote != null ? task.quote.id : task.quote,
+        project: editing && task.project != null ? task.project.id : task.project,
+        service: editing && task.service != null? task.service.id : task.service,
+        hse: editing && task.hse != null ? task.hse.id : task.hse,
         created: new Date(),
         is_complete: task.is_complete,
         is_deleted: false,
@@ -95,7 +95,7 @@ export default function AddTaskForm(props) {
 
     const [ values, setValues ] = React.useState(initialFormValues);
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (didMount.current) {
             if(editing){
                 if(task.service !== null){
@@ -116,7 +116,7 @@ export default function AddTaskForm(props) {
         }
     },[props]);
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (didMount.current) {
             if(editing){
                 setValues(editFormValues)
@@ -278,6 +278,7 @@ export default function AddTaskForm(props) {
     const handleClose = () => {
         setOpen(!open);
         setEditing(false);
+        setValues(initialFormValues);
     };
 
     const handleSubmit = () => {

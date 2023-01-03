@@ -4,7 +4,7 @@ import { SERVER } from "./SERVER";
 class TaskDataService {
     getAllTaskList(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/tasklist/`, {timeout: 900});
+        return axios.get(`${SERVER}/api/tasklist/`, {timeout: 3000});
     };
 
     getAssigneeTasks(token, assignee){

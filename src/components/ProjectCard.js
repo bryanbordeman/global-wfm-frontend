@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ContactServices from '../services/Contact.services';
 import PhoneServices from '../services/Phone.services';
+import CompanyServices from '../services/Company.services';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -62,25 +63,7 @@ export default function ProjectCard(props) {
     const [ contact, setContact ] = React.useState('');
     const didMount = React.useRef(false);
     const [ expanded, setExpanded ] = React.useState('panel1');
-    const [ phones, setPhones ] = React.useState([]);
     const [ isLoading, setIsLoading ] = React.useState(false);
-
-    React.useLayoutEffect(() => {
-        if (didMount.current) {
-            setPhones([]);
-            if(contact.phone){
-                contact.phone.map((p) => {
-                    // check if already exisitng
-                    if(!phones.find(e => e.id == p)){
-                        // if not already in list get phone
-                        recievePhone(p)
-                    }
-                })
-            }
-        } else {
-            didMount.current = true;
-        }
-    }, [contact]);
 
     const handleChange = (panel) => (event, newExpanded) => {
         if(contacts.length > 0) 
@@ -148,20 +131,6 @@ export default function ProjectCard(props) {
         setOpenContactModel(!openContactModal);
     };
 
-    const recievePhone = (id) => {
-        setIsLoading(true);
-        PhoneServices.getPhone(id, token)
-            .then(response => {
-                setPhones(oldArray => [...oldArray, response.data]);
-            })
-            .catch(e => {
-                console.log(e);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    };
-        
     return (
         <>
             {project.number ? 
@@ -214,7 +183,6 @@ export default function ProjectCard(props) {
                             </a>
                             
                         </div>
-                        
                         <Divider orientation="vertical" flexItem/>
                         </>
                         : ''}
@@ -274,7 +242,8 @@ export default function ProjectCard(props) {
                                     <Typography>{project.customer.name}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails sx={{pb:0}}>
-                                    {contacts.map((contact) => (
+                                    {contacts.map((contact) => {
+                                        return (
                                         <div key={contact.id}>
                                             <Stack direction="row" spacing={1}>
                                                 <IconButton 
@@ -294,19 +263,29 @@ export default function ProjectCard(props) {
                                             </div>
                                             </Stack>
                                         </div>
-                                    ))}
+                                        )
+                                    })}
                                     <ContactModal
                                         contact={contact}
-                                        phones={phones}
                                         setContact={setContact}
                                         open={openContactModal}
                                         setOpen={setOpenContactModel}
                                         isLoading={isLoading}
-                                        company={project.customer}
                                     />
                                 </AccordionDetails>
                             </Accordion>
                         </div>
+                        {project.notes?
+                        <div>
+                            <Divider sx={{mt:2}}/>
+                            <Typography variant="body2" sx={{mt:2}} >
+                                Notes:
+                            </Typography>
+                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                {project.notes}
+                            </Typography>
+                        </div>:
+                        ''}
                     </CardContent>
                     <CardActions>
                 </CardActions>
