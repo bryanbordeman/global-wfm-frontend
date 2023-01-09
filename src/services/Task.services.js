@@ -1,23 +1,24 @@
 import axios from "axios";
 import { SERVER } from "./SERVER";
+import { TIMEOUT } from "./TIMEOUT";
 
 class TaskDataService {
     getAllTaskList(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/tasklist/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/tasklist/`, {timeout: TIMEOUT});
     };
 
     getAssigneeTasks(token, assignee){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/tasks/${assignee}/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/tasks/${assignee}/`, {timeout: TIMEOUT});
     };
     getAssigneeList(token, assignee, list){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/tasks/${assignee}/${list}/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/tasks/${assignee}/${list}/`, {timeout: TIMEOUT});
     };
     getAssigneeListComplete(token, assignee, list){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/complete/tasks/${assignee}/${list}/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/complete/tasks/${assignee}/${list}/`, {timeout: TIMEOUT});
     };
     createTask(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

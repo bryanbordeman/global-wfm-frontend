@@ -1,10 +1,11 @@
 import axios from "axios";
 import { SERVER } from "./SERVER";
+import { TIMEOUT } from "./TIMEOUT";
 
 class AnnouncementDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/announcement/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/announcement/`, {timeout: TIMEOUT});
     };
     createAnnouncement(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

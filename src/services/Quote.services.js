@@ -1,14 +1,15 @@
 import axios from "axios";
 import { SERVER } from "./SERVER";
+import { TIMEOUT } from "./TIMEOUT";
 
 class QuoteDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/quotes/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/quotes/`, {timeout: TIMEOUT});
     };
     getNextQuoteNumber(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/next/quote/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/next/quote/`, {timeout: TIMEOUT});
     };
     createQuote(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

@@ -16,6 +16,7 @@ import WorksegmentDataService from '../services/Worksegment.services';
 import moment from 'moment';
 import Loading from './Loading';
 import WeekPicker from './WeekPicker';
+import { v4 as uuidv4 } from 'uuid';
 
 function createData(name, regular, overtime, travel, total_duration, summary) {
     return {
@@ -75,7 +76,7 @@ function Row(props) {
                         </TableHead>
                         <TableBody>
                         {row.summary.map((summaryRow) => (
-                            <TableRow hover key={summaryRow.date} >
+                            <TableRow hover key={uuidv4()} >
                             <TableCell component="th" scope="row">
                                 {summaryRow.approved}
                             </TableCell>
@@ -237,7 +238,7 @@ export default function WorksegmentTable(props) {
             
             {totals.map((row) => (
                 <Row 
-                    key={row.name} 
+                    key={uuidv4()} 
                     row={row} 
                     isoWeek={isoWeek}
                 />

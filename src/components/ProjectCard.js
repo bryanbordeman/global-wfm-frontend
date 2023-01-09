@@ -1,7 +1,5 @@
 import * as React from 'react';
 import ContactServices from '../services/Contact.services';
-import PhoneServices from '../services/Phone.services';
-import CompanyServices from '../services/Company.services';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -61,7 +59,6 @@ export default function ProjectCard(props) {
     const [ openContactModal, setOpenContactModel ] = React.useState(false);
     const [ contacts, setContacts ] = React.useState([]);
     const [ contact, setContact ] = React.useState('');
-    const didMount = React.useRef(false);
     const [ expanded, setExpanded ] = React.useState('panel1');
     const [ isLoading, setIsLoading ] = React.useState(false);
 
@@ -71,13 +68,9 @@ export default function ProjectCard(props) {
     };
 
     React.useEffect(() => {
-        if (didMount.current) {
-            if(project.id){
-                recieveContacts(project.id);
-            }
-        } else {
-            didMount.current = true;
-        }
+        if(project.id){
+            recieveContacts(project.id);
+        };
     },[project]);
 
     const recieveContacts = (id) => {
@@ -183,6 +176,7 @@ export default function ProjectCard(props) {
                             </a>
                             
                         </div>
+                        
                         <Divider orientation="vertical" flexItem/>
                         </>
                         : ''}
@@ -242,8 +236,7 @@ export default function ProjectCard(props) {
                                     <Typography>{project.customer.name}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails sx={{pb:0}}>
-                                    {contacts.map((contact) => {
-                                        return (
+                                    {contacts.map((contact) => (
                                         <div key={contact.id}>
                                             <Stack direction="row" spacing={1}>
                                                 <IconButton 
@@ -263,29 +256,20 @@ export default function ProjectCard(props) {
                                             </div>
                                             </Stack>
                                         </div>
-                                        )
-                                    })}
+                                    ))}
+                                    
                                     <ContactModal
                                         contact={contact}
+                                        phones={contact.phone}
                                         setContact={setContact}
                                         open={openContactModal}
                                         setOpen={setOpenContactModel}
                                         isLoading={isLoading}
+                                        company={project.customer}
                                     />
                                 </AccordionDetails>
                             </Accordion>
                         </div>
-                        {project.notes?
-                        <div>
-                            <Divider sx={{mt:2}}/>
-                            <Typography variant="body2" sx={{mt:2}} >
-                                Notes:
-                            </Typography>
-                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                {project.notes}
-                            </Typography>
-                        </div>:
-                        ''}
                     </CardContent>
                     <CardActions>
                 </CardActions>

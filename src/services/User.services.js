@@ -1,10 +1,11 @@
 import axios from "axios";
 import { SERVER } from "./SERVER";
+import { TIMEOUT } from "./TIMEOUT";
 
 class UserService {
     getUsers(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/users/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/users/`, {timeout: TIMEOUT});
     };
     login(data){
         return axios.post(`${SERVER}/api/login/`, data);

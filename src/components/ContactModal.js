@@ -22,6 +22,12 @@ const style = {
 export default function ContactModal(props) {
     const { open, setOpen, contact, setContact, isLoading } = props
 
+    function stringAvatar(name) {
+        return {
+            children: `${name.split(' ')[0][0]}`,
+            };
+        };
+
     const handleClose = () => {
         setContact('');
         setOpen(!open);
@@ -51,9 +57,9 @@ export default function ContactModal(props) {
                     </IconButton>
                     <Stack direction="row" spacing={1}>
                         <Avatar 
-                            alt={`${contact.name}`}
-                            src="/broken-image.jpg"
-                            />
+                            {...stringAvatar(`${contact.name}`)} 
+                        />
+
                         <Stack>
                             <Typography style={{ wordWrap: "break-word", maxWidth:'200px' }} id="contact-name" variant="h5" component="h5">
                                 {contact.name}

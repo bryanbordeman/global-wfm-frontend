@@ -1,10 +1,11 @@
 import axios from "axios";
 import { SERVER } from "./SERVER";
+import { TIMEOUT } from "./TIMEOUT";
 
 class CompanyDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/companies/`);
+        return axios.get(`${SERVER}/api/companies/`, {timeout: TIMEOUT});
     };
     searchAll(token, search){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
@@ -12,7 +13,7 @@ class CompanyDataService {
     };
     getAllShort(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/companies/short/`);
+        return axios.get(`${SERVER}/api/companies/short/`, {timeout: TIMEOUT});
     };
     createCompany(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

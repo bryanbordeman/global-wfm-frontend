@@ -1,14 +1,15 @@
 import axios from "axios";
 import { SERVER } from "./SERVER";
+import { TIMEOUT } from "./TIMEOUT";
 
 class PhoneDataService {
     getAll(token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/phone_numbers/`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/phone_numbers/`, {timeout: TIMEOUT});
     };
     getPhone(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/phone_number/${id}`, {timeout: 3000});
+        return axios.get(`${SERVER}/api/phone_number/${id}`, {timeout: TIMEOUT});
     };
     createPhone(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

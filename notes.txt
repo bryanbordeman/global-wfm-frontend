@@ -15,7 +15,7 @@
 
 - addsubtask dialog buttons not at bottom of dialog
 
-- Show Version number under profile page.
+- Fix ios image upload on expenses 
 
 
 

@@ -29,11 +29,11 @@ return (
             </Typography>
             <Divider sx={{ml: 6, mr: 6 }}/>
             <Typography sx={{ mb: 2, mt:2 }} color="text.primary">
-                Name: Global WFM
+                Description: {packageJson.description}
                 <br/>
                 Version: {packageJson.version}
                 <br/>
-                Published by: Bryan Bordeman
+                Auther: {packageJson.auther}
             </Typography>
         </CardContent>
     </Card>

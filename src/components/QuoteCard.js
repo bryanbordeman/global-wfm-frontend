@@ -1,6 +1,5 @@
 import * as React from 'react';
 import ContactServices from '../services/Contact.services';
-import PhoneServices from '../services/Phone.services';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -64,26 +63,7 @@ export default function QuoteCard(props) {
     const [ contact, setContact ] = React.useState('');
     const [ company, setCompany ] = React.useState('');
     const [ expanded, setExpanded ] = React.useState('panel1');
-    const [ phones, setPhones ] = React.useState([]);
     const [ isLoading, setIsLoading ] = React.useState(false);
-    const didMount = React.useRef(false);
-
-    React.useLayoutEffect(() => {
-        if (didMount.current) {
-            setPhones([]);
-            if(contact.phone){
-                contact.phone.map((p) => {
-                    // check if already exisitng
-                    if(!phones.find(e => e.id == p)){
-                        // if not already in list get phone
-                        recievePhone(p)
-                    }
-                })
-            }
-        } else {
-            didMount.current = true;
-        }
-    }, [contact]);
 
     const handleChange = (panel) => (event, newExpanded) => {
         if(contacts.length > 0) 
@@ -91,13 +71,9 @@ export default function QuoteCard(props) {
     };
 
     React.useEffect(() => {
-        if (didMount.current) {
-            if(quote.id){
-                recieveContacts(quote.id);
-            }
-        } else {
-            didMount.current = true;
-        }
+        if(quote.id){
+            recieveContacts(quote.id);
+        };
     },[quote]);
 
     const recieveContacts = (id) => {
@@ -119,21 +95,6 @@ export default function QuoteCard(props) {
         setContact(contact);
         setCompany(company);
         setOpenContactModel(!openContactModal);
-    };
-
-    const recievePhone = (id) => {
-        setIsLoading(true);
-        PhoneServices.getPhone(id, token)
-            .then(response => {
-                setPhones(oldArray => [...oldArray, response.data]);
-            })
-            .catch( e => {
-                console.log(e);
-                setIsLoading(false);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
     };
 
     return (
@@ -254,7 +215,8 @@ export default function QuoteCard(props) {
                                 </AccordionSummary>
                                 <AccordionDetails sx={{pb:0}}>
                                 {contacts.map((contact) => {
-                                    return contact.quotes.includes(quote.id) && contact.company === customer.id? 
+                                    let quotes = Array.from(contact.quotes, (q => (q.id)));
+                                    return quotes.includes(quote.id) && contact.company.id === customer.id? 
                                     <div key={contact.id}>
                                         <Stack direction="row" spacing={1}>
                                             <IconButton 
@@ -279,7 +241,7 @@ export default function QuoteCard(props) {
                                 })}
                                 <ContactModal
                                     contact={contact}
-                                    phones={phones}
+                                    phones={contact.phone}
                                     setContact={setContact}
                                     open={openContactModal}
                                     setOpen={setOpenContactModel}
