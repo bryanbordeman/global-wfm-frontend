@@ -4,9 +4,20 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Divider } from '@mui/material';
 import packageJson from '../../package.json';
+import { Button } from '@mui/material';
 
 
 export default function SoftwareCard() {
+    const ClearCacheData = () => {
+        caches.keys().then((names) => {
+            names.forEach((name) => {
+                caches.delete(name);
+            });
+            window.location.reload();
+            });
+        alert(`Updated to ${packageJson.version} refresh browser`)
+    };
+
 
 return (
     <Card 
@@ -35,6 +46,9 @@ return (
                 <br/>
                 Auther: {packageJson.auther}
             </Typography>
+            <Button onClick={ClearCacheData} variant='outlined'>
+                Update
+            </Button>
         </CardContent>
     </Card>
     );

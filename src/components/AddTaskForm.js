@@ -96,7 +96,7 @@ export default function AddTaskForm(props) {
     const [ values, setValues ] = React.useState(initialFormValues);
 
     React.useLayoutEffect(() => {
-        if (didMount.current) {
+        // if (didMount.current) {
             if(editing){
                 if(task.service !== null){
                     setMenuSelection(1)
@@ -111,19 +111,19 @@ export default function AddTaskForm(props) {
                     setMenuSelection(0)
                 }
             }
-        } else {
-            didMount.current = true;
-        }
+        // } else {
+        //     didMount.current = true;
+        // }
     },[props]);
 
     React.useLayoutEffect(() => {
-        if (didMount.current) {
+        // if (didMount.current) {
             if(editing){
                 setValues(editFormValues)
             }
-        } else {
-            didMount.current = true;
-        }
+        // } else {
+        //     didMount.current = true;
+        // }
     },[props]);
     
     const handleInputValue = (e) => {
@@ -292,8 +292,10 @@ export default function AddTaskForm(props) {
             data.updated= moment.tz(data.updated, "America/New_York")._d.toISOString()
             console.log(moment.tz(data.updated, "America/New_York")._d.toISOString())
             updateTask(task.id, data);
+            setValues(initialFormValues);
         }else{
             createTask(values);
+            setValues(initialFormValues);
         }
         handleClose();
         
@@ -439,7 +441,7 @@ export default function AddTaskForm(props) {
                             helperText={errors.notes === null ? '' : errors.notes}
                             error={errors.notes? true : false}
                         />
-                        {editing && user.id === values.assignee.id ?
+                        {editing && user.id === values.assignee ?
                         <FormControlLabel
                             onChange={() => {setValues({...values, is_complete: !values.is_complete})}}
                             control={<Switch checked={values.is_complete} color="primary" />}

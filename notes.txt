@@ -15,7 +15,9 @@
 
 - addsubtask dialog buttons not at bottom of dialog
 
-- Fix ios image upload on expenses 
+- Fix ios image upload on expenses
+
+- after creating new task form does not reset.
 
 
 

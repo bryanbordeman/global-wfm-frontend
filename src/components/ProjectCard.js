@@ -270,6 +270,17 @@ export default function ProjectCard(props) {
                                 </AccordionDetails>
                             </Accordion>
                         </div>
+                        {project.notes ? 
+                            <div>
+                            <Divider sx={{mt:2}}/>
+                                <Typography variant="body2" sx={{mt:2}}>
+                                    Notes:
+                                </Typography>
+                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                    {project.notes}
+                                </Typography>
+                            </div>
+                            : ''}
                     </CardContent>
                     <CardActions>
                 </CardActions>

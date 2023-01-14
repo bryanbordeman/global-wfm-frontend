@@ -384,6 +384,8 @@ function Task(props) {
                         <div style={{marginBottom: '0.75rem'}}>
                             <EmployeePicker
                                 user={user}
+                                editing={true}
+                                editObject={{user:user}}
                                 employee={employee}
                                 token={token}
                                 handleChangeEmployee={handleChangeEmployee}/>

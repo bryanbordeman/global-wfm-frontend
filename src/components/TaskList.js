@@ -30,6 +30,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import moment from 'moment-timezone';
+import Tooltip from '@mui/material/Tooltip';
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -233,18 +234,23 @@ return (
         const labelId = `list-label-${list.title}`;
         let subtasks = list.subtasks.map(sublist => (sublist))
         let number = ''
+        let name = ''
         // set number based on type
         if(list.project){
             number =list.project.number
+            name =list.project.name
         }
         if(list.service){
             number =list.service.number
+            name =list.service.name
         }
         if(list.hse){
             number =list.hse.number
+            name =list.hse.name
         }
         if(list.quote){
             number =list.quote.number
+            name =list.quote.name
         }
         return (
             <div key={list.id}>
@@ -327,6 +333,7 @@ return (
                         handleMenuClick(e, list);
                     }}
                 >
+                    <Tooltip title={name} enterTouchDelay={0}>
                     <ListItemIcon>
                         <Chip 
                             sx={{mr:1}} 
@@ -336,6 +343,7 @@ return (
                             label={number}
                         />
                     </ListItemIcon>
+                    </Tooltip>
                     <ListItemText 
                         primaryTypographyProps={{ 
                             style: {
