@@ -432,6 +432,7 @@ function WorksegmentList(props) {
                 handleChangeEmployee={handleChangeEmployee}
                 employee={employee}
                 segment={editSegment}
+                setSegment={setEditSegment}
                 handleClickOpen={handleClickOpen}
                 openAdd={openAdd}
                 setOpenAdd={setOpenAdd}

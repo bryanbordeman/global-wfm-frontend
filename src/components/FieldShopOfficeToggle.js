@@ -8,10 +8,10 @@ export default function FieldShopOfficeToggle(props) {
     const { workTypes, values } = props
 
     React.useLayoutEffect(() => {
-            if(values.segment_type.id === undefined){
-                setValue(workTypes.length > 0 ? workTypes[workTypes.length - 1].id : '');
+            if(values.segment_type === undefined){
+                setValue(workTypes.length > 0 ? workTypes[workTypes.length - 1] : '');
             }else{
-                setValue(values.segment_type.id);
+                setValue(values.segment_type);
             }
     },[]);
 

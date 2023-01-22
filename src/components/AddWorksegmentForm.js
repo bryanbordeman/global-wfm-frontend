@@ -32,6 +32,7 @@ export default function AddWorksegmentForm(props) {
         createWorksegment, 
         updateWorksegment,
         segment,
+        setSegment,
         openAdd,
         setOpenAdd,
         user,
@@ -42,7 +43,6 @@ export default function AddWorksegmentForm(props) {
 
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
     const [ menuSelection, setMenuSelection ] = React.useState(0);
-    const didMount = React.useRef(false);
     
     const initialFormValues = {
         user: user.id,
@@ -94,7 +94,6 @@ export default function AddWorksegmentForm(props) {
     },[]);
 
     React.useEffect(() => {
-        if (didMount.current) {
             if(editing){
                 if(segment.service !== null){
                     setMenuSelection(1)
@@ -109,18 +108,13 @@ export default function AddWorksegmentForm(props) {
                     setMenuSelection(0)
                 }
             }
-        } else {
-            didMount.current = true;
-        }
     },[props]);
 
-    React.useEffect(() => {
-        if (didMount.current) {
-            if(editing){
+    React.useLayoutEffect(() => {
+        if(editing){
+            setTimeout(() => {
                 setValues(editFormValues)
-            }
-        } else {
-            didMount.current = true;
+            }, 500);
         }
     },[props]);
 
@@ -137,18 +131,26 @@ export default function AddWorksegmentForm(props) {
     },[menuSelection]);
 
     React.useEffect(() => {
-        if(employee) 
+        if(employee) {
             setValues({
             ...values,
             user: employee.id
             });
+        }
+        //! not 100% if this is correct
+        // if(employee.id === undefined) 
+        //     setValues({
+        //     ...values,
+        //     user: user.id,
+        //     });
+        
     },[employee]);
 
     React.useLayoutEffect(() => {
         if(editing){
             setValues({
                 ...values,
-                segment_type: segment.segment_type
+                segment_type: segment.segment_type? segment.segment_type.id : ''
             });
             // setSegmentType(workTypes.find(x => x.name === segment.segment_type).id);
         }else{
@@ -178,7 +180,7 @@ export default function AddWorksegmentForm(props) {
 
     const handleSubmit = () => {
         const data = {
-            user: values.user? values.user : user.id ,
+            user: values.user? values.user : user.id,
             segment_type: values.segment_type,
             quote: values.quote,
             project: values.project, 
@@ -365,6 +367,7 @@ export default function AddWorksegmentForm(props) {
     const handleClose = () => {
         setOpenAdd(false);
         setEditing(false);
+        setSegment('');
         handleClear();
     };
 

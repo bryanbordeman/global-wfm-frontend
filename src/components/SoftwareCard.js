@@ -15,7 +15,7 @@ export default function SoftwareCard() {
             });
             window.location.reload();
             });
-        alert(`Updated to ${packageJson.version} refresh browser`)
+        alert(`Updated to ${packageJson.version}`)
     };
 
 

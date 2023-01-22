@@ -281,6 +281,17 @@ export default function ProjectCard(props) {
                                 </Typography>
                             </div>
                             : ''}
+                        {project.quote ? 
+                            <div>
+                            <Divider sx={{mt:2}}/>
+                                <Typography variant="body2" sx={{mt:2}}>
+                                    Quote: 
+                                </Typography>
+                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                    {project.quote.number}
+                                </Typography>
+                            </div>
+                            : ''}
                     </CardContent>
                     <CardActions>
                 </CardActions>
