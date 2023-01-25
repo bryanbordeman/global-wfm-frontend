@@ -24,7 +24,7 @@ export default function ProjectPicker(props) {
             handleClear();
             retrieveProject();
         }
-    },[])
+    },[editing])
 
     React.useEffect(() => {
         //! renders twice??
@@ -35,7 +35,7 @@ export default function ProjectPicker(props) {
         } else {
             didMount.current = true;
         }
-    },[])
+    },[editing])
 
     const retrieveProject = () => {
         setIsLoading(true);

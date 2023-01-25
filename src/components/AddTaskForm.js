@@ -349,6 +349,8 @@ export default function AddTaskForm(props) {
                 />  
     };
 
+    const assignee = typeof values.assignee == 'number'? values.assignee : values.assignee.id
+
     return (
         <div>
             <Dialog
@@ -441,7 +443,7 @@ export default function AddTaskForm(props) {
                             helperText={errors.notes === null ? '' : errors.notes}
                             error={errors.notes? true : false}
                         />
-                        {editing && user.id === values.assignee ?
+                        {editing && user.id === assignee?
                         <FormControlLabel
                             onChange={() => {setValues({...values, is_complete: !values.is_complete})}}
                             control={<Switch checked={values.is_complete} color="primary" />}
