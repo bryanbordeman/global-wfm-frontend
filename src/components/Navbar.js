@@ -137,7 +137,7 @@ const Navbar = (props) => {
                         >
                         <Typography textAlign="center">Timesheets</Typography>
                     </MenuItem>
-                    {/* <MenuItem 
+                    <MenuItem 
                         onClick={() => {
                             setActiveButton('schedule');
                             handleCloseNavMenu()}}
@@ -145,7 +145,7 @@ const Navbar = (props) => {
                         to='/schedule'
                         >
                         <Typography textAlign="center">Schedule</Typography>
-                    </MenuItem> */}
+                    </MenuItem>
                     <MenuItem 
                         onClick={() => {
                             setActiveButton('projects');
@@ -182,6 +182,15 @@ const Navbar = (props) => {
                         to='/task'
                         >
                         <Typography textAlign="center">Task</Typography>
+                    </MenuItem>
+                    <MenuItem  
+                        onClick={() => {
+                            setActiveButton('videos');
+                            handleCloseNavMenu()}}
+                        component={Link} 
+                        to='/videos'
+                        >
+                        <Typography textAlign="center">Videos</Typography>
                     </MenuItem>
                 </Menu>
                 </Box>
@@ -220,13 +229,13 @@ const Navbar = (props) => {
                         >
                         Timesheets
                     </Button>
-                    {/* <Button component={Link} to='/schedule'
+                    <Button component={Link} to='/schedule'
                         name='schedule'
                         sx={activeButton === 'schedule' ? activeStyle : inactiveStyle}
                         onClick={clickedButtonHandler}
                         >
                         Schedule
-                    </Button> */}
+                    </Button>
                     <Button component={Link} to='/projects'
                         name='projects'
                         sx={activeButton === 'projects' ? activeStyle : inactiveStyle}
@@ -254,6 +263,13 @@ const Navbar = (props) => {
                         onClick={clickedButtonHandler}
                         >
                         Task
+                    </Button>
+                    <Button component={Link} to='/videos'
+                        name='training'
+                        sx={activeButton === 'videos' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
+                        >
+                        Videos
                     </Button>
                 </Box>
                 <Box sx={{ flexGrow: 0 }}>

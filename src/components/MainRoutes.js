@@ -11,6 +11,7 @@ import Announcements from '../pages/Announcements';
 import Expenses from '../pages/Expenses';
 import Profile from '../pages/Profile'
 import Task from '../pages/Task'
+import Videos from '../pages/Videos';
 
 function MainRoutes(props) {
     const { user, token, login, signup, loginErrors, darkState, handleOpenSnackbar } = props
@@ -101,6 +102,20 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Task
+                        user={user}
+                        token={token}
+                        darkState={darkState}
+                        handleOpenSnackbar={handleOpenSnackbar}
+                        />
+                }/>
+                <Route 
+                    exact 
+                    path='/videos' 
+                    element={
+                        !user.username  ? 
+                        <Navigate to="/login" />
+                        :
+                        <Videos
                         user={user}
                         token={token}
                         darkState={darkState}

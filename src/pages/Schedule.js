@@ -15,10 +15,11 @@ function Schedule(props) {
                         flexDirection:'column',
                         height: '100%'
                     }}>
-                 <Typography style={{fontWeight: '700'}} mb={1} variant="h4" component="div">
+                        <div>Coming Soon</div>
+                 {/* <Typography style={{fontWeight: '700'}} mb={1} variant="h4" component="div">
                     2022W25
                 </Typography>
-                <ScheduleList/>
+                <ScheduleList/> */}
             </Container>
         </div>
     );
