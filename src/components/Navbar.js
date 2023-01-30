@@ -137,7 +137,7 @@ const Navbar = (props) => {
                         >
                         <Typography textAlign="center">Timesheets</Typography>
                     </MenuItem>
-                    <MenuItem 
+                    {/* <MenuItem 
                         onClick={() => {
                             setActiveButton('schedule');
                             handleCloseNavMenu()}}
@@ -145,7 +145,7 @@ const Navbar = (props) => {
                         to='/schedule'
                         >
                         <Typography textAlign="center">Schedule</Typography>
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem 
                         onClick={() => {
                             setActiveButton('projects');
@@ -185,12 +185,21 @@ const Navbar = (props) => {
                     </MenuItem>
                     <MenuItem  
                         onClick={() => {
-                            setActiveButton('videos');
+                            setActiveButton('field');
                             handleCloseNavMenu()}}
                         component={Link} 
-                        to='/videos'
+                        to='/field'
                         >
-                        <Typography textAlign="center">Videos</Typography>
+                        <Typography textAlign="center">Field</Typography>
+                    </MenuItem>
+                    <MenuItem  
+                        onClick={() => {
+                            setActiveButton('shop');
+                            handleCloseNavMenu()}}
+                        component={Link} 
+                        to='/shop'
+                        >
+                        <Typography textAlign="center">Shop</Typography>
                     </MenuItem>
                 </Menu>
                 </Box>
@@ -229,13 +238,13 @@ const Navbar = (props) => {
                         >
                         Timesheets
                     </Button>
-                    <Button component={Link} to='/schedule'
+                    {/* <Button component={Link} to='/schedule'
                         name='schedule'
                         sx={activeButton === 'schedule' ? activeStyle : inactiveStyle}
                         onClick={clickedButtonHandler}
                         >
                         Schedule
-                    </Button>
+                    </Button> */}
                     <Button component={Link} to='/projects'
                         name='projects'
                         sx={activeButton === 'projects' ? activeStyle : inactiveStyle}
@@ -264,12 +273,19 @@ const Navbar = (props) => {
                         >
                         Task
                     </Button>
-                    <Button component={Link} to='/videos'
-                        name='training'
-                        sx={activeButton === 'videos' ? activeStyle : inactiveStyle}
+                    <Button component={Link} to='/field'
+                        name='field'
+                        sx={activeButton === 'field' ? activeStyle : inactiveStyle}
                         onClick={clickedButtonHandler}
                         >
-                        Videos
+                        Field
+                    </Button>
+                    <Button component={Link} to='/shop'
+                        name='shop'
+                        sx={activeButton === 'shop' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
+                        >
+                        Shop
                     </Button>
                 </Box>
                 <Box sx={{ flexGrow: 0 }}>

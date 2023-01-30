@@ -1,9 +1,7 @@
 import React from 'react';
 import { Container } from '@mui/material';
-import ScheduleList from '../components/ScheduleList';
-import Typography from '@mui/material/Typography';
 
-export default function Schedule(props) {
+export default function Material(props) {
     const { user, token, handleOpenSnackbar, darkState} = props
     return ( 
         <Container

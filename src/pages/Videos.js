@@ -79,9 +79,11 @@ const data = [
     loading: PropTypes.bool,
     };
 
-    export default function Videos() {
+    export default function Videos(props) {
+        const { user, token, handleOpenSnackbar, darkState} = props
     return (
         <Container
+            component="span"
             sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -89,11 +91,11 @@ const data = [
                 flexDirection:'column',
                 height: '100%'
         }}>
-            <div style={{marginTop: '20px'}}>Coming Soon</div>
-        <Box sx={{ overflow: 'hidden' }}>
-            <Media loading />
-            <Media />
-        </Box>
+            Coming Soon
+            <Box sx={{ overflow: 'hidden' }}>
+                <Media loading />
+                <Media />
+            </Box>
         </Container>
     );
 }
