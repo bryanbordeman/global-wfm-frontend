@@ -18,6 +18,7 @@ import DeleteWorksegmentModal from '../components/DeleteWorksegmentModal';
 
 import EmployeePicker from '../components/EmployeePicker';
 import Loading from '../components/Loading';
+import { purple } from '@mui/material/colors';
 
 function WorksegmentList(props) {
     const [ worksegments, setWorksegments ] = useState([]);
@@ -232,8 +233,8 @@ function WorksegmentList(props) {
                     my: 1,
                     width: '100%',
                     maxWidth: '500px',
-                    border: 0.5,
-                    borderColor: 'primary.main',
+                    borderWidth: `${segment.project && segment.project.id === 36 || segment.project && segment.project.id === 37? '3px' : '1px'}`,
+                    borderColor: `${segment.project && segment.project.id === 36 || segment.project && segment.project.id === 37? purple[500] : 'primary.main'}`,
                     borderRadius: '16px',
                     }}
                     variant="outlined"
@@ -337,6 +338,19 @@ function WorksegmentList(props) {
                                     : ''}
                                     {segment.hse?
                                     `HSE: ${segment.hse.number}`
+                                    : ''}
+                                    <br/>
+                                    {segment.quote?
+                                    `Quote Name: ${segment.quote.name}`
+                                    : ''}
+                                    {segment.project?
+                                    `Project Name: ${segment.project.name}`
+                                    : ''}
+                                    {segment.service?
+                                    `Service Name: ${segment.service.name}`
+                                    : ''}
+                                    {segment.hse?
+                                    `HSE Name: ${segment.hse.name}`
                                     : ''}
                                     <br/>
                                     Travel: {segment.travel_duration} {segment.travel_duration > 1 ? 'Hrs' : 'Hr'}
