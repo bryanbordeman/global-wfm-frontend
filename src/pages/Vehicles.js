@@ -11,9 +11,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+import VehicleListDialog from '../components/VehicleListDialog';
 
 export default function Vehicles(props) {
     const { user, token, handleOpenSnackbar, darkState} = props
+    const [ open, setOpen ] = React.useState(false);
+    
     return ( 
         <Container
             component="span"
@@ -27,7 +30,7 @@ export default function Vehicles(props) {
             <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <List>
                     <ListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={() => setOpen(true)}>
                         <ListItemIcon>
                             <DirectionsCarIcon />
                         </ListItemIcon>
@@ -73,6 +76,12 @@ export default function Vehicles(props) {
 
                 </List>
             </Box>
+            <VehicleListDialog
+                token={token}
+                handleOpenSnackbar={handleOpenSnackbar}
+                open={open}
+                setOpen={setOpen}
+            />
         </Container>
     );
 };
