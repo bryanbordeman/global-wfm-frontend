@@ -1,10 +1,13 @@
 import React from 'react';
+import VehicleDataService from '../services/Vehicle.services';
+import Loading from '../components/Loading';
 import { Container, Typography, Box } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import WashIcon from '@mui/icons-material/Wash';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -16,7 +19,27 @@ import VehicleListDialog from '../components/VehicleListDialog';
 export default function Vehicles(props) {
     const { user, token, handleOpenSnackbar, darkState} = props
     const [ open, setOpen ] = React.useState(false);
+    const [ isLoading, setIsLoading ] = React.useState(true);
+    const [ vehicles , setVehicles ] = React.useState([]);
+
+    React.useEffect(() => {
+        retrieveVehicles();
+    },[]);
     
+    const retrieveVehicles = () => {
+        setIsLoading(true);
+        VehicleDataService.getAll(props.token)
+        .then(response => {
+            setVehicles(response.data);
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
     return ( 
         <Container
             component="span"
@@ -43,16 +66,16 @@ export default function Vehicles(props) {
                         <ListItemIcon>
                             <ConstructionIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Service Reminders" />
+                        <ListItemText primary="Services" />
                         </ListItemButton>
                     </ListItem>
                     <Divider />
                     <ListItem disablePadding>
                         <ListItemButton>
                         <ListItemIcon>
-                            <PersonAddIcon />
+                            <WashIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Vehicle Assignments" />
+                        <ListItemText primary="Cleaning" />
                         </ListItemButton>
                     </ListItem>
                     <Divider />
@@ -77,10 +100,12 @@ export default function Vehicles(props) {
                 </List>
             </Box>
             <VehicleListDialog
-                token={token}
-                handleOpenSnackbar={handleOpenSnackbar}
+                vehicles={vehicles}
                 open={open}
                 setOpen={setOpen}
+            />
+            <Loading
+                open={isLoading}
             />
         </Container>
     );
