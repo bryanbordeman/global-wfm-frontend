@@ -6,9 +6,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Stack, Typography, IconButton } from '@mui/material';
 import  Divider from '@mui/material/Divider';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import EditIcon from '@mui/icons-material/Edit';
-import moment from 'moment';
 import Transition from './DialogTransistion'
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -19,7 +16,9 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import CloseIcon from '@mui/icons-material/Close';
 
+import AddVehicleIssueForm from '../components/AddVehicleIssueForm';
 
 
 const Accordion = styled((props) => (
@@ -62,6 +61,8 @@ const Accordion = styled((props) => (
 export default function VehicleListDialog(props) {
     const { vehicles } = props
     const { open, setOpen } = props;
+    const [ vehicle, setVehicle ] = React.useState({});
+    const [ openIssue, setOpenIssue ] = React.useState(false);
     const [ expanded, setExpanded ] = React.useState('panel1');
 
     const handleChange = (panel) => (event, newExpanded) => {
@@ -72,6 +73,11 @@ export default function VehicleListDialog(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleOpenIssue = (vehicle) => {
+        setVehicle(vehicle);
+        setOpenIssue(true);
+    }
 
     return (
         <div>
@@ -84,8 +90,21 @@ export default function VehicleListDialog(props) {
                 scroll={'paper'} 
             >
             <DialogTitle>
-                Vehicles
-            </DialogTitle>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <div>
+                            Vehicles
+                        </div>
+                        <div>
+                        <IconButton 
+                            edge="end" 
+                            aria-label="close"
+                            onClick={handleClose}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        </div> 
+                    </div>
+                </DialogTitle>
                 <Divider/>
                 <DialogContent>
                 {vehicles.map((v) => (
@@ -125,7 +144,7 @@ export default function VehicleListDialog(props) {
                                     <Divider sx={{ mb: 2, mt:2}}/>
                                     <CardActions  sx={{display:'flex', justifyContent:'center'}}>
                                         <Stack spacing={1} sx={{width: '100%'}}>
-                                            <Button variant='outlined' size="small">Report Issue</Button>
+                                            <Button variant='outlined' size="small" onClick={() => {handleOpenIssue(v)}}>Report Issue</Button>
                                             <Button variant='outlined' size="small">Log Cleaning</Button>
                                             <Button variant='outlined' size="small">Log Inspection</Button>
                                             <Button variant='outlined' size="small">Log Service</Button>
@@ -138,18 +157,16 @@ export default function VehicleListDialog(props) {
                     </Accordion>
                 ))}
                 </DialogContent>
-                {/* {vehicles.map((v) => (
-                    <DialogContent key={v.id}>
-                    <Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
-                        {v.nickname}
-                    </Typography>
-                </DialogContent>
-                ))} */}
                 <Divider/>
                     <DialogActions>
                         <Button variant="contained" onClick={handleClose}>Close</Button>
                     </DialogActions>
             </Dialog>
+            <AddVehicleIssueForm
+                open={openIssue}
+                setOpen={setOpenIssue}
+                vehicle={vehicle}
+            />
         </div>
     );
 };

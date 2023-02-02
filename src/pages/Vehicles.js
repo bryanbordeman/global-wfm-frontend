@@ -4,7 +4,6 @@ import Loading from '../components/Loading';
 import { Container, Typography, Box } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import ConstructionIcon from '@mui/icons-material/Construction';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import WashIcon from '@mui/icons-material/Wash';
@@ -16,9 +15,10 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import VehicleListDialog from '../components/VehicleListDialog';
 
+
 export default function Vehicles(props) {
     const { user, token, handleOpenSnackbar, darkState} = props
-    const [ open, setOpen ] = React.useState(false);
+    const [ openList, setOpenList ] = React.useState(false);
     const [ isLoading, setIsLoading ] = React.useState(true);
     const [ vehicles , setVehicles ] = React.useState([]);
 
@@ -53,7 +53,7 @@ export default function Vehicles(props) {
             <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <List>
                     <ListItem disablePadding>
-                        <ListItemButton onClick={() => setOpen(true)}>
+                        <ListItemButton onClick={() => setOpenList(true)}>
                         <ListItemIcon>
                             <DirectionsCarIcon />
                         </ListItemIcon>
@@ -101,8 +101,8 @@ export default function Vehicles(props) {
             </Box>
             <VehicleListDialog
                 vehicles={vehicles}
-                open={open}
-                setOpen={setOpen}
+                open={openList}
+                setOpen={setOpenList}
             />
             <Loading
                 open={isLoading}
