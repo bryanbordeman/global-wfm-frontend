@@ -17,7 +17,7 @@ import VehicleListDialog from '../components/VehicleListDialog';
 
 
 export default function Vehicles(props) {
-    const { user, token, handleOpenSnackbar, darkState} = props
+    const { user, token, handleOpenSnackbar } = props
     const [ openList, setOpenList ] = React.useState(false);
     const [ isLoading, setIsLoading ] = React.useState(true);
     const [ vehicles , setVehicles ] = React.useState([]);
@@ -40,6 +40,22 @@ export default function Vehicles(props) {
             setIsLoading(false);
         });
     };
+
+    const createVehicleIssue = (data) => {
+        setIsLoading(true);
+        VehicleDataService.createVehicleIssue(data, token)
+        .then(response => {
+            handleOpenSnackbar('success', 'Your issue has been submitted')
+        })
+        .catch(e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
     return ( 
         <Container
             component="span"
@@ -103,6 +119,8 @@ export default function Vehicles(props) {
                 vehicles={vehicles}
                 open={openList}
                 setOpen={setOpenList}
+                user={user}
+                createVehicleIssue={createVehicleIssue}
             />
             <Loading
                 open={isLoading}

@@ -59,7 +59,8 @@ const Accordion = styled((props) => (
 
 
 export default function VehicleListDialog(props) {
-    const { vehicles } = props
+    const { user } = props
+    const { vehicles, createVehicleIssue } = props
     const { open, setOpen } = props;
     const [ vehicle, setVehicle ] = React.useState({});
     const [ openIssue, setOpenIssue ] = React.useState(false);
@@ -72,6 +73,7 @@ export default function VehicleListDialog(props) {
     
     const handleClose = () => {
         setOpen(false);
+        setExpanded(false);
     };
 
     const handleOpenIssue = (vehicle) => {
@@ -166,6 +168,8 @@ export default function VehicleListDialog(props) {
                 open={openIssue}
                 setOpen={setOpenIssue}
                 vehicle={vehicle}
+                user={user}
+                createVehicleIssue={createVehicleIssue}
             />
         </div>
     );
