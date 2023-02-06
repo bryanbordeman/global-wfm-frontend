@@ -14,16 +14,27 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import VehicleListDialog from '../components/VehicleListDialog';
+import VehicleServicesListDialog from '../components/VehicleServicesListDialog';
 
 
 export default function Vehicles(props) {
     const { user, token, handleOpenSnackbar } = props
     const [ openList, setOpenList ] = React.useState(false);
+    const [ openServicesList, setOpenServicesList ] = React.useState(false);
     const [ isLoading, setIsLoading ] = React.useState(true);
     const [ vehicles , setVehicles ] = React.useState([]);
+    const [ issues, setIssues ] = React.useState([]);
+    const [ inspections, setInspections ] = React.useState([]);
+    const [ services, setServices ] = React.useState([]);
+    const [ cleanings, setCleanings ] = React.useState([]);
+
 
     React.useEffect(() => {
         retrieveVehicles();
+        retrieveVehicleIssues();
+        retrieveVehicleInspections();
+        retrieveVehicleServices();
+        retrieveVehicleCleanings();
     },[]);
     
     const retrieveVehicles = () => {
@@ -41,11 +52,116 @@ export default function Vehicles(props) {
         });
     };
 
+    const retrieveVehicleIssues = () => {
+        setIsLoading(true);
+        VehicleDataService.getAllIssues(props.token)
+        .then(response => {
+            setIssues(response.data);
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const retrieveVehicleInspections = () => {
+        setIsLoading(true);
+        VehicleDataService.getAllInspections(props.token)
+        .then(response => {
+            setInspections(response.data);
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const retrieveVehicleServices = () => {
+        setIsLoading(true);
+        VehicleDataService.getAllServices(props.token)
+        .then(response => {
+            setServices(response.data);
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const retrieveVehicleCleanings= () => {
+        setIsLoading(true);
+        VehicleDataService.getAllCleanings(props.token)
+        .then(response => {
+            setCleanings(response.data);
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
     const createVehicleIssue = (data) => {
         setIsLoading(true);
         VehicleDataService.createVehicleIssue(data, token)
         .then(response => {
             handleOpenSnackbar('success', 'Your issue has been submitted')
+        })
+        .catch(e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const createVehicleInspection = (data) => {
+        setIsLoading(true);
+        VehicleDataService.createVehicleInspection(data, token)
+        .then(response => {
+            handleOpenSnackbar('success', 'Your inspection has been logged')
+        })
+        .catch(e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const createVehicleService = (data) => {
+        setIsLoading(true);
+        VehicleDataService.createVehicleService(data, token)
+        .then(response => {
+            handleOpenSnackbar('success', 'Your service has been logged')
+        })
+        .catch(e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const createVehicleCleaning = (data) => {
+        setIsLoading(true);
+        VehicleDataService.createVehicleCleaning(data, token)
+        .then(response => {
+            handleOpenSnackbar('success', 'Your cleaning has been logged')
         })
         .catch(e => {
             console.log(e);
@@ -78,7 +194,7 @@ export default function Vehicles(props) {
                     </ListItem>
                     <Divider />
                     <ListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={() => setOpenServicesList(true)}>
                         <ListItemIcon>
                             <ConstructionIcon />
                         </ListItemIcon>
@@ -120,7 +236,19 @@ export default function Vehicles(props) {
                 open={openList}
                 setOpen={setOpenList}
                 user={user}
+                issues={issues}
                 createVehicleIssue={createVehicleIssue}
+                createVehicleInspection={createVehicleInspection}
+                createVehicleService={createVehicleService}
+                createVehicleCleaning={createVehicleCleaning}
+            />
+            <VehicleServicesListDialog
+                vehicles={vehicles}
+                open={openServicesList}
+                setOpen={setOpenServicesList}
+                user={user}
+                services={services}
+                createVehicleService={createVehicleService}
             />
             <Loading
                 open={isLoading}

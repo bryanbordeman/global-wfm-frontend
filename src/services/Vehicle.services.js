@@ -38,6 +38,63 @@ class VehicleDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.delete(`${SERVER}/api/vehicle/issue/${id}`);
     };
+
+    //!--------------------------------------------------------------------
+    
+    getAllInspections(token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/vehicle/inspections/`, {timeout: TIMEOUT});
+    };
+    createVehicleInspection(data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/create/vehicle/inspection/`, data);
+    };
+    updateVehicleInspection(id, data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/vehicle/inspection/${id}`, data);
+    };
+    deleteVehicleInspection(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.delete(`${SERVER}/api/vehicle/inspection/${id}`);
+    };
+
+    //!--------------------------------------------------------------------
+    
+    getAllServices(token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/vehicle/services/`, {timeout: TIMEOUT});
+    };
+    createVehicleService(data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/create/vehicle/service/`, data);
+    };
+    updateVehicleService(id, data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/vehicle/service/${id}`, data);
+    };
+    deleteVehicleService(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.delete(`${SERVER}/api/vehicle/service/${id}`);
+    };
+
+     //!--------------------------------------------------------------------
+    
+    getAllCleanings(token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/vehicle/cleanings/`, {timeout: TIMEOUT});
+    };
+    createVehicleCleaning(data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/create/vehicle/cleaning/`, data);
+    };
+    updateVehicleCleaning(id, data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/vehicle/cleaning/${id}`, data);
+    };
+    deleteVehicleCleaning(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.delete(`${SERVER}/api/vehicle/cleaning/${id}`);
+    };
 }
 
 export default new VehicleDataService();

@@ -19,7 +19,12 @@ import CardMedia from '@mui/material/CardMedia';
 import CloseIcon from '@mui/icons-material/Close';
 
 import AddVehicleIssueForm from '../components/AddVehicleIssueForm';
+import AddVehicleInspectionForm from './AddVehicleInspectionForm';
+import AddVehicleServiceForm from './AddVehicleServiceForm';
+import AddVehicleCleaningForm from './AddVehicleCleaningForm';
 
+import { amber } from '@mui/material/colors';
+import WarningIcon from '@mui/icons-material/Warning';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -60,10 +65,17 @@ const Accordion = styled((props) => (
 
 export default function VehicleListDialog(props) {
     const { user } = props
-    const { vehicles, createVehicleIssue } = props
+    const { createVehicleIssue, 
+            createVehicleInspection, 
+            createVehicleService, 
+            createVehicleCleaning } = props
+    const { vehicles, issues } = props
     const { open, setOpen } = props;
     const [ vehicle, setVehicle ] = React.useState({});
     const [ openIssue, setOpenIssue ] = React.useState(false);
+    const [ openInspection, setOpenInspection ] = React.useState(false);
+    const [ openService, setOpenService ] = React.useState(false);
+    const [ openCleaning, setOpenCleaning ] = React.useState(false);
     const [ expanded, setExpanded ] = React.useState('panel1');
 
     const handleChange = (panel) => (event, newExpanded) => {
@@ -79,7 +91,23 @@ export default function VehicleListDialog(props) {
     const handleOpenIssue = (vehicle) => {
         setVehicle(vehicle);
         setOpenIssue(true);
-    }
+    };
+
+    const handleOpenInspection = (vehicle) => {
+        setVehicle(vehicle);
+        setOpenInspection(true);
+    };
+
+    const handleOpenService = (vehicle) => {
+        setVehicle(vehicle);
+        setOpenService(true);
+    };
+
+    const handleOpenCleaning = (vehicle) => {
+        setVehicle(vehicle);
+        setOpenCleaning(true);
+    };
+
 
     return (
         <div>
@@ -112,15 +140,50 @@ export default function VehicleListDialog(props) {
                 {vehicles.map((v) => (
                     <Accordion key={v.id} expanded={expanded === v.id} onChange={handleChange(v.id)}>
                         <AccordionSummary 
+                            // sx={{backgroundColor: issues.find(i => v.id === i.vehicle.id)? amber[500] : ''}}
                             aria-controls={`${v.id}-content`} 
                             id={`${v.id}-header`}
                         >
-                            <Typography>{v.nickname}</Typography>
+                            {issues.find(i => v.id === i.vehicle.id)?
+                            <div>
+                                <Stack direction="row" spacing={2}>
+                                <Typography variant="h6" >{v.nickname}</Typography>
+                                {/* <Typography variant="subtitle2" color="text.secondary" >Open Issue</Typography> */}
+                                <WarningIcon
+                                    sx={{
+                                        position: 'absolute',
+                                        right: '10px', 
+                                        color: amber[500]
+                                    }}
+                                /> 
+                                </Stack>
+                            </div>
+                                :
+                                <Typography variant="h6"  >{v.nickname}</Typography>
+                            }
+                            
                         </AccordionSummary>
                         <AccordionDetails
                             sx={{display:'flex', justifyContent:'center'}}
                         >
                             <Card sx={{ maxWidth: 500 }}>
+                            {issues.find(i => v.id === i.vehicle.id)?
+                            <div>
+                                <Typography 
+                                    variant="body2" 
+                                    sx={{ 
+                                        display: 'flex',
+                                        justifyContent:'center',
+                                        m:2,
+                                        color: amber[500]
+                                    }}
+                                >
+                                    Unresolved issue
+                                </Typography>
+
+                            </div>
+                            :
+                            ''}
                                 <CardMedia
                                     component="img"
                                     alt={`${v.nickname}-image`}
@@ -147,9 +210,9 @@ export default function VehicleListDialog(props) {
                                     <CardActions  sx={{display:'flex', justifyContent:'center'}}>
                                         <Stack spacing={1} sx={{width: '100%'}}>
                                             <Button variant='outlined' size="small" onClick={() => {handleOpenIssue(v)}}>Report Issue</Button>
-                                            <Button variant='outlined' size="small">Log Cleaning</Button>
-                                            <Button variant='outlined' size="small">Log Inspection</Button>
-                                            <Button variant='outlined' size="small">Log Service</Button>
+                                            <Button variant='outlined' size="small" onClick={() => {handleOpenCleaning(v)}}>Log Cleaning</Button>
+                                            <Button variant='outlined' size="small" onClick={() => {handleOpenInspection(v)}} >Log Inspection</Button>
+                                            <Button variant='outlined' size="small" onClick={() => {handleOpenService(v)}} >Log Service</Button>
                                         </Stack>
                                     </CardActions>
                                     
@@ -170,6 +233,27 @@ export default function VehicleListDialog(props) {
                 vehicle={vehicle}
                 user={user}
                 createVehicleIssue={createVehicleIssue}
+            />
+            <AddVehicleInspectionForm
+                open={openInspection}
+                setOpen={setOpenInspection}
+                vehicle={vehicle}
+                user={user}
+                createVehicleInspection={createVehicleInspection}
+            />
+            <AddVehicleServiceForm
+                open={openService}
+                setOpen={setOpenService}
+                vehicle={vehicle}
+                user={user}
+                createVehicleService={createVehicleService}
+            />
+            <AddVehicleCleaningForm
+                open={openCleaning}
+                setOpen={setOpenCleaning}
+                vehicle={vehicle}
+                user={user}
+                createVehicleCleaning={createVehicleCleaning}
             />
         </div>
     );
