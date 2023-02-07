@@ -60,9 +60,9 @@ class VehicleDataService {
 
     //!--------------------------------------------------------------------
     
-    getAllServices(token){
+    getAllServices(year, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/vehicle/services/`, {timeout: TIMEOUT});
+        return axios.get(`${SERVER}/api/vehicle/services/${year}`, {timeout: TIMEOUT});
     };
     createVehicleService(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
@@ -79,9 +79,9 @@ class VehicleDataService {
 
      //!--------------------------------------------------------------------
     
-    getAllCleanings(token){
+    getAllCleanings(year, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/vehicle/cleanings/`, {timeout: TIMEOUT});
+        return axios.get(`${SERVER}/api/vehicle/cleanings/${year}`, {timeout: TIMEOUT});
     };
     createVehicleCleaning(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

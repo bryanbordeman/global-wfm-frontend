@@ -27,7 +27,7 @@ export default function Vehicles(props) {
     const [ inspections, setInspections ] = React.useState([]);
     const [ services, setServices ] = React.useState([]);
     const [ cleanings, setCleanings ] = React.useState([]);
-
+    const [ year, setYear ] = React.useState(new Date())
 
     React.useEffect(() => {
         retrieveVehicles();
@@ -36,7 +36,13 @@ export default function Vehicles(props) {
         retrieveVehicleServices();
         retrieveVehicleCleanings();
     },[]);
-    
+
+    React.useEffect(() => {
+        // if year changes update list
+        retrieveVehicleServices();
+        retrieveVehicleCleanings();
+    },[year]);
+
     const retrieveVehicles = () => {
         setIsLoading(true);
         VehicleDataService.getAll(props.token)
@@ -84,7 +90,7 @@ export default function Vehicles(props) {
 
     const retrieveVehicleServices = () => {
         setIsLoading(true);
-        VehicleDataService.getAllServices(props.token)
+        VehicleDataService.getAllServices(year.getFullYear(),props.token)
         .then(response => {
             setServices(response.data);
         })
@@ -99,7 +105,7 @@ export default function Vehicles(props) {
 
     const retrieveVehicleCleanings= () => {
         setIsLoading(true);
-        VehicleDataService.getAllCleanings(props.token)
+        VehicleDataService.getAllCleanings(year.getFullYear(), props.token)
         .then(response => {
             setCleanings(response.data);
         })
@@ -243,6 +249,8 @@ export default function Vehicles(props) {
                 createVehicleCleaning={createVehicleCleaning}
             />
             <VehicleServicesListDialog
+                year={year}
+                setYear={setYear}
                 vehicles={vehicles}
                 open={openServicesList}
                 setOpen={setOpenServicesList}
