@@ -4,7 +4,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { IconButton } from '@mui/material';
 import  Divider from '@mui/material/Divider';
 import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,6 +13,18 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import moment from 'moment';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import CommentIcon from '@mui/icons-material/Comment';
 
 export default function VehicleServicesListDialog(props) {
     const { user } = props
@@ -33,14 +44,49 @@ export default function VehicleServicesListDialog(props) {
         setOpenService(true);
     };
 
-    const serviceList = services.map((s) => (
-        <div key={s.id}>
-            <span>{s.date}</span>
-            <span>{s.vehicle.nickname}</span>
-            <span>{s.description}</span>
+    const serviceList = 
+        <div>
+            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                {services.map((value, index) => {
+                    const labelId = `list-label-${value.id}`;
+                    return (
+                        <div style={{marginRight: '0.5rem', marginLeft: '0.5rem'}} key={value.id}>
+                            <ListItem
+                                dense
+                                secondaryAction={
+                                    user.is_staff?
+                                        <IconButton edge="end" aria-label="delete" color='error'>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    :''
+                                }
+                            >
+                                {user.is_staff?
+                                    <ListItemIcon>
+                                        <IconButton  edge="start">
+                                            <EditIcon color='primary'/>
+                                        </IconButton>
+                                    </ListItemIcon>
+                                    :''
+                                }
+                                <ListItemText 
+                                    id={labelId} 
+                                    primary={value.description} 
+                                    secondary={
+                                        <> Vehicle: {value.vehicle.nickname} 
+                                        <br/> 
+                                        Serviced on: {moment(value.date).format('L')}
+                                        </>} 
+                                    />
+                            </ListItem>
+                            {index === services.length - 1?
+                                ''
+                                : <Divider/>}
+                        </div>
+                    );
+                })}
+            </List>
         </div>
-        
-    ))
 
     return (
         <div>
@@ -84,7 +130,7 @@ export default function VehicleServicesListDialog(props) {
                             />
                         </LocalizationProvider>
                     </Box>
-                    {serviceList}
+                    {services.length > 0 ? serviceList : 'No Services Recorded'}
                 </DialogContent>
                 <Divider/>
                     <DialogActions>
