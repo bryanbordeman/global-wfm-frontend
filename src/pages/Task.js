@@ -178,7 +178,7 @@ function Task(props) {
         setIsLoading(true);
         TaskDataService.deleteTask(id, token)
             .then(response => {
-                handleOpenSnackbar('error', 'Tasks has been deleted')
+                handleOpenSnackbar('warning', 'Tasks has been deleted')
                 retrieveTasks();
             })
             .catch( e => {

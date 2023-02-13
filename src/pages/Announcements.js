@@ -65,7 +65,7 @@ function Announcements(props) {
         .then(response => {
             window.scrollTo(0, 0);
             retrieveAnnouncements();
-            handleOpenSnackbar('error', 'Your announcement has been deleted')
+            handleOpenSnackbar('warning', 'Your announcement has been deleted')
         })
         .catch( e => {
             console.log(e);

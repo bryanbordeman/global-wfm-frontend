@@ -19,29 +19,45 @@ import moment from 'moment';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import CommentIcon from '@mui/icons-material/Comment';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 export default function VehicleServicesListDialog(props) {
     const { user } = props
     const { year, setYear } = props
-    const { createVehicleService } = props
+    const { createVehicleService, updateVehicleService, deleteVehicleService } = props
     const { vehicles, services } = props
     const { open, setOpen } = props;
     const [ vehicle, setVehicle ] = React.useState({});
     const [ openService, setOpenService ] = React.useState(false);
+    const [ editService, setEditService ] = React.useState({});
+    const [  openDelete, setOpenDelete ] = React.useState(false);
+    const [ deleteId, setDeleteId ] = React.useState('');
+    const [ deleteMessage, setDeleteMessage ] = React.useState('');
 
     const handleClose = () => {
         setOpen(false);
+        setEditService({});
+        setYear(new Date());
     };
 
-    const handleOpenService = (vehicle) => {
+    const handleOpenService = (vehicle, service) => {
         setVehicle(vehicle);
+        setEditService(service);
         setOpenService(true);
+    };
+
+    const handleDelete = (value) => {
+        setDeleteId(value.id);
+        setDeleteMessage({title: 'Permanently delete this service', content: `Service: ${value.description}`})
+        setOpenDelete(!openDelete)
+        // deleteVehicleService();
+    };
+
+    const handleDeleteAction = () => {
+        deleteVehicleService(deleteId);
     };
 
     const serviceList = 
@@ -55,7 +71,7 @@ export default function VehicleServicesListDialog(props) {
                                 dense
                                 secondaryAction={
                                     user.is_staff?
-                                        <IconButton edge="end" aria-label="delete" color='error'>
+                                        <IconButton onClick={() => handleDelete(value)} edge="end" aria-label="delete" color='error'>
                                             <DeleteIcon />
                                         </IconButton>
                                     :''
@@ -63,7 +79,10 @@ export default function VehicleServicesListDialog(props) {
                             >
                                 {user.is_staff?
                                     <ListItemIcon>
-                                        <IconButton  edge="start">
+                                        <IconButton  
+                                            onClick={() => {handleOpenService(value.vehicle, value)}}
+                                            edge="start"
+                                        >
                                             <EditIcon color='primary'/>
                                         </IconButton>
                                     </ListItemIcon>
@@ -142,7 +161,14 @@ export default function VehicleServicesListDialog(props) {
                 setOpen={setOpenService}
                 vehicle={vehicle}
                 user={user}
-                createVehicleService={createVehicleService}
+                updateVehicleService={updateVehicleService}
+                editService={editService}
+            />
+            <DeleteConfirmationModal
+                deleteAction={handleDeleteAction}
+                message={deleteMessage}
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
             />
         </div>
     );

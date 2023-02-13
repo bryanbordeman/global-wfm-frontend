@@ -15,12 +15,13 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import VehicleListDialog from '../components/VehicleListDialog';
 import VehicleServicesListDialog from '../components/VehicleServicesListDialog';
-
+import VehicleCleaningsListDialog from '../components/VehicleCleaningsListDialog';
 
 export default function Vehicles(props) {
     const { user, token, handleOpenSnackbar } = props
     const [ openList, setOpenList ] = React.useState(false);
     const [ openServicesList, setOpenServicesList ] = React.useState(false);
+    const [ openCleaningsList, setOpenCleaningsList ] = React.useState(false);
     const [ isLoading, setIsLoading ] = React.useState(true);
     const [ vehicles , setVehicles ] = React.useState([]);
     const [ issues, setIssues ] = React.useState([]);
@@ -122,6 +123,7 @@ export default function Vehicles(props) {
         setIsLoading(true);
         VehicleDataService.createVehicleIssue(data, token)
         .then(response => {
+            retrieveVehicleIssues();
             handleOpenSnackbar('success', 'Your issue has been submitted')
         })
         .catch(e => {
@@ -137,6 +139,7 @@ export default function Vehicles(props) {
         setIsLoading(true);
         VehicleDataService.createVehicleInspection(data, token)
         .then(response => {
+            retrieveVehicleInspections();
             handleOpenSnackbar('success', 'Your inspection has been logged')
         })
         .catch(e => {
@@ -152,6 +155,7 @@ export default function Vehicles(props) {
         setIsLoading(true);
         VehicleDataService.createVehicleService(data, token)
         .then(response => {
+            retrieveVehicleServices();
             handleOpenSnackbar('success', 'Your service has been logged')
         })
         .catch(e => {
@@ -167,6 +171,7 @@ export default function Vehicles(props) {
         setIsLoading(true);
         VehicleDataService.createVehicleCleaning(data, token)
         .then(response => {
+            retrieveVehicleCleanings();
             handleOpenSnackbar('success', 'Your cleaning has been logged')
         })
         .catch(e => {
@@ -176,6 +181,83 @@ export default function Vehicles(props) {
         .finally(() => {
             setIsLoading(false);
         });
+    };
+
+    const updateVehicleService = (vehicleId, data) => {
+        setIsLoading(true);
+        VehicleDataService.updateVehicleService(vehicleId, data, token)
+        .then(response => {
+            retrieveVehicleServices();
+            handleOpenSnackbar('info', 'Service has been updated')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const updateVehicleIssue = (vehicleId, data) => {
+        setIsLoading(true);
+        VehicleDataService.updateVehicleIssue(vehicleId, data, token)
+        .then(response => {
+            retrieveVehicleIssues();
+            handleOpenSnackbar('info', 'Issue has been updated')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const updateVehicleInspection = (vehicleId, data) => {
+        setIsLoading(true);
+        VehicleDataService.updateVehicleInspection(vehicleId, data, token)
+        .then(response => {
+            retrieveVehicleInspections();
+            handleOpenSnackbar('info', 'Inspection has been updated')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const updateVehicleCleaning = (vehicleId, data) => {
+        setIsLoading(true);
+        VehicleDataService.updateVehicleCleaning(vehicleId, data, token)
+        .then(response => {
+            retrieveVehicleCleanings();
+            handleOpenSnackbar('info', 'Cleaning has been updated')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const deleteVehicleService = (vehicleId) => {
+        VehicleDataService.deleteVehicleService(vehicleId, token)
+        .then(response => {
+            retrieveVehicleServices();
+            handleOpenSnackbar('warning', 'Service has been deleted')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+
     };
 
     return ( 
@@ -209,7 +291,7 @@ export default function Vehicles(props) {
                     </ListItem>
                     <Divider />
                     <ListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={() => setOpenCleaningsList(true)}>
                         <ListItemIcon>
                             <WashIcon />
                         </ListItemIcon>
@@ -257,6 +339,20 @@ export default function Vehicles(props) {
                 user={user}
                 services={services}
                 createVehicleService={createVehicleService}
+                updateVehicleService={updateVehicleService}
+                deleteVehicleService={deleteVehicleService}
+            />
+            <VehicleCleaningsListDialog
+                year={year}
+                setYear={setYear}
+                vehicles={vehicles}
+                open={openCleaningsList}
+                setOpen={setOpenCleaningsList}
+                user={user}
+                cleanings={cleanings}
+                createVehicleCleaning={createVehicleService}
+                updateVehicleCleaning={updateVehicleService}
+                deleteVehicleService={deleteVehicleService}
             />
             <Loading
                 open={isLoading}

@@ -245,6 +245,7 @@ export default function VehicleListDialog(props) {
                 open={openService}
                 setOpen={setOpenService}
                 vehicle={vehicle}
+                setVehicle={setVehicle}
                 user={user}
                 createVehicleService={createVehicleService}
             />
