@@ -260,6 +260,20 @@ export default function Vehicles(props) {
 
     };
 
+    const deleteVehicleCleaning= (vehicleId) => {
+        VehicleDataService.deleteVehicleCleaning(vehicleId, token)
+        .then(response => {
+            retrieveVehicleCleanings();
+            handleOpenSnackbar('warning', 'Cleaning has been deleted')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+
+    };
+
+
     return ( 
         <Container
             component="span"
@@ -350,9 +364,9 @@ export default function Vehicles(props) {
                 setOpen={setOpenCleaningsList}
                 user={user}
                 cleanings={cleanings}
-                createVehicleCleaning={createVehicleService}
-                updateVehicleCleaning={updateVehicleService}
-                deleteVehicleService={deleteVehicleService}
+                createVehicleCleaning={createVehicleCleaning}
+                updateVehicleCleaning={updateVehicleCleaning}
+                deleteVehicleCleaning={deleteVehicleCleaning}
             />
             <Loading
                 open={isLoading}

@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import  Divider from '@mui/material/Divider';
 import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
-import AddVehicleServiceForm from './AddVehicleServiceForm';
+import AddVehicleCleaningForm from './AddVehicleCleaningForm';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -99,15 +99,16 @@ export default function VehicleCleaningsListDialog(props) {
         setExpanded('')
     };
 
-    const handleOpenService = (vehicle, cleaning) => {
+    const handleOpenCleaning = (vehicle, cleaning) => {
         setVehicle(vehicle);
         setEditCleaning(cleaning);
         setOpenCleaning(true);
     };
 
     const handleDelete = (value, isFullyCleaned) => {
+        console.log(value)
         setDeleteId(value.id);
-        setDeleteMessage({title: 'Permanently delete this cleaning', content: `${isFullyCleaned}`})
+        setDeleteMessage({title: 'Permanently delete this cleaning', content: `${isFullyCleaned} for ${value.vehicle.nickname}`})
         setOpenDelete(!openDelete)
         // deleteVehicleService();
     };
@@ -228,7 +229,7 @@ export default function VehicleCleaningsListDialog(props) {
                                             width: '100%',
                                             maxWidth: '150px'
                                         }}
-                                        onClick={() => handleOpenService(value.vehicle, value)} 
+                                        onClick={() => handleOpenCleaning(value.vehicle, value)} 
                                         color='primary' 
                                         variant="contained" 
                                         startIcon={<EditIcon />}
@@ -295,7 +296,7 @@ export default function VehicleCleaningsListDialog(props) {
                         <Button variant="contained" onClick={handleClose}>Close</Button>
                     </DialogActions>
             </Dialog>
-            <AddVehicleServiceForm
+            <AddVehicleCleaningForm
                 open={openCleaning}
                 setOpen={setOpenCleaning}
                 vehicle={vehicle}

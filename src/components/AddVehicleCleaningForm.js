@@ -20,10 +20,11 @@ import FormControl from '@mui/material/FormControl';
 export default function AddVehicleCleaningForm(props) {
     const { user } = props 
     const { open, setOpen } = props;
-    const { vehicle, createVehicleCleaning } = props;
+    const { vehicle, editCleaning, createVehicleCleaning, updateVehicleCleaning } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
     const [ selectAll, setSeleteAll ] = React.useState(false);
+    const [ isEdit, setIsEdit ] = React.useState(false);
 
     const initialFormValues = {
         created_by: user.id,
@@ -42,8 +43,29 @@ export default function AddVehicleCleaningForm(props) {
     const [ values, setValues ] = React.useState({});
 
     React.useEffect(() => {
-        setValues(initialFormValues);
-    },[props])
+        if(editCleaning !== undefined && Object.keys(editCleaning).length > 0){
+            setValues({...editCleaning, date: new Date(editCleaning.date.replaceAll('-','/'))})
+            setIsEdit(true);
+            let isFullyCleaned = editCleaning.wash_exterior === true &&
+                                editCleaning.wash_interior === true &&
+                                editCleaning.clean_windows === true &&
+                                editCleaning.wash_seats === true &&
+                                editCleaning.vacuum_seats === true &&
+                                editCleaning.vacuum_floor === true? true : false;
+                if (isFullyCleaned) {
+                    setSeleteAll(true)
+                }else{
+                    setSeleteAll(false)
+                }
+            
+            
+            
+            
+        }else{
+            setValues(initialFormValues);
+        }
+    },[open]);
+
     
     const handleClose = () => {
         setOpen(false);
@@ -123,7 +145,18 @@ export default function AddVehicleCleaningForm(props) {
     };
 
     const handleSubmit = () => {
-        createVehicleCleaning(values);
+        if(isEdit){
+            // if(values.description !== editService.description || moment(values.date).format().slice(0,10) !== editService.date){
+                if(Object.keys(values.created_by).length > 0 && Object.keys(values.vehicle).length > 0){
+                    let temp = values
+                    temp.created_by = values.created_by.id
+                    temp.vehicle = values.vehicle.id
+                    updateVehicleCleaning(editCleaning.id, temp);
+                }  
+            // }
+        }else{
+            createVehicleCleaning(values);
+        }
         handleClose();
     };
 
@@ -141,7 +174,7 @@ export default function AddVehicleCleaningForm(props) {
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Stack>
                             <Typography variant="h6">
-                                Log Vehicle Cleaning
+                                {isEdit? 'Edit Vehicle Cleaning' : 'Log Vehicle Cleaning'}
                             </Typography>
                             <Typography variant="subtitle1">
                                 {vehicle.nickname}
@@ -182,7 +215,7 @@ export default function AddVehicleCleaningForm(props) {
                         >
                         <FormGroup>
                             <Divider sx={{mb:3}}/>
-                                <FormControlLabel control={<Checkbox onClick={handleSelectAll}/>} name="select_all" label="Full Cleaning (Select All)" />
+                                <FormControlLabel control={<Checkbox checked={selectAll} onClick={handleSelectAll}/>} name="select_all" label="Full Cleaning (Select All)" />
                             <Divider sx={{mt:3}}/>
                             <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.wash_exterior} onClick={() => setValues({...values, wash_exterior: !values.wash_exterior})} />} name="wash_exterior" label="Wash Exterior" />
                             <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.wash_interior} onClick={() => setValues({...values, wash_interior: !values.wash_interior})}/>} name="wash_interior" label="Wash Interior" />
@@ -210,6 +243,22 @@ export default function AddVehicleCleaningForm(props) {
                 
                 </DialogContent>
                 <Divider/>
+                    {isEdit?
+                        <div>
+                            <DialogActions>
+                                <DialogContent sx={{pt:0, pb:0}}>
+                                    <Stack direction="column" spacing={0}>
+                                        <Typography variant="caption" color={'error'}>
+                                            Created By: {isEdit && editCleaning.created_by? 
+                                            `${editCleaning.created_by.first_name} ${editCleaning.created_by.last_name}` 
+                                            : ''}
+                                        </Typography>
+                                    </Stack>
+                                </DialogContent>
+                            </DialogActions>
+                            <Divider/>
+                        </div>
+                        :''}
                     <DialogActions>
                     <Button 
                         variant='outlined' 
@@ -221,8 +270,7 @@ export default function AddVehicleCleaningForm(props) {
                         // onClick={handleValidation}
                         color={`${isValid? 'primary' : 'error'}`}
                     >
-                        Submit
-                        {/* {editing ? 'Update' : 'Submit'} */}
+                        {isEdit ? 'Update' : 'Submit'}
                     </Button>
                     </DialogActions>
             </Dialog>
