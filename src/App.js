@@ -12,7 +12,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Loading from './components/Loading';
 
 function App() {
-    const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user')) || {})
+    const [ user, setUser ] = useState(localStorage.getItem('user')? JSON.parse(localStorage.getItem('user')) : '' || {})
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
     const [ loginErrors, setLoginErrors ] = useState({username: null, password: null})
@@ -103,6 +103,8 @@ function App() {
             loadWindow()
         })
         .catch( e => {
+            handleOpenSnackbar('error', 'Unauthorized User')
+            window.location.reload();
             console.log('login', e.toString());
             setLoginErrors({username: 'Username', password: 'Password'});
         })
@@ -161,6 +163,7 @@ function App() {
                 <MainRoutes
                     user={user}
                     token={token}
+                    setToken={setToken}
                     login={login}
                     signup={signup}
                     logout={logout}

@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 
 function Dashboard(props){
-    const { user, token, handleOpenSnackbar } = props
+    const { user, token, setToken, handleOpenSnackbar } = props
     
     return (
         <div>
@@ -28,6 +28,7 @@ function Dashboard(props){
                     <WorksegmentTable
                         user={user}
                         token={token}
+                        setToken={setToken}
                         handleOpenSnackbar={handleOpenSnackbar}
                     />
                 </Container>

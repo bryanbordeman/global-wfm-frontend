@@ -15,7 +15,7 @@ import Field from '../pages/Field';
 import Shop from '../pages/Shop';
 
 function MainRoutes(props) {
-    const { user, token, login, signup, loginErrors, darkState, handleOpenSnackbar } = props
+    const { user, token, setToken, login, signup, loginErrors, darkState, handleOpenSnackbar } = props
     return (
         <div>
             <Routes>
@@ -29,6 +29,7 @@ function MainRoutes(props) {
                         <Dashboard
                         user={user}
                         token={token}
+                        setToken={setToken}
                         handleOpenSnackbar={handleOpenSnackbar}
                         />
                     }/>

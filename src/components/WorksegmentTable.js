@@ -101,7 +101,7 @@ function Row(props) {
 };
 
 export default function WorksegmentTable(props) {
-    const { user, token, handleOpenSnackbar} = props
+    const { user, token, setToken, handleOpenSnackbar} = props
     const [ isLoading, setIsLoading ] = React.useState(true);
     const [ totals, setTotals ] = React.useState([]);
     const [ worksegments, setWorksegments ] = React.useState([]);
@@ -186,8 +186,16 @@ export default function WorksegmentTable(props) {
                     setWorksegments(response.data);
                 })
                 .catch( e => {
-                    console.log(e);
-                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                    if(e.request.statusText === 'Unauthorized'){
+                        setToken('')
+                        localStorage.setItem('token', '')
+                        localStorage.setItem('user', '');
+                        handleOpenSnackbar('error', 'Unauthorized User')
+                        window.location.reload();
+                    }else{
+                        console.log(e);
+                        handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                        }
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -199,8 +207,16 @@ export default function WorksegmentTable(props) {
                     setWorksegments(response.data);
                 })
                 .catch( e => {
-                    console.log(e);
-                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                    if(e.request.statusText === 'Unauthorized'){
+                        setToken('')
+                        localStorage.setItem('token', '')
+                        localStorage.setItem('user', '');
+                        handleOpenSnackbar('error', 'Unauthorized User')
+                        window.location.reload();
+                    }else{
+                        console.log(e);
+                        handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                        }
                 })
                 .finally(() => {
                     setIsLoading(false);

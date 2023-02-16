@@ -275,6 +275,7 @@ export default function VehicleCleaningsListDialog(props) {
                 </DialogTitle>
                 <Divider/>
                 <DialogContent>
+                    <Stack direction='row' spacing={2}>
                     <Box sx={{marginBottom: 4}}>
                         <LocalizationProvider dateAdapter={AdapterDateFns} >
                             <DatePicker
@@ -289,6 +290,22 @@ export default function VehicleCleaningsListDialog(props) {
                             />
                         </LocalizationProvider>
                     </Box>
+                    <Box sx={{width: '100%'}}>
+                        <Button 
+                            size='large'
+                            disableElevation
+                            sx={{
+                                width: '100%', 
+                                maxWidth: '150px', 
+                                position: 'absolute',
+                                right:'0px',
+                                mr: '1.25rem'}}
+                            variant="contained"
+                            // onClick={}
+                        >Add</Button>
+                    </Box>
+                    
+                    </Stack>
                     {cleanings.length > 0 ? cleaningsList : 'No Cleanings Recorded'}
                 </DialogContent>
                 <Divider/>
