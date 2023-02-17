@@ -12,9 +12,11 @@ import CloseIcon from '@mui/icons-material/Close';
 export default function AddVehicleIssueForm(props) {
     const { user } = props 
     const { open, setOpen } = props;
-    const { vehicle, createVehicleIssue } = props;
+    const { vehicle, createVehicleIssue, updateVehicleIssue } = props;
+    const { editIssue } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
+    const [ isEdit, setIsEdit ] = React.useState(false);
 
     const initialFormValues = {
         created_by: user.id,
@@ -26,8 +28,19 @@ export default function AddVehicleIssueForm(props) {
     const [ values, setValues ] = React.useState({});
 
     React.useEffect(() => {
-        setValues(initialFormValues);
-    },[props])
+        if(editIssue !== undefined && Object.keys(editIssue).length > 0){
+            // setValues(editIssue);
+            setValues({...editIssue, date: new Date(editIssue.date.replaceAll('-','/'))})
+            setIsEdit(true);
+        }else{
+            setValues(initialFormValues);
+        }
+    },[open]);
+    
+    
+    // React.useEffect(() => {
+    //     setValues(initialFormValues);
+    // },[props])
     
     const handleClose = () => {
         setOpen(false);
@@ -67,7 +80,18 @@ export default function AddVehicleIssueForm(props) {
     };
 
     const handleSubmit = () => {
-        createVehicleIssue(values);
+        if(isEdit){
+            if(values.description !== editIssue.description){
+                if(Object.keys(values.created_by).length > 0 && Object.keys(values.vehicle).length > 0){
+                    let temp = values
+                    temp.created_by = values.created_by.id
+                    temp.vehicle = values.vehicle.id
+                    updateVehicleIssue(editIssue.id, temp);
+                }  
+            }
+        }else{
+            createVehicleIssue(values);
+        }
         handleClose();
     };
 
@@ -85,7 +109,7 @@ export default function AddVehicleIssueForm(props) {
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Stack>
                             <Typography variant="h6">
-                                Report Vehicle Issue
+                                {isEdit? 'Edit Vehicle Issue' : 'Report Vehicle Issue'}
                             </Typography>
                             <Typography variant="subtitle1">
                                 {vehicle.nickname}
@@ -121,6 +145,22 @@ export default function AddVehicleIssueForm(props) {
                 
                 </DialogContent>
                 <Divider/>
+                    {isEdit?
+                    <div>
+                        <DialogActions>
+                            <DialogContent sx={{pt:0, pb:0}}>
+                                <Stack direction="column" spacing={0}>
+                                    <Typography variant="caption" color={'error'}>
+                                        Created By: {isEdit && editIssue.created_by? 
+                                        `${editIssue.created_by.first_name} ${editIssue.created_by.last_name}` 
+                                        : ''}
+                                    </Typography>
+                                </Stack>
+                            </DialogContent>
+                        </DialogActions>
+                        <Divider/>
+                    </div>
+                    :''}
                     <DialogActions>
                     <Button 
                         variant='outlined' 
@@ -132,8 +172,7 @@ export default function AddVehicleIssueForm(props) {
                         // onClick={handleValidation}
                         color={`${isValid? 'primary' : 'error'}`}
                     >
-                        Submit
-                        {/* {editing ? 'Update' : 'Submit'} */}
+                        {isEdit ? 'Update' : 'Submit'}
                     </Button>
                     </DialogActions>
             </Dialog>

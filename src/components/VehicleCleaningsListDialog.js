@@ -297,8 +297,7 @@ export default function VehicleCleaningsListDialog(props) {
                             sx={{
                                 width: '100%', 
                                 maxWidth: '150px', 
-                                position: 'absolute',
-                                right:'0px',
+                                float: 'right',
                                 mr: '1.25rem'}}
                             variant="contained"
                             // onClick={}

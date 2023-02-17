@@ -16,12 +16,14 @@ import Divider from '@mui/material/Divider';
 import VehicleListDialog from '../components/VehicleListDialog';
 import VehicleServicesListDialog from '../components/VehicleServicesListDialog';
 import VehicleCleaningsListDialog from '../components/VehicleCleaningsListDialog';
+import VehicleIssuesListDialog from '../components/VehicleIssuesListDialog';
 
 export default function Vehicles(props) {
     const { user, token, handleOpenSnackbar } = props
     const [ openList, setOpenList ] = React.useState(false);
     const [ openServicesList, setOpenServicesList ] = React.useState(false);
     const [ openCleaningsList, setOpenCleaningsList ] = React.useState(false);
+    const [ openIssuesList, setOpenIssuesList ] = React.useState(false);
     const [ isLoading, setIsLoading ] = React.useState(true);
     const [ vehicles , setVehicles ] = React.useState([]);
     const [ issues, setIssues ] = React.useState([]);
@@ -273,6 +275,19 @@ export default function Vehicles(props) {
 
     };
 
+    const deleteVehicleIssue= (vehicleId) => {
+        VehicleDataService.deleteVehicleIssue(vehicleId, token)
+        .then(response => {
+            retrieveVehicleIssues();
+            handleOpenSnackbar('warning', 'Issue has been deleted')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+
+    };
+
 
     return ( 
         <Container
@@ -323,7 +338,7 @@ export default function Vehicles(props) {
                     </ListItem>
                     <Divider />
                     <ListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={() => setOpenIssuesList(true)}>
                         <ListItemIcon>
                             <LiveHelpIcon />
                         </ListItemIcon>
@@ -367,6 +382,16 @@ export default function Vehicles(props) {
                 createVehicleCleaning={createVehicleCleaning}
                 updateVehicleCleaning={updateVehicleCleaning}
                 deleteVehicleCleaning={deleteVehicleCleaning}
+            />
+            <VehicleIssuesListDialog
+                vehicles={vehicles}
+                open={openIssuesList}
+                setOpen={setOpenIssuesList}
+                user={user}
+                issues={issues}
+                createVehicleIssue={createVehicleIssue}
+                updateVehicleIssue={updateVehicleIssue}
+                deleteVehicleIssue={deleteVehicleIssue}
             />
             <Loading
                 open={isLoading}
