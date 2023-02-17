@@ -522,13 +522,13 @@ export default function AddWorksegmentForm(props) {
                         onFocus={event => {
                             event.target.select();
                         }}
+                        inputProps={{ inputmode: 'decimal', pattern: '[0-9]*' }}
                         margin="dense"
                         id="travel"
                         name="travel"
                         onChange={handleInputValue}
                         value={values.travel}
                         label="Travel Duration"
-                        type="number"
                         fullWidth
                         variant="outlined"
                         helperText={errors.travel === null ? '' : errors.travel}
@@ -561,3 +561,5 @@ export default function AddWorksegmentForm(props) {
         </div>
     );
 };
+
+
