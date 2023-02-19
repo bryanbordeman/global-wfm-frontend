@@ -18,11 +18,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CloseIcon from '@mui/icons-material/Close';
 
-import AddVehicleIssueForm from '../components/AddVehicleIssueForm';
-import AddVehicleInspectionForm from './AddVehicleInspectionForm';
-import AddVehicleServiceForm from './AddVehicleServiceForm';
-import AddVehicleCleaningForm from './AddVehicleCleaningForm';
-
 import { amber } from '@mui/material/colors';
 import WarningIcon from '@mui/icons-material/Warning';
 
@@ -64,18 +59,13 @@ const Accordion = styled((props) => (
 
 
 export default function VehicleListDialog(props) {
-    const { user } = props
-    const { createVehicleIssue, 
-            createVehicleInspection, 
-            createVehicleService, 
-            createVehicleCleaning } = props
     const { vehicles, issues } = props
     const { open, setOpen } = props;
-    const [ vehicle, setVehicle ] = React.useState({});
-    const [ openIssue, setOpenIssue ] = React.useState(false);
-    const [ openInspection, setOpenInspection ] = React.useState(false);
-    const [ openService, setOpenService ] = React.useState(false);
-    const [ openCleaning, setOpenCleaning ] = React.useState(false);
+    const { setVehicle } = props;
+    const { setOpenIssue } = props;
+    const { setOpenInspection } = props;
+    const { setOpenService } = props;
+    const { setOpenCleaning } = props;
     const [ expanded, setExpanded ] = React.useState('panel1');
 
     const handleChange = (panel) => (event, newExpanded) => {
@@ -227,35 +217,6 @@ export default function VehicleListDialog(props) {
                         <Button variant="contained" onClick={handleClose}>Close</Button>
                     </DialogActions>
             </Dialog>
-            <AddVehicleIssueForm
-                open={openIssue}
-                setOpen={setOpenIssue}
-                vehicle={vehicle}
-                user={user}
-                createVehicleIssue={createVehicleIssue}
-            />
-            <AddVehicleInspectionForm
-                open={openInspection}
-                setOpen={setOpenInspection}
-                vehicle={vehicle}
-                user={user}
-                createVehicleInspection={createVehicleInspection}
-            />
-            <AddVehicleServiceForm
-                open={openService}
-                setOpen={setOpenService}
-                vehicle={vehicle}
-                setVehicle={setVehicle}
-                user={user}
-                createVehicleService={createVehicleService}
-            />
-            <AddVehicleCleaningForm
-                open={openCleaning}
-                setOpen={setOpenCleaning}
-                vehicle={vehicle}
-                user={user}
-                createVehicleCleaning={createVehicleCleaning}
-            />
         </div>
     );
 };

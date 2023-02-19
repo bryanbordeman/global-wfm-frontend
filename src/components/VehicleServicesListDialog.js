@@ -7,7 +7,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import  Divider from '@mui/material/Divider';
 import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
-import AddVehicleServiceForm from './AddVehicleServiceForm';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -16,26 +15,22 @@ import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
-
+import { Stack } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 export default function VehicleServicesListDialog(props) {
     const { user } = props
     const { year, setYear } = props
-    const { createVehicleService, updateVehicleService, deleteVehicleService } = props
-    const { vehicles, services } = props
+    const { services } = props
     const { open, setOpen } = props;
-    const [ vehicle, setVehicle ] = React.useState({});
-    const [ openService, setOpenService ] = React.useState(false);
-    const [ editService, setEditService ] = React.useState({});
-    const [  openDelete, setOpenDelete ] = React.useState(false);
-    const [ deleteId, setDeleteId ] = React.useState('');
-    const [ deleteMessage, setDeleteMessage ] = React.useState('');
+    const { setVehicle } = props;
+    const { setOpenService } = props;
+    const { setEditService } = props;
+    const { openDelete, setDeleteId, setDeleteMessage, setOpenDelete } = props;
 
     const handleClose = () => {
         setOpen(false);
@@ -53,11 +48,6 @@ export default function VehicleServicesListDialog(props) {
         setDeleteId(value.id);
         setDeleteMessage({title: 'Permanently delete this service', content: `Service: ${value.description}`})
         setOpenDelete(!openDelete)
-        // deleteVehicleService();
-    };
-
-    const handleDeleteAction = () => {
-        deleteVehicleService(deleteId);
     };
 
     const serviceList = 
@@ -135,20 +125,35 @@ export default function VehicleServicesListDialog(props) {
                 </DialogTitle>
                 <Divider/>
                 <DialogContent>
-                    <Box sx={{marginBottom: 4}}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns} >
-                            <DatePicker
-                                label="Year"
-                                id="year"
-                                name="year"
-                                views={['year']}
-                                value={year}
-                                onChange={(date) => {setYear(date)}}
-                                renderInput={(params) => < TextField {...params} variant="filled"/>}
-                                fullWidth
-                            />
-                        </LocalizationProvider>
-                    </Box>
+                    <Stack direction='row' spacing={2}>
+                        <Box sx={{marginBottom: 4}}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns} >
+                                <DatePicker
+                                    label="Year"
+                                    id="year"
+                                    name="year"
+                                    views={['year']}
+                                    value={year}
+                                    onChange={(date) => {setYear(date)}}
+                                    renderInput={(params) => < TextField {...params} variant="filled"/>}
+                                    fullWidth
+                                />
+                            </LocalizationProvider>
+                        </Box>
+                        <Box sx={{width: '100%'}}>
+                            <Button 
+                                size='large'
+                                disableElevation
+                                sx={{
+                                    width: '100%', 
+                                    maxWidth: '150px', 
+                                    float: 'right',
+                                    mr: '1.25rem'}}
+                                variant="contained"
+                                onClick={() => setOpenService(true)}
+                            >Add</Button>
+                        </Box>
+                    </Stack>
                     {services.length > 0 ? serviceList : 'No Services Recorded'}
                 </DialogContent>
                 <Divider/>
@@ -156,20 +161,6 @@ export default function VehicleServicesListDialog(props) {
                         <Button variant="contained" onClick={handleClose}>Close</Button>
                     </DialogActions>
             </Dialog>
-            <AddVehicleServiceForm
-                open={openService}
-                setOpen={setOpenService}
-                vehicle={vehicle}
-                user={user}
-                updateVehicleService={updateVehicleService}
-                editService={editService}
-            />
-            <DeleteConfirmationModal
-                deleteAction={handleDeleteAction}
-                message={deleteMessage}
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-            />
         </div>
     );
 };

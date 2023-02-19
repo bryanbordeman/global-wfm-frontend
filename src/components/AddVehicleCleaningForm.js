@@ -16,15 +16,22 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import VehiclePicker from './VehiclePicker';
+import moment from 'moment';
+import { red } from '@mui/material/colors';
 
 export default function AddVehicleCleaningForm(props) {
     const { user } = props 
     const { open, setOpen } = props;
-    const { vehicle, editCleaning, createVehicleCleaning, updateVehicleCleaning } = props;
+    const { vehicles } = props;
+    const { vehicle, setVehicle, createVehicleCleaning, updateVehicleCleaning } = props;
+    const { editCleaning, setEditCleaning } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
     const [ selectAll, setSeleteAll ] = React.useState(false);
-    const [ isEdit, setIsEdit ] = React.useState(false);
+    const { isEdit } = props;
+    
 
     const initialFormValues = {
         created_by: user.id,
@@ -45,7 +52,6 @@ export default function AddVehicleCleaningForm(props) {
     React.useEffect(() => {
         if(editCleaning !== undefined && Object.keys(editCleaning).length > 0){
             setValues({...editCleaning, date: new Date(editCleaning.date.replaceAll('-','/'))})
-            setIsEdit(true);
             let isFullyCleaned = editCleaning.wash_exterior === true &&
                                 editCleaning.wash_interior === true &&
                                 editCleaning.clean_windows === true &&
@@ -53,22 +59,20 @@ export default function AddVehicleCleaningForm(props) {
                                 editCleaning.vacuum_seats === true &&
                                 editCleaning.vacuum_floor === true? true : false;
                 if (isFullyCleaned) {
-                    setSeleteAll(true)
+                    setSeleteAll(true);
                 }else{
-                    setSeleteAll(false)
+                    setSeleteAll(false);
                 }
-            
-            
-            
-            
         }else{
             setValues(initialFormValues);
         }
     },[open]);
 
-    
     const handleClose = () => {
         setOpen(false);
+        setEditCleaning({});
+        setVehicle({});
+        setSeleteAll(false);
     };
 
     const handleInputValue = (e) => {
@@ -129,6 +133,14 @@ export default function AddVehicleCleaningForm(props) {
                 setErrors({...errors, nothingSelected: null});
             }, 3000);
         }
+        else if(values.vehicle === undefined){
+            setErrors({...errors, vehicle: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, vehicle: null});
+            }, 3000);
+        }
         
         
         else{
@@ -146,14 +158,23 @@ export default function AddVehicleCleaningForm(props) {
 
     const handleSubmit = () => {
         if(isEdit){
-            // if(values.description !== editService.description || moment(values.date).format().slice(0,10) !== editService.date){
+            
+            let isModified = editCleaning.wash_exterior === values.wash_exterior &&
+                                editCleaning.wash_interior === values.wash_interior &&
+                                editCleaning.clean_windows === values.clean_windows &&
+                                editCleaning.wash_seats === values.wash_seats &&
+                                editCleaning.vacuum_seats === values.vacuum_seats &&
+                                editCleaning.vacuum_floor === values.vacuum_floor &&
+                                editCleaning.other === values.other &&
+                                editCleaning.other_description === values.other_description? false : true;
+            if(isModified || moment(values.date).format().slice(0,10) !== editCleaning.date){
                 if(Object.keys(values.created_by).length > 0 && Object.keys(values.vehicle).length > 0){
                     let temp = values
                     temp.created_by = values.created_by.id
                     temp.vehicle = values.vehicle.id
                     updateVehicleCleaning(editCleaning.id, temp);
                 }  
-            // }
+            }
         }else{
             createVehicleCleaning(values);
         }
@@ -206,6 +227,16 @@ export default function AddVehicleCleaningForm(props) {
                                 fullWidth
                             />
                         </LocalizationProvider>
+                        {isEdit || Object.keys(vehicle).length > 0? 
+                            ''
+                            :
+                            <VehiclePicker
+                                vehicles={vehicles}
+                                setValues={setValues}
+                                values={values}
+                                errors={errors}
+                            />
+                        }
                         <FormControl
                             required
                             error={errors.nothingSelected}
@@ -213,17 +244,19 @@ export default function AddVehicleCleaningForm(props) {
                             sx={{ m: 3 }}
                             variant="standard"
                         >
-                        <FormGroup>
+                        
+                        <FormGroup >
                             <Divider sx={{mb:3}}/>
                                 <FormControlLabel control={<Checkbox checked={selectAll} onClick={handleSelectAll}/>} name="select_all" label="Full Cleaning (Select All)" />
                             <Divider sx={{mt:3}}/>
-                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.wash_exterior} onClick={() => setValues({...values, wash_exterior: !values.wash_exterior})} />} name="wash_exterior" label="Wash Exterior" />
-                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.wash_interior} onClick={() => setValues({...values, wash_interior: !values.wash_interior})}/>} name="wash_interior" label="Wash Interior" />
-                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.clean_windows} onClick={() => setValues({...values, clean_windows: !values.clean_windows})}/>} name="clean_windows" label="Clean Windows" />
-                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.wash_seats} onClick={() => setValues({...values, wash_seats: !values.wash_seats})}/>} name="wash_seats" label="Wash Seats" />
-                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.vacuum_seats} onClick={() => setValues({...values, vacuum_seats: !values.vacuum_seats})}/>} name="vacuum_seats" label="Vacuum Seats" />
-                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.vacuum_floor} onClick={() => setValues({...values, vacuum_floor: !values.vacuum_floor})}/>} name="vacuum_floor" label="Vacuum Floor" />
-                            <FormControlLabel control={<Checkbox onClick={() => setValues({...values, other: !values.other})}/>} name="other" label="Other" />
+                            <FormLabel component="legend">Choose at least 1</FormLabel>
+                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.wash_exterior} onClick={() => setValues({...values, wash_exterior: !values.wash_exterior})} sx={{color: errors.nothingSelected? red[500] : '' }} />} name="wash_exterior" label="Wash Exterior" sx={{color: errors.nothingSelected? red[500] : '' }}/>
+                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.wash_interior} onClick={() => setValues({...values, wash_interior: !values.wash_interior})} sx={{color: errors.nothingSelected? red[500] : '' }} />} name="wash_interior" label="Wash Interior" sx={{color: errors.nothingSelected? red[500] : '' }}/>
+                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.clean_windows} onClick={() => setValues({...values, clean_windows: !values.clean_windows})} sx={{color: errors.nothingSelected? red[500] : '' }} />} name="clean_windows" label="Clean Windows" sx={{color: errors.nothingSelected? red[500] : '' }}/>
+                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.wash_seats} onClick={() => setValues({...values, wash_seats: !values.wash_seats})} sx={{color: errors.nothingSelected? red[500] : '' }} />} name="wash_seats" label="Wash Seats" sx={{color: errors.nothingSelected? red[500] : '' }}/>
+                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.vacuum_seats} onClick={() => setValues({...values, vacuum_seats: !values.vacuum_seats})} sx={{color: errors.nothingSelected? red[500] : '' }} />} name="vacuum_seats" label="Vacuum Seats" sx={{color: errors.nothingSelected? red[500] : '' }}/>
+                            <FormControlLabel control={<Checkbox disabled={selectAll} checked={values.vacuum_floor} onClick={() => setValues({...values, vacuum_floor: !values.vacuum_floor})} sx={{color: errors.nothingSelected? red[500] : '' }} />} name="vacuum_floor" label="Vacuum Floor" sx={{color: errors.nothingSelected? red[500] : '' }}/>
+                            <FormControlLabel control={<Checkbox checked={values.other}  onClick={() => setValues({...values, other: !values.other})} sx={{color: errors.nothingSelected? red[500] : '' }} />} name="other" label="Other" sx={{color: errors.nothingSelected? red[500] : '' }}/>
                         </FormGroup>
                         <FormHelperText>{errors.nothingSelected}</FormHelperText>
                         </FormControl>

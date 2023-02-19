@@ -118,7 +118,7 @@ export default function VehicleIssuesListDialog(props) {
             <DialogTitle>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <div>
-                            Vehicle Services
+                            Vehicle Issues
                         </div>
                         <div>
                         <IconButton 

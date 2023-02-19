@@ -7,7 +7,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import  Divider from '@mui/material/Divider';
 import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
-import AddVehicleCleaningForm from './AddVehicleCleaningForm';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -16,14 +15,8 @@ import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
-
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
 import IconButton from '@mui/material/IconButton';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
+import StarIcon from '@mui/icons-material/Star';
 
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -75,18 +68,16 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 
 export default function VehicleCleaningsListDialog(props) {
+
     const { user } = props
     const { year, setYear } = props
-    const { createVehicleCleaning, updateVehicleCleaning, deleteVehicleCleaning } = props
-    const { vehicles, cleanings } = props
+    const { cleanings } = props
     const { open, setOpen } = props;
-    const [ vehicle, setVehicle ] = React.useState({});
-    const [ openCleaning, setOpenCleaning] = React.useState(false);
-    const [ editCleaning, setEditCleaning ] = React.useState({});
-    const [  openDelete, setOpenDelete ] = React.useState(false);
-    const [ deleteId, setDeleteId ] = React.useState('');
-    const [ deleteMessage, setDeleteMessage ] = React.useState('');
-    const [expanded, setExpanded] = React.useState('');
+    const { setVehicle } = props;
+    const { setOpenCleaning } = props;
+    const { setEditCleaning } = props;
+    const { openDelete, setDeleteId, setDeleteMessage, setOpenDelete } = props;
+    const [ expanded, setExpanded ] = React.useState('');
 
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
@@ -106,15 +97,9 @@ export default function VehicleCleaningsListDialog(props) {
     };
 
     const handleDelete = (value, isFullyCleaned) => {
-        console.log(value)
         setDeleteId(value.id);
         setDeleteMessage({title: 'Permanently delete this cleaning', content: `${isFullyCleaned} for ${value.vehicle.nickname}`})
         setOpenDelete(!openDelete)
-        // deleteVehicleService();
-    };
-
-    const handleDeleteAction = () => {
-        deleteVehicleCleaning(deleteId);
     };
 
     const cleaningsList = 
@@ -127,21 +112,35 @@ export default function VehicleCleaningsListDialog(props) {
                                     value.vacuum_seats === true &&
                                     value.vacuum_floor === true? 'Full Cleaning' : 'Partial Cleaning';
                 return(
-                    <Accordion key={value.id} expanded={expanded === value.id} onChange={handleChange(value.id)}>
+                    <Accordion 
+                        elevation={0}
+                        sx={{ 
+                            mb:2,
+                            borderRadius: '16px',
+                        }}
+                        key={value.id} 
+                        expanded={expanded === value.id} 
+                        onChange={handleChange(value.id)}
+                    >
                         <AccordionSummary 
                             sx={{
-                                // borderWidth: `${isFullyCleaned === 'Full Cleaning' ? '3px' : '1px'}`,
-                                backgroundColor: `${isFullyCleaned === 'Full Cleaning'? purple[500] : 'primary.main'}`,
-                                color: 'white'
+                                border: Number(`${isFullyCleaned === 'Full Cleaning'? 3 : 0}`),
+                                borderColor: `${isFullyCleaned === 'Full Cleaning'? 'warning.main' : ''}`,
+                                borderRadius: '16px',
                             }} 
                             aria-controls={`${value.id}-content`} 
                             id={`${value.id}-header`}
                             >
                             <Stack>
-                                <Typography 
+                                <Stack direction={'row'} spacing={2}>
+                                    {isFullyCleaned === 'Full Cleaning'? <StarIcon sx={{color: 'warning.main'}}/> : ''}
+                                    <Typography 
                                     variant="h6" 
-                                    
-                                >{value.vehicle.nickname}</Typography>
+                                >
+                                    {value.vehicle.nickname}
+                                </Typography>
+                                </Stack>
+                                
                                 <Typography>
                                 {<> 
                                     {isFullyCleaned}
@@ -300,10 +299,9 @@ export default function VehicleCleaningsListDialog(props) {
                                 float: 'right',
                                 mr: '1.25rem'}}
                             variant="contained"
-                            // onClick={}
+                            onClick={() => setOpenCleaning(true)}
                         >Add</Button>
                     </Box>
-                    
                     </Stack>
                     {cleanings.length > 0 ? cleaningsList : 'No Cleanings Recorded'}
                 </DialogContent>
@@ -312,20 +310,6 @@ export default function VehicleCleaningsListDialog(props) {
                         <Button variant="contained" onClick={handleClose}>Close</Button>
                     </DialogActions>
             </Dialog>
-            <AddVehicleCleaningForm
-                open={openCleaning}
-                setOpen={setOpenCleaning}
-                vehicle={vehicle}
-                user={user}
-                updateVehicleCleaning={updateVehicleCleaning}
-                editCleaning={editCleaning}
-            />
-            <DeleteConfirmationModal
-                deleteAction={handleDeleteAction}
-                message={deleteMessage}
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-            />
         </div>
     );
 };

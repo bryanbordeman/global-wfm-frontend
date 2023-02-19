@@ -13,24 +13,58 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+
+
+import AddVehicleIssueForm from '../components/AddVehicleIssueForm';
+import AddVehicleInspectionForm from '../components/AddVehicleInspectionForm';
+import AddVehicleServiceForm from '../components/AddVehicleServiceForm';
+import AddVehicleCleaningForm from '../components/AddVehicleCleaningForm';
+
 import VehicleListDialog from '../components/VehicleListDialog';
 import VehicleServicesListDialog from '../components/VehicleServicesListDialog';
 import VehicleCleaningsListDialog from '../components/VehicleCleaningsListDialog';
 import VehicleIssuesListDialog from '../components/VehicleIssuesListDialog';
 
+import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
+
 export default function Vehicles(props) {
     const { user, token, handleOpenSnackbar } = props
-    const [ openList, setOpenList ] = React.useState(false);
-    const [ openServicesList, setOpenServicesList ] = React.useState(false);
-    const [ openCleaningsList, setOpenCleaningsList ] = React.useState(false);
-    const [ openIssuesList, setOpenIssuesList ] = React.useState(false);
-    const [ isLoading, setIsLoading ] = React.useState(true);
-    const [ vehicles , setVehicles ] = React.useState([]);
-    const [ issues, setIssues ] = React.useState([]);
+    
+    const [ isLoading, setIsLoading ] = React.useState(true); // wait until API returns promise
+
+    const [ vehicle, setVehicle ] = React.useState({});
+
+    // list of values (this is fetched from API)
+    const [ vehicles , setVehicles ] = React.useState([]); // all vehicle
+    const [ issues, setIssues ] = React.useState([]); 
     const [ inspections, setInspections ] = React.useState([]);
     const [ services, setServices ] = React.useState([]);
     const [ cleanings, setCleanings ] = React.useState([]);
-    const [ year, setYear ] = React.useState(new Date())
+
+    // year is used for cleanings and services
+    const [ year, setYear ] = React.useState(new Date());
+
+    // open list
+    const [ openList, setOpenList ] = React.useState(false); // vehicle list
+    const [ openServicesList, setOpenServicesList ] = React.useState(false); // service list
+    const [ openCleaningsList, setOpenCleaningsList ] = React.useState(false); // cleaning list
+    const [ openIssuesList, setOpenIssuesList ] = React.useState(false); // issues list
+
+    // open add form
+    const [ openIssue, setOpenIssue ] = React.useState(false); // add or edit issue
+    const [ openInspection, setOpenInspection ] = React.useState(false); // add or edit inspection
+    const [ openService, setOpenService ] = React.useState(false); // add or edit service
+    const [ openCleaning, setOpenCleaning ] = React.useState(false); // add or edit cleaning
+
+    // set edit values
+    const [ isEdit, setIsEdit ] = React.useState(false);
+    const [ editCleaning, setEditCleaning ] = React.useState({});
+    const [ editService, setEditService ] = React.useState({});
+
+    // delete 
+    const [ openDelete, setOpenDelete ] = React.useState(false);
+    const [ deleteId, setDeleteId ] = React.useState('');
+    const [ deleteMessage, setDeleteMessage ] = React.useState('');
 
     React.useEffect(() => {
         retrieveVehicles();
@@ -41,10 +75,41 @@ export default function Vehicles(props) {
     },[]);
 
     React.useEffect(() => {
+        // set isEdit if edit object exist
+        if(Object.keys(editService).length > 0){
+            setIsEdit(true);
+        }
+        else if(Object.keys(editCleaning).length > 0){
+            setIsEdit(true);
+        }else{
+            setIsEdit(false);
+        }
+    },[editService, editCleaning]);
+
+    React.useEffect(() => {
         // if year changes update list
         retrieveVehicleServices();
         retrieveVehicleCleanings();
     },[year]);
+
+    const handleDeleteAction = () => {
+        // take last word of message to determine which action to take
+        let key = deleteMessage.title.split(' ').pop();
+        
+        if(key === 'service'){
+            deleteVehicleService(deleteId);
+        }
+        else if(key === 'cleaning'){
+            deleteVehicleCleaning(deleteId);
+        }
+        else if(key === 'issue'){
+            deleteVehicleIssue(deleteId);
+        }
+        else if(key === 'inspection'){
+            deleteVehicleInspection(deleteId);
+        };
+        
+    };
 
     const retrieveVehicles = () => {
         setIsLoading(true);
@@ -250,6 +315,7 @@ export default function Vehicles(props) {
     };
 
     const deleteVehicleService = (vehicleId) => {
+        setIsLoading(true);
         VehicleDataService.deleteVehicleService(vehicleId, token)
         .then(response => {
             retrieveVehicleServices();
@@ -258,11 +324,15 @@ export default function Vehicles(props) {
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
 
     };
 
     const deleteVehicleCleaning= (vehicleId) => {
+        setIsLoading(true);
         VehicleDataService.deleteVehicleCleaning(vehicleId, token)
         .then(response => {
             retrieveVehicleCleanings();
@@ -271,11 +341,15 @@ export default function Vehicles(props) {
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
 
     };
 
     const deleteVehicleIssue= (vehicleId) => {
+        setIsLoading(true);
         VehicleDataService.deleteVehicleIssue(vehicleId, token)
         .then(response => {
             retrieveVehicleIssues();
@@ -284,10 +358,27 @@ export default function Vehicles(props) {
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
-
     };
 
+    const deleteVehicleInspection= (vehicleId) => {
+        setIsLoading(true);
+        VehicleDataService.deleteVehicleInspection(vehicleId, token)
+        .then(response => {
+            retrieveVehicleInspections();
+            handleOpenSnackbar('warning', 'Inspection has been deleted')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
 
     return ( 
         <Container
@@ -345,11 +436,20 @@ export default function Vehicles(props) {
                         <ListItemText primary="Issues" />
                         </ListItemButton>
                     </ListItem>
-
                 </List>
             </Box>
             <VehicleListDialog
+                openIssue={openIssue}
+                setOpenIssue={setOpenIssue}
+                openInspection={openInspection}
+                setOpenInspection={setOpenInspection}
+                openService={openService}
+                setOpenService={setOpenService}
+                openCleaning={openCleaning}
+                setOpenCleaning={setOpenCleaning}
                 vehicles={vehicles}
+                vehicle={vehicle}
+                setVehicle={setVehicle}
                 open={openList}
                 setOpen={setOpenList}
                 user={user}
@@ -362,36 +462,103 @@ export default function Vehicles(props) {
             <VehicleServicesListDialog
                 year={year}
                 setYear={setYear}
-                vehicles={vehicles}
+                setVehicle={setVehicle}
                 open={openServicesList}
                 setOpen={setOpenServicesList}
+                setOpenService={setOpenService}
+                setEditService={setEditService}
                 user={user}
                 services={services}
-                createVehicleService={createVehicleService}
-                updateVehicleService={updateVehicleService}
-                deleteVehicleService={deleteVehicleService}
+                openDelete={openDelete}
+                setDeleteId={setDeleteId}
+                setDeleteMessage={setDeleteMessage}
+                setOpenDelete={setOpenDelete}
             />
+            
             <VehicleCleaningsListDialog
                 year={year}
                 setYear={setYear}
-                vehicles={vehicles}
+                setVehicle={setVehicle}
                 open={openCleaningsList}
                 setOpen={setOpenCleaningsList}
+                openCleaning={openCleaning}
+                setOpenCleaning={setOpenCleaning}
+                editCleaning={editCleaning}
+                setEditCleaning={setEditCleaning}
                 user={user}
                 cleanings={cleanings}
-                createVehicleCleaning={createVehicleCleaning}
-                updateVehicleCleaning={updateVehicleCleaning}
-                deleteVehicleCleaning={deleteVehicleCleaning}
+                openDelete={openDelete}
+                setDeleteId={setDeleteId}
+                setDeleteMessage={setDeleteMessage}
+                setOpenDelete={setOpenDelete}
             />
             <VehicleIssuesListDialog
                 vehicles={vehicles}
                 open={openIssuesList}
                 setOpen={setOpenIssuesList}
+                openIssue={openIssue}
+                setOpenIssue={setOpenIssue}
                 user={user}
                 issues={issues}
                 createVehicleIssue={createVehicleIssue}
                 updateVehicleIssue={updateVehicleIssue}
                 deleteVehicleIssue={deleteVehicleIssue}
+            />
+
+            <AddVehicleIssueForm
+                open={openIssue}
+                setOpen={setOpenIssue}
+                vehicle={vehicle}
+                vehicles={vehicles}
+                user={user}
+                createVehicleIssue={createVehicleIssue}
+                updateVehicleIssue={updateVehicleIssue}
+                deleteVehicleIssue={deleteVehicleIssue}
+            />
+            <AddVehicleInspectionForm
+                open={openInspection}
+                setOpen={setOpenInspection}
+                vehicle={vehicle}
+                vehicles={vehicles}
+                user={user}
+                createVehicleInspection={createVehicleInspection}
+                updateVehicleInspection={updateVehicleInspection}
+                deleteVehicleInspection={deleteVehicleInspection}
+            />
+            <AddVehicleServiceForm
+                open={openService}
+                setOpen={setOpenService}
+                vehicle={vehicle}
+                setVehicle={setVehicle}
+                vehicles={vehicles}
+                editService={editService}
+                setEditService={setEditService}
+                isEdit={isEdit}
+                user={user}
+                createVehicleService={createVehicleService}
+                updateVehicleService={updateVehicleService}
+                deleteVehicleService={deleteVehicleService}
+            />
+            <AddVehicleCleaningForm
+                open={openCleaning}
+                setOpen={setOpenCleaning}
+                vehicle={vehicle}
+                setVehicle={setVehicle}
+                vehicles={vehicles}
+                editCleaning={editCleaning}
+                setEditCleaning={setEditCleaning}
+                isEdit={isEdit}
+                user={user}
+                createVehicleCleaning={createVehicleCleaning}
+                updateVehicleCleaning={updateVehicleCleaning}
+                deleteVehicleCleaning={deleteVehicleCleaning}
+            />
+
+            <DeleteConfirmationModal
+                deleteAction={handleDeleteAction}
+                message={deleteMessage}
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
             />
             <Loading
                 open={isLoading}

@@ -8,6 +8,8 @@ import { Stack, Typography, IconButton, TextField } from '@mui/material';
 import  Divider from '@mui/material/Divider';
 import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 export default function AddVehicleIssueForm(props) {
     const { user } = props 
@@ -81,7 +83,7 @@ export default function AddVehicleIssueForm(props) {
 
     const handleSubmit = () => {
         if(isEdit){
-            if(values.description !== editIssue.description){
+            if(values.description !== editIssue.description || values.is_resolved !== editIssue.is_resolved){
                 if(Object.keys(values.created_by).length > 0 && Object.keys(values.vehicle).length > 0){
                     let temp = values
                     temp.created_by = values.created_by.id
@@ -141,6 +143,16 @@ export default function AddVehicleIssueForm(props) {
                             helperText={errors.description === null ? '' : errors.description}
                             error={errors.description? true : false}
                         />
+                        {isEdit?
+                        <FormControlLabel
+                            onChange={() => {setValues({...values, is_resolved: !values.is_resolved})}}
+                            control={<Switch checked={values.is_resolved} color="primary" />}
+                            id="is_resolved"
+                            name="is_resolved"
+                            label="Resolved"
+                            value={values.is_resolved}
+                        />
+                        : ''}
                     </Stack>
                 
                 </DialogContent>

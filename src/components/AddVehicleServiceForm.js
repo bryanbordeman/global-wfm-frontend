@@ -12,15 +12,17 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
+import VehiclePicker from './VehiclePicker';
 
 export default function AddVehicleServiceForm(props) {
-    const { user } = props 
+    const { user } = props;
     const { open, setOpen } = props;
-    const { vehicle, createVehicleService, updateVehicleService } = props;
-    const { editService } = props;
+    const { vehicles } = props;
+    const { vehicle, setVehicle, createVehicleService, updateVehicleService } = props;
+    const { editService, setEditService } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
-    const [ isEdit, setIsEdit ] = React.useState(false);
+    const { isEdit } = props;
 
     const initialFormValues = {
         created_by: user.id,
@@ -33,9 +35,7 @@ export default function AddVehicleServiceForm(props) {
 
     React.useEffect(() => {
         if(editService !== undefined && Object.keys(editService).length > 0){
-            // setValues(editService);
             setValues({...editService, date: new Date(editService.date.replaceAll('-','/'))})
-            setIsEdit(true);
         }else{
             setValues(initialFormValues);
         }
@@ -43,7 +43,8 @@ export default function AddVehicleServiceForm(props) {
 
     const handleClose = () => {
         setOpen(false);
-        setIsEdit(false);
+        setEditService({});
+        setVehicle({});
     };
 
     const handleInputValue = (e) => {
@@ -63,6 +64,15 @@ export default function AddVehicleServiceForm(props) {
             setTimeout(() => {
                 formIsValid = true;
                 setErrors({...errors, description: null});
+            }, 3000);
+        }
+
+        else if(values.vehicle === undefined){
+            setErrors({...errors, vehicle: 'Required field'});
+            formIsValid = false;
+            setTimeout(() => {
+                formIsValid = true;
+                setErrors({...errors, vehicle: null});
             }, 3000);
         }
         
@@ -141,6 +151,16 @@ export default function AddVehicleServiceForm(props) {
                                 fullWidth
                             />
                         </LocalizationProvider>
+                        {isEdit || Object.keys(vehicle).length > 0? 
+                            ''
+                            :
+                            <VehiclePicker
+                                vehicles={vehicles}
+                                setValues={setValues}
+                                values={values}
+                                errors={errors}
+                            />
+                        }
                         <TextField
                             autoFocus={false}
                             id="description"

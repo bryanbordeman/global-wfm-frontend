@@ -47,7 +47,7 @@ export default function TaskListPicker(props) {
 
     return (
         <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={errors.tasklist}>
                 <InputLabel 
                     id="select-list-label"
                 >
