@@ -10,15 +10,17 @@ import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import moment from 'moment';
+import VehiclePicker from './VehiclePicker';
 
 export default function AddVehicleIssueForm(props) {
     const { user } = props 
     const { open, setOpen } = props;
-    const { vehicle, createVehicleIssue, updateVehicleIssue } = props;
-    const { editIssue } = props;
+    const { vehicle, vehicles, setVehicle, createVehicleIssue, updateVehicleIssue } = props;
+    const { editIssue, setEditIssue } = props;
     const [ isValid, setIsValid ] = React.useState(true);
     const [ errors, setErrors ] = React.useState({});
-    const [ isEdit, setIsEdit ] = React.useState(false);
+    const { isEdit } = props;
 
     const initialFormValues = {
         created_by: user.id,
@@ -31,21 +33,16 @@ export default function AddVehicleIssueForm(props) {
 
     React.useEffect(() => {
         if(editIssue !== undefined && Object.keys(editIssue).length > 0){
-            // setValues(editIssue);
             setValues({...editIssue, date: new Date(editIssue.date.replaceAll('-','/'))})
-            setIsEdit(true);
         }else{
             setValues(initialFormValues);
         }
     },[open]);
     
-    
-    // React.useEffect(() => {
-    //     setValues(initialFormValues);
-    // },[props])
-    
     const handleClose = () => {
         setOpen(false);
+        setEditIssue({});
+        setVehicle({});
     };
 
     const handleInputValue = (e) => {
@@ -131,6 +128,16 @@ export default function AddVehicleIssueForm(props) {
                 <Divider/>
                 <DialogContent>
                     <Stack direction="column" spacing={2}>
+                    {isEdit || Object.keys(vehicle).length > 0? 
+                            ''
+                            :
+                            <VehiclePicker
+                                vehicles={vehicles}
+                                setValues={setValues}
+                                values={values}
+                                errors={errors}
+                            />
+                        }
                         <TextField
                             autoFocus={false}
                             id="description"

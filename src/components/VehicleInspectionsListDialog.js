@@ -18,7 +18,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import Chip from '@mui/material/Chip';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 export default function VehicleInspectionsListDialog(props) {
     const { user } = props

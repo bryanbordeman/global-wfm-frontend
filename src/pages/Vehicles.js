@@ -63,6 +63,7 @@ export default function Vehicles(props) {
     const [ editCleaning, setEditCleaning ] = React.useState({});
     const [ editService, setEditService ] = React.useState({});
     const [ editInspection, setEditInspection ] = React.useState({});
+    const [ editIssue, setEditIssue ] = React.useState({});
 
     // delete 
     const [ openDelete, setOpenDelete ] = React.useState(false);
@@ -84,10 +85,17 @@ export default function Vehicles(props) {
         }
         else if(Object.keys(editCleaning).length > 0){
             setIsEdit(true);
-        }else{
+        }
+        else if(Object.keys(editInspection).length > 0){
+            setIsEdit(true);
+        }
+        else if(Object.keys(editIssue).length > 0){
+            setIsEdit(true);
+        }
+        else{
             setIsEdit(false);
         }
-    },[editService, editCleaning]);
+    },[editService, editCleaning, editInspection, editIssue]);
 
     React.useEffect(() => {
         // if year changes update list
@@ -496,16 +504,19 @@ export default function Vehicles(props) {
                 setOpenDelete={setOpenDelete}
             />
             <VehicleIssuesListDialog
-                vehicles={vehicles}
+                setVehicle={setVehicle}
                 open={openIssuesList}
                 setOpen={setOpenIssuesList}
                 openIssue={openIssue}
                 setOpenIssue={setOpenIssue}
+                editIssue={editIssue}
+                setEditIssue={setEditIssue}
                 user={user}
                 issues={issues}
-                createVehicleIssue={createVehicleIssue}
-                updateVehicleIssue={updateVehicleIssue}
-                deleteVehicleIssue={deleteVehicleIssue}
+                openDelete={openDelete}
+                setDeleteId={setDeleteId}
+                setDeleteMessage={setDeleteMessage}
+                setOpenDelete={setOpenDelete}
             />
 
             <VehicleInspectionsListDialog
@@ -523,12 +534,15 @@ export default function Vehicles(props) {
                 setDeleteMessage={setDeleteMessage}
                 setOpenDelete={setOpenDelete}
             />
-
             <AddVehicleIssueForm
                 open={openIssue}
                 setOpen={setOpenIssue}
                 vehicle={vehicle}
+                setVehicle={setVehicle}
                 vehicles={vehicles}
+                editIssue={editIssue}
+                setEditIssue={setEditIssue}
+                isEdit={isEdit}
                 user={user}
                 createVehicleIssue={createVehicleIssue}
                 updateVehicleIssue={updateVehicleIssue}

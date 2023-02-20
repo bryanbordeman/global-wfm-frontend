@@ -7,41 +7,32 @@ import DialogTitle from '@mui/material/DialogTitle';
 import  Divider from '@mui/material/Divider';
 import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
-import AddVehicleIssueForm from './AddVehicleIssueForm';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
-
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
+import { Stack } from '@mui/material';
 
 export default function VehicleIssuesListDialog(props) {
     const { user } = props
-    const { createVehicleIssue, updateVehicleIssue, deleteVehicleIssue } = props
-    const { vehicles, issues } = props
+    const { issues } = props
     const { open, setOpen } = props;
-    const [ vehicle, setVehicle ] = React.useState({});
-    const [ openIssue, setOpenIssue ] = React.useState(false);
-    const [ editIssue, setEditIssue ] = React.useState({});
-    const [  openDelete, setOpenDelete ] = React.useState(false);
-    const [ deleteId, setDeleteId ] = React.useState('');
-    const [ deleteMessage, setDeleteMessage ] = React.useState('');
+    const { setVehicle } = props;
+    const { setOpenIssue } = props;
+    const { setEditIssue } = props;
+    const { openDelete, setDeleteId, setDeleteMessage, setOpenDelete } = props;
 
     const handleClose = () => {
         setOpen(false);
         setEditIssue({});
     };
 
-    const handleOpenService = (vehicle, issue) => {
+    const handleOpenIssue = (vehicle, issue) => {
         setVehicle(vehicle);
         setEditIssue(issue);
         setOpenIssue(true);
@@ -52,10 +43,6 @@ export default function VehicleIssuesListDialog(props) {
         setDeleteMessage({title: 'Permanently delete this issue', content: `Issue: ${value.description}`})
         setOpenDelete(!openDelete)
         // deleteVehicleService();
-    };
-
-    const handleDeleteAction = () => {
-        deleteVehicleIssue(deleteId);
     };
 
     const issueList = 
@@ -78,7 +65,7 @@ export default function VehicleIssuesListDialog(props) {
                                 {user.is_staff?
                                     <ListItemIcon>
                                         <IconButton  
-                                            onClick={() => {handleOpenService(value.vehicle, value)}}
+                                            onClick={() => {handleOpenIssue(value.vehicle, value)}}
                                             edge="start"
                                         >
                                             <EditIcon color='primary'/>
@@ -133,9 +120,22 @@ export default function VehicleIssuesListDialog(props) {
                 </DialogTitle>
                 <Divider/>
                 <DialogContent>
-                    <Box sx={{marginBottom: 4}}>
-                        
-                    </Box>
+                <Stack direction='row' spacing={2}>
+                        <Box sx={{width: '100%'}}>
+                            <Button 
+                                size='large'
+                                disableElevation
+                                sx={{
+                                    width: '100%', 
+                                    maxWidth: '150px', 
+                                    float: 'right',
+                                    mr: '1.25rem',
+                                    mb: 3}}
+                                variant="contained"
+                                onClick={() => setOpenIssue(true)}
+                            >Add</Button>
+                        </Box>
+                    </Stack>
                     {issues.length > 0 ? issueList : 'No Issues Recorded'}
                 </DialogContent>
                 <Divider/>
@@ -143,21 +143,6 @@ export default function VehicleIssuesListDialog(props) {
                         <Button variant="contained" onClick={handleClose}>Close</Button>
                     </DialogActions>
             </Dialog>
-            <AddVehicleIssueForm
-                open={openIssue}
-                setOpen={setOpenIssue}
-                vehicle={vehicle}
-                user={user}
-                createVehicleIssue={createVehicleIssue}
-                updateVehicleIssue={updateVehicleIssue}
-                editIssue={editIssue}
-            />
-            <DeleteConfirmationModal
-                deleteAction={handleDeleteAction}
-                message={deleteMessage}
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-            />
         </div>
     );
 };

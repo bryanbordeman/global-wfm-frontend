@@ -213,9 +213,12 @@ export default function ExpaneseTabs(props) {
         ExpenseDataService.getAllMiles(token, month)
         .then(response => {
             setMiles(response.data);
+            // console.log(response.data);
             setTotalMiles(0)
+            let newMilesTotal = 0
             for(let i = 0; i < response.data.length; i++) {
-                setTotalMiles(totalMiles+ response.data[i].price)
+                newMilesTotal += response.data[i].price
+                setTotalMiles(newMilesTotal)
             }
         })
         .catch( e => {
