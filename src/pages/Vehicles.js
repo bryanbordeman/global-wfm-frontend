@@ -24,6 +24,7 @@ import VehicleListDialog from '../components/VehicleListDialog';
 import VehicleServicesListDialog from '../components/VehicleServicesListDialog';
 import VehicleCleaningsListDialog from '../components/VehicleCleaningsListDialog';
 import VehicleIssuesListDialog from '../components/VehicleIssuesListDialog';
+import VehicleInspectionsListDialog from '../components/VehicleInspectionsListDialog';
 
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 
@@ -49,6 +50,7 @@ export default function Vehicles(props) {
     const [ openServicesList, setOpenServicesList ] = React.useState(false); // service list
     const [ openCleaningsList, setOpenCleaningsList ] = React.useState(false); // cleaning list
     const [ openIssuesList, setOpenIssuesList ] = React.useState(false); // issues list
+    const [ openInspectionsList, setOpenInspectionsList ] = React.useState(false); // issues list
 
     // open add form
     const [ openIssue, setOpenIssue ] = React.useState(false); // add or edit issue
@@ -60,6 +62,7 @@ export default function Vehicles(props) {
     const [ isEdit, setIsEdit ] = React.useState(false);
     const [ editCleaning, setEditCleaning ] = React.useState({});
     const [ editService, setEditService ] = React.useState({});
+    const [ editInspection, setEditInspection ] = React.useState({});
 
     // delete 
     const [ openDelete, setOpenDelete ] = React.useState(false);
@@ -420,7 +423,7 @@ export default function Vehicles(props) {
                     </ListItem>
                     <Divider />
                     <ListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={() => setOpenInspectionsList(true)}>
                         <ListItemIcon>
                             <PlaylistAddCheckIcon />
                         </ListItemIcon>
@@ -505,6 +508,22 @@ export default function Vehicles(props) {
                 deleteVehicleIssue={deleteVehicleIssue}
             />
 
+            <VehicleInspectionsListDialog
+                year={year}
+                setYear={setYear}
+                setVehicle={setVehicle}
+                open={openInspectionsList}
+                setOpen={setOpenInspectionsList}
+                setOpenInspection={setOpenInspection}
+                setEditInspection={setEditInspection}
+                user={user}
+                inspections={inspections}
+                openDelete={openDelete}
+                setDeleteId={setDeleteId}
+                setDeleteMessage={setDeleteMessage}
+                setOpenDelete={setOpenDelete}
+            />
+
             <AddVehicleIssueForm
                 open={openIssue}
                 setOpen={setOpenIssue}
@@ -519,7 +538,11 @@ export default function Vehicles(props) {
                 open={openInspection}
                 setOpen={setOpenInspection}
                 vehicle={vehicle}
+                setVehicle={setVehicle}
                 vehicles={vehicles}
+                editInspection={editInspection}
+                setEditInspection={setEditInspection}
+                isEdit={isEdit}
                 user={user}
                 createVehicleInspection={createVehicleInspection}
                 updateVehicleInspection={updateVehicleInspection}
