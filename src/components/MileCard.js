@@ -159,14 +159,14 @@ export default function MileCard(props) {
                                         color='success'
                                         size='small'
                                         onClick={() => {approveMile(expense.id)}}
-                                        >Approved</Button> : 
+                                        >Paid</Button> : 
                                     <Button 
                                         variant='outlined' 
                                         color='inherit'
                                         size='small'
                                         onClick={() => {approveMile(expense.id)}}
-                                        >Approve</Button> : 
-                                    `${expense.is_approved ? 'Approved' : 'Pending'}`
+                                        >Pay</Button> : 
+                                    `${expense.is_approved ? 'Paid' : 'Pay'}`
                                     }
                             />
                         </ListItemAvatar>
