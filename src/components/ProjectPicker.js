@@ -14,17 +14,10 @@ export default function ProjectPicker(props) {
     const { editing, editObject } = props;
     const didMount = React.useRef(false);
 
-    const calledOnce = React.useRef(false);
-
     React.useEffect(() => {
-        if (calledOnce.current) {
-        return;
-        }
         handleClear();
         retrieveProject();
-        calledOnce.current = true;
     },[]);
-
 
     // React.useEffect(() => {
     //     //! renders twice??
@@ -40,13 +33,9 @@ export default function ProjectPicker(props) {
 
     React.useEffect(() => {
         //! renders twice??
-        if (didMount.current) {
-            if(editing){
-                handleInputValue(editObject.project);
-            };
-        } else {
-            didMount.current = true;
-        }
+        if(editing){
+            handleInputValue(editObject.project);
+        };
     },[editing])
 
     const retrieveProject = () => {
