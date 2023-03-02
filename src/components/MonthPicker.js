@@ -8,13 +8,14 @@ export default function MonthPicker(props) {
     const [ value, setValue ] = React.useState(new Date());
     const { handleChangeMonth } = props
 
+    const today = new Date();
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
             views={['year', 'month']}
             label="Year and Month"
-            minDate={new Date('2012-03-01')}
-            maxDate={new Date('2023-06-01')}
+            minDate={today.setFullYear(today.getFullYear() - 1)}
+            maxDate={today.setFullYear(today.getFullYear() + 1)}
             value={value}
             onChange={(newValue) => {
                 setValue(newValue);

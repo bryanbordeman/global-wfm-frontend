@@ -5,7 +5,7 @@ import { TIMEOUT } from "./TIMEOUT";
 class ExpenseDataService {
     getAll(token, month){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/expenses/${month.getMonth()+1}`, {timeout: TIMEOUT});
+        return axios.get(`${SERVER}/api/expenses/${month.getMonth()+1}/${month.getFullYear()}`, {timeout: TIMEOUT});
     };
     createExpense(data, token, userId){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
@@ -27,7 +27,7 @@ class ExpenseDataService {
 
     getAllMiles(token, month){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/miles/${month.getMonth()+1}`, {timeout: TIMEOUT});
+        return axios.get(`${SERVER}/api/miles/${month.getMonth()+1}/${month.getFullYear()}`, {timeout: TIMEOUT});
     };
 
     approveMile(id, token){
