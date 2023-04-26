@@ -6,11 +6,12 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function TaskSortBy(props) {
-    const { setSortBy } = props
+    const { setSortBy, sortList } = props
     // const [value, setValue] = React.useState('');
 
     const handleChange = (event) => {
         // setValue(event.target.value);
+        sortList(event.target.value)
         setSortBy(event.target.value);
     };
 

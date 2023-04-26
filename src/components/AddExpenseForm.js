@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ExpenseDataService from '../services/Expense.services';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -24,7 +25,8 @@ import moment from 'moment-timezone';
 import Transition from './DialogTransistion'
 
 export default function AddExpenseForm(props) {
-    const { user, token } = props
+    const { user, token, handleOpenSnackbar } = props
+    const { employees } = props; 
     const { open, setOpen } = props
     const { editing, expense } = props
     const { employee, handleChangeEmployee } = props
@@ -144,8 +146,25 @@ export default function AddExpenseForm(props) {
             const fileName = 'myFile.jpg';
             let editImage = []
 
-            fetch(url)
+            getImage(expense.id)
+            fetch(url, 
+                { 
+                    method: "GET",
+                    mode: 'cors',
+                    // mode: "no-cors",
+                
+                    headers: {
+                      // Accept: "application/json", <---- **Originally BE returned stringified json. Not sure if I should be returning it as something else or if this is still needed**
+                        // Origin: "http://localhost:3000/",
+                        // crossorigin: "anonymous" 
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                }
+            )
+
             .then(async response => {
+                console.log(response)
+                
                 const contentType = response.headers.get('content-type')
                 const blob = await response.blob()
                 const file = new File([blob], fileName, { contentType })
@@ -170,11 +189,36 @@ export default function AddExpenseForm(props) {
                             })
 
                         })
+                        .catch( e => {
+                            console.log(e);
+                            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                        })
+                        .finally(() => {
+                        });
                 })
+                .catch( e => {
+                    console.log(e);
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                })
+                .finally(() => {
+                });
+                
         } else {
             setImages([])
         }
     },[open])
+
+    const getImage = (expenseId) => {
+        ExpenseDataService.getImage(expenseId, token)
+        .then(response => {
+            console.log(response)
+            handleOpenSnackbar('info', 'Your expense has been submitted for approval')
+        })
+        .catch( e => {
+            console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+        });
+    }
 
     const handleInputValue = (e) => {
         const { name, value } = e.target;
@@ -451,6 +495,7 @@ export default function AddExpenseForm(props) {
                     user={user}
                     token={token}
                     handleChangeEmployee={handleChangeEmployee}
+                    employees={employees}
                 />
                 : ''}     
                 <Stack direction="row" spacing={1}>

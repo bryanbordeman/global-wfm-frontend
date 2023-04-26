@@ -6,14 +6,23 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function AssigneePicker(props) {
     const { handleChangeAssignee, errors, token, handleOpenSnackbar} = props;
+    const { user, employees } = props;
     const { task, editing } = props;
     const [ value, setValue ] = React.useState(null);
     const [ assignees, setAssignees ] = React.useState([{}]);
     const [ inputValue, setInputValue ] = React.useState('');
     const [ isLoading, setIsLoading ] = React.useState(false);
 
+    // React.useEffect(() => {
+    //     retrieveEmployees()
+    // },[]);
+
     React.useEffect(() => {
-        retrieveEmployees()
+        //! errors when reload
+        if(employees.length > 0 && user){
+            let newValue = employees.find((e) => e.id === user.id)
+            handleInputValue(newValue)
+        }
     },[]);
 
 
@@ -57,7 +66,7 @@ export default function AssigneePicker(props) {
         onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);
         }}
-        options={assignees}
+        options={employees}
         getOptionLabel={(option) => (`${option.first_name} ${option.last_name}`)}
         isOptionEqualToValue={(option, newValue) => {
             return option.id === newValue.id;

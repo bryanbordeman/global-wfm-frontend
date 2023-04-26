@@ -53,6 +53,10 @@ class ExpenseDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.put(`${SERVER}/api/mile/${id}`, data);
     };
+    getImage(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/expense/${id}`);
+    };
 }
 
 export default new ExpenseDataService();

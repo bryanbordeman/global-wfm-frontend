@@ -14,9 +14,18 @@ export default function ProjectPicker(props) {
     const { editing, editObject } = props;
     const didMount = React.useRef(false);
 
+    // React.useEffect(() => {
+    //     handleClear();
+    //     retrieveProject();
+    // },[]);
+
     React.useEffect(() => {
-        handleClear();
-        retrieveProject();
+        if (didMount.current) {
+            handleClear();
+            retrieveProject();
+        } else {
+            didMount.current = true;
+        }
     },[]);
 
     // React.useEffect(() => {

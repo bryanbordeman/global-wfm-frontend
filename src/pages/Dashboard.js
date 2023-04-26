@@ -8,6 +8,11 @@ import Divider from '@mui/material/Divider';
 function Dashboard(props){
     const { user, token, setToken, handleOpenSnackbar } = props
     
+    const { worksegments, setWorksegments } = props
+    const { PTOsegments } = props;
+    const { totals, setTotals } = props
+    const { isoWeek, setIsoWeek } = props
+    
     return (
         <div>
             <div style={{paddingTop: '1rem'}}> 
@@ -30,6 +35,15 @@ function Dashboard(props){
                         token={token}
                         setToken={setToken}
                         handleOpenSnackbar={handleOpenSnackbar}
+                        
+                        
+                        worksegments={worksegments}
+                        setWorksegments={setWorksegments}
+                        totals={totals}
+                        setTotals={setTotals}
+                        PTOsegments={PTOsegments}
+                        isoWeek={isoWeek}
+                        setIsoWeek={setIsoWeek}
                     />
                 </Container>
             </div> 

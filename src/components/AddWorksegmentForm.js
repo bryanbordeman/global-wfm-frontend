@@ -38,7 +38,8 @@ export default function AddWorksegmentForm(props) {
         user,
         token,
         handleChangeEmployee,
-        employee
+        employee,
+        employees
         } = props
 
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
@@ -460,6 +461,7 @@ export default function AddWorksegmentForm(props) {
                             editing={editing}
                             editObject={segment}
                             employee={employee}
+                            employees={employees}
                             errors={errors}
                             user={user}
                             token={token}
@@ -522,7 +524,7 @@ export default function AddWorksegmentForm(props) {
                         onFocus={event => {
                             event.target.select();
                         }}
-                        inputProps={{ inputmode: 'decimal', pattern: '[0-9]*' }}
+                        inputProps={{ inputMode: 'decimal', pattern: '[0-9]*' }}
                         margin="dense"
                         id="travel"
                         name="travel"

@@ -23,13 +23,17 @@ class WorksegmentDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/admin/worksegments/${isoweek}/`, {timeout: TIMEOUT});
     };
-    createWorksegment(data, token, userId){
+    async createWorksegment(data, token, userId){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.post(`${SERVER}/api/create/worksegment/${userId}/`, data);
+        return axios.post(`${SERVER}/api/create/worksegment/${userId}/`, data)
+        .then(response => {
+            return axios.get(`${SERVER}/api/worksegment/${response.data.id}`);
+        })
     };
-    updateWorksegment(id, data, token){
+    async updateWorksegment(id, data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.put(`${SERVER}/api/worksegment/${id}`, data);
+        await axios.put(`${SERVER}/api/worksegment/${id}`, data);
+        return await axios.get(`${SERVER}/api/worksegment/${id}`);
     };
     deleteWorksegment(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

@@ -47,7 +47,7 @@ export default function ExpaneseTabs(props) {
     const [ totalCreditCard, setTotalCreditCard ] = React.useState(0);
     const [ totalReimbursable, setTotalReimbursable ] = React.useState(0);
     const [ totalMiles, setTotalMiles ] = React.useState(0);
-    const { month, user, employee, token, handleOpenSnackbar, 
+    const { month, user, employee, employees, token, handleOpenSnackbar, 
         open, setOpen, handleChangeEmployee } = props;
     const { openMiles, setOpenMiles } = props;
     const { editing, setEditing, setTabIndex } = props;
@@ -255,7 +255,7 @@ export default function ExpaneseTabs(props) {
         ExpenseDataService.deleteMile(expenseId, props.token)
         .then(response => {
             window.scrollTo(0, 0);
-            handleOpenSnackbar('error', 'Your miles have been deleted')
+            handleOpenSnackbar('warning', 'Your miles have been deleted')
             retrieveMiles();
         })
         .catch( e => {
@@ -368,6 +368,7 @@ export default function ExpaneseTabs(props) {
                     ))) : ''}
                 </TabPanel>
                 <AddExpenseForm
+                    employees={employees}
                     open={open}
                     expense={editExpense}
                     setOpen={setOpen}
@@ -377,10 +378,12 @@ export default function ExpaneseTabs(props) {
                     token={token}
                     employee={employee}
                     handleChangeEmployee={handleChangeEmployee}
+                    handleOpenSnackbar={handleOpenSnackbar}
                     createExpense={createExpense}
                     updateExpense={updateExpense}
                 />
                 <AddMileForm
+                    employees={employees}
                     user={user}
                     token={token}
                     editing={editing}

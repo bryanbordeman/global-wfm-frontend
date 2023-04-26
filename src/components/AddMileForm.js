@@ -21,6 +21,7 @@ import Transition from './DialogTransistion'
 
 export default function AddMileForm(props) {
     const { user, token } = props
+    const { employees } = props;
     const { openMiles, setOpenMiles } = props;
     const { editing, expense, updateMiles } = props
     const { employee, handleChangeEmployee } = props
@@ -365,6 +366,7 @@ export default function AddMileForm(props) {
                     user={user}
                     token={token}
                     handleChangeEmployee={handleChangeEmployee}
+                    employees={employees}
                 />
                 : ''}     
                 <Stack direction="row" spacing={1}>

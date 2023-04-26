@@ -8,6 +8,7 @@ import ExpenseTabs from '../components/ExpenseTabs';
 
 export default function Expenses(props) {
     const { user, token, handleOpenSnackbar} = props
+    const { employees } = props;
     const [ employee, setEmployee ] = React.useState({})
     const [ month, setMonth ] = React.useState(new Date())
     const [ open, setOpen ] = React.useState(false);
@@ -64,11 +65,14 @@ export default function Expenses(props) {
                             <EmployeePicker
                                 user={user}
                                 token={token}
-                                handleChangeEmployee={handleChangeEmployee}/>
+                                handleChangeEmployee={handleChangeEmployee}
+                                employees={employees}
+                                />
                         </div> : ''
                         }
                     </div>
                     <ExpenseTabs
+                        employees={employees}
                         setTabIndex = {setTabIndex}
                         editing={editing}
                         setEditing={setEditing}

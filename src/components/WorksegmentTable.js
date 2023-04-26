@@ -18,12 +18,14 @@ import Loading from './Loading';
 import WeekPicker from './WeekPicker';
 import { v4 as uuidv4 } from 'uuid';
 
-function createData(name, regular, overtime, travel, total_duration, summary) {
+function createData(name, regular, overtime, travel, sick, vacation, total_duration, summary) {
     return {
         name,
         regular,
         overtime,
         travel,
+        sick,
+        vacation,
         total_duration,
         summary
     };
@@ -51,6 +53,8 @@ function Row(props) {
                 <TableCell align="left">{row.regular}</TableCell>
                 <TableCell align="left">{row.overtime}</TableCell>
                 <TableCell align="left">{row.travel}</TableCell>
+                <TableCell align="left">{row.sick}</TableCell>
+                <TableCell align="left">{row.vacation}</TableCell>
                 <TableCell align="left">{row.total_duration}</TableCell>
             </TableRow>
             <TableRow>
@@ -101,127 +105,60 @@ function Row(props) {
 };
 
 export default function WorksegmentTable(props) {
-    const { user, token, setToken, handleOpenSnackbar} = props
-    const [ isLoading, setIsLoading ] = React.useState(true);
-    const [ totals, setTotals ] = React.useState([]);
-    const [ worksegments, setWorksegments ] = React.useState([]);
-    const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
-    const didMount = React.useRef(false);
+    const { user, token, setToken, handleOpenSnackbar} = props;
+
+    const { worksegments, setWorksegments } = props
+    const { PTOsegments } = props;
+    const { totals, setTotals } = props
+    const { isoWeek, setIsoWeek } = props
+
+    const [ tableRows, setTableRows ] = React.useState([]); 
 
     React.useEffect(() => {
-        // if (didMount.current) {
-            retrieveWorksegments();
-        // } else {
-        //     didMount.current = true;
-        // }
-    },[isoWeek]);
-
-    React.useEffect(() => {
-        if (didMount.current) {
-            recieveTotals();
-        } else {
-            didMount.current = true;
+        setTableRows([])
+        if(totals && worksegments && isoWeek){
+            updateTable();
         }
-    },[worksegments]);
+    },[totals, worksegments, isoWeek])
 
-    const recieveTotals = () => {
+    const updateTable = () => {
         // get total hours for all users in isoweek.
         const isAdmin = user.is_staff ? true : false;
-        setIsLoading(true);
-        WorksegmentDataService.getTotals(token, isoWeek)
-            .then(response => {
-                    const data = response.data
-                    const rows = []
-                if(isAdmin){
-                    data.map((d) => {
-                        rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['total_duration'], []))
-                    })
-                }else{
-                    data.map((d) => {
-                        if(d.user_id == user.id){
-                            rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['total_duration'], []))
-                        }
-                    })
-                }
-                    rows.map((r) => {
-                        worksegments.map((w) => {
-                            if(`${w.user.first_name} ${w.user.last_name}` === r.name){
-                                let number =''
-                                if(w.project){number = w.project.number}
-                                if(w.service){number = w.service.number}
-                                if(w.hse){number = w.hse.number}
-                                if(w.quote){number = w.quote.number}
-                                r.summary.push({
-                                    approved: w.is_approved? 'Approved' : 'Pending',
-                                    date: moment(w.date).format('dddd'),
-                                    project: number,
-                                    type: w.segment_type.name.charAt(0).toUpperCase() + w.segment_type.name.slice(1),
-                                    start_time: moment(getDateFromHours(w.start_time)).format('LT'),
-                                    end_time: moment(getDateFromHours(w.end_time)).format('LT'),
-                                    travel: w.travel_duration,
-                                    lunch: w.lunch? 'Yes' : 'No',
-                                    total: w.duration
-                                });
-                            };
-                        }); 
-                    });
-                    setTotals(rows);
-            })
-            .catch(e => {
-                console.log(e);
-                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    };
-
-    const retrieveWorksegments = () => {
-        // get segments from API
-        const isAdmin = user.is_staff ? true : false;
+        const rows = []
         if(isAdmin){
-            setIsLoading(true);
-            WorksegmentDataService.adminGetWeek(props.token, isoWeek)
-                .then(response => {
-                    setWorksegments(response.data);
-                })
-                .catch( e => {
-                    if(e.request.statusText === 'Unauthorized'){
-                        setToken('')
-                        localStorage.setItem('token', '')
-                        localStorage.setItem('user', '');
-                        handleOpenSnackbar('error', 'Unauthorized User')
-                        window.location.reload();
-                    }else{
-                        console.log(e);
-                        handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-                        }
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                })
+            totals.map((d) => {
+                rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['sick'],d['vacation'],d['total_duration'], []))
+            })
         }else{
-            setIsLoading(true);
-            WorksegmentDataService.getWeek(props.token, isoWeek)
-                .then(response => {
-                    setWorksegments(response.data);
-                })
-                .catch( e => {
-                    if(e.request.statusText === 'Unauthorized'){
-                        setToken('')
-                        localStorage.setItem('token', '')
-                        localStorage.setItem('user', '');
-                        handleOpenSnackbar('error', 'Unauthorized User')
-                        window.location.reload();
-                    }else{
-                        console.log(e);
-                        handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-                        }
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                })
+            totals.map((d) => {
+                if(d.user_id == user.id){
+                    rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['sick'],d['vacation'],d['total_duration'], []))
+                }
+            })
         }
+        rows.map((r) => {
+            worksegments.map((w) => {
+                if(`${w.user.first_name} ${w.user.last_name}` === r.name){
+                    let number =''
+                    if(w.project){number = w.project.number}
+                    if(w.service){number = w.service.number}
+                    if(w.hse){number = w.hse.number}
+                    if(w.quote){number = w.quote.number}
+                    r.summary.push({
+                        approved: w.is_approved? 'Approved' : 'Pending',
+                        date: moment(w.date).format('dddd'),
+                        project: number,
+                        type: w.segment_type.name.charAt(0).toUpperCase() + w.segment_type.name.slice(1),
+                        start_time: moment(getDateFromHours(w.start_time)).format('LT'),
+                        end_time: moment(getDateFromHours(w.end_time)).format('LT'),
+                        travel: w.travel_duration,
+                        lunch: w.lunch? 'Yes' : 'No',
+                        total: w.duration
+                    });
+                };
+            }); 
+        });
+        setTableRows(rows);
     };
 
     function getDateFromHours(time) {
@@ -233,11 +170,13 @@ export default function WorksegmentTable(props) {
     const getIsoWeek = (week) => {
         setIsoWeek(week)
     };
+    
     return (
         <div style={{width: '100%', marginTop: '20px'}}>
             <WeekPicker
                 getIsoWeek={getIsoWeek}
             />
+        {/* {Object.keys(worksegments).length > 0 || Object.keys(PTOsegments).length > 0?  */}
         <TableContainer component={Box} sx={{mt:3}}>
         <Table stickyHeader size="small" aria-label="collapsible table">
             <TableHead>
@@ -247,12 +186,14 @@ export default function WorksegmentTable(props) {
                 <TableCell align="left">Regular</TableCell>
                 <TableCell align="left">Overtime</TableCell>
                 <TableCell align="left">Travel</TableCell>
+                <TableCell align="left">Sick</TableCell>
+                <TableCell align="left">Vacation</TableCell>
                 <TableCell align="left">Total Hours</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
             
-            {totals.map((row) => (
+            {tableRows.map((row) => (
                 <Row 
                     key={uuidv4()} 
                     row={row} 
@@ -261,10 +202,12 @@ export default function WorksegmentTable(props) {
             ))}
             </TableBody>
         </Table>
-        <Loading
-            open={isLoading}
-        />
         </TableContainer>
+        {/* // :
+        // <div style={{marginTop: '10px'}}> 
+        //     {Object.keys(totals).length < 1? 'Loading...' : `No hours recorded for ${isoWeek}` } 
+        // </div>
+        // } */}
         </div>
     );
 };

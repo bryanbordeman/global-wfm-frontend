@@ -263,6 +263,12 @@ export default function QuoteCard(props) {
                         </Typography>
                     </div>
                     : ''}
+                    <Divider sx={{mt:2}}/>
+                    <div>
+                        <Typography variant="body2" sx={{mt:2, mb:2}}>
+                            Manager: {`${quote.manager.first_name} ${quote.manager.last_name}`}
+                        </Typography>
+                    </div>
 
                     {user.groups.filter(group => (group.name === 'ADMIN')).length > 0 && quote.price ? 
                     <div>

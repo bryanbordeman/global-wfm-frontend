@@ -19,6 +19,7 @@ function Task(props) {
     const { user } = props;
     const { token } = props;
     const { handleOpenSnackbar, darkState } = props;
+    const { employees } = props;
     const [ employee, setEmployee ] = React.useState(null);
     const [ selectedList, setSelectedList ] = React.useState([]); // current selected list task in progress
     const [ selectedCompleteList, setSelectedCompleteList ] = React.useState([]); // current selected list completed task
@@ -37,25 +38,35 @@ function Task(props) {
     const [ isLoading, setIsLoading ] = React.useState(true);
 
     React.useEffect(() => {
-        setSelectedList([]) // not a great solution to clear list after employee change
-        retrieveTasks();
-        retrieveTaskList();
-        setCurrentList('');
-        setSelectedCompleteList([]);
+            setSelectedList([]) // not a great solution to clear list after employee change
+            retrieveTaskList();
+            retrieveTasks();
+            setCurrentList('');
+            setSelectedCompleteList([]);
     },[employee])
 
     React.useEffect(() => {
-        if(currentList)
-        retrieveList();
+        sortList();
+    },[sortBy])
+
+    React.useEffect(() => {
+        //! look into this effect not effective.
+        if(currentList) {
+            retrieveList();
+        } 
         // retrieveCompletedTasks();
-    },[currentList, tasks, open, sortBy])
+    },[currentList, tasks, open])
+
+    //! ^^^ fix effect above to make sortList Function that doesnt require API call
     
     const retrieveTaskList = () => {
         setIsLoading(true);
         TaskDataService.getAllTaskList(token)
             .then(response => {
                 // sort the select list
+                retrieveTasks(response.data.sort((a, b) => (a.title > b.title) ? 1 : -1))
                 setTaskLists(response.data.sort((a, b) => (a.title > b.title) ? 1 : -1));
+                
             })
             .catch( e => {
                 console.log(e);
@@ -66,7 +77,7 @@ function Task(props) {
             });
     };
 
-    const retrieveTasks = () => {
+    const retrieveTasks = (inputList) => {
         let allTasks= [];
         let tempObject = {};
         setIsLoading(true);
@@ -74,7 +85,8 @@ function Task(props) {
             TaskDataService.getAssigneeTasks(token, employee.id)
                 .then(response => {
                     allTasks = response.data;
-                    taskLists.map(list => {
+                    let list = inputList? inputList : taskLists // only use inputList on initial load
+                    list.map(list => {
                         // sort results into taskObject
                         let result = allTasks.filter(task => task.tasklist.id === list.id);
                         // sort results based on user and assignee. If user === to assignee or user === created_by show task
@@ -86,6 +98,7 @@ function Task(props) {
                             return userResult
                         }
                     })
+                
                     setTasks(tempObject);
                 })
                 .catch( e => {
@@ -96,6 +109,61 @@ function Task(props) {
                 .finally(() => {
                     setIsLoading(false);
                 });
+    };
+
+    const sortList = (sort) => {
+        const userResult = tasks[currentList.title]
+        let projectSort = []
+        let serviceSort = []
+        let hseSort = []
+        let QuoteSort = []
+        let sortList = []
+
+        if (userResult){
+            // sort list
+            switch(sort) {
+                case (1):
+                    // Due Date (Oldest to Newest
+                    setSelectedList(userResult.sort((a, b) => (a.due > b.due) ? 1 : -1));
+                break;
+                case (2):
+                    // Due Date (Newest to Oldest)
+                    setSelectedList(userResult.sort((a, b) => (a.due < b.due) ? 1 : -1));
+                break;
+                case (3):
+                    // Project (Descending)
+                    userResult.forEach(task => {
+                        if(task.project != null){
+                            projectSort.push(task);
+                        };
+                        if(task.service != null){
+                            serviceSort.push(task);
+                        };
+                        if(task.hse != null){
+                            hseSort.push(task);
+                        };
+                        if(task.quote != null){
+                            QuoteSort.push(task);
+                        };
+                        
+                        projectSort.sort((a, b) => (a.project.number > b.project.number) ? 1 : -1);
+                        serviceSort.sort((a, b) => (a.service.number > b.service.number) ? 1 : -1);
+                        hseSort.sort((a, b) => (a.hse.number > b.hse.number) ? 1 : -1);
+                        QuoteSort.sort((a, b) => (a.quote.number > b.quote.number) ? 1 : -1);
+                    });
+                    
+                    sortList = QuoteSort.concat(projectSort, serviceSort, hseSort);
+                    setSelectedList(sortList);
+                    break;
+                case (4):
+                    // Task (Alphabetically)
+                    setSelectedList(userResult.sort((a, b) => (a.title > b.title) ? 1 : -1));
+                break;
+
+                default:
+                    setSelectedList(userResult);
+            };
+        };
     };
 
     const retrieveList = () => {
@@ -367,6 +435,7 @@ function Task(props) {
                             <div style={{width: '50%' }}>
                             <TaskSortBy
                                 setSortBy={setSortBy}
+                                sortList={sortList}
                             />
                             </div>
                             <div style={{width: '50%'}}>
@@ -388,7 +457,9 @@ function Task(props) {
                                 editObject={{user:user}}
                                 employee={employee}
                                 token={token}
-                                handleChangeEmployee={handleChangeEmployee}/>
+                                handleChangeEmployee={handleChangeEmployee}
+                                employees={employees}
+                                />
                         </div>
                         <div style={{marginBottom: '0.75rem'}}>
                             <TaskSelectlist
@@ -436,6 +507,7 @@ function Task(props) {
                             task={task}
                             open={open}
                             // editTask={editTask}
+                            employees={employees}
                             setOpen={setOpen}
                             editing={editing}
                             setEditing={setEditing}

@@ -16,6 +16,13 @@ import Shop from '../pages/Shop';
 
 function MainRoutes(props) {
     const { user, token, setToken, login, signup, loginErrors, darkState, handleOpenSnackbar } = props
+    const { worksegments, setWorksegments } = props;
+    const { totals, setTotals } = props;
+    const { isoWeek, setIsoWeek } = props;
+    const { PTOsegments, setPTOsegments } = props;
+    const { employees } = props;
+
+
     return (
         <div>
             <Routes>
@@ -31,6 +38,15 @@ function MainRoutes(props) {
                         token={token}
                         setToken={setToken}
                         handleOpenSnackbar={handleOpenSnackbar}
+                        
+                        worksegments={worksegments}
+                        setWorksegments={setWorksegments}
+                        PTOsegments={PTOsegments}
+                        totals={totals}
+                        setTotals={setTotals}
+                        isoWeek={isoWeek}
+                        setIsoWeek={setIsoWeek}
+
                         />
                     }/>
                 <Route 
@@ -44,6 +60,18 @@ function MainRoutes(props) {
                         user={user}
                         token={token}
                         handleOpenSnackbar={handleOpenSnackbar}
+                        darkState={darkState}
+                        worksegments={worksegments}
+                        setWorksegments={setWorksegments}
+                        PTOsegments={PTOsegments}
+                        setPTOsegments={setPTOsegments}
+                        totals={totals}
+                        setTotals={setTotals}
+                        isoWeek={isoWeek}
+                        setIsoWeek={setIsoWeek}
+
+                        employees={employees}
+
                         />
                 }/>
                 <Route 
@@ -94,6 +122,7 @@ function MainRoutes(props) {
                         user={user}
                         token={token}
                         handleOpenSnackbar={handleOpenSnackbar}
+                        employees={employees}
                         />
                 }/>
                 <Route 
@@ -108,6 +137,7 @@ function MainRoutes(props) {
                         token={token}
                         darkState={darkState}
                         handleOpenSnackbar={handleOpenSnackbar}
+                        employees={employees}
                         />
                 }/>
                 <Route 

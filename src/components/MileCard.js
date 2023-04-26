@@ -166,7 +166,7 @@ export default function MileCard(props) {
                                         size='small'
                                         onClick={() => {approveMile(expense.id)}}
                                         >Pay</Button> : 
-                                    `${expense.is_approved ? 'Paid' : 'Pay'}`
+                                    `${expense.is_approved ? 'Paid' : user.is_staff? 'Pay' : 'Pending'}`
                                     }
                             />
                         </ListItemAvatar>

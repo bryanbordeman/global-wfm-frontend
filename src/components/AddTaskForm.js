@@ -24,6 +24,7 @@ import Transition from './DialogTransistion'
 export default function AddTaskForm(props) {
     const { user, token } = props;
     const { handleOpenSnackbar } = props;
+    const { employees } = props;
     const { open, setOpen } = props;
     const { editing, task, setEditing } = props;
     const { createTask } = props;
@@ -388,6 +389,7 @@ export default function AddTaskForm(props) {
                             handleChangeList={handleChangeList}
                         />
                         <AssigneePicker
+                            employees={employees}
                             editing={editing}
                             task={task}
                             errors={errors}

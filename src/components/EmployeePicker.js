@@ -5,36 +5,34 @@ import UserService from '../services/User.services'
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function EmployeePicker(props) {
-    const { handleChangeEmployee, errors} = props
+    const { handleChangeEmployee, errors, user} = props
     const { editing, editObject } = props
+    const { employees } = props;
     const [ value, setValue ] = React.useState(null)
-    const [ employees, setEmployees ] = React.useState([{}])
+    // const [ employees, setEmployees ] = React.useState([{}]);
+
     const [ inputValue, setInputValue ] = React.useState('');
     const [ isLoading, setIsLoading ] = React.useState(false);
 
     React.useEffect(() => {
-        retrieveEmployees()
+        //! doesnt work with task on initial load
+        //! errors when reload
+        // if(employees.length > 0 && user){
+        //     let newValue = employees.find((e) => e.id === user.id)
+        //     handleInputValue(newValue);
+        //     handleChangeEmployee(newValue);
+        // }
+        if(editing){
+            handleInputValue(editObject.user)
+        }
     },[]);
+    // React.useEffect(()=>{
+    //     if(editing){
+    //         handleInputValue(editObject.user);
+    //         handleChangeEmployee(editObject.user);
+    //     };
+    // },[]);
 
-
-    const retrieveEmployees = () => {
-        setIsLoading(true);
-        UserService.getUsers(props.token)
-        .then(response => {
-            setEmployees(response.data);
-            if(editing){
-                handleInputValue(editObject.user);
-                handleChangeEmployee(editObject.user);
-            };
-        })
-        .catch( e => {
-            console.log(e);
-            setIsLoading(false);
-        })
-        .finally(() => {
-            setIsLoading(false);
-        });
-    }
     const handleInputValue = (newValue) => {
         setValue(newValue);
         handleChangeEmployee(newValue)
