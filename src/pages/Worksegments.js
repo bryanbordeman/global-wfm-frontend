@@ -141,6 +141,7 @@ export default function WorksegmentList(props) {
                 newTotals.regular = "40.00"
             }
         }
+        //* PTO segments
         if(type === 2){
             newTotals.regular = userTotalsList? userTotalsList.regular : '0.00'
             newTotals.travel = userTotalsList? userTotalsList.travel : '0.00'
@@ -180,8 +181,10 @@ export default function WorksegmentList(props) {
                                     Number(newTotals.vacation)).toFixed(2));
         //* set new totals 
         if(userTotalsList){
+            // console.log(newTotals)
             setTotals(replaceAt(totals, currentIndex, newTotals));
         }else{
+            console.log(newTotals)
             setTotals(oldArray => [newTotals, ...oldArray]);
         };
     };
@@ -361,7 +364,7 @@ export default function WorksegmentList(props) {
         .then(response => {
             // update segment card
             let data = response.data
-            data.user = employee // clean data. need user object not pk
+            data.user = isAdmin ? employee : user; // clean data. need user object not pk
             let id = data.id
             let currentIndex =  PTOsegments.indexOf(PTOsegments.find((q) => q.id === id));
             let updatedPTOsegments = replaceAt(PTOsegments,currentIndex, data ) // replace segment with updated segment

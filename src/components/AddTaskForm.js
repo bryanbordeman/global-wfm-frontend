@@ -291,7 +291,6 @@ export default function AddTaskForm(props) {
             data.tasklist = values.tasklist.id === undefined? values.tasklist : values.tasklist.id
             data.subtasks = values.subtasks.map(subT => (subT.id))
             data.updated= moment.tz(data.updated, "America/New_York")._d.toISOString()
-            console.log(moment.tz(data.updated, "America/New_York")._d.toISOString())
             updateTask(task.id, data);
             setValues(initialFormValues);
         }else{
@@ -350,7 +349,7 @@ export default function AddTaskForm(props) {
                 />  
     };
 
-    const assignee = typeof values.assignee == 'number'? values.assignee : values.assignee.id
+    const assignee = values.assignee ? typeof values.assignee == 'number'? values.assignee : values.assignee.id : ''
 
     return (
         <div>

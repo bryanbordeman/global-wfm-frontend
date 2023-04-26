@@ -166,24 +166,25 @@ export default function App() {
 
     React.useEffect(() => {
         // load segments and employee lists
-        if (didMount.current && user !== '') {
+        // if (didMount.current && user !== '') {
             retrieveEmployees();
-        } else {
-            didMount.current = true;
-        }
+        // } else {
+        //     didMount.current = true;
+        // }
     },[]);
 
     React.useEffect(() => {
         // load segments and employee lists
-        if (didMount.current && user !== '') {
+        if (user !== '') {
             // setTimeout(() => {
                 recieveTotals();
             // }, 3000);
             
             
-        } else {
-            didMount.current = true;
-        }
+        } 
+        // else {
+        //     didMount.current = true;
+        // }
     },[isoWeek]);
 
     // React.useEffect(() => {

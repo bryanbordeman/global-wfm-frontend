@@ -20,12 +20,12 @@ export default function ProjectPicker(props) {
     // },[]);
 
     React.useEffect(() => {
-        if (didMount.current) {
+        // if (didMount.current) {
             handleClear();
             retrieveProject();
-        } else {
-            didMount.current = true;
-        }
+        // } else {
+        //     didMount.current = true;
+        // }
     },[]);
 
     // React.useEffect(() => {

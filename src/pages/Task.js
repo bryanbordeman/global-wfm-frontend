@@ -40,10 +40,11 @@ function Task(props) {
     React.useEffect(() => {
             setSelectedList([]) // not a great solution to clear list after employee change
             retrieveTaskList();
-            retrieveTasks();
+            // retrieveTasks();
             setCurrentList('');
             setSelectedCompleteList([]);
     },[employee])
+    
 
     React.useEffect(() => {
         sortList();

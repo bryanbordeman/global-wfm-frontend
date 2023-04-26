@@ -23,6 +23,9 @@ export default function AssigneePicker(props) {
             let newValue = employees.find((e) => e.id === user.id)
             handleInputValue(newValue)
         }
+        if(editing){
+            handleInputValue(task.assignee);
+        };
     },[]);
 
 
