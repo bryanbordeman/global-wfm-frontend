@@ -40,23 +40,21 @@ function Task(props) {
     React.useEffect(() => {
             setSelectedList([]) // not a great solution to clear list after employee change
             retrieveTaskList();
-            // retrieveTasks();
             setCurrentList('');
             setSelectedCompleteList([]);
-    },[employee])
+    },[employee]);
     
 
     React.useEffect(() => {
         sortList();
-    },[sortBy])
+    },[sortBy]);
 
     React.useEffect(() => {
         //! look into this effect not effective.
         if(currentList) {
             retrieveList();
-        } 
-        // retrieveCompletedTasks();
-    },[currentList, tasks, open])
+        };
+    },[currentList, tasks, open]);
 
     //! ^^^ fix effect above to make sortList Function that doesnt require API call
     

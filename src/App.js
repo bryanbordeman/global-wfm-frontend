@@ -202,19 +202,17 @@ export default function App() {
             .then(response => {
                 setTotals(response.data);
                 retrieveWorksegments();
-            
-                
             })
             .catch(e => {
                 console.log(e);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
-            .finally(() => {
-                // setTimeout(() => {
-                //     setIsLoading(false);
-                // }, 3000);
-                setIsLoading(false);
-            });
+            // .finally(() => {
+            //     // setTimeout(() => {
+            //     //     setIsLoading(false);
+            //     // }, 3000);
+            //     setIsLoading(false);
+            // });
     };
 
     const retrieveWorksegments = () => {
@@ -241,9 +239,9 @@ export default function App() {
                         handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
                         }
                 })
-                .finally(() => {
-                    setIsLoading(false);
-                })
+                // .finally(() => {
+                //     setIsLoading(false);
+                // })
         }else{
             // else get only segemnts for current user
             setIsLoading(true);
@@ -265,15 +263,15 @@ export default function App() {
                         handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
                         }
                 })
-                .finally(() => {
-                    setIsLoading(false);
-                })
+                // .finally(() => {
+                //     setIsLoading(false);
+                // })
         }
     };
 
     const retrievePTOs = () => {
         // get PTO segments from API
-        setIsLoading(true);
+        // setIsLoading(true);
         user.is_staff? 
         PTOServices.adminGetWeek(token, isoWeek)
             .then(response => {

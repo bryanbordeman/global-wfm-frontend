@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import WorksegmentDataService from '../services/Worksegment.services';
 import PTOServices from '../services/PTO.services';
 import { Container, Typography, Button, Card, CardContent, Chip } from '@mui/material';
@@ -19,6 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import AddWorksegmentForm from '../components/AddWorksegmentForm'
 import DeleteWorksegmentModal from '../components/DeleteWorksegmentModal';
+import DeletePTOsegmentModal from '../components/DeletePTOsegmentModal';
 import AddPTOForm from '../components/AddPTOForm';
 
 import EmployeePicker from '../components/EmployeePicker';
@@ -39,6 +40,7 @@ export default function WorksegmentList(props) {
 
     const [ openAdd, setOpenAdd ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
+    const [ openDeletePTO, setOpenDeletePTO ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
     const [ editSegment, setEditSegment ] = React.useState({});
     const [ employee, setEmployee ] = React.useState({});
@@ -127,8 +129,6 @@ export default function WorksegmentList(props) {
                 let updatedWorksegments = replaceAt(segments,currentIndex, segment); // replace segment with updated segment 
                 segments = updatedWorksegments
             }
-            
-
             //* update new totals
             segments.map((s) => {
                 newTotals.regular = String((Number(newTotals.regular) + Number(s.duration)).toFixed(2))
@@ -172,7 +172,6 @@ export default function WorksegmentList(props) {
                 }
             })
         }
-
         //* add all totals
         newTotals.total_duration = String((Number(newTotals.regular) +
                                     Number(newTotals.travel) +
@@ -223,7 +222,7 @@ export default function WorksegmentList(props) {
         .catch(e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        })
+        });
     };
 
     const deleteWorksegment = (segmentId) => {
@@ -286,6 +285,11 @@ export default function WorksegmentList(props) {
         setEditSegment(segment)
     };
 
+    const handleClickOpenDeletePTO = (segment) => {
+        setOpenDeletePTO(true)
+        setEditSegment(segment)
+    };
+
     const handleClickOpenEdit = (segment) => {
         setEditing(true);
         handleClickOpen();
@@ -297,7 +301,6 @@ export default function WorksegmentList(props) {
         handleClickOpenPTO();
         setSegmentPTO(segment);
     };
-
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -442,7 +445,7 @@ export default function WorksegmentList(props) {
                                             color="error"
                                             aria-label="delete"
                                             onClick={ () => {
-                                                deletePTO(segment)}}
+                                                handleClickOpenDeletePTO(segment)}}
                                             >
                                             <DeleteIcon />
                                         </IconButton>
@@ -858,8 +861,13 @@ export default function WorksegmentList(props) {
                 setOpenDelete={setOpenDelete}
                 segment={editSegment}
                 deleteWorksegment={deleteWorksegment}
-                // retrieveWorksegments={retrieveWorksegments}
-                />
+            />
+            <DeletePTOsegmentModal
+                openDelete={openDeletePTO}
+                setOpenDelete={setOpenDeletePTO}
+                segment={editSegment}
+                deletePTO={deletePTO}
+            />
             
         </Container>
         <Loading
