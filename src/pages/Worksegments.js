@@ -535,7 +535,7 @@ export default function WorksegmentList(props) {
                     my: 1,
                     width: '100%',
                     maxWidth: '500px',
-                    borderColor: `${segment.project && segment.project.prevailing_rate === true? pink[500] : 'primary.main'}`,
+                    borderColor: segment.project ?`${segment.project && segment.project.prevailing_rate === true? pink[500] : 'primary.main'}` : 'primary.main',
                     borderWidth: darkState? '1.5px' :'3px',
                     // borderColor: 'primary.main',
                     borderRadius: '16px',
@@ -557,12 +557,13 @@ export default function WorksegmentList(props) {
                                 zIndex: 1
                                 }}
                         >
-                        {segment.project.prevailing_rate === true? 
+                        {segment.project ? segment.project.prevailing_rate === true? 
                             <Typography color={pink[500]} sx={{ml: 1}} variant="h6" gutterBottom>
                                 PR
                             </Typography>
                         :
                         ''
+                        :''
                         }
                         </div>
                     </div>

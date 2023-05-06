@@ -162,38 +162,42 @@ export default function App() {
         setOpenSnackbar(false);
     };
 
+    async function isActive(){
+        // check if user is active
+        setIsLoading(true);
+        UserService.isActive({'username': user.username})
+        .then(response => {
+            if(response.data){
+                let active = response.data.user_is_active
+                if(active === 'True'){
+                    recieveTotals();
+                    retrieveEmployees();
+                }else{
+                    // if user is not active anymore logout.
+                    setToken('')
+                    localStorage.setItem('token', '')
+                    localStorage.setItem('user', '');
+                    handleOpenSnackbar('error', 'Unauthorized User')
+                    window.location.reload();
+                }
+            }
+            
+        })
+        .catch( e => {
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+
     // -------- worksegments --------- //
 
     React.useEffect(() => {
-        // load segments and employee lists
-        // if (didMount.current && user !== '') {
-            retrieveEmployees();
-        // } else {
-        //     didMount.current = true;
-        // }
-    },[]);
-
-    React.useEffect(() => {
-        // load segments and employee lists
         if (user !== '') {
-            // setTimeout(() => {
-                recieveTotals();
-            // }, 3000);
-            
-            
-        } 
-        // else {
-        //     didMount.current = true;
-        // }
+            isActive();
+        }
     },[isoWeek]);
-
-    // React.useEffect(() => {
-    //     if (didMount.current && user !== '') {
-    //         recieveTotals();
-    //     } else {
-    //         didMount.current = true;
-    //     }
-    // },[worksegments]);
 
     const recieveTotals = () => {
         // get total hours for all users in isoweek.
@@ -207,12 +211,6 @@ export default function App() {
                 console.log(e);
                 handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
             })
-            // .finally(() => {
-            //     // setTimeout(() => {
-            //     //     setIsLoading(false);
-            //     // }, 3000);
-            //     setIsLoading(false);
-            // });
     };
 
     const retrieveWorksegments = () => {
@@ -220,58 +218,32 @@ export default function App() {
         const isAdmin = user.is_staff ? true : false;
         if(isAdmin){
             // if admin get all users segments for the week.
-            setIsLoading(true);
             WorksegmentDataService.adminGetWeek(token, isoWeek)
                 .then(response => {
                     setWorksegments(response.data);
                     retrievePTOs();
                 })
                 .catch( e => {
-                    if(e.request.statusText === 'Unauthorized'){
-                        // if user is not active anymore logout.
-                        setToken('')
-                        localStorage.setItem('token', '')
-                        localStorage.setItem('user', '');
-                        handleOpenSnackbar('error', 'Unauthorized User')
-                        window.location.reload();
-                    }else{
-                        console.log(e);
-                        handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-                        }
+                    console.log(e);
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
                 })
-                // .finally(() => {
-                //     setIsLoading(false);
-                // })
         }else{
             // else get only segemnts for current user
-            setIsLoading(true);
+            // setIsLoading(true);
             WorksegmentDataService.getWeek(token, isoWeek)
                 .then(response => {
                     setWorksegments(response.data);
                     retrievePTOs();
                 })
                 .catch( e => {
-                    if(e.request.statusText === 'Unauthorized'){
-                        // if user is not active anymore logout.
-                        setToken('')
-                        localStorage.setItem('token', '')
-                        localStorage.setItem('user', '');
-                        handleOpenSnackbar('error', 'Unauthorized User')
-                        window.location.reload();
-                    }else{
-                        console.log(e);
-                        handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-                        }
+                    console.log(e);
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
                 })
-                // .finally(() => {
-                //     setIsLoading(false);
-                // })
         }
     };
 
     const retrievePTOs = () => {
         // get PTO segments from API
-        // setIsLoading(true);
         user.is_staff? 
         PTOServices.adminGetWeek(token, isoWeek)
             .then(response => {

@@ -13,6 +13,9 @@ class UserService {
     signup(data){
         return axios.post(`${SERVER}/api/signup/`, data);
     };
+    isActive(data){
+        return axios.post(`${SERVER}/api/is_active/`, data);
+    };
 }
 
 export default new UserService();
