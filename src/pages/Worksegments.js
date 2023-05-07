@@ -103,8 +103,8 @@ export default function WorksegmentList(props) {
             'sick': '0.00',
             'total_duration': '0.00',
             'travel': '0.00',
-            'user_id': userTotalsList? userTotalsList.user_id : employee.length > 0 ? String(employee.id) : String(user.id),
-            'user_name': userTotalsList? userTotalsList.user_name : employee.length > 0 ? `${employee.first_name} ${employee.last_name}` :`${user.first_name} ${user.last_name}`,
+            'user_id': userTotalsList? userTotalsList.user_id : isAdmin && employee? String(employee.id) : String(user.id),
+            'user_name': userTotalsList? userTotalsList.user_name : isAdmin && employee? `${employee.first_name} ${employee.last_name}` :`${user.first_name} ${user.last_name}`,
             'vacation': '0.00',
         }
         //* worksegments

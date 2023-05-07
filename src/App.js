@@ -42,24 +42,6 @@ export default function App() {
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
     const didMount = React.useRef(false);
 
-    // const theme = createTheme({
-    //     palette: {
-    //         background: 
-    //             {
-    //                 default: darkState? 'black' : "#f8f8ff"
-    //             },
-    //         mode: palletType,
-    //         primary: {
-    //             main: '#1C88B0',
-    //         },
-    //         secondary: {
-    //             main: '#D1DF45',
-    //         },
-    //         darkBlue: {
-    //             main: '#11495F',
-    //         },
-    //         },
-    // });
     const theme = createTheme({
         palette: {
             background: 
@@ -116,6 +98,7 @@ export default function App() {
             setError('');
             //TODO hack to get dashboard tab highlighted as active page. Need to figure out better solution.
             loadWindow()
+            
         })
         .catch( e => {
             handleOpenSnackbar('error', 'Unauthorized User')
@@ -165,6 +148,7 @@ export default function App() {
     async function isActive(){
         // check if user is active
         setIsLoading(true);
+        // if(user)
         UserService.isActive({'username': user.username})
         .then(response => {
             if(response.data){
@@ -184,20 +168,25 @@ export default function App() {
             
         })
         .catch( e => {
-        })
+            // console.log(e);
+            // handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+    })
         .finally(() => {
             setIsLoading(false);
         });
     };
 
-
     // -------- worksegments --------- //
 
     React.useEffect(() => {
-        if (user !== '') {
+        if (typeof user === 'object' &&
+        !Array.isArray(user) &&
+        user !== null) {
             isActive();
+        }else{
+            setIsLoading(false)
         }
-    },[isoWeek]);
+    },[isoWeek, user]);
 
     const recieveTotals = () => {
         // get total hours for all users in isoweek.
