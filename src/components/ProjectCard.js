@@ -1,10 +1,11 @@
 import * as React from 'react';
 import ContactServices from '../services/Contact.services';
+import UploaderServices from '../services/Uploader.services';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Divider, Stack } from '@mui/material';
+import { Button, Divider, Stack } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { styled } from '@mui/material/styles';
@@ -16,6 +17,14 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import IconButton from '@mui/material/IconButton';
 import ContactModal from './ContactModal';
 import Loading from '../components/Loading';
+import ArchitectureIcon from '@mui/icons-material/Architecture';
+import Box from '@mui/material/Box';
+import DrawingDialog from './DrawingDialog';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -57,10 +66,13 @@ export default function ProjectCard(props) {
     const { token } = props;
     const { project, menuSelection } = props;
     const [ openContactModal, setOpenContactModel ] = React.useState(false);
+    const [ drawing, setDrawing ] = React.useState([]);
+    const [ drawings, setDrawings ] = React.useState([]);
     const [ contacts, setContacts ] = React.useState([]);
     const [ contact, setContact ] = React.useState('');
     const [ expanded, setExpanded ] = React.useState('panel1');
     const [ isLoading, setIsLoading ] = React.useState(false);
+    const [ openDrawingDialog, setOpenDrawingDialog ] = React.useState(false);
 
     const handleChange = (panel) => (event, newExpanded) => {
         if(contacts.length > 0) 
@@ -70,8 +82,23 @@ export default function ProjectCard(props) {
     React.useEffect(() => {
         if(project.id){
             recieveContacts(project.id);
+            recieveDrawings(project.id);
         };
     },[project]);
+
+    const recieveDrawings = (id) => {
+        setIsLoading(true);
+        UploaderServices.getProjectDrawings(id, token)
+            .then(response => {
+                setDrawings(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }
 
     const recieveContacts = (id) => {
         switch(menuSelection) {
@@ -124,6 +151,10 @@ export default function ProjectCard(props) {
         setOpenContactModel(!openContactModal);
     };
 
+    const handleOpenDrawing = (d) => {
+        setDrawing(d)
+        setOpenDrawingDialog(true);
+    }
     return (
         <>
             {project.number ? 
@@ -140,7 +171,7 @@ export default function ProjectCard(props) {
                 }}
                 variant="outlined"
             >
-                <CardContent>
+                <CardContent sx={{pb:0}}>
                     <Typography variant="h5" component="div">
                         {project.number}
                     </Typography>
@@ -292,11 +323,49 @@ export default function ProjectCard(props) {
                                 </Typography>
                             </div>
                             : ''}
+                            <div>
+                            <Divider sx={{mt:2}}/>
+                            {drawings.length > 0? 
+                                    <Box textAlign='center'>
+                                        <List sx={{mt:0, pt:0}}>
+                                            {drawings.map((d) => (
+                                                <div>
+                                                    <ListItem disablePadding>
+                                                        <ListItemButton onClick={() => handleOpenDrawing(d)}>
+                                                        <ListItemIcon>
+                                                            <ArchitectureIcon color='secondary'/>
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={d.title} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                    <Divider />
+                                                </div>
+                                            
+                                            ))}
+                                            {/* <Divider /> */}
+                                        </List>
+                                        {/* <Button 
+                                            sx={{width: '100%'}}
+                                            size='large'
+                                            color='secondary'
+                                            startIcon={<ArchitectureIcon/>} 
+                                            variant='outlined' 
+                                            onClick={() => handleOpenDrawing(d)}
+                                            >Drawings
+                                        </Button> */}
+                                    </Box>
+                            : <div></div>}
+                            </div>
                     </CardContent>
                     <CardActions>
                 </CardActions>
             </Card>
             : ''}
+            <DrawingDialog
+                drawing={drawing}
+                openDrawingDialog={openDrawingDialog}
+                setOpenDrawingDialog={setOpenDrawingDialog} 
+            />
             <Loading
                 open={isLoading}
             />

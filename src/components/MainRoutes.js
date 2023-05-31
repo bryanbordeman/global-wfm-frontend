@@ -13,6 +13,8 @@ import Profile from '../pages/Profile'
 import Task from '../pages/Task'
 import Field from '../pages/Field';
 import Shop from '../pages/Shop';
+import Asset from '../pages/Asset';
+
 
 function MainRoutes(props) {
     const { user, token, setToken, login, signup, loginErrors, darkState, handleOpenSnackbar } = props
@@ -21,6 +23,7 @@ function MainRoutes(props) {
     const { isoWeek, setIsoWeek } = props;
     const { PTOsegments, setPTOsegments } = props;
     const { employees } = props;
+    const { handleChangeMode } = props;
 
 
     return (
@@ -201,6 +204,18 @@ function MainRoutes(props) {
                         <Signup 
                             signup={signup} 
                             darkState={darkState}
+                        />
+                    }/>
+                <Route 
+                    exact 
+                    path='/asset/:id' 
+                    element={
+                        <Asset
+                            user={user}
+                            token={token}
+                            darkState={darkState}
+                            handleOpenSnackbar={handleOpenSnackbar}
+                            handleChangeMode={handleChangeMode}
                         />
                     }/>
 

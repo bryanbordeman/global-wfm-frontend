@@ -15,6 +15,7 @@ import WorksegmentDataService from './services/Worksegment.services';
 import PTOServices from './services/PTO.services';
 import moment from 'moment';
 
+import { purple, pink} from '@mui/material/colors';
 
 // export const UserContext = React.createContext();
 
@@ -54,7 +55,7 @@ export default function App() {
                     main: '#1C88B0',
                 },
                 secondary: {
-                    main: '#D1DF45',
+                    main: purple[500],
                 },
                 darkBlue: {
                     main: '#11495F',
@@ -300,7 +301,7 @@ export default function App() {
                     loginErrors={loginErrors}
                     darkState={darkState}
                     handleOpenSnackbar={handleOpenSnackbar}
-                    
+                    handleChangeMode={handleChangeMode}
                     worksegments={worksegments}
                     setWorksegments={setWorksegments}
                     totals={totals}
