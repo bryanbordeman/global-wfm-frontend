@@ -80,6 +80,7 @@ export default function ProjectCard(props) {
     };
 
     React.useEffect(() => {
+        setIsLoading(true);
         if(project.id){
             recieveContacts(project.id);
             recieveDrawings(project.id);
@@ -87,7 +88,7 @@ export default function ProjectCard(props) {
     },[project]);
 
     const recieveDrawings = (id) => {
-        setIsLoading(true);
+        // setIsLoading(true);
         UploaderServices.getProjectDrawings(id, token)
             .then(response => {
                 setDrawings(response.data);
@@ -104,7 +105,7 @@ export default function ProjectCard(props) {
         switch(menuSelection) {
             case 1:
                 // console.log('Services')
-                setIsLoading(true);
+                // setIsLoading(true);
                 ContactServices.getContactService(id, token)
                     .then(response => {
                         setContacts(response.data);
@@ -118,7 +119,7 @@ export default function ProjectCard(props) {
             break;
             case 2:
                 // console.log("HSE's")
-                setIsLoading(true);
+                // setIsLoading(true);
                 ContactServices.getContactHSE(id, token)
                     .then(response => {
                         setContacts(response.data);
@@ -132,7 +133,7 @@ export default function ProjectCard(props) {
             break;
             default:
                 // console.log('Projects')
-                setIsLoading(true);
+                // setIsLoading(true);
                 ContactServices.getContactProject(id, token)
                     .then(response => {
                         setContacts(response.data);

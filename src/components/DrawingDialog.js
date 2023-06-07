@@ -33,7 +33,17 @@ export default function DrawingDialog(props) {
                 >
                 <Divider/>
                 <DialogContent sx={{m:0, p:0}}>
-                    <iframe src={pdfData} width="100%" height="100%"/>
+                    <div style={{overflow: "auto!important",
+                                "-webkit-overflow-scrolling": "touch!important",
+                                width: '100%',
+                                height: '100%'
+                                }}>
+                        <iframe 
+                            src={`https://docs.google.com/gview?url=${pdfData}&embedded=true`}
+                            width="100%" 
+                            height="100%" 
+                        />
+                    </div>
                 </DialogContent>
                     <DialogActions>
                         <Button variant="contained" onClick={handleClose}>Close</Button>
