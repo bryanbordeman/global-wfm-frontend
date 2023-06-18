@@ -6,21 +6,21 @@ export default function Shop(props) {
     const { user, token, handleOpenSnackbar, darkState} = props
     return ( 
         <div style={{paddingTop: '1rem'}}> 
-            <Container
+            {/* <Container
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexDirection:'column',
-                        height: '100%'
-                    }}>
+                        height: '100%',
+                    }}> */}
                         <ShopTabs
                             user={user}
                             token={token}
                             darkState={darkState}
                             handleOpenSnackbar={handleOpenSnackbar}                  
                         />
-            </Container>
+            {/* </Container> */}
         </div>
     );
 };

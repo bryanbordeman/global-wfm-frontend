@@ -10,6 +10,8 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment';
 import Transition from './DialogTransistion'
+import DocIframe from './DocIframe';
+
 
 export default function DrawingDialog(props) {
     const { openDrawingDialog, setOpenDrawingDialog } = props;
@@ -33,17 +35,9 @@ export default function DrawingDialog(props) {
                 >
                 <Divider/>
                 <DialogContent sx={{m:0, p:0}}>
-                    <div style={{overflow: "auto!important",
-                                "-webkit-overflow-scrolling": "touch!important",
-                                width: '100%',
-                                height: '100%'
-                                }}>
-                        <iframe 
-                            src={`https://docs.google.com/gview?url=${pdfData}&embedded=true`}
-                            width="100%" 
-                            height="100%" 
-                        />
-                    </div>
+                    <DocIframe
+                        source={pdfData}
+                    />    
                 </DialogContent>
                     <DialogActions>
                         <Button variant="contained" onClick={handleClose}>Close</Button>

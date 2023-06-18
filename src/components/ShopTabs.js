@@ -5,8 +5,10 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Material from '../pages/Material';
 import Tools from '../pages/Tools';
+import Doors from '../pages/Doors';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import LayersIcon from '@mui/icons-material/Layers';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -54,16 +56,25 @@ export default function FieldTabs(props) {
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab icon={<LayersIcon />}  label="Materials" {...a11yProps(0)} />
-                    <Tab icon={<HandymanIcon />}  label="Tools" {...a11yProps(1)} />
+                <Tab icon={<MeetingRoomIcon />}  label="Doors" {...a11yProps(0)} />
+                    <Tab icon={<LayersIcon />}  label="Materials" {...a11yProps(1)} />
+                    <Tab icon={<HandymanIcon />}  label="Tools" {...a11yProps(2)} />
+                    
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <Material/>
+                <Doors
+                    darkState={darkState}
+                    user={user}
+                />
             </TabPanel>
             <TabPanel value={value} index={1}>
+                <Material/>
+            </TabPanel>
+            <TabPanel value={value} index={2}>
                 <Tools/>
             </TabPanel>
+            
         </Box>
     );
 };

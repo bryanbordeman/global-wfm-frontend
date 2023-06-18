@@ -80,11 +80,13 @@ export default function ProjectCard(props) {
     };
 
     React.useEffect(() => {
-        setIsLoading(true);
-        if(project.id){
-            recieveContacts(project.id);
-            recieveDrawings(project.id);
-        };
+        if(menuSelection !== 3){
+            setIsLoading(true);
+            if(project.id){
+                recieveContacts(project.id);
+                recieveDrawings(project.id);
+            };
+        }
     },[project]);
 
     const recieveDrawings = (id) => {
