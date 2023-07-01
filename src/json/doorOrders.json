@@ -34,7 +34,7 @@
                     }
                 }
             ],
-            "due_date": "2023-06-31",
+            "due_date": "2023-06-19",
             "issue_date": "2023-06-14",
             "created_by": {
                 "first_name": "Bryan",
@@ -140,7 +140,202 @@
             "completed": null,
             "updated": "06/14/23",
             "qrcode": null,
-            "drawing": null
+            "drawing": [
+                {
+                    "id": 11,
+                    "is_active": true,
+                    "rev": null,
+                    "title": "15823 Submittal",
+                    "title_suffix": "",
+                    "document": "https://globalshielding.s3.amazonaws.com/15823_LMCO_Orlando_Waveguides_IND-CMP_As_Submitted_060523.pdf",
+                    "created_at": "2023-06-05T16:10:42.843412-04:00",
+                    "updated_at": "2023-06-05T16:10:42.843434-04:00",
+                    "drawing_type": {
+                        "id": 1,
+                        "description": "Submittal"
+                    }
+                },
+                    {
+                        "id": 19,
+                        "is_active": true,
+                        "rev": "A",
+                        "title": "11523 Submittal Rev A",
+                        "title_suffix": "",
+                        "document": "https://globalshielding.s3.amazonaws.com/11523_Nelco_Brookhaven_Doors_Architectural_Drawings_Rev_A_As_Submitted_042123.pdf",
+                        "created_at": "2023-06-07T05:48:15.518873-04:00",
+                        "updated_at": "2023-06-07T05:48:15.518914-04:00",
+                        "drawing_type": {
+                            "id": 1,
+                            "description": "Submittal"
+                        }
+                    }
+            ]
+        },
+        {
+            "id": "2",
+            "project": {
+                "number": "16223",
+                "name": "Nelco PO 947755 UC Irvine"
+            },
+            "rev": [],
+            "due_date": "2023-05-31",
+            "issue_date": "2023-06-14",
+            "created_by": {
+                "first_name": "Bryan",
+                "last_name": "Bordeman"
+            },
+            "checked_by": {
+                "first_name": "Mark",
+                "last_name": "Holder"
+            },
+            "hand": "RHA",
+            "swing": "out",
+            "door_type": {
+                "description": "MRI Double"
+            },
+            "is_double_door": true,
+            "inactive_width": "48",
+            "width": "48",
+            "height": "84",
+            "veneer": "oak",
+            "lockset": {
+                "description": "Cam & Rack W/Deadbolt"
+            },
+            "door_switch": true,
+            "sill_type": {
+                "description": "Generic MRI"
+            },
+            "frame_type": {
+                "description": "Generic MRI"
+            },
+            "core_type": {
+                "description": "Generic MRI"
+            },
+            "hinge_type": {
+                "description": "Generic MRI Continuous Hinge"
+            },
+            "options": [],
+            "packaging": {
+                "description": "Crate"
+            },
+            "notes": null,
+            "is_complete": false,
+            "completed": null,
+            "updated": "06/14/23",
+            "qrcode": null,
+            "drawing": [
+                {
+                    "id": 11,
+                    "is_active": true,
+                    "rev": null,
+                    "title": "15823 Submittal",
+                    "title_suffix": "",
+                    "document": "https://globalshielding.s3.amazonaws.com/15823_LMCO_Orlando_Waveguides_IND-CMP_As_Submitted_060523.pdf",
+                    "created_at": "2023-06-05T16:10:42.843412-04:00",
+                    "updated_at": "2023-06-05T16:10:42.843434-04:00",
+                    "drawing_type": {
+                        "id": 1,
+                        "description": "Submittal"
+                    }
+                },
+                    {
+                        "id": 19,
+                        "is_active": true,
+                        "rev": "A",
+                        "title": "11523 Submittal Rev A",
+                        "title_suffix": "",
+                        "document": "https://globalshielding.s3.amazonaws.com/11523_Nelco_Brookhaven_Doors_Architectural_Drawings_Rev_A_As_Submitted_042123.pdf",
+                        "created_at": "2023-06-07T05:48:15.518873-04:00",
+                        "updated_at": "2023-06-07T05:48:15.518914-04:00",
+                        "drawing_type": {
+                            "id": 1,
+                            "description": "Submittal"
+                        }
+                    }
+            ]
+        },
+        {
+            "id": "2",
+            "project": {
+                "number": "16223",
+                "name": "Nelco PO 947755 UC Irvine"
+            },
+            "rev": [],
+            "due_date": "2023-06-20",
+            "issue_date": "2023-06-14",
+            "created_by": {
+                "first_name": "Bryan",
+                "last_name": "Bordeman"
+            },
+            "checked_by": {
+                "first_name": "Mark",
+                "last_name": "Holder"
+            },
+            "hand": "RHA",
+            "swing": "out",
+            "door_type": {
+                "description": "MRI Double"
+            },
+            "is_double_door": true,
+            "inactive_width": "48",
+            "width": "48",
+            "height": "84",
+            "veneer": "oak",
+            "lockset": {
+                "description": "Cam & Rack W/Deadbolt"
+            },
+            "door_switch": true,
+            "sill_type": {
+                "description": "Generic MRI"
+            },
+            "frame_type": {
+                "description": "Generic MRI"
+            },
+            "core_type": {
+                "description": "Generic MRI"
+            },
+            "hinge_type": {
+                "description": "Generic MRI Continuous Hinge"
+            },
+            "options": [],
+            "packaging": {
+                "description": "Crate"
+            },
+            "notes": null,
+            "is_complete": false,
+            "completed": null,
+            "updated": "06/14/23",
+            "qrcode": null,
+            "drawing": [
+                {
+                    "id": 11,
+                    "is_active": true,
+                    "rev": null,
+                    "title": "15823 Submittal",
+                    "title_suffix": "",
+                    "document": "https://globalshielding.s3.amazonaws.com/15823_LMCO_Orlando_Waveguides_IND-CMP_As_Submitted_060523.pdf",
+                    "created_at": "2023-06-05T16:10:42.843412-04:00",
+                    "updated_at": "2023-06-05T16:10:42.843434-04:00",
+                    "drawing_type": {
+                        "id": 1,
+                        "description": "Submittal"
+                    }
+                },
+                    {
+                        "id": 19,
+                        "is_active": true,
+                        "rev": "A",
+                        "title": "11523 Submittal Rev A",
+                        "title_suffix": "",
+                        "document": "https://globalshielding.s3.amazonaws.com/11523_Nelco_Brookhaven_Doors_Architectural_Drawings_Rev_A_As_Submitted_042123.pdf",
+                        "created_at": "2023-06-07T05:48:15.518873-04:00",
+                        "updated_at": "2023-06-07T05:48:15.518914-04:00",
+                        "drawing_type": {
+                            "id": 1,
+                            "description": "Submittal"
+                        }
+                    }
+            ]
         }
     ]
 }

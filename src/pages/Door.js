@@ -23,7 +23,7 @@ import qrcode from '../assets/ShieldingSystemsQRCode.png'
 const pathname = window.location.pathname
 
 
-const Asset = (props) => {
+export default function Door(props) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const { user, handleChangeMode, darkState } = props
@@ -56,6 +56,7 @@ const Asset = (props) => {
 
     return (
         <div>
+        {user.id? '' : 
         <AppBar 
             position="fixed" 
             color='darkBlue' 
@@ -160,6 +161,7 @@ const Asset = (props) => {
             </Toolbar>
             </Container>
         </AppBar>
+        }
         <Container
                 sx={{
                     display: 'flex',
@@ -289,4 +291,3 @@ const Asset = (props) => {
         </div>
     );
 };
-export default Asset;

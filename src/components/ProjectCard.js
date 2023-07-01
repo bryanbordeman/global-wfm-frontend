@@ -157,7 +157,8 @@ export default function ProjectCard(props) {
     const handleOpenDrawing = (d) => {
         setDrawing(d)
         setOpenDrawingDialog(true);
-    }
+    };
+    
     return (
         <>
             {project.number ? 

@@ -109,13 +109,19 @@ function DueDate(props) {
     );
 };
 
+let doorCount = 1; // Variable to store the current door count within a series
 
 export default function Doors(props) {
     const { user, token, handleOpenSnackbar, darkState} = props;
     const [ openDoorWorkOrderDialog, setOpenDoorWorkOrderDialog ] = React.useState(false);
     const [ DoorWorkOrder, setDoorWorkOrder ] = React.useState('');
     const [ doorOrderList, setDoorOrderList ] = React.useState([]);
+    const [ doorNumberList, setDoorNumberList ] = React.useState([]);
 
+    React.useEffect(() => {
+        // Reset doorCount to 1 whenever doorNumberList changes
+        doorCount = 1;
+    }, [doorNumberList]);
 
     React.useEffect(() => {
         retrieveOrders();
@@ -126,13 +132,35 @@ export default function Doors(props) {
     }
 
     const retrieveOrders = () => {
+        const tempDoorNumberList = []
         const data = response.data
         const sortedList = data.sort((a, b) => {
+            // Compare project.number first
+            const projectNumberA = a.project.number;
+            const projectNumberB = b.project.number;
+            if (projectNumberA < projectNumberB) return -1;
+            if (projectNumberA > projectNumberB) return 1;
+            // If project.number is the same, compare due_date
             const dueDateA = new Date(a.due_date);
             const dueDateB = new Date(b.due_date);
-            
-            return dueDateA - dueDateB;
+            if (dueDateA < dueDateB) return -1;
+            if (dueDateA > dueDateB) return 1;
+            return 0;
         });
+        sortedList.map((d) => {
+            let object = {"number": d.project.number, "quantity": 1, "doors" : 1 };
+            // Check if the number already exists in doorNumberList
+            const existingDoor = tempDoorNumberList.find((door) => door.number === object.number);
+            if (existingDoor) {
+              // If the number exists, increase the quantity
+            existingDoor.quantity += object.quantity;
+            existingDoor.doors += object.doors;
+            } else {
+              // If the number doesn't exist, add it to doorNumberList
+            tempDoorNumberList.push(object);
+            }
+        });
+        setDoorNumberList(tempDoorNumberList);
         setDoorOrderList(sortedList);
     };
 
@@ -158,7 +186,19 @@ export default function Doors(props) {
             <List
                 sx={{mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: "#1C88B0 !important" }}
             >
-                {doorOrderList.map ((order, key) => (
+                {doorOrderList.map ((order, key) => {
+                    const door = doorNumberList.find((n) => n.number === order.project.number);
+                    const seriesCounter = door ? door.quantity : 1;
+                    let secondaryText = `Door ${doorCount} of ${seriesCounter}`;
+                    if (key > 0 && order.project.number !== doorOrderList[key - 1].project.number) {
+                      // Reset doorCount to 1 for a new series
+                        doorCount = 1;
+                        secondaryText = `Door 1 of ${seriesCounter}`;
+                    } else if (door) {
+                      // Increment doorCount within the series
+                        doorCount += 1;
+                    }
+                    return (
                 <div key={key}>
                     <ListItem
                         disablePadding
@@ -184,7 +224,8 @@ export default function Doors(props) {
                                 }}
                                 // id={labelId} 
                                 primary={order.project.name}
-                                secondary='Door 1 of 1'
+                                //! need to figure out how to 
+                                secondary={secondaryText}
                                 />
                         </ListItemButton>
                         <Grid 
@@ -204,7 +245,7 @@ export default function Doors(props) {
                     {key < doorOrderList.length - 1 && <Divider  sx={{ borderColor: "#1C88B0 !important" }}
                     />}
                 </div>
-                ))}
+                )})}
             </List>
             <DoorWorkOrderDialog
                 openDoorWorkOrderDialog = {openDoorWorkOrderDialog}

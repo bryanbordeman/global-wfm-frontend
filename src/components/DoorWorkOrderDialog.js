@@ -1,4 +1,5 @@
 import React from 'react';
+import DrawingDialog from './DrawingDialog';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -45,7 +46,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 export default function DoorWorkOrderDialog(props) {
     const { openDoorWorkOrderDialog, setOpenDoorWorkOrderDialog } = props;
     const { order, setDoorWorkOrder, darkState } = props;
-    const [ doorIcon, setDoorIcon ] = React.useState('')
+    const [ doorIcon, setDoorIcon ] = React.useState('');
+    const [ drawing, setDrawing ] = React.useState([]);
+    const [ openDrawingDialog, setOpenDrawingDialog ] = React.useState(false);
 
     React.useEffect(() => {
         if (order){
@@ -110,7 +113,12 @@ export default function DoorWorkOrderDialog(props) {
                 setDoorIcon('');
             }
         }
-    },[order])
+    },[order]);
+
+    const handleOpenDrawing = (d) => {
+        setDrawing(d)
+        setOpenDrawingDialog(true);
+    };
 
     const handleClose = () => {
         setOpenDoorWorkOrderDialog(false);
@@ -367,17 +375,19 @@ export default function DoorWorkOrderDialog(props) {
                             {order.hinge_type.description}
                         </Typography>
                     </Stack>
-                    <Divider/>
                     {order.options.length > 0? 
-                    <Stack direction="row" spacing={1}>
-                        <Typography sx={{color: 'text.secondary'}}>
-                            Options:
-                        </Typography>
-                        {order.options.map ((op, k) => (
-                            <Typography key={k} sx={{fontWeight: "bold"}}>
-                                {`${op.description} ${order.options.length > 1 && k !== order.options.length - 1? ',' : ''}`}
+                    <Stack spacing={2}>
+                        <Divider/>
+                        <Stack direction="row" spacing={1}>
+                            <Typography sx={{color: 'text.secondary'}}>
+                                Options:
                             </Typography>
-                        ))}
+                            {order.options.map ((op, k) => (
+                                <Typography key={k} sx={{fontWeight: "bold"}}>
+                                    {`${op.description} ${order.options.length > 1 && k !== order.options.length - 1? ',' : ''}`}
+                                </Typography>
+                            ))}
+                        </Stack>
                     </Stack>
                     : ''}
                     <Divider color='primary' sx={{ borderWidth: '2px' }} />
@@ -391,6 +401,7 @@ export default function DoorWorkOrderDialog(props) {
                     </Stack>
                     <Divider/>
                     {order.notes? 
+                    <Stack spacing={2}>
                         <Stack direction="row" spacing={1}>
                             <Typography sx={{color: 'text.secondary'}}>
                                 Notes:
@@ -399,31 +410,30 @@ export default function DoorWorkOrderDialog(props) {
                                 {order.notes}
                             </Typography>
                         </Stack>
+                        <Divider/>
+                    </Stack>
                     : ''}
-                    <Divider/>
-
+                    {order.drawing?
                     <Box textAlign='center'>
                         <List
                             sx={{mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: "#1C88B0 !important" }}
                         >
-
-                                <div>
-                                    <ListItem disablePadding>
-                                        <ListItemButton 
-                                            // onClick={() => handleOpenDrawing(d)}
-                                        >
-                                        <ListItemIcon>
-                                            <ArchitectureIcon color='secondary'/>
-                                        </ListItemIcon>
-                                        <ListItemText primary='Drawing' />
-                                        </ListItemButton>
-                                    </ListItem>
-                                  
-                                </div>
-        
+                            {order.drawing.map((d, i) => (
+                            <div key={i}>
+                                <ListItem disablePadding>
+                                    <ListItemButton onClick={() => handleOpenDrawing(d)}>
+                                    <ListItemIcon>
+                                        <ArchitectureIcon color='secondary' />
+                                    </ListItemIcon>
+                                    <ListItemText primary={d.title} />
+                                    </ListItemButton>
+                                </ListItem>
+                                {i < order.drawing.length - 1 && <Divider sx={{ borderColor: '#1C88B0' }} />}
+                            </div>
+                        ))}
                         </List>
                     </Box>
-
+                    :''}
                     </Stack>
                 </DialogContent>
                     <DialogActions>
@@ -431,6 +441,11 @@ export default function DoorWorkOrderDialog(props) {
                     </DialogActions>
             </Dialog>
             : '' }
+            <DrawingDialog
+                drawing={drawing}
+                openDrawingDialog={openDrawingDialog}
+                setOpenDrawingDialog={setOpenDrawingDialog} 
+            />
         </div>
     );
 };

@@ -13,7 +13,7 @@ import Profile from '../pages/Profile'
 import Task from '../pages/Task'
 import Field from '../pages/Field';
 import Shop from '../pages/Shop';
-import Asset from '../pages/Asset';
+import Door from '../pages/Door';
 
 
 function MainRoutes(props) {
@@ -208,9 +208,9 @@ function MainRoutes(props) {
                     }/>
                 <Route 
                     exact 
-                    path='/asset/:id' 
+                    path='/asset/door/:id' 
                     element={
-                        <Asset
+                        <Door
                             user={user}
                             token={token}
                             darkState={darkState}
