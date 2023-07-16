@@ -66,65 +66,54 @@ export default function ExpaneseTabs(props) {
 
     const retrieveExpenses = () => {
         setIsLoading(true);
-        user.is_staff? 
-            ExpenseDataService.getAll(token, month)
+        ExpenseDataService.getAll(token, month)
             .then(response => {
-                // !sort expense by user request
-                const filteredEmployee = []
-                if(employee){
-                    Object.values(response.data).find((obj) => {
-                        if(obj.user.id === employee.id){
-                            filteredEmployee.push(obj)
-                        }
-                    return ''
-                    });
+                if(user.is_staff){
+                    const filteredEmployee = [];
+                    if(employee){
+                        Object.values(response.data).find((obj) => {
+                            if(obj.user.id === employee.id){
+                                filteredEmployee.push(obj)
+                            }
+                        return ''
+                        });
+                    };
+                    setExpenses(filteredEmployee);
+                    
+                    setTotalReimbursable(0);
+                    setTotalCreditCard(0);
+
+                    let newCreditCardTotal = 0;
+                    let newReimbursableTotal = 0;
+
+                    for(let i = 0; i < filteredEmployee.length; i++) {
+                        if(filteredEmployee[i].is_reimbursable){
+                            newReimbursableTotal += filteredEmployee[i].price;
+                            setTotalReimbursable(newReimbursableTotal);
+                        } else {
+                            newCreditCardTotal += filteredEmployee[i].price;
+                            setTotalCreditCard(newCreditCardTotal);
+                        };
+                    };
+                }else{
+                    setExpenses(response.data);
+                    
+                    setTotalReimbursable(0);
+                    setTotalCreditCard(0);
+
+                    let newCreditCardTotal = 0;
+                    let newReimbursableTotal = 0;
+
+                    for(let i = 0; i < response.data.length; i++) {
+                        if(response.data[i].is_reimbursable){
+                            newReimbursableTotal += response.data[i].price
+                            setTotalReimbursable(newReimbursableTotal)
+                        } else {
+                            newCreditCardTotal += response.data[i].price
+                            setTotalCreditCard(newCreditCardTotal)
+                        };
+                    };
                 };
-                setExpenses(filteredEmployee);
-                
-                setTotalReimbursable(0)
-                setTotalCreditCard(0)
-
-                let newCreditCardTotal = 0
-                let newReimbursableTotal = 0
-
-                for(let i = 0; i < filteredEmployee.length; i++) {
-                    if(filteredEmployee[i].is_reimbursable){
-                        newReimbursableTotal += filteredEmployee[i].price
-                        setTotalReimbursable(newReimbursableTotal)
-                    } else {
-                        newCreditCardTotal += filteredEmployee[i].price
-                        setTotalCreditCard(newCreditCardTotal)
-                    }
-                }
-            })
-            .catch( e => {
-                console.log(e);
-                setIsLoading(false);
-                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-            })
-            .finally(() => {
-                setIsLoading(false);
-            })
-        :
-            ExpenseDataService.getAll(token, month)
-            .then(response => {
-                setExpenses(response.data);
-                
-                setTotalReimbursable(0)
-                setTotalCreditCard(0)
-
-                let newCreditCardTotal = 0
-                let newReimbursableTotal = 0
-
-                for(let i = 0; i < response.data.length; i++) {
-                    if(response.data[i].is_reimbursable){
-                        newReimbursableTotal += response.data[i].price
-                        setTotalReimbursable(newReimbursableTotal)
-                    } else {
-                        newCreditCardTotal += response.data[i].price
-                        setTotalCreditCard(newCreditCardTotal)
-                    }
-                }
             })
             .catch( e => {
                 console.log(e);
@@ -134,9 +123,10 @@ export default function ExpaneseTabs(props) {
             .finally(() => {
                 setIsLoading(false);
             });
-    }
+    };
 
     const createExpense = (data) => {
+        setIsLoading(true);
         const userId = user.is_staff ? Number(employee.id) : Number(user.id)
         
         ExpenseDataService.createExpense(data, token, userId)
@@ -148,7 +138,10 @@ export default function ExpaneseTabs(props) {
         .catch(e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
+        })
+        .finally(() => {
+            setIsLoading(false);
+        })
     };
 
     const deleteExpense = (expenseId) => {
@@ -165,6 +158,7 @@ export default function ExpaneseTabs(props) {
     };
 
     const updateExpense = (expenseId, data) => {
+        setIsLoading(true);
         ExpenseDataService.updateExpense(expenseId, data, token)
         .then(response => {
             window.scrollTo(0, 0);
@@ -174,8 +168,11 @@ export default function ExpaneseTabs(props) {
         .catch( e => {
             console.log(e);
             handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
-    }
+        })
+        .finally(() => {
+            setIsLoading(false);
+        })
+    };
 
     const approveExpense = (expenseId) => {
         ExpenseDataService.approveExpense(expenseId, token)

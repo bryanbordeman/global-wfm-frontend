@@ -91,16 +91,44 @@ export default function ProjectCard(props) {
 
     const recieveDrawings = (id) => {
         // setIsLoading(true);
-        UploaderServices.getProjectDrawings(id, token)
-            .then(response => {
-                setDrawings(response.data);
-            })
-            .catch(e => {
-                console.log(e);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+        switch(menuSelection) {
+            case 1:
+                UploaderServices.getServiceDrawings(id, token)
+                    .then(response => {
+                        setDrawings(response.data);
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+            break;
+            case 2:
+                UploaderServices.getHSEDrawings(id, token)
+                    .then(response => {
+                        setDrawings(response.data);
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+            break;
+            default:
+                UploaderServices.getProjectDrawings(id, token)
+                    .then(response => {
+                        setDrawings(response.data);
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+        };
+        
     }
 
     const recieveContacts = (id) => {

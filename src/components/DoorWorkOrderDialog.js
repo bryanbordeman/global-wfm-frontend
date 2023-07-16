@@ -206,7 +206,7 @@ export default function DoorWorkOrderDialog(props) {
                                             Checked By:
                                         </Typography>
                                         <Typography sx={{fontWeight: "bold"}}>
-                                            {`${r.checked_by.first_name} ${r.checked_by.last_name}`}
+                                            {`${r.approved_by.first_name} ${r.approved_by.last_name}`}
                                         </Typography>
                                     </Stack>
                                 </Stack>
@@ -234,7 +234,7 @@ export default function DoorWorkOrderDialog(props) {
                             Due Date:
                         </Typography>
                         <Typography sx={{fontWeight: "bold"}}>
-                            {moment(order.due_date).format("MM/DD/YY")}
+                            {moment(order.due).format("MM/DD/YY")}
                         </Typography>
                     </Stack>
                     <Divider/>
@@ -413,12 +413,12 @@ export default function DoorWorkOrderDialog(props) {
                         <Divider/>
                     </Stack>
                     : ''}
-                    {order.drawing?
+                    {order.drawings.length > 0?
                     <Box textAlign='center'>
                         <List
                             sx={{mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: "#1C88B0 !important" }}
                         >
-                            {order.drawing.map((d, i) => (
+                            {order.drawings.map((d, i) => (
                             <div key={i}>
                                 <ListItem disablePadding>
                                     <ListItemButton onClick={() => handleOpenDrawing(d)}>
@@ -428,7 +428,7 @@ export default function DoorWorkOrderDialog(props) {
                                     <ListItemText primary={d.title} />
                                     </ListItemButton>
                                 </ListItem>
-                                {i < order.drawing.length - 1 && <Divider sx={{ borderColor: '#1C88B0' }} />}
+                                {i < order.drawings.length - 1 && <Divider sx={{ borderColor: '#1C88B0' }} />}
                             </div>
                         ))}
                         </List>
@@ -437,7 +437,19 @@ export default function DoorWorkOrderDialog(props) {
                     </Stack>
                 </DialogContent>
                     <DialogActions>
-                        <Button variant="contained" onClick={handleClose}>Close</Button>
+                        <Stack
+                            direction="row"
+                            justifyContent="flex-end"
+                            alignItems="center"
+                            spacing={2}
+                        >
+                            <Button
+                                color='primary' 
+                                variant="contained" 
+                                onClick={handleClose}
+                            >Close
+                            </Button>
+                        </Stack>
                     </DialogActions>
             </Dialog>
             : '' }

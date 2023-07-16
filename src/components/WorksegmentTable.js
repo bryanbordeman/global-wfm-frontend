@@ -18,7 +18,7 @@ import Loading from './Loading';
 import WeekPicker from './WeekPicker';
 import { v4 as uuidv4 } from 'uuid';
 
-function createData(name, regular, overtime, travel, sick, vacation, total_duration, summary) {
+function createData(name, regular, overtime, travel, sick, vacation, holiday, total_duration, summary) {
     return {
         name,
         regular,
@@ -26,6 +26,7 @@ function createData(name, regular, overtime, travel, sick, vacation, total_durat
         travel,
         sick,
         vacation,
+        holiday,
         total_duration,
         summary
     };
@@ -55,6 +56,7 @@ function Row(props) {
                 <TableCell align="left">{row.travel}</TableCell>
                 <TableCell align="left">{row.sick}</TableCell>
                 <TableCell align="left">{row.vacation}</TableCell>
+                <TableCell align="left">{row.holiday}</TableCell>
                 <TableCell align="left">{row.total_duration}</TableCell>
             </TableRow>
             <TableRow>
@@ -127,12 +129,12 @@ export default function WorksegmentTable(props) {
         const rows = []
         if(isAdmin){
             totals.map((d) => {
-                rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['sick'],d['vacation'],d['total_duration'], []))
+                rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['sick'],d['vacation'],d['holiday'],d['total_duration'], []))
             })
         }else{
             totals.map((d) => {
                 if(d.user_id == user.id){
-                    rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['sick'],d['vacation'],d['total_duration'], []))
+                    rows.push(createData(d['user_name'], d['regular'], d['overtime'], d['travel'], d['sick'],d['vacation'],d['holiday'],d['total_duration'], []))
                 }
             })
         }
@@ -188,6 +190,7 @@ export default function WorksegmentTable(props) {
                 <TableCell align="left">Travel</TableCell>
                 <TableCell align="left">Sick</TableCell>
                 <TableCell align="left">Vacation</TableCell>
+                <TableCell align="left">Holiday</TableCell>
                 <TableCell align="left">Total Hours</TableCell>
             </TableRow>
             </TableHead>

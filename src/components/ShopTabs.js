@@ -66,6 +66,8 @@ export default function FieldTabs(props) {
                 <Doors
                     darkState={darkState}
                     user={user}
+                    token={token}
+                    handleOpenSnackbar={handleOpenSnackbar}
                 />
             </TabPanel>
             <TabPanel value={value} index={1}>

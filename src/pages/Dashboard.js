@@ -2,8 +2,6 @@ import * as React from 'react';
 import { Container } from '@mui/material';
 import SnackbarAlert from '../components/SnackbarAlert'
 import WorksegmentTable from '../components/WorksegmentTable';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 
 function Dashboard(props){
     const { user, token, setToken, handleOpenSnackbar } = props

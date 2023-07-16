@@ -10,6 +10,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
 import SickIcon from '@mui/icons-material/Sick';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import WeekPicker from '../components/WeekPicker'
 import Tooltip from '@mui/material/Tooltip';
@@ -24,7 +25,7 @@ import AddPTOForm from '../components/AddPTOForm';
 
 import EmployeePicker from '../components/EmployeePicker';
 import Loading from '../components/Loading';
-import { purple, pink} from '@mui/material/colors';
+import { purple, pink, teal} from '@mui/material/colors';
 
 export default function WorksegmentList(props) {
     const { user, token, handleOpenSnackbar, darkState } = props;
@@ -106,11 +107,13 @@ export default function WorksegmentList(props) {
             'user_id': userTotalsList? userTotalsList.user_id : isAdmin && employee? String(employee.id) : String(user.id),
             'user_name': userTotalsList? userTotalsList.user_name : isAdmin && employee? `${employee.first_name} ${employee.last_name}` :`${user.first_name} ${user.last_name}`,
             'vacation': '0.00',
+            'holiday': '0.00',
         }
         //* worksegments
         if(type === 1){
             newTotals.sick = userTotalsList? userTotalsList.sick : '0.00'
             newTotals.vacation = userTotalsList? userTotalsList.vacation : '0.00'
+            newTotals.holiday = userTotalsList? userTotalsList.holiday : '0.00'
             // get segments for employee or user
             segments = worksegments.filter((s) => 
             isAdmin && employee? s.user.id === employee.id : s.user.id === user.id)
@@ -167,8 +170,10 @@ export default function WorksegmentList(props) {
             segments.map((s) => {
                 if(s.PTO_type === 'Sick'){
                     newTotals.sick = String((Number(newTotals.sick) + Number(s.duration)).toFixed(2))
-                }else{
+                }else if (s.PTO_type === 'Vacation'){
                     newTotals.vacation = String((Number(newTotals.vacation) + Number(s.duration)).toFixed(2))
+                }else{
+                    newTotals.holiday = String((Number(newTotals.holiday) + Number(s.duration)).toFixed(2))
                 }
             })
         }
@@ -177,6 +182,7 @@ export default function WorksegmentList(props) {
                                     Number(newTotals.travel) +
                                     Number(newTotals.overtime) +
                                     Number(newTotals.sick) +
+                                    Number(newTotals.holiday) +
                                     Number(newTotals.vacation)).toFixed(2));
         //* set new totals 
         if(userTotalsList){
@@ -392,7 +398,7 @@ export default function WorksegmentList(props) {
                     width: '100%',
                     maxWidth: '500px',
                     borderWidth: darkState? '1.5px' :'3px',
-                    borderColor:  segment.PTO_type === 'Sick'? 'warning.main' : purple[500],
+                    borderColor:  segment.PTO_type === 'Sick' ? 'warning.main' : segment.PTO_type === 'Vacation' ? purple[500] : teal[500],
                     borderRadius: '16px', 
                     }}
                     variant="outlined"
@@ -412,17 +418,14 @@ export default function WorksegmentList(props) {
                                 zIndex: 1
                                 }}
                         >
-                        {segment.PTO_type === 'Sick'? 
-                            <SickIcon
-                                fontSize='large'
-                                color='warning'
-                            />
-                        :
-                        <BeachAccessIcon
-                            fontSize='large'
-                            sx={{color: purple[500]}}
-                        />
-                        }
+                        {segment.PTO_type === 'Sick' ? (
+                            <SickIcon fontSize='large' color='warning' />
+                            ) : segment.PTO_type === 'Vacation' ? (
+                            <BeachAccessIcon fontSize='large' sx={{ color: purple[500] }} />
+                            ) : (
+                            <CalendarMonthIcon fontSize='large' sx={{ color: teal[500] }}/>
+                        )}
+
                         </div>
                     </div>
                     <Grid container wrap="nowrap" spacing={2}>
@@ -734,6 +737,11 @@ export default function WorksegmentList(props) {
                     {Number(total.vacation) > 0?
                     <Typography variant="body2" color="text.secondary" gutterBottom>
                         Vacation Hours: {total.vacation}
+                    </Typography>
+                    :''}
+                    {Number(total.holiday) > 0?
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                        Holiday Hours: {total.holiday}
                     </Typography>
                     :''}
                     <Typography style={{fontWeight: '600'}} variant="body1" color="text.primary" gutterBottom>

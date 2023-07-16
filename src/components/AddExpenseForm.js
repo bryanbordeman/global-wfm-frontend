@@ -32,7 +32,6 @@ export default function AddExpenseForm(props) {
     const { employee, handleChangeEmployee } = props
     const { createExpense, updateExpense } = props
     const [ images, setImages ] = React.useState([]);
-    const [ editImage, setEditImage ] = React.useState({});
     const [ isValid, setIsValid ] = React.useState(true);
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
     const [ menuSelection, setMenuSelection ] = React.useState(0);
@@ -78,14 +77,6 @@ export default function AddExpenseForm(props) {
             });
     },[menuSelection])
 
-    function getBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    }
     const onChange = (imageList) => {
         setImages(imageList);
         if(imageList.length > 0){ 
@@ -107,24 +98,21 @@ export default function AddExpenseForm(props) {
         is_approved: false,
         date_purchased: today,
         notes: ''
-    }
-
+    };
 
     const editFormValues = {
         quote: editing && expense.quote != null ? expense.quote.id : expense.quote,
         project: editing && expense.project != null ? expense.project.id : expense.project,
         service: editing && expense.service != null? expense.service.id : expense.service,
         hse: editing && expense.hse != null ? expense.hse.id : expense.hse,
-        receipt_pic: editImage,
-        // receipt_pic: getBase64Image(expense.receipt_pic),
+        receipt_pic: editing && expense.receipt_pic? expense.receipt_pic : '',
         merchant: expense.merchant,
         price: expense.price,
         is_reimbursable: expense.is_reimbursable,
         is_approved: expense.is_approved,
         date_purchased: editing ? new Date(expense.date_purchased.replace('-', '/').replace('-', '/')) : new Date(),
         notes: expense.notes
-    }
-
+    };
 
     const [ values, setValues ] = React.useState(initialFormValues);
     const [ errors, setErrors ] = React.useState({
@@ -134,7 +122,7 @@ export default function AddExpenseForm(props) {
         price: null,
         date_purchased: null,
         employee: null
-    })
+    });
     
     React.useLayoutEffect(() => {
         setValues(editing ? editFormValues : initialFormValues)
@@ -142,84 +130,11 @@ export default function AddExpenseForm(props) {
 
     React.useLayoutEffect(() => {
         if(editing === true){
-            const url = expense.receipt_pic;
-            const fileName = 'myFile.jpg';
-            let editImage = []
-
-            getImage(expense.id)
-            fetch(url, 
-                { 
-                    method: "GET",
-                    mode: 'cors',
-                    // mode: "no-cors",
-                
-                    headers: {
-                      // Accept: "application/json", <---- **Originally BE returned stringified json. Not sure if I should be returning it as something else or if this is still needed**
-                        // Origin: "http://localhost:3000/",
-                        // crossorigin: "anonymous" 
-                        "Access-Control-Allow-Origin": "*"
-                    }
-                }
-            )
-
-            .then(async response => {
-                console.log(response)
-                
-                const contentType = response.headers.get('content-type')
-                const blob = await response.blob()
-                const file = new File([blob], fileName, { contentType })
-                setEditImage(file)
-                getBase64(file)
-                    .then(
-                        data => {
-                        editImage = [{data_url: data, file: file}]
-                        setImages(editImage)
-                        setValues({
-                            quote: editing && expense.quote != null ? expense.quote.id : expense.quote,
-                            project: editing && expense.project != null ? expense.project.id : expense.project,
-                            service: editing && expense.service != null? expense.service.id : expense.service,
-                            hse: editing && expense.hse != null ? expense.hse.id : expense.hse,                    
-                            receipt_pic: editImage[0].data_url,
-                            merchant: expense.merchant,
-                            price: expense.price,
-                            is_reimbursable: expense.is_reimbursable,
-                            is_approved: expense.is_approved,
-                            date_purchased: editing ? new Date(expense.date_purchased.replace('-', '/').replace('-', '/')) : new Date(),
-                            notes: expense.notes
-                            })
-
-                        })
-                        .catch( e => {
-                            console.log(e);
-                            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-                        })
-                        .finally(() => {
-                        });
-                })
-                .catch( e => {
-                    console.log(e);
-                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-                })
-                .finally(() => {
-                });
-                
-        } else {
-            setImages([])
-        }
-    },[open])
-
-    const getImage = (expenseId) => {
-        ExpenseDataService.getImage(expenseId, token)
-        .then(response => {
-            console.log(response)
-            handleOpenSnackbar('info', 'Your expense has been submitted for approval')
-        })
-        .catch( e => {
-            console.log(e);
-            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-        });
-    }
-
+            setImages([expense.receipt_pic]);
+            // onChange(expense.receipt_pic);
+        };
+    },[open]);
+    
     const handleInputValue = (e) => {
         const { name, value } = e.target;
         if(name === 'price'){
@@ -236,6 +151,8 @@ export default function AddExpenseForm(props) {
         });
     }
     };
+
+    
 
     const handleChangeProject = (newValue) => {
         switch(menuSelection) {
@@ -291,7 +208,7 @@ export default function AddExpenseForm(props) {
 
     const handleSubmit = () => {
         //!! value is not consistant. need to figure out solution.
-        console.log(values.receipt_pic)
+        // console.log(values.receipt_pic)
 
         const date = moment.tz(values.date_purchased, "America/New_York")._d
         const data = {
@@ -308,6 +225,9 @@ export default function AddExpenseForm(props) {
             notes: values.notes
         };
         if(editing){
+            if(expense.receipt_pic === values.receipt_pic){
+                delete data.receipt_pic
+            }
             updateExpense(expense.id, data);
             setOpen(false);
             setImages([])
@@ -553,7 +473,7 @@ export default function AddExpenseForm(props) {
                             </Stack>
                             {imageList.map((image, index) => (
                             <div style={{marginTop: '0.5rem'}} key={index} className="image-item">
-                                <img src={image['data_url']} alt="" width="100" />
+                                <img name='preview_image' src={values.receipt_pic} alt="" width="100" />
                                 <div className="image-item__btn-wrapper">
                                 <Stack direction="row" spacing={2}> 
                                 <IconButton 

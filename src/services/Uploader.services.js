@@ -9,7 +9,15 @@ class UploaderDataService {
     };
     getProjectDrawings(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/drawings/${id}`, {timeout: TIMEOUT});
+        return axios.get(`${SERVER}/api/drawings/project/${id}`, {timeout: TIMEOUT});
+    };
+    getServiceDrawings(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/drawings/service/${id}`, {timeout: TIMEOUT});
+    };
+    getHSEDrawings(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/drawings/hse/${id}`, {timeout: TIMEOUT});
     };
     createDrawing(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

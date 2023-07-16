@@ -15,7 +15,7 @@ import WorksegmentDataService from './services/Worksegment.services';
 import PTOServices from './services/PTO.services';
 import moment from 'moment';
 
-import { purple, pink} from '@mui/material/colors';
+import { purple} from '@mui/material/colors';
 
 // export const UserContext = React.createContext();
 

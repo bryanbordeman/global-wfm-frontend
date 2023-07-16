@@ -14,7 +14,11 @@ class ExpenseDataService {
 
     updateExpense(id, data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.put(`${SERVER}/api/expense/${id}`, data);
+        return axios.put(`${SERVER}/api/expense/${id}`, data, {
+            headers: {
+                "content-type": "multipart/form-data"
+            }
+        });
     };
     deleteExpense(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;

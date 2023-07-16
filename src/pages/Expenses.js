@@ -64,6 +64,9 @@ export default function Expenses(props) {
                         <div style={{marginBottom: '0.25rem'}}>
                             <EmployeePicker
                                 user={user}
+                                editing={true}
+                                editObject={{user:user}}
+                                employee={user}
                                 token={token}
                                 handleChangeEmployee={handleChangeEmployee}
                                 employees={employees}

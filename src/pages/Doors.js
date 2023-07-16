@@ -1,5 +1,6 @@
 import React from 'react';
 import DoorWorkOrderDialog from '../components/DoorWorkOrderDialog';
+import DoorDataService from '../services/Door.services';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -27,7 +28,7 @@ function DueDate(props) {
     const customInputRef = useRef();
 
     React.useLayoutEffect(() => {
-        setValue(order.due_date)
+        setValue(order.due)
     },[order]);
     
 
@@ -128,41 +129,94 @@ export default function Doors(props) {
     },[]);
 
     const updateOrder = (id, newDate) => {
-        console.log(id, newDate);
-    }
+        const order = doorOrderList.filter((o) => (o.id === id))[0]
+        const sanitizeData = {
+            ...order,
+            project:  order.project ?  order.project.id : '',
+            due: newDate,
+            rev: order.rev && order.rev.length > 0 ? order.rev.map((i) => (i.id)) : [],
+            created_by: order.created_by ? order.created_by.id : '',
+            checked_by: order.checked_by ? order.checked_by.id : '',
+            door_type: order.door_type ? order.door_type.id : '',
+            lockset: order.lockset ? order.lockset.id : '',
+            sill_type: order.sill_type ? order.sill_type.id : '',
+            frame_type: order.frame_type ? order.frame_type.id : '',
+            core_type: order.core_type ? order.core_type.id : '',
+            hinge_type: order.hinge_type ? order.hinge_type.id : '',
+            options: order.options && order.options.length > 0 ? order.options.map((i) => (i.id)) : [],
+            packaging: order.packaging ? order.packaging.id : '',
+            drawings:  order.drawings && order.drawings.length > 0 ? order.drawings.map((i) => (i.id)) : [],
+            log: order.log && order.log.length > 0 ? order.log.map((i) => (i.id)) : [],
+            qr_code: order.qr_code ? order.qr_code.id : null,
+        };
+        
+        DoorDataService.updateDoor(id, sanitizeData, token)
+            .then(response => {
+                const updatedOrder = response.data;
+
+                const updatedList = [...doorOrderList];
+                const index = updatedList.findIndex((item) => item.id === updatedOrder.id);
+
+                if (index !== -1) {
+                    updatedList[index] = {
+                        ...updatedList[index],
+                        due: updatedOrder.due
+                    };
+                setDoorOrderList(updatedList);
+                }
+                handleOpenSnackbar('info', 'Door was updated');
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            });
+    };
+
 
     const retrieveOrders = () => {
         const tempDoorNumberList = []
-        const data = response.data
-        const sortedList = data.sort((a, b) => {
-            // Compare project.number first
-            const projectNumberA = a.project.number;
-            const projectNumberB = b.project.number;
-            if (projectNumberA < projectNumberB) return -1;
-            if (projectNumberA > projectNumberB) return 1;
-            // If project.number is the same, compare due_date
-            const dueDateA = new Date(a.due_date);
-            const dueDateB = new Date(b.due_date);
-            if (dueDateA < dueDateB) return -1;
-            if (dueDateA > dueDateB) return 1;
-            return 0;
-        });
-        sortedList.map((d) => {
-            let object = {"number": d.project.number, "quantity": 1, "doors" : 1 };
-            // Check if the number already exists in doorNumberList
-            const existingDoor = tempDoorNumberList.find((door) => door.number === object.number);
-            if (existingDoor) {
-              // If the number exists, increase the quantity
-            existingDoor.quantity += object.quantity;
-            existingDoor.doors += object.doors;
-            } else {
-              // If the number doesn't exist, add it to doorNumberList
-            tempDoorNumberList.push(object);
-            }
-        });
-        setDoorNumberList(tempDoorNumberList);
-        setDoorOrderList(sortedList);
+        // setIsLoading(true);
+        DoorDataService.getAll(token)
+            .then(response => {
+                const data = response.data
+                const sortedList = data.sort((a, b) => {
+                    // Compare project.number first
+                    const projectNumberA = a.project.number;
+                    const projectNumberB = b.project.number;
+                    if (projectNumberA < projectNumberB) return -1;
+                    if (projectNumberA > projectNumberB) return 1;
+                    // If project.number is the same, compare due_date
+                    const dueDateA = new Date(a.due_date);
+                    const dueDateB = new Date(b.due_date);
+                    if (dueDateA < dueDateB) return -1;
+                    if (dueDateA > dueDateB) return 1;
+                    return 0;
+                });
+                sortedList.map((d) => {
+                    let object = {"number": d.project.number, "quantity": 1, "doors" : 1 };
+                    // Check if the number already exists in doorNumberList
+                    const existingDoor = tempDoorNumberList.find((door) => door.number === object.number);
+                    if (existingDoor) {
+                    // If the number exists, increase the quantity
+                    existingDoor.quantity += object.quantity;
+                    existingDoor.doors += object.doors;
+                    } else {
+                    // If the number doesn't exist, add it to doorNumberList
+                    tempDoorNumberList.push(object);
+                    }
+                });
+                // setDoorNumberList(tempDoorNumberList);
+                setDoorOrderList(sortedList);
+                    
+            })
+            .catch( e => {
+                console.log(e);
+            })
+            .finally(() => {
+                // setIsLoading(false);
+            })
     };
+
 
     const handleOpenWorkOrder = (order) => {
         setOpenDoorWorkOrderDialog(true);
@@ -183,7 +237,7 @@ export default function Doors(props) {
                 DOOR WORK ORDERS
             </Typography>
             <Divider sx={{mb:3}}/>
-            <List
+            { doorOrderList.length > 0 ? <List
                 sx={{mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: "#1C88B0 !important" }}
             >
                 {doorOrderList.map ((order, key) => {
@@ -246,7 +300,7 @@ export default function Doors(props) {
                     />}
                 </div>
                 )})}
-            </List>
+            </List> : ''}
             <DoorWorkOrderDialog
                 openDoorWorkOrderDialog = {openDoorWorkOrderDialog}
                 setOpenDoorWorkOrderDialog = {setOpenDoorWorkOrderDialog}

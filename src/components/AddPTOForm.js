@@ -41,7 +41,7 @@ export default function AddPTOForm(props) {
         } = props
 
     
-    const CHOICES = ['Vacation', 'Sick'];
+    const CHOICES = ['Vacation', 'Sick', 'Holiday'];
 
     const initialFormValues = {
         user: user.id,
