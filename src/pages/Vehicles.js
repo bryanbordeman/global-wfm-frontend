@@ -13,7 +13,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-
+import ArticleIcon from '@mui/icons-material/Article';
 
 import AddVehicleIssueForm from '../components/AddVehicleIssueForm';
 import AddVehicleInspectionForm from '../components/AddVehicleInspectionForm';
@@ -25,6 +25,7 @@ import VehicleServicesListDialog from '../components/VehicleServicesListDialog';
 import VehicleCleaningsListDialog from '../components/VehicleCleaningsListDialog';
 import VehicleIssuesListDialog from '../components/VehicleIssuesListDialog';
 import VehicleInspectionsListDialog from '../components/VehicleInspectionsListDialog';
+import VehicleInsurance from '../components/VehicleInsurance';
 
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 
@@ -57,6 +58,7 @@ export default function Vehicles(props) {
     const [ openInspection, setOpenInspection ] = React.useState(false); // add or edit inspection
     const [ openService, setOpenService ] = React.useState(false); // add or edit service
     const [ openCleaning, setOpenCleaning ] = React.useState(false); // add or edit cleaning
+    const [ openInsurance, setOpenInsurance ] = React.useState(false); // add or edit cleaning
 
     // set edit values
     const [ isEdit, setIsEdit ] = React.useState(false);
@@ -447,6 +449,14 @@ export default function Vehicles(props) {
                         <ListItemText primary="Issues" />
                         </ListItemButton>
                     </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton onClick={() => setOpenInsurance(true)}>
+                        <ListItemIcon>
+                            <ArticleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Insurance" />
+                        </ListItemButton>
+                    </ListItem>
                 </List>
             </Box>
             <VehicleListDialog
@@ -589,6 +599,10 @@ export default function Vehicles(props) {
                 createVehicleCleaning={createVehicleCleaning}
                 updateVehicleCleaning={updateVehicleCleaning}
                 deleteVehicleCleaning={deleteVehicleCleaning}
+            />
+            <VehicleInsurance
+                open={openInsurance}
+                setOpen={setOpenInsurance}
             />
 
             <DeleteConfirmationModal

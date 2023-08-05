@@ -393,7 +393,7 @@ export default function Door(props) {
                         alt="Door Icon"
                     />
                     <Typography color="text.secondary">
-                        S/N: {door.project ? door.project.number : (door.service ? door.service.number : '')}
+                        S/N: {door.project ? `${door.project.number}-${door.count}-${door.id}` : (door.service ? `${door.service.number}-${door.count}-${door.id}` : '')}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
                         Door Type: {door.door_type.description}
@@ -439,6 +439,7 @@ export default function Door(props) {
                                 target="_blank"
                                 rel="noopener noreferrer" 
                             >
+                                {door.service.address?
                                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                     {door.service ? door.service.address.address : ''}
                                     <br/>
@@ -446,6 +447,7 @@ export default function Door(props) {
                                     <br/>
                                     {door.service ? door.service.address.country === 'US'? '' : door.service.address.country : ''}
                                 </Typography>
+                                :''}
                             </a>
                             
                         </div>
@@ -497,6 +499,7 @@ export default function Door(props) {
                                 target="_blank"
                                 rel="noopener noreferrer" 
                             >
+                                {door.project.address?
                                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                     {door.project ? door.project.address.address : ''}
                                     <br/>
@@ -504,6 +507,7 @@ export default function Door(props) {
                                     <br/>
                                     {door.project ? door.project.address.country === 'US'? '' : door.project.address.country : ''}
                                 </Typography>
+                                : ''}
                             </a>
                             
                         </div>

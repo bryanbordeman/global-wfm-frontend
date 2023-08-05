@@ -13,6 +13,7 @@ class DoorDataService {
     getDoor(id){
         return axios.get(`${SERVER}/api/asset/portal/door/${id}`);
     };
+    
     createDoor(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.post(`${SERVER}/api/asset/create/door`, data);
@@ -31,7 +32,30 @@ class DoorDataService {
     };
     projectDoor(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
-        return axios.get(`${SERVER}/api/asset/door/project/${id}/`);
+        return axios.get(`${SERVER}/api/asset/door/project/${id}`);
+    };
+
+    projectDoorCount(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/asset/door/project/count/${id}`);
+    };
+
+    createAttributes(data, attributes, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/asset/create/door/${attributes}`, data);
+    };
+
+    createRev(data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/asset/create/door/rev`, data);
+    };
+    updateRev(id, data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/asset/door/rev/${id}`, data);
+    };
+    deleteRev(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.delete(`${SERVER}/api/asset/door/rev/${id}`);
     };
 }
 

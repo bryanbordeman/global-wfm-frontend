@@ -172,51 +172,74 @@ export default function Doors(props) {
             });
     };
 
-
     const retrieveOrders = () => {
-        const tempDoorNumberList = []
-        // setIsLoading(true);
         DoorDataService.getAll(token)
             .then(response => {
                 const data = response.data
                 const sortedList = data.sort((a, b) => {
-                    // Compare project.number first
-                    const projectNumberA = a.project.number;
-                    const projectNumberB = b.project.number;
-                    if (projectNumberA < projectNumberB) return -1;
-                    if (projectNumberA > projectNumberB) return 1;
-                    // If project.number is the same, compare due_date
                     const dueDateA = new Date(a.due_date);
                     const dueDateB = new Date(b.due_date);
                     if (dueDateA < dueDateB) return -1;
                     if (dueDateA > dueDateB) return 1;
                     return 0;
                 });
-                sortedList.map((d) => {
-                    let object = {"number": d.project.number, "quantity": 1, "doors" : 1 };
-                    // Check if the number already exists in doorNumberList
-                    const existingDoor = tempDoorNumberList.find((door) => door.number === object.number);
-                    if (existingDoor) {
-                    // If the number exists, increase the quantity
-                    existingDoor.quantity += object.quantity;
-                    existingDoor.doors += object.doors;
-                    } else {
-                    // If the number doesn't exist, add it to doorNumberList
-                    tempDoorNumberList.push(object);
-                    }
-                });
-                // setDoorNumberList(tempDoorNumberList);
                 setDoorOrderList(sortedList);
-                    
+                projectList(sortedList)
             })
             .catch( e => {
                 console.log(e);
             })
             .finally(() => {
-                // setIsLoading(false);
+            
             })
     };
 
+    const projectList = (list) => {
+        // create list of project id's
+        const projectNumberList = [];
+        list.map((p) => {
+        if (!projectNumberList.includes(p.project.id)) {
+            projectNumberList.push(p.project.id);
+        }
+        });
+
+        const projectNumberObject = [];
+        const promiseArray = projectNumberList.map((p) => {
+        return retrieveDoorCount(p)
+            .then(countData => {
+            projectNumberObject.push({ id: p, count: countData.count });
+            // Handle the count data here
+            })
+            .catch(error => {
+            console.log(error);
+            // Handle the error here
+            });
+        });
+
+        Promise.all(promiseArray)
+        .then(() => {
+            setDoorNumberList(projectNumberObject);
+            // Use the updated projectNumberObject here
+        })
+        .catch(error => {
+            console.log(error);
+            // Handle any errors that occurred during Promise.all()
+        });
+
+    };
+
+    const retrieveDoorCount = (id) => {
+        return new Promise((resolve, reject) => {
+            DoorDataService.projectDoorCount(id, token)
+                .then(response => {
+                resolve(response.data);
+                })
+                .catch(error => {
+                console.log(error);
+                reject(error);
+                });
+            });
+    };
 
     const handleOpenWorkOrder = (order) => {
         setOpenDoorWorkOrderDialog(true);
@@ -237,21 +260,13 @@ export default function Doors(props) {
                 DOOR WORK ORDERS
             </Typography>
             <Divider sx={{mb:3}}/>
-            { doorOrderList.length > 0 ? <List
+            { doorOrderList.length > 0 && doorNumberList.length > 0 && <List
                 sx={{mb: 3, pb: 0, pt:0, width: '100%', bgcolor: 'background.paper', border: 1, borderRadius:2, borderColor: "#1C88B0 !important" }}
             >
                 {doorOrderList.map ((order, key) => {
-                    const door = doorNumberList.find((n) => n.number === order.project.number);
-                    const seriesCounter = door ? door.quantity : 1;
-                    let secondaryText = `Door ${doorCount} of ${seriesCounter}`;
-                    if (key > 0 && order.project.number !== doorOrderList[key - 1].project.number) {
-                      // Reset doorCount to 1 for a new series
-                        doorCount = 1;
-                        secondaryText = `Door 1 of ${seriesCounter}`;
-                    } else if (door) {
-                      // Increment doorCount within the series
-                        doorCount += 1;
-                    }
+                    let secondaryText = '';
+                    let totalDoors = doorNumberList.find((p) => p.id === order.project.id).count
+                    secondaryText = `Door ${order.count} of ${totalDoors}`
                     return (
                 <div key={key}>
                     <ListItem
@@ -300,7 +315,7 @@ export default function Doors(props) {
                     />}
                 </div>
                 )})}
-            </List> : ''}
+            </List> }
             <DoorWorkOrderDialog
                 openDoorWorkOrderDialog = {openDoorWorkOrderDialog}
                 setOpenDoorWorkOrderDialog = {setOpenDoorWorkOrderDialog}
