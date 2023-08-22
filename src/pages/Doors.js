@@ -17,7 +17,7 @@ import { useRef } from 'react';
 import { parseISO } from 'date-fns';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import moment from 'moment-timezone';
-import response from '../json/doorOrders.json';
+import Loading from '../components/Loading';
 
 const currentDate = moment.tz(new Date(), "America/New_York")._d
 
@@ -118,6 +118,7 @@ export default function Doors(props) {
     const [ DoorWorkOrder, setDoorWorkOrder ] = React.useState('');
     const [ doorOrderList, setDoorOrderList ] = React.useState([]);
     const [ doorNumberList, setDoorNumberList ] = React.useState([]);
+    const [ isLoading, setIsLoading ] = React.useState(true); // wait until API returns promise
 
     React.useEffect(() => {
         // Reset doorCount to 1 whenever doorNumberList changes
@@ -173,6 +174,7 @@ export default function Doors(props) {
     };
 
     const retrieveOrders = () => {
+        setIsLoading(true);
         DoorDataService.getAll(token)
             .then(response => {
                 const data = response.data
@@ -189,9 +191,7 @@ export default function Doors(props) {
             .catch( e => {
                 console.log(e);
             })
-            .finally(() => {
             
-            })
     };
 
     const projectList = (list) => {
@@ -224,6 +224,9 @@ export default function Doors(props) {
         .catch(error => {
             console.log(error);
             // Handle any errors that occurred during Promise.all()
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
 
     };
@@ -322,6 +325,9 @@ export default function Doors(props) {
                 order={DoorWorkOrder}
                 setDoorWorkOrder={setDoorWorkOrder}
                 darkState={darkState}
+            />
+            <Loading
+                open={isLoading}
             />
         </div>
     );
