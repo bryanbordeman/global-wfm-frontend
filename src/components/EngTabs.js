@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import Material from '../pages/Material';
-import Tools from '../pages/Tools';
-import Doors from '../pages/Doors';
-import HandymanIcon from '@mui/icons-material/Handyman';
-import LayersIcon from '@mui/icons-material/Layers';
-import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import ArchitectureIcon from '@mui/icons-material/Architecture';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import DCNs from '../pages/DCNs';
+import EngSchedule from '../pages/EngSchedule';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -43,7 +41,7 @@ function TabPanel(props) {
     };
     }
 
-export default function ShopTabs(props) {
+export default function EngTabs(props) {
     const { user, token, handleOpenSnackbar, darkState} = props
     const [value, setValue] = React.useState(0);
     
@@ -56,26 +54,20 @@ export default function ShopTabs(props) {
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="basic tabs example">
-                <Tab icon={<MeetingRoomIcon />}  label="Doors" {...a11yProps(0)} />
-                    <Tab icon={<LayersIcon />}  label="Materials" {...a11yProps(1)} />
-                    <Tab icon={<HandymanIcon />}  label="Tools" {...a11yProps(2)} />
-                    
+                    <Tab icon={<ListAltIcon />}  label="DCN" {...a11yProps(0)} />
+                    <Tab icon={<ArchitectureIcon />}  label="Schedule" {...a11yProps(1)} />
+                    {/* <Tab icon={<HandymanIcon />}  label="Tools" {...a11yProps(2)} /> */}
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <Doors
-                    darkState={darkState}
-                    user={user}
-                    token={token}
-                    handleOpenSnackbar={handleOpenSnackbar}
-                />
+                <DCNs/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Material/>
+                <EngSchedule/>
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            {/* <TabPanel value={value} index={2}>
                 <Tools/>
-            </TabPanel>
+            </TabPanel> */}
             
         </Box>
     );

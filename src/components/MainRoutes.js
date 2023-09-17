@@ -14,6 +14,7 @@ import Task from '../pages/Task'
 import Field from '../pages/Field';
 import Shop from '../pages/Shop';
 import Door from '../pages/Door';
+import Engineering from '../pages/Engineering';
 
 
 function MainRoutes(props) {
@@ -165,6 +166,20 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Shop
+                        user={user}
+                        token={token}
+                        darkState={darkState}
+                        handleOpenSnackbar={handleOpenSnackbar}
+                        />
+                }/>
+                <Route 
+                    exact 
+                    path='/engineering' 
+                    element={
+                        !user.username  ? 
+                        <Navigate to="/login" />
+                        :
+                        <Engineering
                         user={user}
                         token={token}
                         darkState={darkState}

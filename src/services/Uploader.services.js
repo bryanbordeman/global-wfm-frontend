@@ -19,6 +19,21 @@ class UploaderDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/drawings/hse/${id}`, {timeout: TIMEOUT});
     };
+    
+    createDropbox(data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post(`${SERVER}/api/create/dropbox/`, data);
+    };
+    updateDropbox(id, data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/dropbox/${id}`, data);
+    };
+    deleteDropbox(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.delete(`${SERVER}/api/dropbox/${id}`);
+    };
+
+
     createDrawing(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.post(`${SERVER}/api/create/drawing/`, data);

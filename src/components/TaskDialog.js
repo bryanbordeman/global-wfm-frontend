@@ -11,18 +11,29 @@ import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment';
 import Transition from './DialogTransistion'
 
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
+import {  CardActionArea } from '@mui/material';
+import ImageDialog from './ImageDialog';
+
+
 export default function TaskDialog(props) {
     const { task } = props;
-    const { setOpenDelete } = props
-    const { created_by } = props.task
-    const { project } = props.task
-    const { quote } = props.task
-    const { editing, setEditing, handleOpenTaskForm } = props
+    const { setOpenDelete } = props;
+    const { created_by } = props.task;
+    const { project } = props.task;
+    const { quote } = props.task;
+    const { editing, setEditing, handleOpenTaskForm } = props;
     const { setOpenTaskDialog, openTaskDialog } = props;
 
-    const [createdBy, setCreatedBy] = React.useState()
-    const [projectNumber, setProjectNumber ] = React.useState()
-    const [quoteNumber, setQuoteNumber ] = React.useState()
+    const [createdBy, setCreatedBy] = React.useState();
+    const [projectNumber, setProjectNumber ] = React.useState();
+    const [quoteNumber, setQuoteNumber ] = React.useState();
+    
+    const [ images, setImages ] = React.useState([]);
+    const [ image, setImage ] = React.useState(null);
+    const [ imageIndex, setImageIndex ] = React.useState(null);
+    const [ openImageDialog, setOpenImageDialog] = React.useState(false);
 
     React.useLayoutEffect(()=>{
         if(created_by)
@@ -41,17 +52,38 @@ export default function TaskDialog(props) {
         }else{
             setQuoteNumber('');
         }
-    },[task])
+    },[task]);
+
+    React.useEffect(()=>{
+        if (task && task.attachments && openTaskDialog) {
+            const newImages = task.attachments.map((i) => i.document);
+            setImages((prevImages) => {
+                if (Array.isArray(prevImages)) {
+                    return [...prevImages, ...newImages];
+                } else {
+                    return [...newImages];
+                }
+            });
+        };
+    },[openTaskDialog]);
+
 
     const handleClose = () => {
         setOpenTaskDialog(false);
         setEditing(false);
+        setImages([]);
     };
 
     const handleDelete = () => {
         setOpenDelete(true);
         setOpenTaskDialog(false);
-    }
+    };
+
+    const handleOpenImageDialog = (image, index) => {
+        setImage(image);
+        setImageIndex(index + 1);
+        setOpenImageDialog(true);
+    };
 
     let number = ''
     let name = ''
@@ -125,6 +157,21 @@ export default function TaskDialog(props) {
                     <Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
                         {`${task.notes}`}
                     </Typography>
+                    {images.length > 0 && <Divider style={{marginTop: '20px'}}/>}
+                    {images && images.map((image, index) => (
+                        <Card key={index} sx={{ marginTop: '20px', width: 143 }}>
+                            <CardActionArea 
+                                onClick={() => handleOpenImageDialog (image, index)}
+                            >
+                                <CardMedia
+                                component="img"
+                                image={image}
+                                alt=""
+                                name='preview_image'
+                                />
+                            </CardActionArea>
+                        </Card>
+                        ))}
                 </DialogContent>
                 <Divider/>
                     <DialogActions>
@@ -156,6 +203,12 @@ export default function TaskDialog(props) {
                         <Button variant="contained" onClick={handleClose}>Close</Button>
                     </DialogActions>
             </Dialog>
+            <ImageDialog
+                image={image}
+                id={imageIndex}
+                open={openImageDialog}
+                setOpen={setOpenImageDialog}
+            />
         </div>
     );
 };

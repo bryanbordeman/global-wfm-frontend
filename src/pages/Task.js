@@ -43,7 +43,6 @@ function Task(props) {
             setCurrentList('');
             setSelectedCompleteList([]);
     },[employee]);
-    
 
     React.useEffect(() => {
         sortList();
@@ -510,6 +509,7 @@ function Task(props) {
                             setOpen={setOpen}
                             editing={editing}
                             setEditing={setEditing}
+                            setIsLoading={setIsLoading}
                             user={user}
                             token={token}
                             createTask={createTask}

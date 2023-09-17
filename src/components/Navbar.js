@@ -57,6 +57,8 @@ const Navbar = (props) => {
         
     }
 
+    const isEng = user.groups.some(group => group.name === "ENGINEERING");
+
     const activeStyle = { my: 2, color: '#60BCD9', display: 'block', textDecoration: 'underline',}
     const inactiveStyle = { my: 2, color: 'white', display: 'block'}
 
@@ -201,6 +203,15 @@ const Navbar = (props) => {
                         >
                         <Typography textAlign="center">Shop</Typography>
                     </MenuItem>
+                    <MenuItem  
+                        onClick={() => {
+                            setActiveButton('eng');
+                            handleCloseNavMenu()}}
+                        component={Link} 
+                        to='/engineering'
+                        >
+                        <Typography textAlign="center">Engineering</Typography>
+                    </MenuItem>
                 </Menu>
                 </Box>
                 <Typography
@@ -287,6 +298,15 @@ const Navbar = (props) => {
                         >
                         Shop
                     </Button>
+                    {isEng ? 
+                    <Button component={Link} to='/engineering'
+                        name='eng'
+                        sx={activeButton === 'eng' ? activeStyle : inactiveStyle}
+                        onClick={clickedButtonHandler}
+                        >
+                        Eng
+                    </Button>
+                    :''}
                 </Box>
                 <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
