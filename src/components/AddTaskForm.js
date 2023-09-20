@@ -515,7 +515,17 @@ export default function AddTaskForm(props) {
             updateTask(task.id, data);
             setValues(initialFormValues);
         }else{
-            createTask(values);
+            const data = values
+            const tempAttachments = []
+            if (values.attachments.length > 0) {
+                values.attachments.forEach((a) => {
+                    if (a.id) {
+                        tempAttachments.push(a.id);
+                    }
+                });
+            data.attachments = tempAttachments
+            }
+            createTask(data);
             setValues(initialFormValues);
         }
         handleClose();
