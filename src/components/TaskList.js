@@ -71,7 +71,7 @@ const StyledMenu = styled((props) => (
         },
         },
     },
-    }));
+}));
 
 
 const currentDate = moment.tz(new Date(), "America/New_York")._d

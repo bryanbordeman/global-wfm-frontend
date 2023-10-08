@@ -9,16 +9,16 @@ import Alert from '@mui/material/Alert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 
-export default function DeleteAnnouncementModal(props) {
+export default function DeleteDCNModal(props) {
 
-    const { deleteAnnouncement, announcement , openDelete, setOpenDelete  } = props
+    const { deleteDCN, DCN , openDelete, setOpenDelete  } = props
 
     const handleClose = () => {
         setOpenDelete(false);
     };
 
     const handleDelete = () => {
-        deleteAnnouncement(announcement.id);
+        deleteDCN(DCN.id);
         setOpenDelete(false);
     };
 
@@ -31,13 +31,13 @@ export default function DeleteAnnouncementModal(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    <Alert severity="error">Permanently delete this announcement?</Alert>
+                    <Alert severity="error">Permanently delete this DCN?</Alert>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {moment(announcement.created).format("ddd, MMMM Do YYYY")}
+                        {moment(DCN.created).format("ddd, MMMM Do YYYY")}
                         <br/>
-                        Title: {`${announcement.title}`}
+                        DCN# {`${DCN.number}`}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

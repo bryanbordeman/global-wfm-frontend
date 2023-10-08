@@ -203,6 +203,7 @@ const Navbar = (props) => {
                         >
                         <Typography textAlign="center">Shop</Typography>
                     </MenuItem>
+                    {isEng ? 
                     <MenuItem  
                         onClick={() => {
                             setActiveButton('eng');
@@ -212,6 +213,7 @@ const Navbar = (props) => {
                         >
                         <Typography textAlign="center">Engineering</Typography>
                     </MenuItem>
+                    : ''}
                 </Menu>
                 </Box>
                 <Typography

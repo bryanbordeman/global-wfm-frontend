@@ -42,10 +42,9 @@ function TabPanel(props) {
     }
 
 export default function EngTabs(props) {
-    const { user, token, handleOpenSnackbar, darkState} = props
+    const { user, token, handleOpenSnackbar} = props
     const [value, setValue] = React.useState(0);
     
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -60,7 +59,11 @@ export default function EngTabs(props) {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <DCNs/>
+                <DCNs
+                    user={user}
+                    token={token}
+                    handleOpenSnackbar={handleOpenSnackbar}
+                />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <EngSchedule/>
