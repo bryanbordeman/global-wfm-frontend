@@ -1,6 +1,7 @@
 import React from 'react';
 import UploaderServices from '../services/Uploader.services'
 import Button from '@mui/material/Button';
+import PublicSwitchButton from './PublicSwitchButton';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -59,7 +60,6 @@ export default function AddTaskForm(props) {
         }
     },[]);
 
-
     React.useEffect(() => {
         // if picker changes clear project value
         if(!editing)
@@ -88,6 +88,7 @@ export default function AddTaskForm(props) {
         is_complete: false,
         is_deleted: false,
         is_read: false,
+        is_public: true,
         completed: new Date(),
         updated: new Date(),
         attachments: []
@@ -108,7 +109,8 @@ export default function AddTaskForm(props) {
         created: new Date(),
         is_complete: task.is_complete,
         is_deleted: false,
-        is_read: false,
+        is_read: task.is_read,
+        is_public: task.is_public,
         completed: new Date(),
         updated: new Date(),
         attachments: task.attachments
@@ -532,6 +534,13 @@ export default function AddTaskForm(props) {
         
     };
 
+    const handleToggleIsPublic = (isPublic) => {
+        setValues({
+            ...values,
+            is_public: isPublic
+        });
+    };
+
     let picker = <div></div>
 
     switch(menuSelection) {
@@ -610,14 +619,22 @@ export default function AddTaskForm(props) {
                 <Divider/>
                 <DialogContent>
                     <Stack direction="column" spacing={2}>
-                        <TaskListPicker
-                            editing={editing}
-                            task={task}
-                            errors={errors}
-                            token={token}
-                            handleOpenSnackbar={handleOpenSnackbar}
-                            handleChangeList={handleChangeList}
-                        />
+                        <Stack direction="row" spacing={2}>
+                            <div style={{ width: '75%' }}>
+                                <TaskListPicker
+                                    editing={editing}
+                                    task={task}
+                                    errors={errors}
+                                    token={token}
+                                    handleOpenSnackbar={handleOpenSnackbar}
+                                    handleChangeList={handleChangeList}
+                                />
+                            </div>
+                            <PublicSwitchButton
+                                handleToggleIsPublic={handleToggleIsPublic}
+                                isPublic={values.is_public}
+                            />
+                        </Stack>
                         <AssigneePicker
                             employees={employees}
                             editing={editing}
@@ -637,18 +654,18 @@ export default function AddTaskForm(props) {
                                 setMenuSelection={setMenuSelection}
                             />
                         </Stack>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker
-                                label="Due Date"
-                                id="due"
-                                name="due"
-                                value={values.due}
-                                onChange={(date) => {setValues({...values, due: date})}}
-                                renderInput={(params) => <TextField {...params} helperText={errors.due === null ? '' : errors.due}
-                                error={errors.due? true : false} />}
-                                fullWidth
-                            />
-                        </LocalizationProvider>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DatePicker
+                                    label="Due Date"
+                                    id="due"
+                                    name="due"
+                                    value={values.due}
+                                    onChange={(date) => {setValues({...values, due: date})}}
+                                    renderInput={(params) => <TextField {...params} helperText={errors.due === null ? '' : errors.due}
+                                    error={errors.due? true : false} />}
+                                    fullWidth
+                                />
+                            </LocalizationProvider>
                         <TextField
                             autoFocus={false}
                             margin="dense"

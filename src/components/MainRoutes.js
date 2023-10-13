@@ -38,19 +38,17 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         : 
                         <Dashboard
-                        user={user}
-                        token={token}
-                        setToken={setToken}
-                        handleOpenSnackbar={handleOpenSnackbar}
-                        
-                        worksegments={worksegments}
-                        setWorksegments={setWorksegments}
-                        PTOsegments={PTOsegments}
-                        totals={totals}
-                        setTotals={setTotals}
-                        isoWeek={isoWeek}
-                        setIsoWeek={setIsoWeek}
-
+                            user={user}
+                            token={token}
+                            setToken={setToken}
+                            handleOpenSnackbar={handleOpenSnackbar}
+                            worksegments={worksegments}
+                            setWorksegments={setWorksegments}
+                            PTOsegments={PTOsegments}
+                            totals={totals}
+                            setTotals={setTotals}
+                            isoWeek={isoWeek}
+                            setIsoWeek={setIsoWeek}
                         />
                     }/>
                 <Route 
@@ -61,21 +59,19 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <WorksegmentList
-                        user={user}
-                        token={token}
-                        handleOpenSnackbar={handleOpenSnackbar}
-                        darkState={darkState}
-                        worksegments={worksegments}
-                        setWorksegments={setWorksegments}
-                        PTOsegments={PTOsegments}
-                        setPTOsegments={setPTOsegments}
-                        totals={totals}
-                        setTotals={setTotals}
-                        isoWeek={isoWeek}
-                        setIsoWeek={setIsoWeek}
-
-                        employees={employees}
-
+                            user={user}
+                            token={token}
+                            handleOpenSnackbar={handleOpenSnackbar}
+                            darkState={darkState}
+                            worksegments={worksegments}
+                            setWorksegments={setWorksegments}
+                            PTOsegments={PTOsegments}
+                            setPTOsegments={setPTOsegments}
+                            totals={totals}
+                            setTotals={setTotals}
+                            isoWeek={isoWeek}
+                            setIsoWeek={setIsoWeek}
+                            employees={employees}
                         />
                 }/>
                 <Route 
@@ -86,8 +82,8 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Schedule
-                        user={user}
-                        token={token}
+                            user={user}
+                            token={token}
                         /> 
                     }/>
                 <Route 
@@ -98,8 +94,8 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Projects
-                        user={user}
-                        token={token}
+                            user={user}
+                            token={token}
                         /> 
                 }/>
                 <Route 
@@ -110,9 +106,9 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Announcements
-                        user={user}
-                        token={token}
-                        handleOpenSnackbar={handleOpenSnackbar}
+                            user={user}
+                            token={token}
+                            handleOpenSnackbar={handleOpenSnackbar}
                         />
                 }/>
                 <Route 
@@ -123,10 +119,10 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Expenses
-                        user={user}
-                        token={token}
-                        handleOpenSnackbar={handleOpenSnackbar}
-                        employees={employees}
+                            user={user}
+                            token={token}
+                            handleOpenSnackbar={handleOpenSnackbar}
+                            employees={employees}
                         />
                 }/>
                 <Route 
@@ -137,11 +133,11 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Task
-                        user={user}
-                        token={token}
-                        darkState={darkState}
-                        handleOpenSnackbar={handleOpenSnackbar}
-                        employees={employees}
+                            user={user}
+                            token={token}
+                            darkState={darkState}
+                            handleOpenSnackbar={handleOpenSnackbar}
+                            employees={employees}
                         />
                 }/>
                 <Route 
@@ -152,10 +148,10 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Field
-                        user={user}
-                        token={token}
-                        darkState={darkState}
-                        handleOpenSnackbar={handleOpenSnackbar}
+                            user={user}
+                            token={token}
+                            darkState={darkState}
+                            handleOpenSnackbar={handleOpenSnackbar}
                         />
                 }/>
                 <Route 
@@ -166,10 +162,10 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Shop
-                        user={user}
-                        token={token}
-                        darkState={darkState}
-                        handleOpenSnackbar={handleOpenSnackbar}
+                            user={user}
+                            token={token}
+                            darkState={darkState}
+                            handleOpenSnackbar={handleOpenSnackbar}
                         />
                 }/>
                 <Route 
@@ -180,10 +176,10 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Engineering
-                        user={user}
-                        token={token}
-                        darkState={darkState}
-                        handleOpenSnackbar={handleOpenSnackbar}
+                            user={user}
+                            token={token}
+                            darkState={darkState}
+                            handleOpenSnackbar={handleOpenSnackbar}
                         />
                 }/>
                     <Route 
@@ -194,8 +190,8 @@ function MainRoutes(props) {
                         <Navigate to="/login" />
                         :
                         <Profile
-                        user={user}
-                        token={token}
+                            user={user}
+                            token={token}
                         />
                 }/>
                 <Route 

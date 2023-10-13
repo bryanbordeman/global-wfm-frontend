@@ -84,9 +84,10 @@ export default function AddDCNForm(props) {
                 created_by: item.created_by.id,
                 is_external: item.is_external
             };
-            setValues(editFormValues)
-        }
-        
+            setValues(editFormValues);
+        }else{
+            setValues(initialFormValues);
+        };
     },[open]);
 
     React.useEffect(() => {
@@ -164,17 +165,17 @@ export default function AddDCNForm(props) {
             }, 3000);
         }
         else if(values.comments.length > 1000){
-            setErrors({...errors, memo: '1000 character max.'});
+            setErrors({...errors, comments: '1000 character max.'});
             formIsValid = false;
             setTimeout(() => {
                 formIsValid = true;
-                setErrors({...errors, memo: null});
+                setErrors({...errors, comments: null});
             }, 3000);
         }
         else{
             setErrors({
-                title: null,
-                memo: null,
+                project: null,
+                comments: null,
             });
             formIsValid = true;
         }
@@ -283,8 +284,9 @@ export default function AddDCNForm(props) {
 
     const handleClose = () => {
         setOpen(!open);
-        setValues(initialFormValues);
         setEditing(false);
+        setValues(initialFormValues);
+        setMenuSelection(0);
     };
 
     return (
@@ -295,14 +297,7 @@ export default function AddDCNForm(props) {
                 fullScreen
                 open={open} 
                 onClose={handleClose}
-                scroll={'body'}
-                // PaperProps={{
-                //     style: {
-                //         minHeight: '100%', // Set a minimum height to the Dialog
-                //         display: 'flex',
-                //         flexDirection: 'column',
-                //     },
-                // }}
+                scroll={'paper'}
             >
                 <DialogTitle>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -353,7 +348,7 @@ export default function AddDCNForm(props) {
                         onChange={handleInputValue}
                         value={values.comments}
                         multiline
-                        rows={5}
+                        rows={8}
                         helperText={errors.comments === null ? '' : errors.comments}
                         error={errors.comments? true : false}
                     />

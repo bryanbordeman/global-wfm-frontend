@@ -88,7 +88,7 @@ function Task(props) {
                         // sort results into taskObject
                         let result = allTasks.filter(task => task.tasklist.id === list.id);
                         // sort results based on user and assignee. If user === to assignee or user === created_by show task
-                        let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id )
+                        let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id || task.is_public )
                         
                         if(result) {
                             return tempObject[`${list.title}`] = userResult
@@ -170,7 +170,7 @@ function Task(props) {
             TaskDataService.getAssigneeList(token, employee.id, currentList.id)
                 .then(response => {
                     const result = response.data;
-                    let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
+                    let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id  || task.is_public);
                     
                     // sort list
                     switch(sortBy) {
@@ -291,6 +291,18 @@ function Task(props) {
             .finally(() => {
                 setIsLoading(false);
             });
+    };
+
+    const readTask = (id) => {
+        TaskDataService.readTask(id, token)
+            .then(response => {
+                retrieveTasks();
+            })
+            .catch( e => {
+                console.log(e);
+                setIsLoading(false);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
     };
 
     const uncompleteTask = (id) => {
@@ -486,6 +498,7 @@ function Task(props) {
                             setEditing={setEditing}
                             completeSubtask={completeSubtask}
                             completeTask={completeTask}
+                            readTask={readTask}
                             setTask={setTask}
                             openDelete={openDelete}
                             setOpenDelete={setOpenDelete}

@@ -119,6 +119,7 @@ export default function DNCDialog(props) {
                     
                 </Stack>
                 </DialogContent>
+                    <Divider/>
                     <DialogActions>
                         <Stack
                             direction="row"

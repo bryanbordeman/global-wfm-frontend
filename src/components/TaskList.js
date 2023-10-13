@@ -4,6 +4,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Badge from '@mui/material/Badge';
 import Divider from '@mui/material/Divider';
 import { Button, Chip } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -190,11 +191,13 @@ export default function TaskList(props) {
             selectedList, 
             updateTask,
             setTask, 
+            task,
             handleOpenTaskForm, 
             handleOpenSubtaskForm,
             setEditing, 
             completeSubtask,
             completeTask,
+            readTask,
             setOpenTaskDialog,
             darkState } = props;
     const { setOpenDelete } = props;
@@ -270,24 +273,33 @@ return (
                             setEditing(true);
                             setOpenTaskDialog(true);
                             handleMenuClose();
+                            if (task.is_read === false && user.id === task.assignee.id) {
+                                readTask(task.id);
+                            } 
                         }} 
                         disableRipple
                     >
                         <PreviewIcon />
                         Preview
                     </MenuItem>
+                    {task && task.assignee && task.assignee.id && (user.id === task.assignee.id || user.id === task.created_by.id)?
                     <MenuItem 
                         sx={{color: 'primary.main'}} 
                         onClick={() => {
                             setEditing(true);
                             handleOpenTaskForm();
                             handleMenuClose();
+                            if (task.is_read === false && user.id === task.assignee.id) {
+                                readTask(task.id);
+                            } 
                         }} 
                         disableRipple
                     >
                         <EditIcon />
                         Edit
                     </MenuItem>
+                    :''}
+                    {task && task.assignee && task.assignee.id && (user.id === task.assignee.id || user.id === task.created_by.id)?
                     <MenuItem 
                         sx={{color: 'primary.main'}} 
                         onClick={() => {
@@ -299,7 +311,8 @@ return (
                         <PlaylistAddIcon />
                         Add Subtask
                     </MenuItem>
-                    {user.id === list.assignee.id ?
+                    :''}
+                    {task && task.assignee && task.assignee.id && (user.id === task.assignee.id)?
                     <MenuItem 
                         sx={{mb:2, color: 'success.main'}} 
                         onClick={() => {
@@ -311,18 +324,22 @@ return (
                         <CheckCircleIcon />
                         Complete Task
                     </MenuItem> : ''}
-                    <Divider sx={{ my: 0.5 }} />
-                    <MenuItem 
-                        sx={{color: 'error.dark', mt:2}} 
-                        onClick={() => {
-                            handleMenuClose();
-                            handleOpenDeleteTask();
-                        }} 
-                        disableRipple
-                    >
-                    <DeleteIcon/>
-                        Delete
-                    </MenuItem>
+                    {task && task.assignee && task.assignee.id && (user.id === task.assignee.id || user.id === task.created_by.id)?
+                    <div>
+                        <Divider sx={{ my: 0.5 }} />
+                        <MenuItem 
+                            sx={{color: 'error.dark', mt:2}} 
+                            onClick={() => {
+                                handleMenuClose();
+                                handleOpenDeleteTask();
+                            }} 
+                            disableRipple
+                        >
+                        <DeleteIcon/>
+                            Delete
+                        </MenuItem>
+                    </div>
+                    : ''}
                 </StyledMenu>
                 <ListItem
                     disablePadding
@@ -334,14 +351,23 @@ return (
                     }}
                 >
                     <Tooltip title={name} enterTouchDelay={0}>
-                    <ListItemIcon>
-                        <Chip 
-                            sx={{mr:1}} 
-                            // variant={darkState? '' : 'outlined'}
-                            size='small' 
-                            color='primary' 
-                            label={number}
-                        />
+                    <ListItemIcon >
+                        <Badge 
+                            color={list.assignee.id === list.created_by.id ? 'secondary' : 'warning'}
+                            variant='dot'
+                            invisible={list.is_read}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                        >
+                            <Chip 
+                                sx={{mr:1}} 
+                                size='small' 
+                                color={list.is_public? 'primary' : 'success'} 
+                                label={number}
+                            />
+                        </Badge>
                     </ListItemIcon>
                     </Tooltip>
                     <ListItemText 

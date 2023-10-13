@@ -36,6 +36,10 @@ class TaskDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.put(`${SERVER}/api/task/${id}/completed/`);
     };
+    readTask(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.put(`${SERVER}/api/task/${id}/read/`);
+    };
     completeSubtask(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.put(`${SERVER}/api/subtask/${id}/completed/`);
