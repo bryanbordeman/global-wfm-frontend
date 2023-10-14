@@ -133,7 +133,6 @@ function DueDate(props) {
             case (dateDelta > 1):
                 dueMessage = `In ${dateDelta} days`
             break;
-
             default:
                 dueMessage = ''
         }
@@ -354,7 +353,8 @@ return (
                     <ListItemIcon >
                         <Badge 
                             color={list.assignee.id === list.created_by.id ? 'secondary' : 'warning'}
-                            variant='dot'
+                            // variant='dot'
+                            badgeContent=" "
                             invisible={list.is_read}
                             anchorOrigin={{
                                 vertical: 'top',
