@@ -34,7 +34,7 @@ export default function TaskSelectlist(props) {
                         <MenuItem key={list.id} value={list}>
                             <Badge
                                 badgeContent={tasks[list.title]? tasks[list.title].filter((t) => !t.is_read).length : 0}
-                                color="secondary"
+                                color="error"
                                 sx={{ "& .MuiBadge-badge": { padding: 0, fontSize: 8, height: 15, minWidth: 15 } }}
                             >
                                 {list.title}

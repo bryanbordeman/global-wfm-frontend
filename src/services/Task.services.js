@@ -20,6 +20,10 @@ class TaskDataService {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/complete/tasks/${assignee}/${list}/`, {timeout: TIMEOUT});
     };
+    getReadCount(token, assignee){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/tasks/read/${assignee}/`, {timeout: TIMEOUT});
+    };
     createTask(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.post(`${SERVER}/api/create/task/`, data);

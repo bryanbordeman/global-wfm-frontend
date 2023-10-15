@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import MainRoutes from './components/MainRoutes';
-import Navbar from './components/Navbar'
+import NavBar from './components/NavBar';
 import UserService from "./services/User.services";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Toolbar } from '@mui/material';
 import SnackbarAlert from './components/SnackbarAlert';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -13,6 +12,7 @@ import Loading from './components/Loading';
 
 import WorksegmentDataService from './services/Worksegment.services';
 import PTOServices from './services/PTO.services';
+import TaskDataService from './services/Task.services';
 import moment from 'moment';
 
 import { purple} from '@mui/material/colors';
@@ -32,16 +32,18 @@ export default function App() {
 
     const getTheme = localStorage.getItem('theme');
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    const [darkState, setDarkState] = useState(prefersDarkMode);     
+    const [ darkState, setDarkState ] = useState(prefersDarkMode);     
     let palletType = darkState ? "dark" : "light";
 
     const [ worksegments, setWorksegments ] = React.useState([]);
     const [ PTOsegments, setPTOsegments ] = useState([]);
     const [ employees, setEmployees ] = React.useState([])
+    const [ taskRead, setTaskRead ] = React.useState(0);
 
     const [ totals, setTotals ] = React.useState([]);
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
     const didMount = React.useRef(false);
+    const [ openDrawer, setOpenDrawer ] = React.useState(false);
 
     const theme = createTheme({
         palette: {
@@ -68,7 +70,11 @@ export default function App() {
         if(getTheme){
             getTheme === 'dark'? setDarkState(true) : setDarkState(false)
         }
-    },[])
+    },[]);
+
+    useEffect(()=> {
+        retrieveTaskReadCount();
+    },[openDrawer])
 
     useEffect(() => {
         localStorage.setItem('theme', palletType)
@@ -277,18 +283,39 @@ export default function App() {
         });
     };
 
+    const retrieveTaskReadCount = () => {
+        TaskDataService.getReadCount(token, user.id)
+            .then(response => {
+                // sort the select list
+                setTaskRead(response.data.count)
+            })
+            .catch( e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <BrowserRouter>
                 {user.username? 
                 <>
-                <Navbar
+                {/* <Navbar
                     handleChangeMode={handleChangeMode}
                     darkState={darkState}
                     user={user}
-                    logout={logout}/>
-                <Toolbar />
+                    logout={logout}/> */}
+                <NavBar
+                    handleChangeMode={handleChangeMode}
+                    darkState={darkState}
+                    user={user}
+                    logout={logout}
+                    taskRead={taskRead}
+                    open={openDrawer}
+                    setOpen={setOpenDrawer}
+                />
+                {/* <Toolbar /> */}
                 </> : ''}
                 <MainRoutes
                     user={user}

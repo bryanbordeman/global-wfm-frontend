@@ -761,7 +761,7 @@ export default function WorksegmentList(props) {
                 height: '100%'
         }}>
             <div  style={{width: '100%', maxWidth: '500px' }}>
-            <Stack style={{marginBottom: '0.75rem', marginTop: '1.5rem',}}direction="row" spacing={2}>
+            <Stack style={{marginBottom: '0.75rem', marginTop: '2rem',}}direction="row" spacing={2}>
             <WeekPicker 
                 getIsoWeek={getIsoWeek}
             />

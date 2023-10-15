@@ -1,380 +1,409 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
+import { styled, useTheme } from '@mui/material/styles';
+import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import ReceiptLongSharpIcon from '@mui/icons-material/ReceiptLongSharp';
+import PlaylistAddCheckSharpIcon from '@mui/icons-material/PlaylistAddCheckSharp';
+import EngineeringSharpIcon from '@mui/icons-material/EngineeringSharp';
+import ArchitectureSharpIcon from '@mui/icons-material/ArchitectureSharp';
+import BuildCircleSharpIcon from '@mui/icons-material/BuildCircleSharp';
+import SummarizeSharpIcon from '@mui/icons-material/SummarizeSharp';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+
+import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import { useNavigate } from 'react-router-dom';
-import logo from '../assets/GPS_Navbar_Logo.svg'
+
+import { Link } from 'react-router-dom';
+import logo from '../assets/GPS_Navbar_Logo_R1.svg'
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { Stack } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from 'react-router-dom';
+import Badge from '@mui/material/Badge';
+
+const drawerWidth = '300px';
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: `-${drawerWidth}px`,
+        ...(open && {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+        }),
+    }),
+);
 
 
-const pathname = window.location.pathname
+
+const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+    })(({ theme, open }) => ({
+        transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+        }),
+        ...(open && {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: `${drawerWidth}px`,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        }),
+}));
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+}));
 
 
-const Navbar = (props) => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
+export default function NavBar(props) {
+    const theme = useTheme();
+    const { open, setOpen } = props
+    const { user, handleChangeMode, darkState, taskRead } = props;
+
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const { user, handleChangeMode, darkState } = props
     let navigate = useNavigate();
-    const [activeButton, setActiveButton] = React.useState(pathname === '/' ? 'dashboard' : pathname.substring(1));
 
-    const clickedButtonHandler = (e) => {
-        const { name } = e.target;
-        setActiveButton(name);
-    };
+    const isEng = user.groups.some(group => group.name === "ENGINEERING");
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
+    const stringToColor = (string) => {
+        let hash = 0;
+        let i;
+        /* eslint-disable no-bitwise */
+        for (i = 0; i < string.length; i += 1) {
+            hash = string.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        
+        let color = '#';
+        
+        for (i = 0; i < 3; i += 1) {
+            const value = (hash >> (i * 8)) & 0xff;
+            color += `00${value.toString(16)}`.slice(-2);
+            }
+        /* eslint-enable no-bitwise */
+        
+            return color;
+        };
+
+    const stringAvatar = (name) => {
+        return {
+            sx: {
+            bgcolor: stringToColor(name),
+            },
+            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+            };
+        };
+
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
+    const handleDrawerOpen = () => {
+        setOpen(true);
     };
 
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
+    
     const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
-
+            setAnchorElUser(null);
+        };
+    
     const logout = () => {
-        setActiveButton('dashboard');
         props.logout()
         navigate('/login')
         setAnchorElUser(null);
         
-    }
-
-    const isEng = user.groups.some(group => group.name === "ENGINEERING");
-
-    const activeStyle = { my: 2, color: '#60BCD9', display: 'block', textDecoration: 'underline',}
-    const inactiveStyle = { my: 2, color: 'white', display: 'block'}
+    };
 
     return (
-        <div>
-        <AppBar 
-            position="fixed" 
-            color='darkBlue' 
-            sx={{marginBottom: '0px',
-                zIndex: (theme) => theme.zIndex.drawer + 1}} >
-            <Container maxWidth="xl">
-            <Toolbar disableGutters>
-                <Typography
-                variant="h6"
-                noWrap
-                name='dashboard'
-                component={Link}
-                to="/"
-                onClick={() => {setActiveButton('dashboard')}}
-                sx={{
-                    mr: 2,
-                    display: { xs: 'none', md: 'flex' },
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    letterSpacing: '.3rem',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                }}
-                >
-                <img style={{width: '6rem'}} src={logo} alt="GPS Logo"/>
-                </Typography>
-
-                <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleOpenNavMenu}
-                    style={{ color: 'white' }}
-                    
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorElNav}
-                    anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                    }}
-                    open={Boolean(anchorElNav)}
-                    onClose={handleCloseNavMenu}
-                    sx={{
-                    display: { xs: 'block', md: 'none' },
-                    }}
-                >
-                    <MenuItem 
-                        onClick={() => {
-                            setActiveButton('dashboard');
-                            handleCloseNavMenu()}}
-                        component={Link} 
-                        to='/'
+        <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
+            <AppBar 
+                position="fixed" 
+                open={open}
+                color='darkBlue' 
+            >
+                <Toolbar>
+                    <IconButton
+                        style={{ color: 'white' }}
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        edge="start"
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h5"
+                        noWrap
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column', 
+                            justifyContent: 'center', 
+                            alignItems: 'center',    
+                            flexGrow: 1,
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                            height: '100%',      
+                        }}
+                    >
+                        <Link 
+                            name='dashboard'
+                            component={Link}
+                            to="/"
                         >
-                        <Typography textAlign="center">Dashboard</Typography>
-                    </MenuItem>
-                    <MenuItem 
-                        onClick={() => {
-                            setActiveButton('worksegments');
-                            handleCloseNavMenu()}} 
+                        <img
+                            style={{
+                                width: '6rem',
+                                height: 'auto',
+                                marginTop: '10px'
+                            }}
+                            src={logo}
+                            alt="GPS Logo"
+                        />
+                        </Link>
+                    </Typography>
+                        <Box sx={{ flexGrow: 0 }}>
+                                <Tooltip title="Open settings">
+                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                        <Avatar
+                                            variant="rounded" 
+                                            {...stringAvatar(`${user.first_name} ${user.last_name}`)} 
+                                        />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                    }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                    }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            > 
+                            <MenuItem 
+                                onClick={handleCloseUserMenu} 
+                                component={Link} 
+                                to='/profile'
+                                >
+                                <Typography textAlign="center">Profile</Typography>
+                            </MenuItem>
+                            <MenuItem 
+                                onClick={() => {
+                                    handleChangeMode()}} 
+                                >
+                                <Stack direction={'row'} spacing={1}>
+                                <Typography 
+                                    textAlign="center"
+                                >
+                                    Mode
+                                </Typography>
+                                {darkState? 
+                                <LightModeIcon
+                                    fontSize={'small'}
+                                />
+                                :
+                                <DarkModeIcon
+                                    fontSize={'small'}
+                                />
+                                }
+                                </Stack>
+                            </MenuItem>
+                            <MenuItem 
+                                onClick={logout} 
+                                >
+                                <Typography textAlign="center">Logout</Typography>
+                            </MenuItem>
+                        </Menu>
+                        </Box>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: drawerWidth,
+                        boxSizing: 'border-box',
+                    },
+                }}
+                variant="temporary"
+                anchor="left"
+                open={open}
+                
+            >
+            <DrawerHeader>
+                <IconButton onClick={handleDrawerClose}>
+                    {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+                <ListItemButton 
+                    component={Link} 
+                    to='/'
+                    onClick={handleDrawerClose}
+                >
+                    <ListItemIcon>
+                    <DashboardIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Dashboard" />
+                </ListItemButton>
+                <Divider/>
+                <List>
+                    <ListItemButton 
                         component={Link} 
                         to='/worksegments'
-                        >
-                        <Typography textAlign="center">Timesheets</Typography>
-                    </MenuItem>
-                    {/* <MenuItem 
-                        onClick={() => {
-                            setActiveButton('schedule');
-                            handleCloseNavMenu()}}
-                        component={Link} 
-                        to='/schedule'
-                        >
-                        <Typography textAlign="center">Schedule</Typography>
-                    </MenuItem> */}
-                    <MenuItem 
-                        onClick={() => {
-                            setActiveButton('projects');
-                            handleCloseNavMenu()}}
-                        onChangeCapture={clickedButtonHandler} 
-                        component={Link} 
-                        to='/projects'
-                        >
-                        <Typography textAlign="center">Projects</Typography>
-                    </MenuItem>
-                    <MenuItem 
-                        onClick={() => {
-                            setActiveButton('announcements');
-                            handleCloseNavMenu()}}
-                        component={Link} 
-                        to='/announcements'
-                        >
-                        <Typography textAlign="center">Announcements</Typography>
-                    </MenuItem>
-                    <MenuItem 
-                        onClick={() => {
-                            setActiveButton('expenses');
-                            handleCloseNavMenu()}} 
+                        onClick={handleDrawerClose}
+                    >
+                        <ListItemIcon>
+                        <AccessTimeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Timesheets" />
+                    </ListItemButton>
+                    <ListItemButton 
                         component={Link} 
                         to='/expenses'
-                        >
-                        <Typography textAlign="center">Expenses</Typography>
-                    </MenuItem>
-                    <MenuItem  
-                        onClick={() => {
-                            setActiveButton('task');
-                            handleCloseNavMenu()}}
+                        onClick={handleDrawerClose}
+                    >
+                        <ListItemIcon>
+                        <ReceiptLongSharpIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Expenses" />
+                    </ListItemButton>
+                    <ListItemButton 
                         component={Link} 
                         to='/task'
-                        >
-                        <Typography textAlign="center">Task</Typography>
-                    </MenuItem>
-                    <MenuItem  
-                        onClick={() => {
-                            setActiveButton('field');
-                            handleCloseNavMenu()}}
-                        component={Link} 
-                        to='/field'
-                        >
-                        <Typography textAlign="center">Field</Typography>
-                    </MenuItem>
-                    <MenuItem  
-                        onClick={() => {
-                            setActiveButton('shop');
-                            handleCloseNavMenu()}}
-                        component={Link} 
-                        to='/shop'
-                        >
-                        <Typography textAlign="center">Shop</Typography>
-                    </MenuItem>
-                    {isEng ? 
-                    <MenuItem  
-                        onClick={() => {
-                            setActiveButton('eng');
-                            handleCloseNavMenu()}}
+                        onClick={handleDrawerClose}
+                    >
+                        <ListItemIcon>
+                        <Badge badgeContent={taskRead} color="error">
+                            <PlaylistAddCheckSharpIcon />
+                        </Badge>
+                        </ListItemIcon>
+                        <ListItemText primary="Task" />
+                    </ListItemButton>
+                </List>
+                <Divider/>
+                <List>
+                <ListItemButton 
+                    component={Link} 
+                    to='/projects'
+                    onClick={handleDrawerClose}
+                >
+                    <ListItemIcon>
+                    <ConstructionIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Projects" />
+                </ListItemButton>
+                <ListItemButton 
+                    // component={Link} 
+                    // to='/reports'
+                    onClick={handleDrawerClose}
+                >
+                    <ListItemIcon>
+                    <SummarizeSharpIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Reports" />
+                </ListItemButton>
+
+                <ListItemButton 
+                    component={Link} 
+                    to='/announcements'
+                    onClick={handleDrawerClose}
+                >
+                    <ListItemIcon>
+                    <AnnouncementIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Announcements" />
+                </ListItemButton>
+            </List>
+            </List>
+            <Divider />
+            <List>
+            <ListItemButton 
+                    component={Link} 
+                    to='/field'
+                    onClick={handleDrawerClose}
+                >
+                    <ListItemIcon>
+                    <EngineeringSharpIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Field" />
+                </ListItemButton>
+
+                <ListItemButton 
+                    component={Link} 
+                    to='/shop'
+                    onClick={handleDrawerClose}
+                >
+                    <ListItemIcon>
+                    <BuildCircleSharpIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Shop" />
+                </ListItemButton>
+
+                {isEng && (
+                    <ListItemButton 
                         component={Link} 
                         to='/engineering'
-                        >
-                        <Typography textAlign="center">Engineering</Typography>
-                    </MenuItem>
-                    : ''}
-                </Menu>
-                </Box>
-                <Typography
-                variant="h5"
-                noWrap
-                name='dashboard'
-                component={Link}
-                to="/"
-                onClick={() => {setActiveButton('dashboard')}}
-                sx={{
-                    mr: 2,
-                    display: { xs: 'flex', md: 'none' },
-                    flexGrow: 1,
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    letterSpacing: '.3rem',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                }}
-                >
-                <img style={{width: '6rem'}} src={logo} alt="GPS Logo"/>
-                </Typography>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    <Button component={Link} to='/'
-                        name='dashboard'
-                        sx={activeButton === 'dashboard' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
+                        onClick={handleDrawerClose}
                     >
-                        Dashboard
-                    </Button>
-                    <Button component={Link} to='/worksegments'
-                        name='worksegments'
-                        sx={activeButton === 'worksegments' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Timesheets
-                    </Button>
-                    {/* <Button component={Link} to='/schedule'
-                        name='schedule'
-                        sx={activeButton === 'schedule' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Schedule
-                    </Button> */}
-                    <Button component={Link} to='/projects'
-                        name='projects'
-                        sx={activeButton === 'projects' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Projects
-                    </Button>
-                    <Button component={Link} to='/announcements'
-                        name='announcements'
-                        sx={activeButton === 'announcements' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Announcements
-                    </Button>
-                    <Button component={Link} to='/expenses'
-                        name='expenses'
-                        sx={activeButton === 'expenses' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Expenses
-                    </Button>
-                    <Button component={Link} to='/task'
-                        name='task'
-                        sx={activeButton === 'task' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Task
-                    </Button>
-                    <Button component={Link} to='/field'
-                        name='field'
-                        sx={activeButton === 'field' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Field
-                    </Button>
-                    <Button component={Link} to='/shop'
-                        name='shop'
-                        sx={activeButton === 'shop' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Shop
-                    </Button>
-                    {isEng ? 
-                    <Button component={Link} to='/engineering'
-                        name='eng'
-                        sx={activeButton === 'eng' ? activeStyle : inactiveStyle}
-                        onClick={clickedButtonHandler}
-                        >
-                        Eng
-                    </Button>
-                    :''}
-                </Box>
-                <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar>{user.first_name.toUpperCase()[0]}</Avatar>
-                    </IconButton>
-                </Tooltip>
-                <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                > 
-                    <MenuItem 
-                        onClick={() => {
-                            setActiveButton('');
-                            handleCloseUserMenu()}} 
-                        component={Link} 
-                        to='/profile'
-                        >
-                        <Typography textAlign="center">Profile</Typography>
-                    </MenuItem>
-                    <MenuItem 
-                        onClick={() => {
-                            handleChangeMode()}} 
-                        >
-                        <Stack direction={'row'} spacing={1}>
-                        <Typography 
-                            textAlign="center"
-                        >
-                            Mode
-                        </Typography>
-                        {darkState? 
-                        <LightModeIcon
-                            fontSize={'small'}
-                        />
-                        :
-                        <DarkModeIcon
-                            fontSize={'small'}
-                        />
-                        }
-                        </Stack>
-                    </MenuItem>
-                    <MenuItem 
-                        onClick={() => {
-                            setActiveButton('dashboard');
-                            logout()}} 
-                        >
-                        <Typography textAlign="center">Logout</Typography>
-                    </MenuItem>
-                </Menu>
-                </Box>
-            </Toolbar>
-            </Container>
-        </AppBar>
-        </div>
+                        <ListItemIcon>
+                            <ArchitectureSharpIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Engineering" />
+                    </ListItemButton>
+                )}
+            </List>
+        </Drawer>
+        <Main open={open} >
+            {/* Your main content goes here */}
+        </Main>
+        </Box>
     );
 };
-export default Navbar;
