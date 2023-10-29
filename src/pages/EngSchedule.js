@@ -1,17 +1,12 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
-import Loading from '../components/Loading';
+// import Loading from '../components/Loading';
 
 export default function EngSchedule(props) {
-    const { user, token, handleOpenSnackbar, darkState} = props;
-    const [ isLoading, setIsLoading ] = React.useState(false); // wait until API returns promise
+    // const { user, token, handleOpenSnackbar, darkState} = props;
+    // const [ isLoading, setIsLoading ] = React.useState(false); // wait until API returns promise
 
     return ( 
         <div>
@@ -27,9 +22,9 @@ export default function EngSchedule(props) {
                 DRAWING SCHEDULE
             </Typography>
             <Divider sx={{mb:3}}/>
-            <Loading
+            {/* <Loading
                 open={isLoading}
-            />
+            /> */}
         </div>
     );
 };

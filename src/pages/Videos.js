@@ -80,7 +80,7 @@ const data = [
     };
 
     export default function Videos(props) {
-        const { user, token, handleOpenSnackbar, darkState} = props
+        // const { user, token, handleOpenSnackbar, darkState} = props
     return (
         <Container
             component="span"

@@ -1,7 +1,7 @@
 import React from 'react';
 import VehicleDataService from '../services/Vehicle.services';
 import Loading from '../components/Loading';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';

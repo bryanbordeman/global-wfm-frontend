@@ -10,75 +10,27 @@ export default function ProjectPicker(props) {
     const [ inputValue, setInputValue ] = React.useState('');
     const [ isLoading, setIsLoading ] = React.useState(false);
 
-    const { handleChangeProject, errors} = props
+    const { handleChangeProject, errors} = props;
     const { editing, editObject } = props;
-    const didMount = React.useRef(false);
-
-    // React.useEffect(() => {
-    //     handleClear();
-    //     retrieveProject();
-    // },[]);
 
     React.useEffect(() => {
-        // if (didMount.current) {
             handleClear();
             retrieveProject();
-        // } else {
-        //     didMount.current = true;
-        // }
     },[]);
-
-    // React.useEffect(() => {
-    //     //! renders twice??
-    //     if (didMount.current && editing) {
-    //         handleClear();
-    //         retrieveProject();
-    //     } else {
-    //         didMount.current = true;
-    //         handleClear();
-    //         retrieveProject();
-    //     }
-    // },[editing])
 
     React.useEffect(() => {
         //! renders twice??
         if(editing){
             handleInputValue(editObject.project);
         };
-    },[editing])
+    },[editing]);
 
     const retrieveProject = () => {
         setProjects([]);
         setIsLoading(true);
         ProjectDataService.getAll(props.token)
             .then(response => {
-                // setProjects(response.data)
-                //!sort by project number
-                let obj = response.data; // object of all open projects
-                let tempObj = {}; // temp object to be sorted by year
-                // make keys of years
-                obj.map((p) => {
-                    tempObj[`${p.number.slice(-2)}`] = []
-                });
-                obj.map((p) => {
-                    // add object to year list
-                    Object.entries(tempObj).filter(([key]) => {
-                        if(key === p.number.slice(-2)){
-                            tempObj[key].push(p)
-                        }
-                    });
-                });
-                // make list of keys so it can be mapped
-                let keys = Object.keys(tempObj);
-                keys.map((k) => {
-                    tempObj[k].sort((a, b) => (a.number < b.number) ? 1 : -1)
-                })
-                // map through keys and add ojects to rows
-                keys.slice(0).reverse().map((k) => {
-                    tempObj[k].map((p) => {
-                        setProjects(oldArray => [...oldArray, p]);
-                    });
-                });
+                setProjects(response.data);
             })
             .catch( e => {
                 console.log(e);
@@ -86,7 +38,8 @@ export default function ProjectPicker(props) {
             .finally(() => {
                 setIsLoading(false);
             });
-    }
+    };
+    
     const handleInputValue = (newValue) => {
         setValue(newValue);
         if(!isLoading)

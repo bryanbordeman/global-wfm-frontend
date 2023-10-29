@@ -428,7 +428,7 @@ export default function AddWorksegmentForm(props) {
                 fullScreen 
                 open={openAdd} 
                 onClose={handleClose}
-                scroll={'body'}
+                scroll={'paper'}
                 
                 >
                 <DialogTitle>

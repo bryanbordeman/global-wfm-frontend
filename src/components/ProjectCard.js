@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Button, Divider, Stack } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { styled } from '@mui/material/styles';
@@ -361,7 +361,7 @@ export default function ProjectCard(props) {
                                     <Box textAlign='center'>
                                         <List sx={{mt:0, pt:0}}>
                                             {drawings.map((d) => (
-                                                <div>
+                                                <div key={d.id}>
                                                     <ListItem disablePadding>
                                                         <ListItemButton onClick={() => handleOpenDrawing(d)}>
                                                         <ListItemIcon>

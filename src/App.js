@@ -24,7 +24,7 @@ export default function App() {
     const [ token, setToken ] = useState(localStorage.getItem('token') || null)
     const [ error, setError ] = useState('')
     const [ loginErrors, setLoginErrors ] = useState({username: null, password: null})
-    const [ isLoading, setIsLoading ] = React.useState(true);
+    const [ isLoading, setIsLoading ] = React.useState(false);
 
     const [ openSnackbar, setOpenSnackbar ] = React.useState(false);
     const [ snackbarSeverity, setSnackbarSeverity ] = React.useState('')
@@ -42,7 +42,6 @@ export default function App() {
 
     const [ totals, setTotals ] = React.useState([]);
     const [ isoWeek, setIsoWeek ] = React.useState(moment(new Date()).format('GGGG[W]WW'));
-    const didMount = React.useRef(false);
     const [ openDrawer, setOpenDrawer ] = React.useState(false);
 
     const theme = createTheme({
@@ -73,7 +72,9 @@ export default function App() {
     },[]);
 
     useEffect(()=> {
-        retrieveTaskReadCount();
+        if(user.username){
+            retrieveTaskReadCount();
+        }
     },[openDrawer])
 
     useEffect(() => {
@@ -161,7 +162,6 @@ export default function App() {
             if(response.data){
                 let active = response.data.user_is_active
                 if(active === 'True'){
-                    recieveTotals();
                     retrieveEmployees();
                 }else{
                     // if user is not active anymore logout.
@@ -175,17 +175,13 @@ export default function App() {
             
         })
         .catch( e => {
-            // console.log(e);
-            // handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-    })
-        .finally(() => {
             setIsLoading(false);
-        });
+        })
     };
 
     // -------- worksegments --------- //
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (typeof user === 'object' &&
         !Array.isArray(user) &&
         user !== null) {
@@ -197,7 +193,6 @@ export default function App() {
 
     const recieveTotals = () => {
         // get total hours for all users in isoweek.
-        setIsLoading(true);
         WorksegmentDataService.getTotals(token, isoWeek)
             .then(response => {
                 setTotals(response.data);
@@ -205,7 +200,8 @@ export default function App() {
             })
             .catch(e => {
                 console.log(e);
-                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.');
+                setIsLoading(false);
             })
     };
 
@@ -221,11 +217,11 @@ export default function App() {
                 })
                 .catch( e => {
                     console.log(e);
-                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.');
+                    setIsLoading(false);
                 })
         }else{
             // else get only segemnts for current user
-            // setIsLoading(true);
             WorksegmentDataService.getWeek(token, isoWeek)
                 .then(response => {
                     setWorksegments(response.data);
@@ -233,7 +229,8 @@ export default function App() {
                 })
                 .catch( e => {
                     console.log(e);
-                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                    handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.');
+                    setIsLoading(false);
                 })
         }
     };
@@ -245,12 +242,14 @@ export default function App() {
             .then(response => {
                 let data = response.data
                 setPTOsegments(data); 
+                setTimeout(() => {
+                    setIsLoading(false);
+                },3000)
+                
             })
             .catch( e => {
                 console.log(e);
-                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-            })
-            .finally(() => {
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.');
                 setIsLoading(false);
             })
         :
@@ -258,29 +257,28 @@ export default function App() {
             .then(response => { 
                 let data = response.data
                 setPTOsegments(data);
+                setTimeout(() => {
+                    setIsLoading(false);
+                },3000)
             })
             .catch( e => {
                 console.log(e);
-                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
-            })
-            .finally(() => {
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.');
                 setIsLoading(false);
             })
     };
 
     const retrieveEmployees = () => {
-        setIsLoading(true);
         UserService.getUsers(token)
         .then(response => {
             setEmployees(response.data);
+            recieveTotals();
         })
         .catch( e => {
             console.log(e);
+            handleOpenSnackbar('error', 'Something Went Wrong!! Please try again. read count')
             setIsLoading(false);
         })
-        .finally(() => {
-            setIsLoading(false);
-        });
     };
 
     const retrieveTaskReadCount = () => {
@@ -291,7 +289,7 @@ export default function App() {
             })
             .catch( e => {
                 console.log(e);
-                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again. read count')
             })
     };
 
@@ -301,11 +299,6 @@ export default function App() {
             <BrowserRouter>
                 {user.username? 
                 <>
-                {/* <Navbar
-                    handleChangeMode={handleChangeMode}
-                    darkState={darkState}
-                    user={user}
-                    logout={logout}/> */}
                 <NavBar
                     handleChangeMode={handleChangeMode}
                     darkState={darkState}
@@ -315,7 +308,6 @@ export default function App() {
                     open={openDrawer}
                     setOpen={setOpenDrawer}
                 />
-                {/* <Toolbar /> */}
                 </> : ''}
                 <MainRoutes
                     user={user}

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ExpenseDataService from '../services/Expense.services';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -27,7 +26,7 @@ import Transition from './DialogTransistion'
 
 
 export default function AddExpenseForm(props) {
-    const { user, token, handleOpenSnackbar } = props
+    const { user, token } = props
     const { employees } = props; 
     const { open, setOpen } = props
     const { editing, expense } = props

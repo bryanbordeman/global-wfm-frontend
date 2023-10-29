@@ -36,6 +36,7 @@ function Task(props) {
     const [ openNextTask, setOpenNextTask ] = React.useState(false);
     const [ openTaskDialog, setOpenTaskDialog ] = React.useState(false);
     const [ isLoading, setIsLoading ] = React.useState(true);
+    const [ isLoadingTask, setIsLoadingTask ] = React.useState(true);
 
     React.useEffect(() => {
             setSelectedList([]) // not a great solution to clear list after employee change
@@ -76,6 +77,7 @@ function Task(props) {
     };
 
     const retrieveTasks = (inputList) => {
+        setIsLoadingTask(true);
         let allTasks= [];
         let tempObject = {};
         setIsLoading(true);
@@ -106,6 +108,7 @@ function Task(props) {
                 })
                 .finally(() => {
                     setIsLoading(false);
+                    setIsLoadingTask(false);
                 });
     };
 
@@ -388,6 +391,8 @@ function Task(props) {
                 taskData.assignee = task.assignee.id
                 taskData.created_by = task.created_by.id
                 taskData.project = task.project? task.project.id : ''
+                taskData.service = task.service? task.service.id : ''
+                taskData.hse = task.hse? task.hse.id : ''
                 taskData.quote = task.quote? task.quote.id : ''
                 taskData.tasklist = task.tasklist.id
                 taskData.subtasks = task.subtasks.map(subT => (subT.id))
@@ -473,6 +478,7 @@ function Task(props) {
                         </div>
                         <div style={{marginBottom: '0.75rem'}}>
                             <TaskSelectlist
+                                isLoadingTask={isLoadingTask}
                                 tasks={tasks}
                                 taskLists={taskLists}
                                 employee={employee}

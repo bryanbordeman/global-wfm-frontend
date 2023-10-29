@@ -4,19 +4,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import  Divider from '@mui/material/Divider';
+import Divider from '@mui/material/Divider';
 import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
-import Box from '@mui/material/Box';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import moment from 'moment';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
-import { Stack } from '@mui/material';
 
 export default function VehicleInsurance(props) {
     const { open, setOpen } = props;

@@ -1,11 +1,10 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import UserService from '../services/User.services'
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function EmployeePicker(props) {
-    const { handleChangeEmployee, errors, user} = props
+    const { handleChangeEmployee, errors } = props
     const { editing, editObject } = props
     const { employees } = props;
     const [ value, setValue ] = React.useState(null)

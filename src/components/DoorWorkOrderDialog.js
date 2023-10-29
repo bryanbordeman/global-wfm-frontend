@@ -218,13 +218,13 @@ export default function DoorWorkOrderDialog(props) {
                     {darkState? 
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <img style={{ width: '300px'}} src={doorIcon}/>
+                            <img alt='door-icon' style={{ width: '300px'}} src={doorIcon}/>
                         </div>
                     </div>
                     :
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'center' }}> 
-                            <img style={{ width: '300px'}} src={doorIcon}/>
+                            <img alt='door-icon' style={{ width: '300px'}} src={doorIcon}/>
                         </div>
                     </div>
                     }

@@ -12,11 +12,16 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import WorksegmentDataService from '../services/Worksegment.services';
 import moment from 'moment';
-import Loading from './Loading';
 import WeekPicker from './WeekPicker';
 import { v4 as uuidv4 } from 'uuid';
+
+// Define a global style object
+const cellOverflowStyle = {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  };
 
 function createData(name, regular, overtime, travel, sick, vacation, holiday, total_duration, summary) {
     return {
@@ -48,16 +53,16 @@ function Row(props) {
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" style={cellOverflowStyle}>
                 {row.name}
                 </TableCell>
-                <TableCell align="left">{row.regular}</TableCell>
-                <TableCell align="left">{row.overtime}</TableCell>
-                <TableCell align="left">{row.travel}</TableCell>
-                <TableCell align="left">{row.sick}</TableCell>
-                <TableCell align="left">{row.vacation}</TableCell>
-                <TableCell align="left">{row.holiday}</TableCell>
-                <TableCell align="left">{row.total_duration}</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>{row.regular}</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>{row.overtime}</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>{row.travel}</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>{row.sick}</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>{row.vacation}</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>{row.holiday}</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>{row.total_duration}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0, border: 0 }} colSpan={9}>
@@ -69,31 +74,29 @@ function Row(props) {
                     <Table size="small" aria-label="purchases">
                         <TableHead>
                         <TableRow>
-                        <TableCell align="left">Status</TableCell>
-                            <TableCell align="left">Date</TableCell>
-                            <TableCell align="left">Project</TableCell>
-                            <TableCell align="left">Type</TableCell>
-                            <TableCell align="left">Start Time</TableCell>
-                            <TableCell align="left">End Time</TableCell>
-                            <TableCell align="left">Travel</TableCell>
-                            <TableCell align="left">Lunch</TableCell>
-                            <TableCell align="left">Total Hours</TableCell>
+                        <TableCell align="left" style={cellOverflowStyle}>Status</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>Date</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>Project</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>Type</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>Start Time</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>End Time</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>Travel</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>Lunch</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>Total Hours</TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
                         {row.summary.map((summaryRow) => (
                             <TableRow hover key={uuidv4()} >
-                            <TableCell component="th" scope="row">
-                                {summaryRow.approved}
-                            </TableCell>
-                            <TableCell align="left">{summaryRow.date}</TableCell>
-                            <TableCell align="left">{summaryRow.project}</TableCell>
-                            <TableCell align="left">{summaryRow.type}</TableCell>
-                            <TableCell align="left">{summaryRow.start_time}</TableCell>
-                            <TableCell align="left">{summaryRow.end_time}</TableCell>
-                            <TableCell align="left">{summaryRow.travel}</TableCell>
-                            <TableCell align="left">{summaryRow.lunch}</TableCell>
-                            <TableCell align="left">{summaryRow.total}</TableCell>
+                            <TableCell component="th" scope="row" style={cellOverflowStyle}>{summaryRow.approved}</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>{summaryRow.date}</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>{summaryRow.project}</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>{summaryRow.type}</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>{summaryRow.start_time}</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>{summaryRow.end_time}</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>{summaryRow.travel}</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>{summaryRow.lunch}</TableCell>
+                            <TableCell align="left" style={cellOverflowStyle}>{summaryRow.total}</TableCell>
                             </TableRow>
                         ))}
                         </TableBody>
@@ -107,21 +110,21 @@ function Row(props) {
 };
 
 export default function WorksegmentTable(props) {
-    const { user, token, setToken, handleOpenSnackbar} = props;
+    const { user} = props;
 
-    const { worksegments, setWorksegments } = props
+    const { worksegments } = props
     const { PTOsegments } = props;
-    const { totals, setTotals } = props
+    const { totals } = props
     const { isoWeek, setIsoWeek } = props
 
     const [ tableRows, setTableRows ] = React.useState([]); 
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         setTableRows([])
         if(totals && worksegments && isoWeek){
             updateTable();
         }
-    },[totals, worksegments, isoWeek])
+    },[totals, worksegments, isoWeek, PTOsegments])
 
     const updateTable = () => {
         // get total hours for all users in isoweek.
@@ -158,7 +161,22 @@ export default function WorksegmentTable(props) {
                         total: w.duration
                     });
                 };
-            }); 
+            });
+            PTOsegments.map((p) => {
+                if(`${p.user.first_name} ${p.user.last_name}` === r.name){
+                    r.summary.push({
+                        approved: p.is_approved? 'Approved' : 'Pending',
+                        date: moment(p.date).format('dddd'),
+                        project: '----',
+                        type: p.is_paid? p.PTO_type : 'Unpaid',
+                        start_time: '----',
+                        end_time: '----',
+                        travel: '----',
+                        lunch: '----',
+                        total: p.duration
+                    })
+                }
+            }) 
         });
         setTableRows(rows);
     };
@@ -184,14 +202,14 @@ export default function WorksegmentTable(props) {
             <TableHead>
             <TableRow>
                 <TableCell />
-                <TableCell align="left">Employee</TableCell>
-                <TableCell align="left">Regular</TableCell>
-                <TableCell align="left">Overtime</TableCell>
-                <TableCell align="left">Travel</TableCell>
-                <TableCell align="left">Sick</TableCell>
-                <TableCell align="left">Vacation</TableCell>
-                <TableCell align="left">Holiday</TableCell>
-                <TableCell align="left">Total Hours</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>Employee</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>Regular</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>Overtime</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>Travel</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>Sick</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>Vacation</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>Holiday</TableCell>
+                <TableCell align="left" style={cellOverflowStyle}>Total Hours</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -206,11 +224,6 @@ export default function WorksegmentTable(props) {
             </TableBody>
         </Table>
         </TableContainer>
-        {/* // :
-        // <div style={{marginTop: '10px'}}> 
-        //     {Object.keys(totals).length < 1? 'Loading...' : `No hours recorded for ${isoWeek}` } 
-        // </div>
-        // } */}
         </div>
     );
 };

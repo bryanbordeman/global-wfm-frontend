@@ -2,7 +2,6 @@ import * as React from 'react';
 import DoorDataService from '../services/Door.services';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
-import { Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,14 +9,13 @@ import IconButton from '@mui/material/IconButton';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/GPS_Navbar_Logo.svg'
+import logo from '../assets/GPS_Navbar_Logo_R1.svg'
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Card, Stack, Divider, CardContent } from '@mui/material';
@@ -45,20 +43,14 @@ import LHAOutSwingDark  from '../assets/door_swing_icons/LHAOutSwingDark.svg'
 
 import Loading from '../components/Loading';
 
-const pathname = window.location.pathname
-
-
-
 export default function Door(props) {
     const [ door, setDoor ] = React.useState('');
     const [ doorIcon, setDoorIcon ] = React.useState('');
     const [ isLoading, setIsLoading ] = React.useState(false);
     const [ service, setService ] = React.useState(false);
-    const [ anchorElNav, setAnchorElNav ] = React.useState(null);
     const [ anchorElUser, setAnchorElUser ] = React.useState(null);
     const { user, handleChangeMode, darkState } = props
     let navigate = useNavigate();
-    const [ activeButton, setActiveButton ] = React.useState(pathname === '/' ? 'dashboard' : pathname.substring(1));
     const { id } = useParams();
 
     const initialService = { 
@@ -111,7 +103,6 @@ export default function Door(props) {
                 color: color
             });
         }
-          
     }, [door])
 
     React.useEffect(() => {
@@ -205,7 +196,7 @@ export default function Door(props) {
         navigate('/login')
         setAnchorElUser(null);
         
-    }
+    };
 
     return (
         <div>
@@ -220,18 +211,18 @@ export default function Door(props) {
                 <Typography
                 variant="h6"
                 noWrap
-                // name='dashboard'
-                // component={Link}
-                // to="/"
-                // onClick={() => {setActiveButton('dashboard')}}
                 sx={{
-                    mr: 2,
-                    display: { xs: 'none', md: 'flex' },
+                    display: 'flex',
+                    flexDirection: 'column', 
+                    justifyContent: 'center', 
+                    alignItems: 'center',    
+                    flexGrow: 1,
                     fontFamily: 'monospace',
                     fontWeight: 700,
                     letterSpacing: '.3rem',
                     color: 'inherit',
                     textDecoration: 'none',
+                    height: '100%', 
                 }}
                 >
                 <img style={{width: '6rem'}} src={logo} alt="GPS Logo"/>
@@ -240,10 +231,6 @@ export default function Door(props) {
                 <Typography
                     variant="h5"
                     noWrap
-                    name='dashboard'
-                    // component={Link}
-                    // to="/"
-                    // onClick={() => {setActiveButton('dashboard')}}
                     sx={{
                         position: 'absolute',
                         top: '50%',
@@ -435,7 +422,6 @@ export default function Door(props) {
                                 Project Address:
                             </Typography>
                             <a 
-                            
                                 target="_blank"
                                 rel="noopener noreferrer" 
                             >
@@ -494,8 +480,7 @@ export default function Door(props) {
                             <Typography variant="body2">
                                 Project Address:
                             </Typography>
-                            <a 
-                            
+                            <a href={`http://maps.google.com/?q=${door.project.address.address}, ${door.project.address.city}, ${door.project.address.state} ${door.project.address.postal_code}`}                             
                                 target="_blank"
                                 rel="noopener noreferrer" 
                             >

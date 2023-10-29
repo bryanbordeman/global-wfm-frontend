@@ -110,8 +110,6 @@ function DueDate(props) {
     );
 };
 
-let doorCount = 1; // Variable to store the current door count within a series
-
 export default function Doors(props) {
     const { user, token, handleOpenSnackbar, darkState} = props;
     const [ openDoorWorkOrderDialog, setOpenDoorWorkOrderDialog ] = React.useState(false);
@@ -120,10 +118,6 @@ export default function Doors(props) {
     const [ doorNumberList, setDoorNumberList ] = React.useState([]);
     const [ isLoading, setIsLoading ] = React.useState(true); // wait until API returns promise
 
-    React.useEffect(() => {
-        // Reset doorCount to 1 whenever doorNumberList changes
-        doorCount = 1;
-    }, [doorNumberList]);
 
     React.useEffect(() => {
         retrieveOrders();

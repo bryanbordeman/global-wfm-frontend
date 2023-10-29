@@ -10,7 +10,6 @@ import Transition from './DialogTransistion'
 import CloseIcon from '@mui/icons-material/Close';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import moment from 'moment';
 import VehiclePicker from './VehiclePicker';
 
 export default function AddVehicleIssueForm(props) {

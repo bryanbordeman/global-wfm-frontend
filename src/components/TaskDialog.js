@@ -21,14 +21,10 @@ export default function TaskDialog(props) {
     const { task } = props;
     const { setOpenDelete } = props;
     const { created_by } = props.task;
-    const { project } = props.task;
-    const { quote } = props.task;
     const { editing, setEditing, handleOpenTaskForm } = props;
     const { setOpenTaskDialog, openTaskDialog } = props;
 
     const [createdBy, setCreatedBy] = React.useState();
-    const [projectNumber, setProjectNumber ] = React.useState();
-    const [quoteNumber, setQuoteNumber ] = React.useState();
     
     const [ images, setImages ] = React.useState([]);
     const [ image, setImage ] = React.useState(null);
@@ -40,17 +36,6 @@ export default function TaskDialog(props) {
         {setCreatedBy(`${created_by.first_name} ${created_by.last_name}`)
         }else{
             setCreatedBy(`${props.user.first_name} ${props.user.last_name}`)
-        }
-        if(project){
-            setProjectNumber(`${project.number}`);
-        }else{
-            setProjectNumber('')
-        }
-
-        if(quote){
-            setQuoteNumber(`${quote.number}`);
-        }else{
-            setQuoteNumber('');
         }
     },[task]);
 

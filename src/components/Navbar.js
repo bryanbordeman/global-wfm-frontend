@@ -274,7 +274,7 @@ export default function NavBar(props) {
                 variant="temporary"
                 anchor="left"
                 open={open}
-                
+                onClose={handleDrawerClose}
             >
             <DrawerHeader>
                 <IconButton onClick={handleDrawerClose}>
@@ -341,8 +341,8 @@ export default function NavBar(props) {
                     <ListItemText primary="Projects" />
                 </ListItemButton>
                 <ListItemButton 
-                    // component={Link} 
-                    // to='/reports'
+                    component={Link} 
+                    to='/reports'
                     onClick={handleDrawerClose}
                 >
                     <ListItemIcon>

@@ -15,7 +15,6 @@ export default function Projects(props) {
     const [ menuOptions, setMenuOptions ] = React.useState(['Projects', 'Services', "HSE's"]);
     const [ menuSelection, setMenuSelection ] = React.useState(0);
     const [ picker, setPicker ] = React.useState('')
-    const didMount = React.useRef(false);
 
     React.useEffect(() => {
         if(user.groups.filter(group => (group.name === 'SALES')).length > 0){
@@ -100,7 +99,7 @@ export default function Projects(props) {
                     flexDirection:'column',
                     height: '100%'
                 }}>
-                    <div style={{width: '100%', maxWidth: '400px', marginTop: '0.5rem'}}>
+                    <div style={{width: '100%', maxWidth: '400px', marginTop: '1.5rem'}}>
                     <Stack direction="row" spacing={1}>
                         {picker}
                         <ProjectTypeDropdown

@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SickIcon from '@mui/icons-material/Sick';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import WeekPicker from '../components/WeekPicker'
 import Tooltip from '@mui/material/Tooltip';
@@ -25,7 +26,7 @@ import AddPTOForm from '../components/AddPTOForm';
 
 import EmployeePicker from '../components/EmployeePicker';
 import Loading from '../components/Loading';
-import { purple, pink, teal} from '@mui/material/colors';
+import { purple, pink, teal, grey} from '@mui/material/colors';
 
 export default function WorksegmentList(props) {
     const { user, token, handleOpenSnackbar, darkState } = props;
@@ -398,7 +399,7 @@ export default function WorksegmentList(props) {
                     width: '100%',
                     maxWidth: '500px',
                     borderWidth: darkState? '1.5px' :'3px',
-                    borderColor:  segment.PTO_type === 'Sick' ? 'warning.main' : segment.PTO_type === 'Vacation' ? purple[500] : teal[500],
+                    borderColor: segment.PTO_type === 'Sick' && segment.is_paid ? 'warning.main' : (segment.PTO_type === 'Vacation' && segment.is_paid ? purple[500] : (segment.is_paid ? teal[500] : grey[500])),
                     borderRadius: '16px', 
                     }}
                     variant="outlined"
@@ -418,13 +419,16 @@ export default function WorksegmentList(props) {
                                 zIndex: 1
                                 }}
                         >
-                        {segment.PTO_type === 'Sick' ? (
+                        {segment.PTO_type === 'Sick' && segment.is_paid ? (
                             <SickIcon fontSize='large' color='warning' />
-                            ) : segment.PTO_type === 'Vacation' ? (
+                        ) : segment.PTO_type === 'Vacation' && segment.is_paid ? (
                             <BeachAccessIcon fontSize='large' sx={{ color: purple[500] }} />
-                            ) : (
-                            <CalendarMonthIcon fontSize='large' sx={{ color: teal[500] }}/>
+                        ) : segment.PTO_type === 'Holiday' ? (
+                            <CalendarMonthIcon fontSize='large' sx={{ color: teal[500] }} />
+                        ) : (
+                            <MoneyOffIcon fontSize='large' sx={{ color: grey[500] }} />
                         )}
+
 
                         </div>
                     </div>
@@ -465,13 +469,13 @@ export default function WorksegmentList(props) {
                                         sx={{ 
                                             marginTop: '2.5rem',
                                             marginBottom: '1.5rem',
-                                            // backgroundColor: segment.PTO_type === 'Sick'? 'warning.main' : purple[500]
+                                            color: !segment.is_paid? grey[500] : '',
+                                            borderColor: !segment.is_paid? grey[500] : ''
                                         }}
-                                        // color={`${purple[500]}`}
                                         color={`${segment.is_approved ? 'success' : 'primary'}`}
                                         icon={segment.is_approved ? <CheckIcon /> : <QueryBuilderIcon/>} 
                                         label={`${segment.duration} ${segment.duration > 1 ? 'Hrs' : 'Hr'}`} 
-                                        // variant="outlined" 
+                                        variant={!segment.is_paid? "outlined" : ''}
                                     />
                                     <Divider/>
                                     <ListItemText
@@ -510,10 +514,9 @@ export default function WorksegmentList(props) {
                                     }
                                     secondary={
                                     <>  
-                                        {/* {user.is_staff? <Chip sx={{mb:1}}label={`${segment.user.first_name} ${segment.user.last_name}`} />:''} */}
                                         {user.is_staff? `${segment.user.first_name} ${segment.user.last_name}` :''}
                                         {user.is_staff? <br/> :''}
-                                        Type: {capitalizeFirstLetter(segment.PTO_type)}
+                                        {segment.is_paid? `Type: ${capitalizeFirstLetter(segment.PTO_type)}` : 'Type: Unpaid'}
                                         <br/>
                                         {segment.notes ? <Tooltip title={segment.notes} enterTouchDelay={0}>
                                                             <IconButton size="small" aria-label="notes">

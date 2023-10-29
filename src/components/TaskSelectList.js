@@ -8,7 +8,7 @@ import Chip from '@mui/material/Chip';
 import Badge from '@mui/material/Badge';
 
 export default function TaskSelectlist(props) {
-    const { employee, tasks, taskLists, setCurrentList } = props;
+    const { employee, tasks, taskLists, setCurrentList, isLoadingTask } = props;
     const { handleChangeList } = props;
     const [value, setValue] = React.useState('');
 
@@ -26,7 +26,7 @@ export default function TaskSelectlist(props) {
                     labelId="select-list-label"
                     id="select-list"
                     value={employee ? value : ''}
-                    disabled={!employee}
+                    disabled={!employee || isLoadingTask}
                     label={employee ? "Select Task List" : "Select Employee First"}
                     onChange={handleChange}
                 >
@@ -59,4 +59,4 @@ export default function TaskSelectlist(props) {
             </FormControl>
         </Box>
     );
-}
+};

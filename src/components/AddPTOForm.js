@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Stack, IconButton } from '@mui/material';
+import { Stack, IconButton, Typography } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import  Divider from '@mui/material/Divider';
@@ -22,6 +22,11 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
+import { grey } from '@mui/material/colors';
+
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import ToggleButton from '@mui/material/ToggleButton';
 
 export default function AddPTOForm(props) {
     const { 
@@ -47,6 +52,7 @@ export default function AddPTOForm(props) {
         user: user.id,
         PTO_type: CHOICES[0],
         is_full_day: true,
+        is_paid: true,
         is_approved: false,
         date: new Date(), 
         notes: ''
@@ -56,6 +62,7 @@ export default function AddPTOForm(props) {
         user: editing ? PTOsegment.user.id : '',
         PTO_type: editing ? PTOsegment.PTO_type : '',
         is_full_day: editing ? PTOsegment.is_full_day : '',
+        is_paid: editing ? PTOsegment.is_paid : '',
         is_approved: editing ? PTOsegment.is_approved : '',
         date: editing ? new Date(PTOsegment.date.replace('-', '/').replace('-', '/')): new Date(), 
         notes: editing ? PTOsegment.notes: '',
@@ -99,6 +106,7 @@ export default function AddPTOForm(props) {
             user: values.user? values.user : user.id,
             PTO_type: values.PTO_type,
             is_full_day: values.is_full_day,
+            is_paid: values.is_paid,
             is_approved: false,
             date: moment.tz(values.date, "America/New_York")._d.toISOString().split('T')[0],
             notes: values.notes
@@ -176,7 +184,7 @@ export default function AddPTOForm(props) {
                 fullScreen 
                 open={openAddPTO} 
                 onClose={handleClose}
-                scroll={'body'}
+                scroll={'paper'}
                 
                 >
                 <DialogTitle>
@@ -227,6 +235,7 @@ export default function AddPTOForm(props) {
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">PTO Type</InputLabel>
                             <Select
+                                disabled={!values.is_paid} 
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={values.PTO_type}
@@ -242,7 +251,7 @@ export default function AddPTOForm(props) {
                     <Stack direction='row' spacing={2}>
                     <FormControlLabel
                         onChange={() => {setValues({...values, is_full_day: !values.is_full_day})}}
-                        control={<Switch checked={values.is_full_day} color="primary" />}
+                        control={<Switch disabled={!values.is_paid} checked={values.is_full_day} color="primary" />}
                         id="is_full_day"
                         name="is_full_day"
                         label="Full Day"
@@ -252,9 +261,22 @@ export default function AddPTOForm(props) {
                         icon={<QueryBuilderIcon/>}
                         label={values.is_full_day? '8 Hours' : '4 Hours'} 
                         color={values.is_full_day? 'success' : 'warning'}  
+                        sx={{color: !values.is_paid? grey[500] : '',
+                        borderColor: !values.is_paid? grey[500] : ''}}
+                        variant={!values.is_paid? "outlined" : ''}
                     />
                     </Stack>
-                    
+                    <Stack direction='row' spacing={2} alignItems='center'>
+                        <ToggleButton
+                            value="check"
+                            selected={values.is_paid}
+                            onChange={() => {setValues({...values, is_paid: !values.is_paid})}}
+                            color='success'
+                            >
+                            {values.is_paid? <AttachMoneyIcon/> : <MoneyOffIcon/> }
+                        </ToggleButton>
+                        <Typography>{values.is_paid? 'Paid' : 'Unpaid'}</Typography>
+                    </Stack>
                     <TextField
                         autoFocus={false}
                         id="notes"

@@ -15,6 +15,7 @@ import Field from '../pages/Field';
 import Shop from '../pages/Shop';
 import Door from '../pages/Door';
 import Engineering from '../pages/Engineering';
+import Reports from '../pages/Reports';
 
 
 function MainRoutes(props) {
@@ -180,6 +181,21 @@ function MainRoutes(props) {
                             token={token}
                             darkState={darkState}
                             handleOpenSnackbar={handleOpenSnackbar}
+                        />
+                }/>
+                <Route 
+                    exact 
+                    path='/reports' 
+                    element={
+                        !user.username  ? 
+                        <Navigate to="/login" />
+                        :
+                        <Reports
+                            user={user}
+                            token={token}
+                            darkState={darkState}
+                            handleOpenSnackbar={handleOpenSnackbar}
+                            employees={employees}
                         />
                 }/>
                     <Route 
