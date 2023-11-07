@@ -159,7 +159,7 @@ export default function DCNs(props) {
                     endIcon={<AddIcon />}
                     onClick={handleOpenForm}
                 >
-                    Add DNC {nextDCN}
+                    Add DCN {nextDCN}
                 </Button>
             </div>
             <DCNList

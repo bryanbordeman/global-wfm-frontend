@@ -20,12 +20,18 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const CHOICES = ['Complete',
+const STATUS_CHOICES = ['Complete',
                 'Incomplete',
                 'Pending',
                 'Under Observation',
                 'Working solution provided'
                 ];
+
+const SERVICE_TYPE_CHOICES = [
+                "Scheduled Maintenance",
+                "Emergency ",
+                "Warranty",
+                ]
 
 export default function AddDoorServiceReportForm(props) {
     const { user, token, handleOpenSnackbar } = props;
@@ -150,6 +156,22 @@ export default function AddDoorServiceReportForm(props) {
                 <Divider/>
                 <DialogContent>
                 <Stack direction="column" spacing={2}>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Service Type</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={values.service_type}
+                                name='status'
+                                label="Status after Service"
+                                defaultValue={SERVICE_TYPE_CHOICES[0]}
+                                onChange={handleInputValue}
+                            >
+                        {SERVICE_TYPE_CHOICES.map((c) => (
+                            <MenuItem key={c} value={c}>{c}</MenuItem>
+                        ))}
+                        </Select>
+                    </FormControl>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             label="Date"
@@ -162,15 +184,22 @@ export default function AddDoorServiceReportForm(props) {
                             fullWidth
                         />
                     </LocalizationProvider>
-                    <EmployeePicker
-                        editing={editing}
-                        employee={employee}
-                        employees={employees}
-                        errors={errors}
-                        user={user}
-                        token={token}
-                        handleChangeEmployee={handleChangeEmployee}
-                    />
+                    <div>
+                        <Typography 
+                                variant="subtitle1" 
+                                gutterBottom
+                                sx={{margin: 0}}
+                            >Technician</Typography>
+                        <EmployeePicker
+                            editing={editing}
+                            employee={employee}
+                            employees={employees}
+                            errors={errors}
+                            user={user}
+                            token={token}
+                            handleChangeEmployee={handleChangeEmployee}
+                        />
+                    </div>
                     </Stack>
                     <Stack direction="column" spacing={1}>
                         <Typography 
@@ -235,7 +264,7 @@ export default function AddDoorServiceReportForm(props) {
                                 label="Status after Service"
                                 onChange={handleInputValue}
                             >
-                        {CHOICES.map((c) => (
+                        {STATUS_CHOICES.map((c) => (
                             <MenuItem key={c} value={c}>{c}</MenuItem>
                         ))}
                         </Select>

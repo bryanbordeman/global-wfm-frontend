@@ -14,6 +14,7 @@ import TaskCompletedList from '../components/TaskCompletedList';
 import NextTaskDialog from '../components/NextTaskDialog'
 import TaskDialog from '../components/TaskDialog';
 import Loading from '../components/Loading';
+import TaskInfoModel from '../components/TaskInfoModel';
 
 function Task(props) {
     const { user } = props;
@@ -520,6 +521,7 @@ function Task(props) {
                             selectedCompleteList={selectedCompleteList}
                         />
                         </div>
+                        {!currentList && <TaskInfoModel/>}
                         <AddTaskForm
                             task={task}
                             open={open}
