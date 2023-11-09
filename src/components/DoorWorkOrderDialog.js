@@ -31,6 +31,21 @@ import RHAOutSwingDark  from '../assets/door_swing_icons/RHAOutSwingDark.svg'
 import LHAInSwingDark  from '../assets/door_swing_icons/LHAInSwingDark.svg'
 import LHAOutSwingDark  from '../assets/door_swing_icons/LHAOutSwingDark.svg'
 
+import RHSlidingIn from '../assets/door_swing_icons/RHSlidingIn.svg'
+import LHSlidingIn from '../assets/door_swing_icons/LHSlidingIn.svg'
+import RHSlidingInDark from '../assets/door_swing_icons/RHSlidingInDark.svg'
+import LHSlidingInDark from '../assets/door_swing_icons/LHSlidingInDark.svg'
+
+import RHSlidingOut from '../assets/door_swing_icons/RHSlidingOut.svg'
+import LHSlidingOut from '../assets/door_swing_icons/LHSlidingOut.svg'
+import RHSlidingOutDark from '../assets/door_swing_icons/RHSlidingOutDark.svg'
+import LHSlidingOutDark from '../assets/door_swing_icons/LHSlidingOutDark.svg'
+
+import BiPartingIn from '../assets/door_swing_icons/BiPartingIn.svg'
+import BiPartingOut from '../assets/door_swing_icons/BiPartingOut.svg'
+import BiPartingInDark from '../assets/door_swing_icons/BiPartingInDark.svg'
+import BiPartingOutDark from '../assets/door_swing_icons/BiPartingOutDark.svg'
+
 import ArchitectureIcon from '@mui/icons-material/Architecture';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -51,69 +66,55 @@ export default function DoorWorkOrderDialog(props) {
     const [ openDrawingDialog, setOpenDrawingDialog ] = React.useState(false);
 
     React.useEffect(() => {
-        if (order){
-            if (order.hand === "RH" && order.swing === "in" && !order.is_double_door){
-                if(darkState){
-                    setDoorIcon(RHInSwingDark);
-                }else{
-                    setDoorIcon(RHInSwing);
-                };
-            }
-            else if (order.hand === "LH" && order.swing === "in" && !order.is_double_door){
-                if(darkState){
-                    setDoorIcon(LHInSwingDark);
-                }else{
-                    setDoorIcon(LHInSwing);
-                };
-            }
-            else if (order.hand === "RH" && order.swing === "out" && !order.is_double_door){
-                if(darkState){
-                    setDoorIcon(RHOutSwingDark);
-                }else{
-                    setDoorIcon(RHOutSwing);
-                };
-            }
-            else if (order.hand === "LH" && order.swing === "out" && !order.is_double_door){
-                if(darkState){
-                    setDoorIcon(LHOutSwingDark);
-                }else{
-                    setDoorIcon(LHOutSwing);
-                };
-            }
-            else if (order.hand === "RHA" && order.swing === "in" && order.is_double_door){
-                if(darkState){
-                    setDoorIcon(RHAInSwingDark);
-                }else{
-                    setDoorIcon(RHAInSwing);
-                };
-            }
-            else if (order.hand === "RHA" && order.swing === "out" && order.is_double_door){
-                if(darkState){
-                    setDoorIcon(RHAOutSwingDark);
-                }else{
-                    setDoorIcon(RHAOutSwing);
-                };
-            }
-            else if (order.hand === "LHA" && order.swing === "in" && order.is_double_door){
-                if(darkState){
-                    setDoorIcon(LHAInSwingDark);
-                }else{
-                    setDoorIcon(LHAInSwing);
-                };
-            }
-            else if (order.hand === "LHA" && order.swing === "out" && order.is_double_door){
-                if(darkState){
-                    setDoorIcon(LHAOutSwingDark);
-                }else{
-                    setDoorIcon(LHAOutSwing);
-                };
-            }
-            
-            else{
+        switch (`${order.hand}-${order.swing}-${order.is_double_door}-${order.is_sliding}-${order.is_biparting}`) {
+            case "RH-in-false-false-false":
+                setDoorIcon(darkState ? RHInSwingDark : RHInSwing);
+                break;
+            case "LH-in-false-false-false":
+                setDoorIcon(darkState ? LHInSwingDark : LHInSwing);
+                break;
+            case "RH-out-false-false-false":
+                setDoorIcon(darkState ? RHOutSwingDark : RHOutSwing);
+                break;
+            case "LH-out-false-false-false":
+                setDoorIcon(darkState ? LHOutSwingDark : LHOutSwing);
+                break;
+            case "RHA-in-true-false-false":
+                setDoorIcon(darkState ? RHAInSwingDark : RHAInSwing);
+                break;
+            case "RHA-out-true-false-false":
+                setDoorIcon(darkState ? RHAOutSwingDark : RHAOutSwing);
+                break;
+            case "LHA-in-true-false-false":
+                setDoorIcon(darkState ? LHAInSwingDark : LHAInSwing);
+                break;
+            case "LHA-out-true-false-false":
+                setDoorIcon(darkState ? LHAOutSwingDark : LHAOutSwing);
+                break;
+
+            case "RH-in-false-true-false":
+                setDoorIcon(darkState ? RHSlidingInDark : RHSlidingIn);
+                break;
+
+            case "LH-in-false-true-false":
+                setDoorIcon(darkState ? LHSlidingInDark : LHSlidingIn);
+                break;
+            case "RH-out-false-true-false":
+                setDoorIcon(darkState ? RHSlidingOutDark : RHSlidingOut);
+                break;
+            case "LH-out-false-true-false":
+                setDoorIcon(darkState ? LHSlidingOutDark : LHSlidingOut);
+                break;
+            case "BI-in-false-true-true":
+                setDoorIcon(darkState ? BiPartingInDark : BiPartingIn);
+                break;
+            case "BI-out-false-true-true":
+                setDoorIcon(darkState ? BiPartingOutDark : BiPartingOut);
+                break;
+            default:
                 setDoorIcon('');
             }
-        }
-    },[order]);
+        }, [order, darkState]);
 
     const handleOpenDrawing = (d) => {
         setDrawing(d)
