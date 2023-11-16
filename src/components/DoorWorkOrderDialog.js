@@ -284,14 +284,14 @@ export default function DoorWorkOrderDialog(props) {
                                     {order.is_double_door? "Active Width =" : "Width ="}
                                 </Typography>
                                 <Typography sx={{fontWeight: "bold"}}>
-                                    {`${order.width}"`}
+                                    {`${order.width % 1 === 0 ? Math.round(order.width) : order.width}"`}
                                 </Typography>
                                 <Divider orientation="vertical" flexItem />
                                 <Typography sx={{color: 'text.secondary'}}>
                                     Height =
                                 </Typography>
                                 <Typography sx={{fontWeight: "bold"}}>
-                                    {`${order.height}"`}
+                                    {`${order.height % 1 === 0 ? Math.round(order.height) : order.height}"`}
                                 </Typography>
                             </Stack>
                             {order.is_double_door?
@@ -300,18 +300,19 @@ export default function DoorWorkOrderDialog(props) {
                                         Inactive Width =
                                     </Typography>
                                     <Typography sx={{fontWeight: "bold"}}>
-                                        {`${order.inactive_width}"`}
+                                        {`${order.inactive_width % 1 === 0 ? Math.round(order.inactive_width) : order.inactive_width}"`}
                                     </Typography>
                                     <Divider orientation="vertical" flexItem />
                                     <Typography sx={{color: 'text.secondary'}}>
                                         Height =
                                     </Typography>
                                     <Typography sx={{fontWeight: "bold"}}>
-                                        {`${order.height}"`}
+                                        {`${order.height % 1 === 0 ? Math.round(order.height) : order.height}"`}
                                     </Typography>
                                 </Stack>
                                 : ''
                             }
+                    
                     </Stack>
                     <Divider/>
                     <Stack direction="row" spacing={1}>
