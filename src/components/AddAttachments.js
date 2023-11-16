@@ -78,9 +78,16 @@ export default function AddAttachments(props){
             const isAll = deletedImages.length > 1;
             deletedImages.map((img) => {
                 values.attachments.map((attachment) => {
-                    if(attachment.title === removeFileExtension(img.file.name)) {
+                    if (typeof img === 'object') {
+                        if(attachment.title === removeFileExtension(img.file.name)) {
                         deleteDropbox(attachment.id, isAll);
-                    }})
+                        }
+                    }else{
+                        if(attachment.document === img) {
+                            deleteDropbox(attachment.id, isAll);
+                        }
+                    }
+                })
             })
             if (isAll) {
                 const updatedValues = {
