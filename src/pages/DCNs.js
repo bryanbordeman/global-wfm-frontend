@@ -67,6 +67,8 @@ export default function DCNs(props) {
                     nextNumber = `${currentYear}-00${nextNumber}`;
                 } else if (nextNumber < 100) {
                     nextNumber = `${currentYear}-0${nextNumber}`;
+                } else {
+                    nextNumber = `${currentYear}-${nextNumber}`;
                 }
                 setNextDCN(nextNumber);
                 // setDCNs(updatedList);
