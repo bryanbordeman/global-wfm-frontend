@@ -1,86 +1,111 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
+import moment from 'moment';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import { Container } from '@mui/material';
+import VideoPlayer from '../components/VideoPlayer'
+import "../../node_modules/video-react/dist/video-react.css"; // import css
+import VideoServices from '../services/Video.services';
+import VideoPicker from '../components/VideoPicker';
 
-const data = [
-    // {
-    //     src: 'https://i.ytimg.com/vi/pLqipJNItIo/hqdefault.jpg?sqp=-oaymwEYCNIBEHZIVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLBkklsyaw9FxDmMKapyBYCn9tbPNQ',
-    //     title: 'Don Diablo @ Tomorrowland Main Stage 2019 | Official…',
-    //     channel: 'Don Diablo',
-    //     views: '396k views',
-    //     createdAt: 'a week ago',
-    // },
-    // {
-    //     src: 'https://i.ytimg.com/vi/_Uu12zY01ts/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&rs=AOn4CLCpX6Jan2rxrCAZxJYDXppTP4MoQA',
-    //     title: 'Queen - Greatest Hits',
-    //     channel: 'Queen Official',
-    //     views: '40M views',
-    //     createdAt: '3 years ago',
-    // },
-    // {
-    //     src: 'https://i.ytimg.com/vi/kkLk2XWMBf8/hqdefault.jpg?sqp=-oaymwEYCNIBEHZIVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLB4GZTFu1Ju2EPPPXnhMZtFVvYBaw',
-    //     title: 'Calvin Harris, Sam Smith - Promises (Official Video)',
-    //     channel: 'Calvin Harris',
-    //     views: '130M views',
-    //     createdAt: '10 months ago',
-    // },
-    ];
+function Media(props) {
+    const { isLoading, videos } = props;
+    const [showSkeleton, setShowSkeleton] = React.useState(isLoading || !videos);
 
-    function Media(props) {
-    const { loading = false } = props;
+    React.useEffect(() => {
+        setShowSkeleton(isLoading || !videos)
+    },[isLoading, videos])
 
     return (
-        <Grid 
+        <Grid
             container
             justifyContent="center"
-            alignItems="center" 
+            alignItems="center"
         >
-        {(loading ? Array.from(new Array(3)) : data).map((item, index) => (
-            <Box key={index} sx={{ width: 210, marginRight: 0.5, my: 2 }}>
-            {item ? (
-                <img
-                style={{ width: 210, height: 118 }}
-                alt={item.title}
-                src={item.src}
-                />
-            ) : (
-                <Skeleton variant="rectangular" width={210} height={118} />
-            )}
+            {(showSkeleton ? Array.from(new Array(3)) : videos).map((item, index) => (
+                <Box key={index} sx={{ width: 300, marginRight: 2, my: 2 }}>
+                    {item && !isLoading ? (
+                        <VideoPlayer
+                            src={item.document}
+                            thumbnail={item.thumbnail.document}
+                        />
+                    ) : (
+                        <Skeleton variant="rectangular" width={300} height={118} />
+                    )}
 
-            {item ? (
-                <Box sx={{ pr: 2 }}>
-                <Typography gutterBottom variant="body2">
-                    {item.title}
-                </Typography>
-                <Typography display="block" variant="caption" color="text.secondary">
-                    {item.channel}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                    {`${item.views} • ${item.createdAt}`}
-                </Typography>
+                    {item? (
+                        <Box sx={{ pr: 2, mt: 1 }}>
+                            <Typography variant="body2">
+                                {item.title}
+                            </Typography>
+                            <Typography display="block" variant="caption" color="text.secondary">
+                                {item.category.title}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                {`${formatDate(item.created_at)}`}
+                            </Typography>
+                        </Box>
+                    ) : (
+                        <Box sx={{ pt: 0.5 }}>
+                            <Skeleton />
+                            <Skeleton width="60%" />
+                        </Box>
+                    )}
                 </Box>
-            ) : (
-                <Box sx={{ pt: 0.5 }}>
-                <Skeleton />
-                <Skeleton width="60%" />
-                </Box>
-            )}
-            </Box>
-        ))}
+            ))}
         </Grid>
     );
-    }
+}
 
-    Media.propTypes = {
-    loading: PropTypes.bool,
+// Function to format the date
+const formatDate = (date) => {
+    const momentDate = moment(date); // If using moment library
+    // Example: "3 days ago", "2 months ago", "1 year ago"
+    return momentDate.fromNow();
+};
+
+
+export default function Videos(props) {
+    const { token, handleOpenSnackbar } = props;
+    const [allVideos, setAllVideos] = React.useState(null);
+    const [videos, setVideos] = React.useState(null);
+    const [categories, setCategories] = React.useState(null);
+    const [category, setCategory] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    React.useLayoutEffect(() => {
+        retrieveVideos();
+    }, [])
+
+    React.useEffect(() => {
+        if (allVideos && category) {
+            setVideos(allVideos.filter((v) => v.category.id === category.id))
+        }
+
+    }, [category])
+
+    const retrieveVideos = () => {
+        setIsLoading(true);
+        VideoServices.getAll(token)
+            .then(response => {
+                const data = response.data;
+                setAllVideos(data);
+                const categorySet = new Set(data.map(item => JSON.stringify(item.category)));
+                const uniqueCategories = Array.from(categorySet).map(jsonString => JSON.parse(jsonString));
+                setCategories(uniqueCategories);
+            })
+            .catch(e => {
+                console.log(e);
+                handleOpenSnackbar('error', 'Something Went Wrong!! Please try again.')
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
-    export default function Videos(props) {
-        // const { user, token, handleOpenSnackbar, darkState} = props
+
     return (
         <Container
             component="span"
@@ -88,14 +113,22 @@ const data = [
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexDirection:'column',
-                height: '100%'
-        }}>
-            Coming Soon
+                flexDirection: 'column',
+                height: '100%',
+                marginTop: '40px'
+            }}
+        >
+            <Box sx={{ width: '100%' }}>
+                {categories && <VideoPicker categories={categories} setCategory={setCategory} />}
+            </Box>
             <Box sx={{ overflow: 'hidden' }}>
-                <Media loading />
-                <Media />
+                {
+                    <Media
+                        isLoading={isLoading}
+                        videos={videos}
+                    />
+                }
             </Box>
         </Container>
     );
-}
+};

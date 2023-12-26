@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Videos from '../pages/Videos';
 import Schedule from '../pages/Schedule';
 import Vehicles from '../pages/Vehicles';
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 
@@ -62,8 +61,7 @@ export default function FieldTabs(props) {
                     aria-label="field tabs"
                 >
                     <Tab icon={<CalendarMonthIcon />}  label="Schedule" {...a11yProps(0)} />
-                    <Tab icon={<OndemandVideoIcon />} label="Vidoes" {...a11yProps(1)} />
-                    <Tab icon={<DirectionsCarIcon />}  label="Vehicles" {...a11yProps(2)} />
+                    <Tab icon={<DirectionsCarIcon />}  label="Vehicles" {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
@@ -75,14 +73,6 @@ export default function FieldTabs(props) {
                 />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Videos
-                    user={user}
-                    token={token}
-                    darkState={darkState}
-                    handleOpenSnackbar={handleOpenSnackbar}  
-                />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
                 <Vehicles
                     user={user}
                     token={token}

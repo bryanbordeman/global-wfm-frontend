@@ -16,6 +16,7 @@ import Shop from '../pages/Shop';
 import Door from '../pages/Door';
 import Engineering from '../pages/Engineering';
 import Reports from '../pages/Reports';
+import Videos from '../pages/Videos';
 
 
 function MainRoutes(props) {
@@ -233,6 +234,20 @@ function MainRoutes(props) {
                             darkState={darkState}
                         />
                     }/>
+                <Route 
+                    exact 
+                    path='/videos' 
+                    element={
+                        !user.username  ? 
+                        <Navigate to="/login" />
+                        :
+                        <Videos
+                            user={user}
+                            token={token}
+                            darkState={darkState}
+                            handleOpenSnackbar={handleOpenSnackbar}
+                        />
+                }/>
                 <Route 
                     exact 
                     path='/asset/door/:id' 

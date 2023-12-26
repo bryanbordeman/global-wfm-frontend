@@ -23,6 +23,7 @@ import EngineeringSharpIcon from '@mui/icons-material/EngineeringSharp';
 import ArchitectureSharpIcon from '@mui/icons-material/ArchitectureSharp';
 import BuildCircleSharpIcon from '@mui/icons-material/BuildCircleSharp';
 import SummarizeSharpIcon from '@mui/icons-material/SummarizeSharp';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -399,6 +400,16 @@ export default function NavBar(props) {
                         <ListItemText primary="Engineering" />
                     </ListItemButton>
                 )}
+                <ListItemButton 
+                    component={Link} 
+                    to='/videos'
+                    onClick={handleDrawerClose}
+                >
+                    <ListItemIcon>
+                        <OndemandVideoIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Videos" />
+                </ListItemButton>
             </List>
         </Drawer>
         <Main open={open} >
