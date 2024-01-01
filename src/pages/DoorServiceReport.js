@@ -5,16 +5,48 @@ import ServicePicker from '../components/ServicePicker';
 import { Stack, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AddDoorServiceReportForm from '../components/AddDoorServiceReportForm';
+import ReportServices from '../services/Report.services';
 
 export default function DoorServiceReport(props) {
     const { user, token, handleOpenSnackbar, employees} = props;
     const { isLoading, setIsLoading } = props;
-    const [ project, setProject ] = React.useState(null);
+    const [report, setReport] = React.useState([]);
+    const [ reports, setReports ] = React.useState([]);
+    // const [ project, setProject ] = React.useState(null);
+    const [ service, setService ] = React.useState(null);
     const [ editing, setEditing ] = React.useState(false);
     const [ openDoorReportForm, setOpenDoorReportForm ] = React.useState(false);
 
+    React.useEffect(() => {
+        if (service) {
+            retrieveReports();
+        } else {
+            setReports([]);
+        }
+    }, [service])
+
+    const retrieveReports = () => {
+        setIsLoading(true);
+        ReportServices.getDoorServiceReports(service.id, token)
+            .then(response => {
+                setReports(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
+
     const handleToggleDoorServiceReportForm = () => {
         setOpenDoorReportForm(!openDoorReportForm);
+        setEditing(false);
+    };
+
+    const handleEditReport = () => {
+        handleToggleDoorServiceReportForm();
+        setEditing(true);
     };
 
     const initialFormValues = {
@@ -29,9 +61,9 @@ export default function DoorServiceReport(props) {
 
     const handleChangeProject = (newValue) => {
         if(newValue){
-            setProject(newValue);
+            setService(newValue);
         } else {
-            setProject(newValue);
+            setService(newValue);
         };
     };
 
@@ -55,7 +87,7 @@ export default function DoorServiceReport(props) {
                         variant='contained' 
                         color='success'
                         startIcon={<AddIcon />}
-                        disabled={project === '' || project === null}
+                        disabled={service === '' || service === null}
                         onClick={handleToggleDoorServiceReportForm}
                     >Add Report</Button>
                     <ServicePicker
@@ -63,9 +95,13 @@ export default function DoorServiceReport(props) {
                         handleChangeProject={handleChangeProject}
                         editing={false}
                         errors={errors}
-                        editProject={values.project}
+                        editProject={values.service}
                     />
-                    <ReportsList/> 
+                    <ReportsList
+                        reports={reports} 
+                        handleOpenForm={handleEditReport}
+                        setReport={setReport}
+                    /> 
                 </Stack>
             </Box>
             <AddDoorServiceReportForm
@@ -73,12 +109,14 @@ export default function DoorServiceReport(props) {
                 token={token}
                 handleOpenSnackbar={handleOpenSnackbar} 
                 open={openDoorReportForm}
-                project={project}
+                service={service}
                 editing={editing}
                 handleClose={handleToggleDoorServiceReportForm}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
                 employees={employees}
+                retrieveReports={retrieveReports}
+                report={report}
             />
         </Container>
     );

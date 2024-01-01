@@ -35,6 +35,11 @@ class DoorDataService {
         return axios.get(`${SERVER}/api/asset/door/project/${id}`);
     };
 
+    serviceDoor(id, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get(`${SERVER}/api/asset/door/service/${id}`);
+    };
+
     projectDoorCount(id, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.get(`${SERVER}/api/asset/door/project/count/${id}`);

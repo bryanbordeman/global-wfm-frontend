@@ -7,11 +7,6 @@ export default function Reports(props) {
     const { user, token, handleOpenSnackbar, employees} = props
     const [ isLoading, setIsLoading ] = React.useState(false);
 
-    React.useEffect(() => {
-        handleOpenSnackbar('success', 'Lets work together to set a new record!')
-    },[])
-
-
     return (
         <div style={{paddingTop: '1rem'}}> 
             <Container

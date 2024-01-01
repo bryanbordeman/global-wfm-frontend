@@ -14,13 +14,18 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import AddAttachments from './AddAttachments';
+import ReportServices from '../services/Report.services';
+import { parseISO } from 'date-fns';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 export default function AddProjectReportForm(props) {
-    const { user, token, handleOpenSnackbar, darkState} = props;
-    const { open, handleClose, editing, project } = props;
+    const { user, token, handleOpenSnackbar} = props;
+    const { open, handleClose, editing, project, retrieveReports, report } = props;
     const { setIsLoading } = props;
+    const [ openDelete, setOpenDelete ] = React.useState(false);
 
     const initialFormValues = {
+        created_by: user.id,
         project: project? project : {},
         comments: '',
         date: new Date(),
@@ -29,19 +34,13 @@ export default function AddProjectReportForm(props) {
     };
 
     const editFormValues ={
-        project: project? project : {},
-        comments: 'testing',
-        date: new Date(),
-        attachments: [
-        {
-            id: '243',
-            title: "14036 Rev C",
-            document :"https://globalshielding.s3.amazonaws.com/08c47c99-e57.png",
-            created_at:"2023-10-20T15:00:54.724416-04:00",
-            updated_at:"2023-10-20T15:00:54.724447-04:00",
-        }
-        ],
-        is_active: true
+        id: report.id,
+        created_by: report.created_by,
+        project: report.project,
+        comments: report.comments,
+        date: parseISO(report.date),
+        attachments: report.attachments,
+        is_active: report.is_active
     }
 
     const [ values, setValues ] = React.useState({});
@@ -54,8 +53,7 @@ export default function AddProjectReportForm(props) {
         } else if (editing) {
             setValues(editFormValues)
         }
-    },[open]);
-    
+    },[open]);    
 
     const handleInputValue = (e) => {
         const { name, value } = e.target;
@@ -66,7 +64,60 @@ export default function AddProjectReportForm(props) {
     };
 
     const handleSubmit = () => {
-        console.log(values)
+        // sanitize data
+        const data = values
+        if (typeof data.created_by === 'object' && data.created_by !== null) {
+            data.created_by = data.created_by.id; // Get id property if it exists
+        }
+        
+        // Check if data.project is an object
+        if (typeof data.project === 'object' && data.project !== null) {
+            data.project = data.project.id; // Get id property if it exists
+        }
+        data.attachments = data.attachments.length > 0 ? data.attachments.map((a) => a.id) : []
+        setIsLoading(true);
+
+        if(editing){
+            ReportServices.updateProjectReport(data.id, data, token)
+            .then(response => {
+                retrieveReports();
+            })
+            .catch(e => {
+                console.log(e);
+            })
+            .finally(() => {
+                setIsLoading(false);
+                handleClose();
+            });
+        }else{
+            // console.log(data)
+            ReportServices.createProjectReport(data, token)
+                .then(response => {
+                    retrieveReports();
+                })
+                .catch(e => {
+                    console.log(e);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                    handleClose();
+                });
+        }
+    };
+
+    const handleDelete = () => {
+        // console.log(values)
+        ReportServices.deleteProjectReport(values.id, token)
+            .then(response => {
+                retrieveReports();
+            })
+            .catch(e => {
+                console.log(e);
+            })
+            .finally(() => {
+                setIsLoading(false);
+                handleClose();
+            });
     };
 
     const handleValidation = () => {
@@ -169,10 +220,26 @@ export default function AddProjectReportForm(props) {
                 </DialogContent>
                 <Divider/>
                 <DialogActions>
+                {editing && <Button variant='outlined' color='error' onClick={() => setOpenDelete(true)}>Delete</Button>}
                 <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-                <Button variant='contained' onClick={handleValidation}>{editing ? 'Update' : 'Submit'}</Button>
+                <Button 
+                    variant='contained' 
+                    onClick={handleValidation}
+                    color={`${isValid? 'primary' : 'error'}`}
+                >
+                    {editing ? 'Update' : 'Submit'}
+                </Button>
                 </DialogActions>
             </Dialog>
+            <DeleteConfirmationModal
+                deleteAction={handleDelete}
+                message={editing? {
+                    title: 'Delete Report',
+                    content: `Delete Report ${report.number}?`
+                } : ''}
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
+            />
         </div>
     );
 };
