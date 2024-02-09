@@ -28,6 +28,8 @@ import EmployeePicker from '../components/EmployeePicker';
 import Loading from '../components/Loading';
 import { purple, pink, teal, grey} from '@mui/material/colors';
 
+import ForemanModal from '../components/ForemenModal';
+
 export default function WorksegmentList(props) {
     const { user, token, handleOpenSnackbar, darkState } = props;
     const { worksegments, setWorksegments } = props;
@@ -43,6 +45,7 @@ export default function WorksegmentList(props) {
     const [ openAdd, setOpenAdd ] = React.useState(false);
     const [ openDelete, setOpenDelete ] = React.useState(false);
     const [ openDeletePTO, setOpenDeletePTO ] = React.useState(false);
+    const [ openForeman, setOpenForeman ] = React.useState(false);
     const [ editing, setEditing ] = React.useState(false);
     const [ editSegment, setEditSegment ] = React.useState({});
     const [ employee, setEmployee ] = React.useState({});
@@ -317,6 +320,10 @@ export default function WorksegmentList(props) {
         setEmployee(newEmployee)
     };
 
+    const handleOpenForeman = (segment) => {
+        console.log(segment);
+        setOpenForeman(true);
+    };
     // ------------ PTO --------------- //
 
     const handleClickOpenPTO = () => {
@@ -639,7 +646,8 @@ export default function WorksegmentList(props) {
                                             variant='outlined' 
                                             color='inherit'
                                             size='small'
-                                            onClick={() => {approveWorksegment(segment.id)}}
+                                            onClick={() => {segment.project.prevailing_rate && segment.segment_type.id === 2? handleOpenForeman(segment) : approveWorksegment(segment.id)}}
+                                            // onClick={() => {approveWorksegment(segment.id)}}
                                             >Approve</Button> : 
                                         `${segment.is_approved ? 'Approved' : 'Pending'}`
                                         }
@@ -885,6 +893,10 @@ export default function WorksegmentList(props) {
         </Container>
         <Loading
             open={isLoading}
+        />
+        <ForemanModal
+            open={openForeman}
+            setOpen={setOpenForeman}
         />
     </div>
     );

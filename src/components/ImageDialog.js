@@ -27,7 +27,7 @@ export default function ImageDialog(props) {
                 aria-labelledby="responsive-dialog-title"
             >
                 <DialogTitle id="responsive-dialog-title">
-                    Attachement: {id}
+                    Attachment: {id}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
