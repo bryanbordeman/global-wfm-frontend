@@ -261,7 +261,9 @@ export default function WorksegmentList(props) {
             let updatedWorksegments = replaceAt(worksegments,currentIndex, data); // replace segment with updated segment
             setWorksegments(updatedWorksegments); // set list of segments
             recalculateTotal(data, 1, 3);
-            handleOpenSnackbar('info', 'Your time has been submitted for approval')
+            if(!(data.project && data.project.prevailing_rate === true && data.segment_type.id === 2 && data.is_approved === true)){
+                handleOpenSnackbar('info', 'Your time has been submitted for approval')
+            };
         })
         .catch( e => {
             console.log(e);
@@ -321,7 +323,7 @@ export default function WorksegmentList(props) {
     };
 
     const handleOpenForeman = (segment) => {
-        console.log(segment);
+        setEditSegment(segment)
         setOpenForeman(true);
     };
     // ------------ PTO --------------- //
@@ -548,7 +550,7 @@ export default function WorksegmentList(props) {
                     my: 1,
                     width: '100%',
                     maxWidth: '500px',
-                    borderColor: segment.project ?`${segment.project && segment.project.prevailing_rate === true && segment.segment_type.id === 2
+                    borderColor: segment.project ?`${segment.project && segment.project.prevailing_rate === true && user.is_staff && segment.segment_type.id === 2
                         ? pink[500] : 'primary.main'}` : 'primary.main',
                     borderWidth: darkState? '1.5px' :'3px',
                     // borderColor: 'primary.main',
@@ -571,10 +573,17 @@ export default function WorksegmentList(props) {
                                 zIndex: 1
                                 }}
                         >
-                        {segment.project ? segment.project.prevailing_rate === true && segment.segment_type.id === 2? 
-                            <Typography color={pink[500]} sx={{ml: 1}} variant="h6" gutterBottom>
-                                PR
-                            </Typography>
+                        {segment.project ? segment.project.prevailing_rate === true && user.is_staff && segment.segment_type.id === 2? 
+                            <Stack direction='row' alignItems='center'>
+                                <Typography color={pink[500]} sx={{ml: 1}} variant="h6" gutterBottom>
+                                    PR
+                                </Typography>
+                                {segment.is_approved && segment.is_foremen?
+                                    <Typography color={grey[500]} sx={{ml: 1}} variant="caption" gutterBottom>
+                                        Foreman
+                                    </Typography>
+                                :''}
+                            </Stack>
                         :
                         ''
                         :''
@@ -646,9 +655,15 @@ export default function WorksegmentList(props) {
                                             variant='outlined' 
                                             color='inherit'
                                             size='small'
-                                            onClick={() => {segment.project.prevailing_rate && segment.segment_type.id === 2? handleOpenForeman(segment) : approveWorksegment(segment.id)}}
+                                            onClick={() => {
+                                                if (segment.project && segment.project.prevailing_rate && segment.segment_type.id === 2) {
+                                                    handleOpenForeman(segment);
+                                                } else {
+                                                    approveWorksegment(segment.id);
+                                                }
+                                            }}
                                             // onClick={() => {approveWorksegment(segment.id)}}
-                                            >Approve</Button> : 
+                                        >Approve</Button> : 
                                         `${segment.is_approved ? 'Approved' : 'Pending'}`
                                         }
                                 />
@@ -895,8 +910,11 @@ export default function WorksegmentList(props) {
             open={isLoading}
         />
         <ForemanModal
+            user={user}
             open={openForeman}
             setOpen={setOpenForeman}
+            segment={editSegment}
+            updateWorksegment={updateWorksegment}
         />
     </div>
     );

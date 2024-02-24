@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { Stack, Grid } from '@mui/material';
+import { Stack } from '@mui/material';
 
 const style = {
     position: 'absolute',
@@ -21,31 +21,58 @@ const style = {
 
 export default function ForemanModal(props) {
     const {open, setOpen} = props;
+    const { segment, updateWorksegment, user } = props;
     const [foreman, setForeman] = React.useState(null);
     const [shiftDifferential, setShiftDifferential] = React.useState(false);
     const [compressedWorkWeek, setCompressedWorkWeek] = React.useState(false);
 
     const handleChangeForeman = (event, newForeman) => {
-        setForeman(newForeman);
+        if (newForeman !== null) {
+            setForeman(newForeman);
+        }
     };
 
     const handleChangeShiftDifferential = (event, newShiftDifferential) => {
-        setShiftDifferential(newShiftDifferential);
+        if (newShiftDifferential !== null) {
+            setShiftDifferential(newShiftDifferential);
+        }
     };
 
     const handleChangeCompressedWorkWeek = (event, newCompressedWorkWeek) => {
-        setCompressedWorkWeek(newCompressedWorkWeek);
+        if (newCompressedWorkWeek !== null) {
+            setCompressedWorkWeek(newCompressedWorkWeek);
+        }
     };
-
-    const handleOpen = () => setOpen(true);
 
     const handleClose = () => {
         setOpen(false)
         setForeman(null)
+        setShiftDifferential(false)
+        setCompressedWorkWeek(false)
     };
 
     const handleApprove = () => {
-        console.log('Approve')
+        const data = {
+            user: segment.user && segment.user.id ? segment.user.id : user.id,
+            segment_type: segment.segment_type && segment.segment_type.id ? segment.segment_type.id : null,
+            quote: segment.quote && segment.quote.id ? segment.quote.id : null,
+            project: segment.project && segment.project.id ? segment.project.id : null,
+            service: segment.service && segment.service.id ? segment.service.id : null,
+            hse: segment.hse && segment.hse.id ? segment.hse.id : null,
+            is_approved: true,
+            date: segment.date,
+            start_time: segment.start_time,
+            end_time: segment.end_time,
+            lunch: segment.lunch,
+            travel_duration: segment.travel_duration ? segment.travel_duration : "0.00",
+            notes: segment.notes,
+            is_foremen: foreman,
+            shift_differential: shiftDifferential,
+            compressed_work_week: compressedWorkWeek
+        };
+
+        updateWorksegment(segment.id, data);
+        // console.log(segment.id);
         handleClose()
     }
 

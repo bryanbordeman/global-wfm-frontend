@@ -16,8 +16,10 @@ export default function FieldShopOfficeToggle(props) {
     },[]);
 
     const handleChange = (event, newValue) => {
-        setValue(newValue);
-        handleChangeSegmentType(newValue)
+        if (newValue !== null) {
+            setValue(newValue);
+            handleChangeSegmentType(newValue);
+        }
     };
 
     return (

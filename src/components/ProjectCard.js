@@ -63,7 +63,7 @@ const Accordion = styled((props) => (
     }));
 
 export default function ProjectCard(props) {
-    const { token } = props;
+    const { token, user } = props;
     const { project, menuSelection } = props;
     const [ openContactModal, setOpenContactModel ] = React.useState(false);
     const [ drawing, setDrawing ] = React.useState([]);
@@ -268,6 +268,7 @@ export default function ProjectCard(props) {
                             justifyContent: 'center',
                             height: '100%'}}
                         >
+                    {user.is_staff &&
                     <div>
                         <Stack direction="row" spacing={1}>
                             <Typography variant="body2">
@@ -278,6 +279,7 @@ export default function ProjectCard(props) {
                             </Typography>
                         </Stack>
                     </div>
+                    }
                     <div>
                         <Stack direction="row" spacing={1}>
                             <Typography variant="body2">
