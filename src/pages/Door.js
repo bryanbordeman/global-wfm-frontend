@@ -1,5 +1,6 @@
 import * as React from 'react';
 import DoorDataService from '../services/Door.services';
+import ReportDataService from '../services/Report.services';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import AppBar from '@mui/material/AppBar';
@@ -64,7 +65,8 @@ export default function Door(props) {
     const [ isLoading, setIsLoading ] = React.useState(false);
     const [ service, setService ] = React.useState(false);
     const [ anchorElUser, setAnchorElUser ] = React.useState(null);
-    const { user, handleChangeMode, darkState } = props
+    const [ reports, setReports ] = React.useState([]);
+    const { user, handleChangeMode, darkState, token } = props;
     let navigate = useNavigate();
     const { id } = useParams();
 
@@ -177,6 +179,23 @@ export default function Door(props) {
         DoorDataService.getDoor(id)
             .then(response => {
                 setDoor(response.data);
+                recieveReports(response.data.service.id);
+                console.log(response.data.service.id);
+            })
+            .catch(e => {
+                console.log(e);
+            })
+            .finally(() => {
+                setIsLoading(false)
+            });
+    };
+
+    const recieveReports = (id) => {
+        setIsLoading(true)
+        //! need to omit token.
+        ReportDataService.getDoorServiceReports(id, token)
+            .then(response => {
+                setReports(response.data);
             })
             .catch(e => {
                 console.log(e);
@@ -526,7 +545,7 @@ export default function Door(props) {
                     <Typography sx={{ fontSize: 14, mb:0 }} color="text.secondary" gutterBottom>
                         Commissioned: {moment(door.completed).format("MM/DD/YY")}
                     </Typography>
-                    {door.log ? door.log.map((l, k) => (
+                    {reports ? reports.map((l, k) => (
                         <div key={k}>
                         <Stack
                             direction="row"
@@ -556,5 +575,7 @@ export default function Door(props) {
         </div>
     );
 };
+
+
 
 

@@ -29,7 +29,7 @@ return (
             border: 0.5,
             borderColor: 'primary.main',
             borderRadius: '16px',
-            // marginTop: '2rem'
+            marginTop: '2rem'
         }}
         >
         <CardContent style={{ marginBottom: 0, paddingBottom: 0, display:'flex', justifyContent:'center' }}>

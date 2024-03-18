@@ -213,8 +213,8 @@ function Task(props) {
                 .then(response => {
                         // console.log(currentList.id)
                     const result = response.data;
-                    let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
-                    setSelectedCompleteList(userResult);
+                    // let userResult = result.filter(task => task.created_by.id === user.id || user.id === task.assignee.id );
+                    setSelectedCompleteList(result);
                 })
                 .catch( e => {
                     console.log(e);

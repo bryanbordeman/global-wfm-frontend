@@ -227,13 +227,6 @@ export default function NavBar(props) {
                                 onClose={handleCloseUserMenu}
                             > 
                             <MenuItem 
-                                onClick={handleCloseUserMenu} 
-                                component={Link} 
-                                to='/profile'
-                                >
-                                <Typography textAlign="center">Profile</Typography>
-                            </MenuItem>
-                            <MenuItem 
                                 onClick={() => {
                                     handleChangeMode()}} 
                                 >
@@ -253,6 +246,20 @@ export default function NavBar(props) {
                                 />
                                 }
                                 </Stack>
+                            </MenuItem>
+                            <MenuItem 
+                                onClick={handleCloseUserMenu} 
+                                component={Link} 
+                                to='/profile'
+                                >
+                                <Typography textAlign="center">Profile</Typography>
+                            </MenuItem>
+                            <MenuItem 
+                                onClick={handleCloseUserMenu} 
+                                component={Link} 
+                                to='/settings'
+                                >
+                                <Typography textAlign="center">Settings</Typography>
                             </MenuItem>
                             <MenuItem 
                                 onClick={logout} 

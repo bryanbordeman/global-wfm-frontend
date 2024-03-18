@@ -1,10 +1,10 @@
 import React from 'react';
 import ProfileCard from '../components/ProfileCard'
 import { Container } from '@mui/material';
-import SoftwareCard from '../components/SoftwareCard';
+import PTOTable from '../components/PTOTable';
 
 function Profile(props) {
-    const { user } = props
+    const { user, token, handleOpenSnackbar } = props
     return ( 
         <div>
             <Container 
@@ -13,8 +13,15 @@ function Profile(props) {
                     justifyContent: 'center',
                     flexDirection:'column',
                     height: '100%'}}> 
-                <ProfileCard user={user}/>
-                <SoftwareCard/>
+                <ProfileCard 
+                    user={user}
+                    token={token}
+                />
+                <PTOTable
+                    user={user}
+                    token={token}
+                    handleOpenSnackbar={handleOpenSnackbar}
+                />
             </Container>
         </div>
     );

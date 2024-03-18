@@ -17,7 +17,7 @@ import Door from '../pages/Door';
 import Engineering from '../pages/Engineering';
 import Reports from '../pages/Reports';
 import Videos from '../pages/Videos';
-
+import Settings from '../pages/Settings';
 
 function MainRoutes(props) {
     const { user, token, setToken, login, signup, loginErrors, darkState, handleOpenSnackbar } = props
@@ -209,8 +209,21 @@ function MainRoutes(props) {
                         <Profile
                             user={user}
                             token={token}
+                            handleOpenSnackbar={handleOpenSnackbar}
                         />
-                }/>
+                    }/>
+                    <Route 
+                    exact 
+                    path='/settings' 
+                    element={
+                        !user.username  ? 
+                        <Navigate to="/login" />
+                        :
+                        <Settings
+                            user={user}
+                            token={token}
+                        />
+                    }/>
                 <Route 
                     exact 
                     path='/login' 
